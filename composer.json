@@ -1,0 +1,27 @@
+{
+    "name": "sabre/http",
+    "description" : "The sabre/http library provides utilities for dealing with http requests and responses. ",
+    "keywords" : [ "HTTP" ],
+    "homepage" : "https://github.com/evert/sabre-http",
+    "license" : "BSD-3-Clause",
+    "require" : {
+        "php" : ">=5.3.1"
+    },
+    "authors" : [
+        {
+            "name" : "Evert Pot",
+            "email" : "evert@rooftopsolutions.nl",
+            "homepage" : "http://www.rooftopsolutions.nl/",
+            "role" : "Developer"
+        }
+    ],
+    "support" : {
+        "forum" : "https://groups.google.com/group/sabredav-discuss",
+        "source" : "https://github.com/evert/sabre-http"
+    },
+    "autoload" : {
+        "psr-0" : {
+            "Sabre\\HTTP" : "lib/"
+        }
+    }
+}

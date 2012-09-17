@@ -3,7 +3,11 @@
 namespace Sabre\HTTP;
 
 /**
- * The RequestInterface represents a HTTP request.
+ * The Request class represents a single HTTP request.
+ *
+ * You can either simply construct the object from scratch, or if you would
+ * like to create the request from the $_SERVER array, use the
+ * createFromServerArray static method.
  *
  * @copyright Copyright (C) 2012 Rooftop Solutions. All rights reserved.
  * @author Evert Pot (http://www.rooftopsolutions.nl/)

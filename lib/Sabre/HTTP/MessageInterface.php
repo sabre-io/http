@@ -13,7 +13,15 @@ namespace Sabre\HTTP;
 interface MessageInterface {
 
     /**
-     * Returns the message body, as a stream
+     * Returns the message body, as a stream.
+     *
+     * Note that streams are usually 'read once' and depending on the stream,
+     * they can not always be rewinded.
+     *
+     * If you plan to read the body here, but need it later as well; be
+     * prepared to duplicate the stream and set it again.
+     *
+     * @return resource
      */
     function getBody();
 
@@ -21,12 +29,12 @@ interface MessageInterface {
      * Updates the message body.
      *
      * @param resource $body
+     * @return void
      */
     function setBody($body);
 
     /**
      * Returns all the HTTP headers as an array.
-     * This method must normalize all headers to lowercase.
      *
      * @return array
      */
@@ -37,8 +45,10 @@ interface MessageInterface {
      *
      * The name must be treated as case-insensitive.
      *
+     * If the header does not exist, this method must return null.
+     *
      * @param string $name
-     * @return string
+     * @return string|null
      */
     function getHeader($name);
 
@@ -54,11 +64,24 @@ interface MessageInterface {
     function setHeader($name, $value);
 
     /**
+     * Sets a new set of HTTP headers.
+     *
+     * This method should append the new headers, not wipe out the existing
+     * ones.
+     *
+     * @param array $headers
+     * @return void
+     */
+    function setHeaders(array $headers);
+
+    /**
      * Removes a HTTP header.
      *
      * The specified header name must be treated as case-insenstive.
+     * This method should return true if the header was successfully deleted,
+     * and false if the header did not exist.
      *
-     * @return string
+     * @return bool
      */
     function removeHeader($name);
 

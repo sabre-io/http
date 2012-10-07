@@ -13,6 +13,13 @@ namespace Sabre\HTTP;
 interface MessageInterface {
 
     /**
+     * This method appends a string or stream to the body.
+     *
+     * @return void
+     */
+    function sendBody($body);
+
+    /**
      * Returns the message body, as a stream.
      *
      * Note that streams are usually 'read once' and depending on the stream,
@@ -26,7 +33,7 @@ interface MessageInterface {
     function getBody();
 
     /**
-     * Updates the message body.
+     * Updates the body resource with a new stream.
      *
      * @param resource $body
      * @return void

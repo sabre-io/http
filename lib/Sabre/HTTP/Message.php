@@ -39,7 +39,7 @@ abstract class Message implements MessageInterface {
         if (is_scalar($body)) {
             fwrite($this->getBody(), $body);
         } elseif (is_resource($body)) {
-            stream_copy_to_stream($this->getBody(), $body);
+            stream_copy_to_stream($body, $this->getBody());
         } else {
             throw new \InvalidArgumentException('You must either pass a string or a stream');
         }
@@ -59,7 +59,7 @@ abstract class Message implements MessageInterface {
      */
     public function getBody() {
 
-        if (is_null($body)) {
+        if (is_null($this->body)) {
             // Creating a new body stream
             $this->body = fopen('php://temp', 'r+');
         }

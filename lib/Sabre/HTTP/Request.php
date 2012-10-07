@@ -37,13 +37,12 @@ class Request extends Message implements RequestInterface {
      * @param array $headers
      * @param resource $body
      */
-    public function __construct($method, $url, array $headers, $body = null) {
+    public function __construct($method = null, $url = null, array $headers = null, $body = null) {
 
-        $this->setMethod($method);
-        $this->setUrl($url);
-        $this->setHeaders($headers);
-
-        if (!is_null($body)) $this->setBody($body);
+        if (!is_null($method))  $this->setMethod($method);
+        if (!is_null($url))     $this->setUrl($url);
+        if (!is_null($headers)) $this->setHeaders($headers);
+        if (!is_null($body))    $this->setBody($body);
 
     }
 
@@ -95,7 +94,7 @@ class Request extends Message implements RequestInterface {
 
                 // Apache may prefix the HTTP_AUTHORIZATION header with
                 // REDIRECT_, if mod_rewrite was used.
-                case 'REDIRECT_HTTP_AUTHORIZATION'
+                case 'REDIRECT_HTTP_AUTHORIZATION' :
                     $headers['Authorization'] = $value;
                     break;
 
@@ -111,7 +110,7 @@ class Request extends Message implements RequestInterface {
                         $header = ucwords(str_replace('_', ' ', $header));
 
                         // Turning spaces into dashes.
-                        $header = str_replace(' ', '_', $header);
+                        $header = str_replace(' ', '-', $header);
                         $headers[$header] = $value;
 
                     }
@@ -132,7 +131,7 @@ class Request extends Message implements RequestInterface {
      */
     public function getMethod() {
 
-        return $method;
+        return $this->method;
 
     }
 

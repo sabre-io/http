@@ -9,7 +9,7 @@ namespace Sabre\HTTP;
  * @author Evert Pot (http://www.rooftopsolutions.nl/)
  * @license http://code.google.com/p/sabredav/wiki/License Modified BSD License
  */
-class Client {
+class Client implements ClientInterface {
 
     /**
      * Base Url
@@ -41,16 +41,6 @@ class Client {
      * @var string
      */
     protected $proxy;
-
-    /**
-     * Basic authentication
-     */
-    const AUTH_BASIC = 1;
-
-    /**
-     * Digest authentication
-     */
-    const AUTH_DIGEST = 2;
 
     /**
      * The authentication type we're using.
@@ -121,6 +111,11 @@ class Client {
 
         $url = $this->getAbsoluteUrl($request->getUrl());
 
+        $body = $request->getBody();
+        if (!is_null($body)) {
+            $body = stream_get_contents($body);
+        }
+
         $curlSettings = array(
             CURLOPT_RETURNTRANSFER => true,
             // Return headers as part of the response
@@ -129,6 +124,7 @@ class Client {
             // Automatically follow redirects
             CURLOPT_FOLLOWLOCATION => true,
             CURLOPT_MAXREDIRS => 5,
+            CURLOPT_URL => $url,
         );
 
         switch ($request->getMethod()) {
@@ -144,7 +140,7 @@ class Client {
                 break;
 
             default:
-                $curlSettings[CURLOPT_CUSTOMREQUEST] = $method;
+                $curlSettings[CURLOPT_CUSTOMREQUEST] = $request->getMethod();
                 break;
 
         }
@@ -179,7 +175,7 @@ class Client {
             $curlInfo,
             $curlErrNo,
             $curlError
-        ) = $this->curlRequest($url, $curlSettings);
+        ) = $this->curlRequest($curlSettings);
 
         $headerBlob = substr($response, 0, $curlInfo['header_size']);
         $response = substr($response, $curlInfo['header_size']);
@@ -199,7 +195,7 @@ class Client {
         foreach($headerBlob as $header) {
             $parts = explode(':', $header, 2);
             if (count($parts)==2) {
-                $headers[strtolower(trim($parts[0]))] = trim($parts[1]);
+                $headers[trim($parts[0])] = trim($parts[1]);
             }
         }
 
@@ -207,16 +203,21 @@ class Client {
             throw new ClientException('[CURL] Error while making request: ' . $curlError . ' (error code: ' . $curlErrNo . ')');
         }
 
+        $responseStream = fopen('php://memory','r+');
+        fwrite($responseStream, $response);
+        rewind($responseStream);
+
         $responseObj = new Response(
             $curlInfo['http_code'],
             $headers,
-            $response
+            $responseStream
         );
 
-        return $response;
+        return $responseObj;
 
     }
 
+    // @codeCoverageIgnoreStart
     /**
      * Wrapper for all curl functions.
      *
@@ -227,18 +228,19 @@ class Client {
      * @param array $settings
      * @return array
      */
-    protected function curlRequest($url, $settings) {
+    protected function curlRequest($settings) {
 
         curl_setopt_array($this->curl, $settings);
 
         return array(
-            curl_exec($curl),
-            curl_getinfo($curl),
-            curl_errno($curl),
-            curl_error($curl)
+            curl_exec($this->curl),
+            curl_getinfo($this->curl),
+            curl_errno($this->curl),
+            curl_error($this->curl)
         );
 
     }
+    // @codeCoverageIgnoreEnd
 
     /**
      * Returns the full url based on the given url (which may be relative). All

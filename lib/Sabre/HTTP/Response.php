@@ -76,8 +76,7 @@ class Response extends Message implements ResponseInterface {
         509 => 'Bandwidth Limit Exceeded', // non-standard
         510 => 'Not extended',
         511 => 'Network Authentication Required', // draft-nottingham-http-new-status
-   );
-
+    );
 
     /**
      * HTTP status code
@@ -85,6 +84,23 @@ class Response extends Message implements ResponseInterface {
      * @var string
      */
     protected $status;
+
+    /**
+     * Creates the response object
+     *
+     * @param string|int $status
+     * @param array $headers
+     * @param resource $body
+     * @return void
+     */
+    public function __construct($status = null, array $headers = null, $body = null) {
+
+        if (!is_null($status)) $this->setStatus($status);
+        if (!is_null($headers)) $this->setHeaders($headers);
+        if (!is_null($body)) $this->setBody($body);
+
+    }
+
 
     /**
      * Returns the current HTTP status.

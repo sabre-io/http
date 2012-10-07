@@ -101,7 +101,7 @@ abstract class Message implements MessageInterface {
      */
     public function setHeaders(array $headers) {
 
-        array_merge($this->headers, $headers);
+        $this->headers = array_merge($this->headers, $headers);
 
     }
 

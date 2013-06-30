@@ -70,7 +70,7 @@ class Request extends Message implements RequestInterface {
     static public function createFromPHPRequest() {
 
         $r = self::createFromServerArray($_SERVER);
-        $r->setBody(fopen('php://input'));
+        $r->setBody(fopen('php://input','r'));
         return $r;
 
     }

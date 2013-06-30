@@ -30,23 +30,6 @@ abstract class Message implements MessageInterface {
     protected $headers = array();
 
     /**
-     * This method appends a string or stream to the body.
-     *
-     * @return void
-     */
-    public function sendBody($body) {
-
-        if (is_scalar($body)) {
-            fwrite($this->getBody(), $body);
-        } elseif (is_resource($body)) {
-            stream_copy_to_stream($body, $this->getBody());
-        } else {
-            throw new \InvalidArgumentException('You must either pass a string or a stream');
-        }
-
-    }
-
-    /**
      * Returns the message body, as a stream.
      *
      * Note that streams are usually 'read once' and depending on the stream,

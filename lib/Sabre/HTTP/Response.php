@@ -139,4 +139,23 @@ class Response extends Message implements ResponseInterface {
 
     }
 
+    /**
+     * Sends the HTTP response back to a HTTP client.
+     *
+     * This calls php's header() function and streams the body to php://output.
+     *
+     * @return void
+     */
+    public function send() {
+
+        header('HTTP/' . $this->httpVersion . ' ' . $this->status . ' ' . self::$statusCodes[$this->status]);
+        foreach($this->headers as $key=>$value) {
+
+            header($key . ': ' . $value);
+
+        }
+        file_put_contents('php://output', $this->body);
+
+    }
+
 }

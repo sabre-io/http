@@ -1,5 +1,5 @@
 2.0.0-alpha1 (2013-??-??)
-	* Added: Request::getHttpVersion and Request::setHttpVersion.
+	* Added: Message::getHttpVersion and Message::setHttpVersion.
 	* Added: Request::setRawServerArray, getRawServerValue.
 	* Added: Request::createFromPHPRequest
 	* Added: Response::send

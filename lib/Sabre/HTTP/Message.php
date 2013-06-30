@@ -27,7 +27,14 @@ abstract class Message implements MessageInterface {
      *
      * @var array
      */
-    protected $headers = array();
+    protected $headers = [];
+
+    /**
+     * HTTP message version (1.0 or 1.1)
+     *
+     * @var string
+     */
+    protected $httpVersion = '1.1';
 
     /**
      * Returns the message body, as a stream.
@@ -145,4 +152,28 @@ abstract class Message implements MessageInterface {
 
     }
 
+    /**
+     * Sets the HTTP version.
+     *
+     * Should be 1.0 or 1.1.
+     *
+     * @param string $version
+     * @return void
+     */
+    public function setHttpVersion($version) {
+
+        $this->httpVersion = $version;
+
+    }
+
+    /**
+     * Returns the HTTP version.
+     *
+     * @return string
+     */
+    public function getHttpVersion() {
+
+        return $this->httpVersion;
+
+    }
 }

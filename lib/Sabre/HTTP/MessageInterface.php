@@ -85,4 +85,21 @@ interface MessageInterface {
      */
     function removeHeader($name);
 
+    /**
+     * Sets the HTTP version.
+     *
+     * Should be 1.0 or 1.1.
+     *
+     * @param string $version
+     * @return void
+     */
+    function setHttpVersion($version);
+
+    /**
+     * Returns the HTTP version.
+     *
+     * @return string
+     */
+    function getHttpVersion();
+
 }

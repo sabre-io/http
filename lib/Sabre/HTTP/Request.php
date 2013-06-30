@@ -29,12 +29,6 @@ class Request extends Message implements RequestInterface {
      */
     protected $url;
 
-    /**
-     * HTTP message version (1.0 or 1.1)
-     *
-     * @var string
-     */
-    protected $httpVersion = '1.1';
 
     /**
      * An array containing the raw _SERVER array.
@@ -206,31 +200,6 @@ class Request extends Message implements RequestInterface {
     public function setUrl($url) {
 
         $this->url = $url;
-
-    }
-
-    /**
-     * Sets the HTTP version.
-     *
-     * Should be 1.0 or 1.1.
-     *
-     * @param string $version
-     * @return void
-     */
-    public function setHttpVersion($version) {
-
-        $this->httpVersion = $version;
-
-    }
-
-    /**
-     * Returns the HTTP version.
-     *
-     * @return string
-     */
-    public function getHttpVersion() {
-
-        return $this->httpVersion;
 
     }
 

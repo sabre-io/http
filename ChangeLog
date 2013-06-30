@@ -3,6 +3,7 @@
 	* Added: Request::setRawServerArray, getRawServerValue.
 	* Added: Request::createFromPHPRequest
 	* Added: Response::send
+	* Added: Request::getQueryParameters
 	* Removed: Response::sendBody
 
 0.0.1-alpha (2012-10-07)

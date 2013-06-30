@@ -148,7 +148,7 @@ class Response extends Message implements ResponseInterface {
      */
     public function send() {
 
-        header('HTTP/' . $this->httpVersion . ' ' . $this->status . ' ' . self::$statusCodes[$this->status]);
+        header('HTTP/' . $this->httpVersion . ' ' . $this->status);
         foreach($this->headers as $key=>$value) {
 
             header($key . ': ' . $value);

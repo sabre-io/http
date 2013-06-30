@@ -204,6 +204,25 @@ class Request extends Message implements RequestInterface {
     }
 
     /**
+     * Returns the list of query parameters.
+     *
+     * This is equivalent to PHP's $_GET superglobal.
+     *
+     * @return array
+     */
+    public function getQueryParameters() {
+
+        $url = $this->getUrl();
+        if (($index = strpos($url,'?'))===false) {
+            return [];
+        } else {
+            parse_str(substr($url, $index+1), $queryParams);
+            return $queryParams;
+        }
+
+    }
+
+    /**
      * Returns an item from the _SERVER array.
      *
      * If the value does not exist in the array, null is returned.

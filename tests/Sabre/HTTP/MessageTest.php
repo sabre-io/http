@@ -7,6 +7,7 @@ class MessageTest extends \PHPUnit_Framework_TestCase {
     function testConstruct() {
 
         $message = new MessageMock();
+        $this->assertInstanceOf('Sabre\HTTP\Message', $message);
 
     }
 
@@ -21,6 +22,15 @@ class MessageTest extends \PHPUnit_Framework_TestCase {
         $message->setBody($body);
 
         $this->assertEquals($body, $message->getBody());
+
+    }
+
+    function testGetEmptyBody() {
+
+        $message = new MessageMock();
+        $body = $message->getBody();
+
+        $this->assertEquals('', stream_get_contents($body));
 
     }
 

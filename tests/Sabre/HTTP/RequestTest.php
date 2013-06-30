@@ -91,4 +91,35 @@ class RequestTest extends \PHPUnit_Framework_TestCase {
         ), $request->getHeaders());
 
     }
+
+    function testGetQueryParameters() {
+
+        $request = new Request('GET', '/foo?a=b&c&d=e');
+        $this->assertEquals([
+            'a' => 'b',
+            'c' => null,
+            'd' => 'e',
+        ], $request->getQueryParameters());
+
+    }
+
+    function testGetQueryParametersNoData() {
+
+        $request = new Request('GET', '/foo');
+        $this->assertEquals([], $request->getQueryParameters());
+
+    }
+
+    /**
+     * @backupGlobals
+     */
+    function testCreateFromPHPRequest() {
+
+        $_SERVER['REQUEST_METHOD'] = 'PUT';
+
+        $request = Request::createFromPHPRequest();
+        $this->assertEquals('PUT', $request->getMethod());
+
+    }
+
 }

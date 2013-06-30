@@ -103,7 +103,7 @@ class Request extends Message implements RequestInterface {
                     $method = $value;
                     break;
                 case 'REQUEST_URI' :
-                    $uri = $value;
+                    $url = $value;
                     break;
 
                 // These sometimes should up without a HTTP_ prefix
@@ -156,7 +156,7 @@ class Request extends Message implements RequestInterface {
 
         }
 
-        $r = new self($method, $uri, $headers);
+        $r = new self($method, $url, $headers);
         $r->setHttpVersion($httpVersion);
         $r->setRawServerData($serverArray);
         return $r;

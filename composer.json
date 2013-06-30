@@ -5,7 +5,7 @@
     "homepage" : "https://github.com/evert/sabre-http",
     "license" : "BSD-3-Clause",
     "require" : {
-        "php" : ">=5.3.1"
+        "php" : ">=5.4"
     },
     "authors" : [
         {

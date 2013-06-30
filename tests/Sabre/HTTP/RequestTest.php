@@ -24,7 +24,8 @@ class RequestTest extends \PHPUnit_Framework_TestCase {
             'REQUEST_METHOD'  => 'GET',
             'HTTP_USER_AGENT' => 'Evert',
             'CONTENT_TYPE'    => 'text/xml',
-            'CONTENT_LENGTH'  => '400', 
+            'CONTENT_LENGTH'  => '400',
+            'SERVER_PROTOCOL' => 'HTTP/1.0',
         ));
 
         $this->assertEquals('GET', $request->getMethod());
@@ -34,6 +35,8 @@ class RequestTest extends \PHPUnit_Framework_TestCase {
             'Content-Type' => 'text/xml',
             'Content-Length' => '400',
         ), $request->getHeaders());
+
+        $this->assertEquals('1.0', $request->getHttpVersion());
 
     }
 

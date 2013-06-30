@@ -30,6 +30,13 @@ class Request extends Message implements RequestInterface {
     protected $url;
 
     /**
+     * HTTP message version (1.0 or 1.1)
+     *
+     * @var string
+     */
+    protected $httpVersion = '1.1';
+
+    /**
      * Creates the request object
      *
      * @param string $method
@@ -39,10 +46,10 @@ class Request extends Message implements RequestInterface {
      */
     public function __construct($method = null, $url = null, array $headers = null, $body = null) {
 
-        if (!is_null($method))  $this->setMethod($method);
-        if (!is_null($url))     $this->setUrl($url);
-        if (!is_null($headers)) $this->setHeaders($headers);
-        if (!is_null($body))    $this->setBody($body);
+        if (!is_null($method))      $this->setMethod($method);
+        if (!is_null($url))         $this->setUrl($url);
+        if (!is_null($headers))     $this->setHeaders($headers);
+        if (!is_null($body))        $this->setBody($body);
 
     }
 
@@ -59,11 +66,17 @@ class Request extends Message implements RequestInterface {
         $headers = array();
         $method = null;
         $url = null;
+        $httpVersion = '1.1';
 
         foreach($serverArray as $key=>$value) {
 
             switch($key) {
 
+                case 'SERVER_PROTOCOL' :
+                    if ($value==='HTTP/1.0') {
+                        $httpVersion = '1.0';
+                    }
+                    break;
                 case 'REQUEST_METHOD' :
                     $method = $value;
                     break;
@@ -120,7 +133,10 @@ class Request extends Message implements RequestInterface {
             }
 
         }
-        return new self($method, $uri, $headers, $body);
+        $r = new self($method, $uri, $headers, $body);
+        $r->setHttpVersion($httpVersion);
+
+        return $r;
 
     }
 
@@ -170,4 +186,28 @@ class Request extends Message implements RequestInterface {
 
     }
 
+    /**
+     * Sets the HTTP version.
+     *
+     * Should be 1.0 or 1.1.
+     *
+     * @param string $version
+     * @return void
+     */
+    public function setHttpVersion($version) {
+
+        $this->httpVersion = $version;
+
+    }
+
+    /**
+     * Returns the HTTP version.
+     *
+     * @return string
+     */
+    public function getHttpVersion() {
+
+        return $this->httpVersion;
+
+    }
 }

@@ -1,3 +1,7 @@
-0.0.1-alpha (2013-??-??)
+0.0.2-alpha (2013-??-??)
+	* Added: Request::getHttpVersion and Request::setHttpVersion.
+
+0.0.1-alpha (2012-10-07)
+	* First version.
 
 Project started: 2012-08-31

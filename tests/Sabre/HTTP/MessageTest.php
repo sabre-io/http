@@ -48,28 +48,18 @@ class MessageTest extends \PHPUnit_Framework_TestCase {
         $message = new MessageMock();
 
         // String
-        $message->sendBody('foo');
+        $message->setBody('foo');
 
         // Stream
         $h = fopen('php://memory','r+');
         fwrite($h,'bar');
         rewind($h);
-        $message->sendBody($h);
+        $message->setBody($h);
 
         $body = $message->getBody();
         rewind($body);
 
-        $this->assertEquals('foobar', stream_get_contents($body));
-
-    }
-
-    /**
-     * @expectedException InvalidArgumentException
-     */
-    function testSendBadBody() {
-
-        $message = new MessageMock();
-        $message->sendBody(array());
+        $this->assertEquals('bar', stream_get_contents($body));
 
     }
 

@@ -66,9 +66,9 @@ class Request extends Message implements RequestInterface {
      *
      * @param array $serverArray
      * @param resource $body
-     * @return void
+     * @return Request
      */
-    static public function createFromServerArray(array $serverArray, $body = null) {
+    static public function createFromServerArray(array $serverArray) {
 
         $headers = array();
         $method = null;
@@ -141,9 +141,24 @@ class Request extends Message implements RequestInterface {
 
         }
 
-        $r = new self($method, $uri, $headers, $body);
+        $r = new self($method, $uri, $headers);
         $r->setHttpVersion($httpVersion);
         $r->setRawServerData($serverArray);
+        return $r;
+
+    }
+
+    /**
+     * This static method will create a new Request object, based on the
+     * current PHP request.
+     *
+     * @param resource $body
+     * @return Request
+     */
+    static public function createFromPHPRequest() {
+
+        $r = self::createFromRawServerArray($_SERVER);
+        $r->setBody(fopen('php://input'));
         return $r;
 
     }

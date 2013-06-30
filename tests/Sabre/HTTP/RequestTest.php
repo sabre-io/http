@@ -38,6 +38,9 @@ class RequestTest extends \PHPUnit_Framework_TestCase {
 
         $this->assertEquals('1.0', $request->getHttpVersion());
 
+        $this->assertEquals('400', $request->getRawServerValue('CONTENT_LENGTH'));
+        $this->assertNull($request->getRawServerValue('FOO'));
+
     }
 
     function testConstructPHPAuth() {

@@ -37,6 +37,13 @@ class Request extends Message implements RequestInterface {
     protected $httpVersion = '1.1';
 
     /**
+     * An array containing the raw _SERVER array.
+     *
+     * @var array
+     */
+    protected $rawServerData;
+
+    /**
      * Creates the request object
      *
      * @param string $method
@@ -133,9 +140,10 @@ class Request extends Message implements RequestInterface {
             }
 
         }
+
         $r = new self($method, $uri, $headers, $body);
         $r->setHttpVersion($httpVersion);
-
+        $r->setRawServerData($serverArray);
         return $r;
 
     }
@@ -210,4 +218,33 @@ class Request extends Message implements RequestInterface {
         return $this->httpVersion;
 
     }
+
+    /**
+     * Returns an item from the _SERVER array.
+     *
+     * If the value does not exist in the array, null is returned.
+     *
+     * @param string $valueName
+     * @return string|null
+     */
+    public function getRawServerValue($valueName) {
+
+        if (isset($this->rawServerData[$valueName])) {
+            return $this->rawServerData[$valueName];
+        }
+
+    }
+
+    /**
+     * Sets the _SERVER array.
+     *
+     * @param array $data
+     * @return void
+     */
+    public function setRawServerData(array $data) {
+
+        $this->rawServerData = $data;
+
+    }
+
 }

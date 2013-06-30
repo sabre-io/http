@@ -58,4 +58,22 @@ interface RequestInterface extends MessageInterface {
      */
     function setHttpVersion($version);
 
+    /**
+     * Returns an item from the _SERVER array.
+     *
+     * If the value does not exist in the array, null is returned.
+     *
+     * @param string $valueName
+     * @return string|null
+     */
+    function getRawServerValue($valueName);
+
+    /**
+     * Sets the _SERVER array.
+     *
+     * @param array $data
+     * @return void
+     */
+    function setRawServerData(array $data);
+
 }

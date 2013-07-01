@@ -306,7 +306,7 @@ class Request extends Message implements RequestInterface {
     public function getPath() {
 
         // Removing duplicated slashes.
-        $uri = str_replace('//','/',$uri);
+        $uri = str_replace('//','/',$this->getUrl());
 
         if (strpos($uri,$this->getBaseUrl())===0) {
 
@@ -320,7 +320,7 @@ class Request extends Message implements RequestInterface {
 
         } else {
 
-            throw new \LogicException('Requested uri (' . $uri . ') is out of base uri (' . $this->getBaseUrl() . ')');
+            throw new \LogicException('Requested uri (' . $this->getUrl() . ') is out of base uri (' . $this->getBaseUrl() . ')');
 
         }
     }

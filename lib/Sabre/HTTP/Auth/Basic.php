@@ -2,8 +2,9 @@
 
 namespace Sabre\HTTP\Auth;
 
-use Sabre\HTTP\Request;
-use Sabre\HTTP\Response;
+use
+    Sabre\HTTP\RequestInterface,
+    Sabre\HTTP\ResponseInterface;
 
 /**
  * HTTP Basic authentication utility.
@@ -18,26 +19,7 @@ use Sabre\HTTP\Response;
  * @author Evert Pot (http://www.rooftopsolutions.nl/)
  * @license http://code.google.com/p/sabredav/wiki/License Modified BSD License
  */
-class Basic {
-
-    /**
-     * Authentication realm
-     *
-     * @var string
-     */
-    protected $realm;
-
-    /**
-     * Creates the basic auth helper.
-     *
-     * @param string $realm
-     * @return void
-     */
-    public function __construct($realm = 'SabreTooth') {
-
-        $this->realm = $realm;
-
-    }
+class Basic extends AbstractAuth {
 
     /**
      * This method returns a numeric array with a username and password as the
@@ -45,12 +27,11 @@ class Basic {
      *
      * If no credentials were found, this method returns null.
      *
-     * @param Sabre\HTTP\Request $request
      * @return null|array
      */
-    public function getCredentials(Request $request) {
+    public function getCredentials() {
 
-        $auth = $request->getHeader('Authorization');
+        $auth = $this->request->getHeader('Authorization');
 
         if (!$auth) {
             return null;
@@ -68,13 +49,12 @@ class Basic {
      * This method sends the needed HTTP header and statuscode (401) to force
      * the user to login.
      *
-     * @param Sabre\HTTP\Response
      * @return void
      */
-    public function requireLogin(Response $response) {
+    public function requireLogin() {
 
-        $response->setHeader('WWW-Authenticate','Basic realm="' . $this->realm . '"');
-        $response->setStatus(401);
+        $this->response->setHeader('WWW-Authenticate','Basic realm="' . $this->realm . '"');
+        $this->response->setStatus(401);
 
     }
 

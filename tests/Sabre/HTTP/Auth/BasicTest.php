@@ -13,7 +13,7 @@ class BasicTest extends \PHPUnit_Framework_TestCase {
             'Authorization' => 'Basic ' . base64_encode('user:pass:bla')
         ));
 
-        $basic = new Basic('Dagger');
+        $basic = new Basic('Dagger', $request, new Response());
 
         $this->assertEquals(array(
             'user',
@@ -25,7 +25,7 @@ class BasicTest extends \PHPUnit_Framework_TestCase {
     function testGetCredentialsNoheader() {
 
         $request = new Request('GET','/',array());
-        $basic = new Basic('Dagger');
+        $basic = new Basic('Dagger', $request, new Response());
 
         $this->assertNull($basic->getCredentials($request));
 
@@ -36,7 +36,7 @@ class BasicTest extends \PHPUnit_Framework_TestCase {
         $request = new Request('GET','/',array(
             'Authorization' => 'QBasic ' . base64_encode('user:pass:bla')
         ));
-        $basic = new Basic('Dagger');
+        $basic = new Basic('Dagger', $request, new Response());
 
         $this->assertNull($basic->getCredentials($request));
 
@@ -45,9 +45,9 @@ class BasicTest extends \PHPUnit_Framework_TestCase {
     function testRequireLogin() {
 
         $response = new Response();
-        $basic = new Basic('Dagger');
+        $basic = new Basic('Dagger', new Request(), $response);
 
-        $basic->requireLogin($response);
+        $basic->requireLogin();
 
         $this->assertEquals('Basic realm="Dagger"', $response->getHeader('WWW-Authenticate'));
         $this->assertEquals('401 Unauthorized', $response->getStatus());

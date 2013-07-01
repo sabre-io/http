@@ -11,7 +11,7 @@ class MessageTest extends \PHPUnit_Framework_TestCase {
 
     }
 
-    function testBody() {
+    function testStreamBody() {
 
         $body = 'foo';
         $h = fopen('php://memory', 'r+');
@@ -19,9 +19,22 @@ class MessageTest extends \PHPUnit_Framework_TestCase {
         rewind($h);
 
         $message = new MessageMock();
+        $message->setBody($h);
+
+        $this->assertEquals($body, $message->getBody($asString = true));
+        rewind($h);
+        $this->assertEquals($body, stream_get_contents($message->getBody()));
+
+    }
+    function testStringBody() {
+
+        $body = 'foo';
+
+        $message = new MessageMock();
         $message->setBody($body);
 
-        $this->assertEquals($body, $message->getBody());
+        $this->assertEquals($body, $message->getBody($asString = true));
+        $this->assertEquals($body, stream_get_contents($message->getBody()));
 
     }
 

@@ -259,7 +259,7 @@ class Request extends Message implements RequestInterface {
      *
      * @var string
      */
-    protected $baseUrl;
+    protected $baseUrl = '/';
 
     /**
      * Sets a base url.

@@ -61,6 +61,8 @@ interface RequestInterface extends MessageInterface {
      *
      * This url is used for relative path calculations.
      *
+     * The base url should default to /
+     *
      * @param string $url
      * @return void
      */

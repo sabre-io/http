@@ -29,14 +29,6 @@ class Request extends Message implements RequestInterface {
      */
     protected $url;
 
-
-    /**
-     * An array containing the raw _SERVER array.
-     *
-     * @var array
-     */
-    protected $rawServerData;
-
     /**
      * Creates the request object
      *
@@ -263,6 +255,13 @@ class Request extends Message implements RequestInterface {
     }
 
     /**
+     * An array containing the raw _SERVER array.
+     *
+     * @var array
+     */
+    protected $rawServerData;
+
+    /**
      * Returns an item from the _SERVER array.
      *
      * If the value does not exist in the array, null is returned.
@@ -289,6 +288,13 @@ class Request extends Message implements RequestInterface {
         $this->rawServerData = $data;
 
     }
+
+    /**
+     * Equivalent of PHP's $_POST.
+     *
+     * @var array
+     */
+    protected $postData = [];
 
     /**
      * Sets the post data.

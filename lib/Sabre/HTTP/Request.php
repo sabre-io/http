@@ -85,6 +85,9 @@ class Request extends Message implements RequestInterface {
         $url = null;
         $httpVersion = '1.1';
 
+        $protocol = 'http';
+        $hostName = 'localhost';
+
         foreach($serverArray as $key=>$value) {
 
             switch($key) {
@@ -128,6 +131,18 @@ class Request extends Message implements RequestInterface {
                     $headers['Authorization'] = $value;
                     break;
 
+                case 'HTTP_HOST' :
+                    $hostName = $value;
+                    $headers['Host'] = $value;
+                    break;
+
+                case 'HTTPS' :
+                    if (!empty($value) && $value!=='off') {
+                        $protocol = 'https';
+                        break;
+                    }
+                    break;
+
                 default :
                     if (substr($key,0,5)==='HTTP_') {
                         // It's a HTTP header
@@ -154,6 +169,7 @@ class Request extends Message implements RequestInterface {
         $r = new self($method, $url, $headers);
         $r->setHttpVersion($httpVersion);
         $r->setRawServerData($serverArray);
+        $r->setAbsoluteUrl($protocol . '://' . $hostName . $url);
         return $r;
 
     }
@@ -220,6 +236,29 @@ class Request extends Message implements RequestInterface {
             parse_str(substr($url, $index+1), $queryParams);
             return $queryParams;
         }
+
+    }
+
+    /**
+     * Sets the absolute url.
+     *
+     * @param string $url
+     * @return void
+     */
+    public function setAbsoluteUrl($url) {
+
+        $this->absoluteUrl = $url;
+
+    }
+
+    /**
+     * Returns the absolute url.
+     *
+     * @return string
+     */
+    public function getAbsoluteUrl() {
+
+        return $this->absoluteUrl;
 
     }
 

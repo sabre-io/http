@@ -6,7 +6,8 @@
 	* Added: Response::send
 	* Added: Request::getQueryParameters
 	* Added: Utility for dealing with HTTP dates.
-	* Added: Request::setPostData and Request::getPostData
+	* Added: Request::setPostData and Request::getPostData.
+	* Added: Request::setAbsoluteUrl and Request::getAbsoluteUrl.
 	* Removed: Response::sendBody
 
 0.0.1-alpha (2012-10-07)

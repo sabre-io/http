@@ -81,4 +81,20 @@ interface RequestInterface extends MessageInterface {
      */
     function getPostData();
 
+    /**
+     * Sets the absolute url.
+     *
+     * @param string $url
+     * @return void
+     */
+    function setAbsoluteUrl($url);
+
+    /**
+     * Returns the absolute url.
+     *
+     * @return string
+     */
+    function getAbsoluteUrl();
+
+
 }

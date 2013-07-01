@@ -255,38 +255,74 @@ class Request extends Message implements RequestInterface {
     }
 
     /**
-     * An array containing the raw _SERVER array.
+     * Base url
      *
-     * @var array
+     * @var string
      */
-    protected $rawServerData;
+    protected $baseUrl;
 
     /**
-     * Returns an item from the _SERVER array.
+     * Sets a base url.
      *
-     * If the value does not exist in the array, null is returned.
+     * This url is used for relative path calculations.
      *
-     * @param string $valueName
-     * @return string|null
+     * @param string $url
+     * @return void
      */
-    public function getRawServerValue($valueName) {
+    public function setBaseUrl($url) {
 
-        if (isset($this->rawServerData[$valueName])) {
-            return $this->rawServerData[$valueName];
-        }
+        $this->baseUrl = $url;
 
     }
 
     /**
-     * Sets the _SERVER array.
+     * Returns the current base url.
      *
-     * @param array $data
-     * @return void
+     * @return string
      */
-    public function setRawServerData(array $data) {
+    public function getBaseUrl() {
 
-        $this->rawServerData = $data;
+        return $this->baseUrl;
 
+    }
+
+    /**
+     * Returns the relative path.
+     *
+     * This is being calculated using the base url. This path will not start
+     * with a slash, so it will always return something like
+     * 'example/path.html'.
+     *
+     * If the full path is equal to the base url, this method will return an
+     * empty string.
+     *
+     * This method will also urldecode the path, and if the url was incoded as
+     * ISO-8859-1, it will convert it to UTF-8.
+     *
+     * If the path is outside of the base url, a LogicException will be thrown.
+     *
+     * @return string
+     */
+    public function getPath() {
+
+        // Removing duplicated slashes.
+        $uri = str_replace('//','/',$uri);
+
+        if (strpos($uri,$this->getBaseUrl())===0) {
+
+            return trim(URLUtil::decodePath(substr($uri,strlen($this->getBaseUrl()))),'/');
+
+        // A special case, if the baseUri was accessed without a trailing
+        // slash, we'll accept it as well.
+        } elseif ($uri.'/' === $this->getBaseUrl()) {
+
+            return '';
+
+        } else {
+
+            throw new \LogicException('Requested uri (' . $uri . ') is out of base uri (' . $this->getBaseUrl() . ')');
+
+        }
     }
 
     /**
@@ -323,6 +359,41 @@ class Request extends Message implements RequestInterface {
     public function getPostData() {
 
         return $this->postData;
+
+    }
+
+    /**
+     * An array containing the raw _SERVER array.
+     *
+     * @var array
+     */
+    protected $rawServerData;
+
+    /**
+     * Returns an item from the _SERVER array.
+     *
+     * If the value does not exist in the array, null is returned.
+     *
+     * @param string $valueName
+     * @return string|null
+     */
+    public function getRawServerValue($valueName) {
+
+        if (isset($this->rawServerData[$valueName])) {
+            return $this->rawServerData[$valueName];
+        }
+
+    }
+
+    /**
+     * Sets the _SERVER array.
+     *
+     * @param array $data
+     * @return void
+     */
+    public function setRawServerData(array $data) {
+
+        $this->rawServerData = $data;
 
     }
 }

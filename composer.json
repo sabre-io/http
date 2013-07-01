@@ -5,7 +5,8 @@
     "homepage" : "https://github.com/fruux/sabre-http",
     "license" : "BSD-3-Clause",
     "require" : {
-        "php" : ">=5.4"
+        "php"          : ">=5.4",
+        "ext-mbstring" : "*"
     },
     "authors" : [
         {

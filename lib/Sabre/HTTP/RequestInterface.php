@@ -42,22 +42,55 @@ interface RequestInterface extends MessageInterface {
     function setUrl($url);
 
     /**
-     * Returns an item from the _SERVER array.
+     * Sets the absolute url.
      *
-     * If the value does not exist in the array, null is returned.
-     *
-     * @param string $valueName
-     * @return string|null
-     */
-    function getRawServerValue($valueName);
-
-    /**
-     * Sets the _SERVER array.
-     *
-     * @param array $data
+     * @param string $url
      * @return void
      */
-    function setRawServerData(array $data);
+    function setAbsoluteUrl($url);
+
+    /**
+     * Returns the absolute url.
+     *
+     * @return string
+     */
+    function getAbsoluteUrl();
+
+    /**
+     * Sets a base url.
+     *
+     * This url is used for relative path calculations.
+     *
+     * @param string $url
+     * @return void
+     */
+    function setBaseUrl($url);
+
+    /**
+     * Returns the current base url.
+     *
+     * @return string
+     */
+    function getBaseUrl();
+
+    /**
+     * Returns the relative path.
+     *
+     * This is being calculated using the base url. This path will not start
+     * with a slash, so it will always return something like
+     * 'example/path.html'.
+     *
+     * If the full path is equal to the base url, this method will return an
+     * empty string.
+     *
+     * This method will also urldecode the path, and if the url was incoded as
+     * ISO-8859-1, it will convert it to UTF-8.
+     *
+     * If the path is outside of the base url, a LogicException will be thrown.
+     *
+     * @return string
+     */
+    function getPath();
 
     /**
      * Sets the post data.
@@ -82,19 +115,22 @@ interface RequestInterface extends MessageInterface {
     function getPostData();
 
     /**
-     * Sets the absolute url.
+     * Returns an item from the _SERVER array.
      *
-     * @param string $url
-     * @return void
+     * If the value does not exist in the array, null is returned.
+     *
+     * @param string $valueName
+     * @return string|null
      */
-    function setAbsoluteUrl($url);
+    function getRawServerValue($valueName);
 
     /**
-     * Returns the absolute url.
+     * Sets the _SERVER array.
      *
-     * @return string
+     * @param array $data
+     * @return void
      */
-    function getAbsoluteUrl();
+    function setRawServerData(array $data);
 
 
 }

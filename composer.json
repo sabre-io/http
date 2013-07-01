@@ -2,7 +2,7 @@
     "name": "sabre/http",
     "description" : "The sabre/http library provides utilities for dealing with http requests and responses. ",
     "keywords" : [ "HTTP" ],
-    "homepage" : "https://github.com/evert/sabre-http",
+    "homepage" : "https://github.com/fruux/sabre-http",
     "license" : "BSD-3-Clause",
     "require" : {
         "php" : ">=5.4"
@@ -17,7 +17,7 @@
     ],
     "support" : {
         "forum" : "https://groups.google.com/group/sabredav-discuss",
-        "source" : "https://github.com/evert/sabre-http"
+        "source" : "https://github.com/fruux/sabre-http"
     },
     "autoload" : {
         "psr-0" : {

@@ -5,8 +5,8 @@ namespace Sabre\HTTP;
 /**
  * The RequestInterface represents a HTTP request.
  *
- * @copyright Copyright (C) 2012 Rooftop Solutions. All rights reserved.
- * @author Evert Pot (http://www.rooftopsolutions.nl/)
+ * @copyright Copyright (C) 2009-2013 fruux GmbH (https://fruux.com/).
+ * @author Evert Pot (http://evertpot.com/)
  * @license http://code.google.com/p/sabredav/wiki/License Modified BSD License
  */
 interface RequestInterface extends MessageInterface {

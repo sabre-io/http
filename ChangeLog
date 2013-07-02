@@ -1,4 +1,4 @@
-2.0.0-alpha1 (2013-??-??)
+2.0.0-alpha2 (2013-??-??)
 	* Added: Digest & AWS Authentication.
 	* Added: Message::getHttpVersion and Message::setHttpVersion.
 	* Added: Request::setRawServerArray, getRawServerValue.
@@ -11,7 +11,10 @@
 	* Added: URLUtil, methods for calculation relative and base urls.
 	* Removed: Response::sendBody
 
-0.0.1-alpha (2012-10-07)
-	* First version.
+2.0.0-alpha1 (2012-10-07)
+	* Fixed: Lots of small naming improvements
+	* Added: Introduction of Message, MessageInterface, Response,
+	  ResponseInterface.
 
-Project started: 2012-08-31
+Before 2.0.0, this package was built-into SabreDAV, where it first appeared in
+January 2009.

@@ -16,7 +16,7 @@ class Response extends Message implements ResponseInterface {
      *
      * @var array
      */
-    static public $statusCodes = array(
+    static public $statusCodes = [
         100 => 'Continue',
         101 => 'Switching Protocols',
         102 => 'Processing',
@@ -61,9 +61,9 @@ class Response extends Message implements ResponseInterface {
         423 => 'Locked', // RFC 4918
         424 => 'Failed Dependency', // RFC 4918
         426 => 'Upgrade required',
-        428 => 'Precondition required', // draft-nottingham-http-new-status
-        429 => 'Too Many Requests', // draft-nottingham-http-new-status
-        431 => 'Request Header Fields Too Large', // draft-nottingham-http-new-status
+        428 => 'Precondition required', // RFC 6585
+        429 => 'Too Many Requests', // RFC 6585
+        431 => 'Request Header Fields Too Large', // RFC 6585;
         500 => 'Internal Server Error',
         501 => 'Not Implemented',
         502 => 'Bad Gateway',
@@ -75,8 +75,8 @@ class Response extends Message implements ResponseInterface {
         508 => 'Loop Detected', // RFC 5842
         509 => 'Bandwidth Limit Exceeded', // non-standard
         510 => 'Not extended',
-        511 => 'Network Authentication Required', // draft-nottingham-http-new-status
-    );
+        511 => 'Network Authentication Required', // RFC 6585
+    ];
 
     /**
      * HTTP status code

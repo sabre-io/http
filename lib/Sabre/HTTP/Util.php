@@ -79,4 +79,98 @@ class Util {
 
     }
 
+    /**
+     * This method can be used to aid with content negotiation.
+     *
+     * It takes 2 argument, the $acceptHeaderValue, which may come from Accept,
+     * Accept-Language, Accept-Charset, Accept-Encoding, and an array of items
+     * that the server can support.
+     *
+     * The result of this function will be the 'best possible option'. If no
+     * best possible option could be found, null is returned.
+     *
+     * When it's null you can according to the spec either return a default, or
+     * you can choose to emit 406 Not Acceptable.
+     *
+     * The method also accepts sending 'null' for the $acceptHeaderValue,
+     * implying that no accept header was sent.
+     *
+     * @param string|null $acceptHeader
+     * @param array $availableOptions
+     * @return string|null
+     */
+    static function negotiate($acceptHeaderValue, array $availableOptions) {
+
+        if (!$acceptHeaderValue) {
+            // Grabbing the first in the list.
+            return reset($availableOptions);
+        }
+
+        $proposals = explode(',' , $acceptHeaderValue);
+
+        /**
+         * This function loops through every element, and creates a new array
+         * with 3 elements per item:
+         * 1. mimeType
+         * 2. quality (contents of q= parameter)
+         * 3. index (the original order in the array)
+         */
+        array_walk(
+            $proposals,
+
+            function(&$value, $key) {
+
+                $parts = explode(';', $value);
+                $mimeType = trim($parts[0]);
+                if (isset($parts[1]) && substr(trim($parts[1]),0,2)==='q=') {
+                    $quality = substr(trim($parts[1]),2);
+                } else {
+                    $quality = 1;
+                }
+
+                $value = [$mimeType, $quality, $key];
+
+            }
+        );
+
+        /**
+         * This sorts the array based on quality first, and key-index second.
+         */
+        usort(
+            $proposals,
+
+            function($a, $b) {
+
+                // Comparing quality
+                $result = $a[1] - $b[1];
+                if ($result === 0) {
+                    // Comparing original index
+                    $result = $a[2] - $b[2];
+                }
+
+                return $result;
+
+            }
+
+        );
+
+        // Now we're left with a correctly ordered Accept: header, so we can
+        // compare it to the available mimetypes.
+        foreach($proposals as $proposal) {
+
+            // If it's */* it means 'anything will wdo'
+            if ($proposal[0] === '*/*') {
+                return reset($availableOptions);
+            }
+
+            foreach($availableOptions as $availableItem) {
+                if ($availableItem===$proposal[0]) {
+                    return $availableItem;
+                }
+            }
+
+        }
+
+    }
+
 }

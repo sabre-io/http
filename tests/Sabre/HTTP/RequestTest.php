@@ -122,4 +122,37 @@ class RequestTest extends \PHPUnit_Framework_TestCase {
 
     }
 
+    function testGetAbsoluteUrl() {
+
+        $s = [
+            'HTTP_HOST' => 'sabredav.org',
+            'REQUEST_URI' => '/foo'
+        ];
+
+        $r = Request::createFromServerArray($s);
+
+        $this->assertEquals('http://sabredav.org/foo', $r->getAbsoluteUrl());
+
+        $s = [
+            'HTTP_HOST'   => 'sabredav.org',
+            'REQUEST_URI' => '/foo',
+            'HTTPS'       => 'on',
+        ];
+
+        $r = Request::createFromServerArray($s);
+
+        $this->assertEquals('https://sabredav.org/foo', $r->getAbsoluteUrl());
+
+    }
+
+    function testGetPostData() {
+
+        $post = [
+            'bla' => 'foo',
+        ];
+        $r = new Request();
+        $r->setPostData($post);
+        $this->assertEquals($post, $r->getPostData());
+
+    }
 }

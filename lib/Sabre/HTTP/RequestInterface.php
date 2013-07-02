@@ -95,6 +95,15 @@ interface RequestInterface extends MessageInterface {
     function getPath();
 
     /**
+     * Returns the list of query parameters.
+     *
+     * This is equivalent to PHP's $_GET superglobal.
+     *
+     * @return array
+     */
+    function getQueryParameters();
+
+    /**
      * Sets the post data.
      *
      * This is equivalent to PHP's $_POST superglobal.

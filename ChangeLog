@@ -1,3 +1,6 @@
+2.0.0-alpha3 (2013-??-??)
+	* Added: getQueryParameters to RequestInterface.
+
 2.0.0-alpha2 (2013-07-02)
 	* Added: Digest & AWS Authentication.
 	* Added: Message::getHttpVersion and Message::setHttpVersion.

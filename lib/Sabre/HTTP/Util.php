@@ -82,7 +82,7 @@ class Util {
     /**
      * This method can be used to aid with content negotiation.
      *
-     * It takes 2 argument, the $acceptHeaderValue, which may come from Accept,
+     * It takes 2 arguments, the $acceptHeaderValue, which may come from Accept,
      * Accept-Language, Accept-Charset, Accept-Encoding, and an array of items
      * that the server can support.
      *

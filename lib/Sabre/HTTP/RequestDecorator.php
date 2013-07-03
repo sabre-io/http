@@ -3,20 +3,27 @@
 namespace Sabre\HTTP;
 
 /**
- * The RequestInterface represents a HTTP request.
+ * Request Decorator
  *
- * @copyright Copyright (C) 2009-2013 fruux GmbH (https://fruux.com/).
+ * This helper class allows you to easily create decorators for the Request
+ * object.
+ *
+ * @copyright Copyright (C) 2009-2013 fruux GmbH. All rights reserved.
  * @author Evert Pot (http://evertpot.com/)
  * @license http://code.google.com/p/sabredav/wiki/License Modified BSD License
  */
-interface RequestInterface extends MessageInterface {
+class RequestDecorator implements RequestInterface {
 
     /**
      * Returns the current HTTP method
      *
      * @return string
      */
-    function getMethod();
+    public function getMethod() {
+
+        return $this->inner->getMethod();
+
+    }
 
     /**
      * Sets the HTTP method
@@ -24,14 +31,22 @@ interface RequestInterface extends MessageInterface {
      * @param string $method
      * @return void
      */
-    function setMethod($method);
+    public function setMethod($method) {
+
+        $this->inner->setMethod($method);
+
+    }
 
     /**
      * Returns the request url.
      *
      * @return string
      */
-    function getUrl();
+    public function getUrl() {
+
+        return $this->inner->getUrl();
+
+    }
 
     /**
      * Sets the request url.
@@ -39,14 +54,22 @@ interface RequestInterface extends MessageInterface {
      * @param string $url
      * @return void
      */
-    function setUrl($url);
+    public function setUrl($url) {
+
+        $this->inner->setUrl($url);
+
+    }
 
     /**
      * Returns the absolute url.
      *
      * @return string
      */
-    function getAbsoluteUrl();
+    public function getAbsoluteUrl() {
+
+        return $this->inner->getAbsoluteUrl();
+
+    }
 
     /**
      * Sets the absolute url.
@@ -54,14 +77,22 @@ interface RequestInterface extends MessageInterface {
      * @param string $url
      * @return void
      */
-    function setAbsoluteUrl($url);
+    public function setAbsoluteUrl($url) {
+
+        $this->inner->setAbsoluteUrl($url);
+
+    }
 
     /**
      * Returns the current base url.
      *
      * @return string
      */
-    function getBaseUrl();
+    public function getBaseUrl() {
+
+        return $this->inner->getBaseUrl();
+
+    }
 
     /**
      * Sets a base url.
@@ -73,7 +104,11 @@ interface RequestInterface extends MessageInterface {
      * @param string $url
      * @return void
      */
-    function setBaseUrl($url);
+    public function setBaseUrl($url) {
+
+        $this->inner->setBaseUrl();
+
+    }
 
     /**
      * Returns the relative path.
@@ -92,7 +127,11 @@ interface RequestInterface extends MessageInterface {
      *
      * @return string
      */
-    function getPath();
+    public function getPath() {
+
+        return $this->inner->getPath();
+
+    }
 
     /**
      * Returns the list of query parameters.
@@ -101,7 +140,11 @@ interface RequestInterface extends MessageInterface {
      *
      * @return array
      */
-    function getQueryParameters();
+    public function getQueryParameters() {
+
+        return $this->inner->getQueryParameters();
+
+    }
 
     /**
      * Returns the POST data.
@@ -110,7 +153,11 @@ interface RequestInterface extends MessageInterface {
      *
      * @return array
      */
-    function getPostData();
+    public function getPostData() {
+
+        return $this->inner->getPostData();
+
+    }
 
     /**
      * Sets the post data.
@@ -123,7 +170,12 @@ interface RequestInterface extends MessageInterface {
      * @param array $postData
      * @return void
      */
-    function setPostData(array $postData);
+    public function setPostData(array $postData) {
+
+        $this->inner->setPostData($postData);
+
+    }
+
 
     /**
      * Returns an item from the _SERVER array.
@@ -133,7 +185,11 @@ interface RequestInterface extends MessageInterface {
      * @param string $valueName
      * @return string|null
      */
-    function getRawServerValue($valueName);
+    public function getRawServerValue($valueName) {
+
+        return $this->inner->getRawServerValue($valueName);
+
+    }
 
     /**
      * Sets the _SERVER array.
@@ -141,7 +197,9 @@ interface RequestInterface extends MessageInterface {
      * @param array $data
      * @return void
      */
-    function setRawServerData(array $data);
+    public function setRawServerData(array $data) {
 
+        $this->inner->setRawServerData($data);
 
+    }
 }

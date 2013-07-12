@@ -1,7 +1,7 @@
 2.0.0-alpha3 (2013-??-??)
 	* Added: getQueryParameters to RequestInterface.
 	* Added: Util::negotiate.
-	* Added: RequestDecorator
+	* Added: RequestDecorator, ResponseDecorator.
 
 2.0.0-alpha2 (2013-07-02)
 	* Added: Digest & AWS Authentication.

@@ -131,7 +131,6 @@ class Request extends Message implements RequestInterface {
                 case 'HTTPS' :
                     if (!empty($value) && $value!=='off') {
                         $protocol = 'https';
-                        break;
                     }
                     break;
 

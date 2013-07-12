@@ -126,6 +126,11 @@ class UtilTest extends \PHPUnit_Framework_TestCase {
                 ['application/xml', 'application/json', 'image/png'],
                 'application/xml',
             ],
+            [ // no match
+                'image/jpeg',
+                ['application/xml'],
+                null,
+            ],
 
         ];
 

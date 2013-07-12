@@ -14,6 +14,19 @@ namespace Sabre\HTTP;
  */
 class RequestDecorator implements RequestInterface {
 
+    use MessageDecoratorTrait;
+
+    /**
+     * Constructor.
+     *
+     * @param RequestInterface $inner
+     */
+    public function __construct(RequestInterface $inner) {
+
+        $this->inner = $inner;
+
+    }
+
     /**
      * Returns the current HTTP method
      *
@@ -106,7 +119,7 @@ class RequestDecorator implements RequestInterface {
      */
     public function setBaseUrl($url) {
 
-        $this->inner->setBaseUrl();
+        $this->inner->setBaseUrl($url);
 
     }
 

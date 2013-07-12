@@ -155,4 +155,37 @@ class RequestTest extends \PHPUnit_Framework_TestCase {
         $this->assertEquals($post, $r->getPostData());
 
     }
+
+    function testGetPath() {
+
+        $request = new Request();
+        $request->setBaseUrl('/foo');
+        $request->setUrl('/foo/bar/');
+
+        $this->assertEquals('bar', $request->getPath());
+
+    }
+
+    function testGetPathMissingSlash() {
+
+        $request = new Request();
+        $request->setBaseUrl('/foo/');
+        $request->setUrl('/foo');
+
+        $this->assertEquals('', $request->getPath());
+
+    }
+
+    /**
+     * @expectedException \LogicException
+     */
+    function testGetPathOutsideBaseUrl() {
+
+        $request = new Request();
+        $request->setBaseUrl('/foo/');
+        $request->setUrl('/bar/');
+
+        $request->getPath();
+
+    }
 }

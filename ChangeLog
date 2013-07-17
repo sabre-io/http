@@ -2,6 +2,7 @@
 	* Added: getQueryParameters to RequestInterface.
 	* Added: Util::negotiate.
 	* Added: RequestDecorator, ResponseDecorator.
+	* Added: A very simple HTTP client.
 
 2.0.0-alpha2 (2013-07-02)
 	* Added: Digest & AWS Authentication.

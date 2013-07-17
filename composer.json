@@ -6,7 +6,11 @@
     "license" : "BSD-3-Clause",
     "require" : {
         "php"          : ">=5.4",
-        "ext-mbstring" : "*"
+        "ext-mbstring" : "*",
+        "sabre/event"  : "dev-master"
+    },
+    "suggest" : {
+        "ext-curl" : " to make http requests with the Client class"
     },
     "authors" : [
         {

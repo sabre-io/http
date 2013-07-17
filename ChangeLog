@@ -1,4 +1,5 @@
 2.0.0-alpha3 (2013-??-??)
+	* Changed: Now depends on sabre/event package.
 	* Added: getQueryParameters to RequestInterface.
 	* Added: Util::negotiate.
 	* Added: RequestDecorator, ResponseDecorator.

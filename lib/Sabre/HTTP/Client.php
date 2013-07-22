@@ -88,7 +88,7 @@ class Client extends EventEmitter {
         ) = $this->curlRequest($settings);
 
         if ($curlErroNo) {
-            throw new ClientException($curlError, $curlErroNo);
+            throw new ClientException($curlError, $curlErrNo);
         }
 
         $headerBlob = substr($response, 0, $curlInfo['header_size']);

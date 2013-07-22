@@ -49,7 +49,7 @@ class Client extends EventEmitter {
      * @param RequestInterface $request
      * @return Response
      */
-    public function request(RequestInterface $request) {
+    public function send(RequestInterface $request) {
 
         $this->emit('beforeRequest', [$request]);
 

@@ -4,6 +4,7 @@
 	* Added: Util::negotiate.
 	* Added: RequestDecorator, ResponseDecorator.
 	* Added: A very simple HTTP client.
+	* Fixed: Not erroring on unknown HTTP status codes.
 
 2.0.0-alpha2 (2013-07-02)
 	* Added: Digest & AWS Authentication.

@@ -131,7 +131,8 @@ class Response extends Message implements ResponseInterface {
 
         if (ctype_digit($status) || is_int($status)) {
 
-            $status = $status . ' ' . self::$statusCodes[$status];
+            $statusMessage = isset(self::$statusCodes[$status])?self::$statusCodes[$status]:'Unknown';
+            $status = $status . ' ' . $statusMessage;
 
         }
 

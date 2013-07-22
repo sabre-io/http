@@ -13,6 +13,27 @@ namespace Sabre\HTTP;
 interface MessageInterface {
 
     /**
+     * Used in getBody.
+     *
+     * Returns the message body as a PHP stream.
+     */
+    const BODY_STREAM = 0;
+
+    /**
+     * Used in getBody.
+     *
+     * Returns the message body as a string.
+     */
+    const BODY_STRING = 1;
+
+    /**
+     * Used in getBody.
+     *
+     * Returns the body in the format it was originally encoded in.
+     */
+    const BODY_RAW = 2;
+
+    /**
      * Returns the message body, as a stream.
      *
      * Note that streams are usually 'read once' and depending on the stream,
@@ -21,9 +42,10 @@ interface MessageInterface {
      * If you plan to read the body here, but need it later as well; be
      * prepared to duplicate the stream and set it again.
      *
-     * @return resource
+     * @param int $returnType
+     * @return resource|string
      */
-    function getBody();
+    function getBody($returnType = self::BODY_STREAM);
 
     /**
      * Updates the body resource with a new stream.

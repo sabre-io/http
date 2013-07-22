@@ -45,30 +45,36 @@ abstract class Message implements MessageInterface {
      * If you plan to read the body here, but need it later as well; be
      * prepared to duplicate the stream and set it again.
      *
-     * @param bool $asString
+     * @param int $returnType
      * @return resource|string
      */
-    public function getBody($asString = false) {
+    public function getBody($returnType = self::BODY_STREAM) {
 
         if (!$this->body) {
             $this->body = '';
         }
 
-        if ($asString) {
-            if (is_string($this->body)) {
+        switch($returnType) {
+            case self::BODY_STREAM :
+                if (is_string($this->body)) {
+                    $stream = fopen('php://temp', 'r+');
+                    fwrite($stream, $this->body);
+                    rewind($stream);
+                    return $stream;
+                } else {
+                    return $this->body;
+                }
+                /* No break */
+            case self::BODY_STRING :
+                if (is_string($this->body)) {
+                    return $this->body;
+                } else {
+                    return stream_get_contents($this->body);
+                }
+                /* No break */
+            case self::BODY_RAW :
                 return $this->body;
-            } else {
-                return stream_get_contents($this->body);
-            }
-        } else {
-            if (is_string($this->body)) {
-                $stream = fopen('php://temp', 'r+');
-                fwrite($stream, $this->body);
-                rewind($stream);
-                return $stream;
-            } else {
-                return $this->body;
-            }
+                /* No break */
         }
 
     }

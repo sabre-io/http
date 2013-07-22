@@ -33,11 +33,12 @@ trait MessageDecoratorTrait {
      * If you plan to read the body here, but need it later as well; be
      * prepared to duplicate the stream and set it again.
      *
-     * @return resource
+     * @param int $returnType
+     * @return resource|string
      */
-    public function getBody() {
+    public function getBody($returnType = self::BODY_STREAM) {
 
-        return $this->inner->getBody();
+        return $this->inner->getBody($returnType);
 
     }
 

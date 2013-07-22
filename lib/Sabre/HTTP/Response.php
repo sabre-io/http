@@ -124,7 +124,8 @@ class Response extends Message implements ResponseInterface {
      * Or just the code, in which case the appropriate default message will be
      * added.
      *
-     * @param string $status
+     * @param string|int $status
+     * @throws \InvalidArgumentExeption
      * @return void
      */
     public function setStatus($status) {
@@ -134,6 +135,9 @@ class Response extends Message implements ResponseInterface {
             $statusMessage = isset(self::$statusCodes[$status])?self::$statusCodes[$status]:'Unknown';
             $status = $status . ' ' . $statusMessage;
 
+        }
+        if ((int)$status < 100 | (int)$status>999) {
+            throw new \InvalidArgumentException('The HTTP status code must be exactly 3 digits');
         }
 
         $this->status = $status;

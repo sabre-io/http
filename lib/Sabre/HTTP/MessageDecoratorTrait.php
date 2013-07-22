@@ -96,10 +96,9 @@ trait MessageDecoratorTrait {
     }
 
     /**
-     * Sets a new set of HTTP headers.
+     * Resets HTTP headers
      *
-     * This method should append the new headers, not wipe out the existing
-     * ones.
+     * This method overwrites all existing HTTP headers
      *
      * @param array $headers
      * @return void
@@ -109,6 +108,22 @@ trait MessageDecoratorTrait {
         $this->inner->setHeaders($headers);
 
     }
+
+    /**
+     * Adds a new set of HTTP headers.
+     *
+     * Any header specified in the array that already exists will be
+     * overwritten, but any other existing headers will be retained.
+     *
+     * @param array $headers
+     * @return void
+     */
+    public function addHeaders(array $headers) {
+
+        $this->inner->addHeaders($headers);
+
+    }
+
 
     /**
      * Removes a HTTP header.

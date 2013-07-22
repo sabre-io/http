@@ -128,6 +128,21 @@ abstract class Message implements MessageInterface {
      */
     public function setHeaders(array $headers) {
 
+        $this->headers = $headers;
+
+    }
+
+    /**
+     * Adds a new set of HTTP headers.
+     *
+     * Any header specified in the array that already exists will be
+     * overwritten, but any other existing headers will be retained.
+     *
+     * @param array $headers
+     * @return void
+     */
+    public function addHeaders(array $headers) {
+
         $this->headers = array_merge($this->headers, $headers);
 
     }

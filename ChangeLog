@@ -1,9 +1,11 @@
 2.0.0-alpha3 (2013-??-??)
 	* Changed: Now depends on sabre/event package.
+	* Changed: setHeaders() now overwrites any existing http headers.
 	* Added: getQueryParameters to RequestInterface.
 	* Added: Util::negotiate.
 	* Added: RequestDecorator, ResponseDecorator.
 	* Added: A very simple HTTP client.
+	* Added: addHeaders() to append a list of new headers.
 	* Fixed: Not erroring on unknown HTTP status codes.
 	* Fixed: Throwing exceptions on invalid HTTP status codes (not 3 digits)
 

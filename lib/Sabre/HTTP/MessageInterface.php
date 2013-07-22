@@ -64,15 +64,25 @@ interface MessageInterface {
     function setHeader($name, $value);
 
     /**
-     * Sets a new set of HTTP headers.
+     * Resets HTTP headers
      *
-     * This method should append the new headers, not wipe out the existing
-     * ones.
+     * This method overwrites all existing HTTP headers
      *
      * @param array $headers
      * @return void
      */
     function setHeaders(array $headers);
+
+    /**
+     * Adds a new set of HTTP headers.
+     *
+     * Any header specified in the array that already exists will be
+     * overwritten, but any other existing headers will be retained.
+     *
+     * @param array $headers
+     * @return void
+     */
+    function addHeaders(array $headers);
 
     /**
      * Removes a HTTP header.

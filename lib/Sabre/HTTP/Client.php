@@ -63,9 +63,17 @@ class Client extends EventEmitter {
             case 'GET' :
                 break;
             default :
-                // This needs to be set to PUT, regardless of the actual method.
-                $settings[CURLOPT_PUT] = true;
-                $settings[CURLOPT_INFILE] = $request->getBody();
+                $body = $request->getBody();
+                if (is_resource($body)) {
+                    // This needs to be set to PUT, regardless of the actual
+                    // method used. Without it, INFILE will be ignored for some
+                    // reason.
+                    $settings[CURLOPT_PUT] = true;
+                    $settings[CURLOPT_INFILE] = $request->getBody();
+                } else {
+                    // Else, it's a string.
+                    $settings[CURLOPT_POSTFIELDS ] = $body;
+                }
                 $settings[CURLOPT_CUSTOMREQUEST] = $request->getMethod();
                 break;
 

@@ -87,7 +87,7 @@ class Client extends EventEmitter {
             $curlError
         ) = $this->curlRequest($settings);
 
-        if ($curlErroNo) {
+        if ($curlErrNo) {
             throw new ClientException($curlError, $curlErrNo);
         }
 

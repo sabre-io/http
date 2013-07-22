@@ -63,7 +63,7 @@ class Client extends EventEmitter {
             case 'GET' :
                 break;
             default :
-                $body = $request->getBody();
+                $body = $request->getBody(MessageInterface::BODY_RAW);
                 if (is_resource($body)) {
                     // This needs to be set to PUT, regardless of the actual
                     // method used. Without it, INFILE will be ignored for some

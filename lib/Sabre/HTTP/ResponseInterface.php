@@ -30,7 +30,7 @@ interface ResponseInterface extends MessageInterface {
      * Or just the code, in which case the appropriate default message will be
      * added.
      *
-     * @param string $status
+     * @param string|int $status
      * @throws \InvalidArgumentExeption
      * @return void
      */

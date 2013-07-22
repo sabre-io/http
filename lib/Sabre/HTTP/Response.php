@@ -136,7 +136,7 @@ class Response extends Message implements ResponseInterface {
             $status = $status . ' ' . $statusMessage;
 
         }
-        if ((int)$status < 100 | (int)$status>999) {
+        if ((int)$status < 100 || (int)$status>999) {
             throw new \InvalidArgumentException('The HTTP status code must be exactly 3 digits');
         }
 

@@ -48,7 +48,7 @@ class ResponseDecorator implements ResponseInterface {
      * Or just the code, in which case the appropriate default message will be
      * added.
      *
-     * @param string $status;
+     * @param string|int $status
      * @return void
      */
     public function setStatus($status) {

@@ -39,6 +39,7 @@ class Client extends EventEmitter {
             CURLOPT_HEADER => true,
             CURLOPT_FOLLOWLOCATION => true,
             CURLOPT_MAXREDIRS => 5,
+            CURLOPT_POSTREDIR => 3,
         ];
 
     }
@@ -72,7 +73,7 @@ class Client extends EventEmitter {
                     $settings[CURLOPT_INFILE] = $request->getBody();
                 } else {
                     // Else, it's a string.
-                    $settings[CURLOPT_POSTFIELDS ] = $body;
+                    $settings[CURLOPT_POSTFIELDS] = $body;
                 }
                 $settings[CURLOPT_CUSTOMREQUEST] = $request->getMethod();
                 break;

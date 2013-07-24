@@ -7,7 +7,9 @@
 	* Added: A very simple HTTP client.
 	* Added: addHeaders() to append a list of new headers.
 	* Fixed: Not erroring on unknown HTTP status codes.
-	* Fixed: Throwing exceptions on invalid HTTP status codes (not 3 digits)
+	* Fixed: Throwing exceptions on invalid HTTP status codes (not 3 digits).
+	* Fixed: Much better README.md
+	* Changed: getBody() now uses a bitfield to specify what type to return.
 
 2.0.0-alpha2 (2013-07-02)
 	* Added: Digest & AWS Authentication.

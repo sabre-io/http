@@ -1,4 +1,5 @@
-#sabre/http library
+sabre/http
+==========
 
 This library provides a toolkit to make working with the HTTP protocol easier.
 
@@ -25,7 +26,8 @@ What this library provides, is a `Request` object, and a `Response` object.
 
 The objects are extendable and easily mockable.
 
-## Installation
+Installation
+------------
 
 Make sure you have [composer][1] installed. In your project directory, create,
 or edit a `composer.json` file, and make sure it contains something like this:
@@ -41,7 +43,8 @@ or edit a `composer.json` file, and make sure it contains something like this:
 
 After that, just hit `composer install` and you should be rolling.
 
-## Quick history
+Quick history
+-------------
 
 This library came to existence in 2009, as a part of the [SabreDAV][2]
 project, which uses it heavily.
@@ -56,13 +59,14 @@ Said library does a lot more stuff and is significantly more popular,
 so if you are looking for something to fulfill this particular requirement,
 I'd recommend also considering [HttpFoundation][3].
 
-## Usage
+
+Getting started
+---------------
 
 First and foremost, this library wraps the superglobals. The easiest way to
 instantiate a request object is as follows:
 
 ```php
-
 use Sabre\HTTP;
 
 include 'vendor/autoload.php';
@@ -81,7 +85,6 @@ function handleRequest(HTTP\RequestInterface $request) {
     // Do something with this request :)
 
 }
-
 ```
 
 A response object you can just create as such:
@@ -110,7 +113,67 @@ $response->send();
 This line should generally also appear once in your application (at the very
 end).
 
-### Client
+
+Decorators
+----------
+
+It may be useful to extend the Request and Response objects in your
+application, if you for example would like them to carry a bit more
+information about the current request.
+
+For instance, you may want to add an `isLoggedIn()` method to the Request
+object.
+
+Simply extending Request and Response may pose some problems:
+
+1. You may want to extend the objects with new behavior differently, in
+   different subsystems of your application.
+2. The `Request::createFromPHPRequest` factory always returns a instance of
+   `Request` so you would have to override the factory method as well.
+3. By controlling the instantation of specific `Request` and `Response`
+   instances in your library or application, you make it harder to work with
+   other applications who also use `sabre/http`.
+
+In short: it would be bad design. Instead, it's recommended to use the
+[decorator pattern][6] to add new behavior in the specific application or
+subsystems where you need them. sabre/http provides helper classes to quickly
+do this.
+
+Example:
+
+```php
+use Sabre\HTTP;
+
+class MyRequest extends HTTP\RequestDectorator {
+
+    function isLoggedIn() {
+
+        return true;
+
+    }
+
+}
+```
+
+Our application assumes that the true `Request` object was instantiated
+somewhere else, by some other subsystem. This could simply be a call like
+`$request = Request::createFromPHPRequest()` at the top of your application,
+but could also be somewhere in a unittest.
+
+All we know in the current subsystem, is that we received a `$request` and
+that it implements `Sabre\HTTP\RequestInterface`. To decorate this object,
+all we need to do is:
+
+```php
+$request = new MyRequest($request);
+```
+
+And that's it, we now have an `isLoggedIn` method, without having to mess
+with the core instances.
+
+
+Client
+------
 
 This package also contains a simple wrapper around [cURL][4], which will allow
 you to write simple clients, using the `Request` and `Response` objects you're
@@ -171,9 +234,11 @@ $client->on('error:401', function($request, $response, &$retry, $retryCount) {
 });
 ```
 
-### The Request and Response API's
 
-#### Request
+The Request and Response API's
+------------------------------
+
+### Request
 
 ```php
 
@@ -441,7 +506,7 @@ function setHttpVersion($version);
 function getHttpVersion();
 ```
 
-#### Response
+### Response
 
 ```php
 /**
@@ -585,3 +650,4 @@ function getHttpVersion();
 [3]: https://github.com/symfony/HttpFoundation
 [4]: http://uk3.php.net/curl
 [5]: https://github.com/fruux/sabre-event
+[6]: http://en.wikipedia.org/wiki/Decorator_pattern

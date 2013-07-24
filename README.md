@@ -130,14 +130,13 @@ Simply extending Request and Response may pose some problems:
    different subsystems of your application.
 2. The `Request::createFromPHPRequest` factory always returns a instance of
    `Request` so you would have to override the factory method as well.
-3. By controlling the instantation of specific `Request` and `Response`
-   instances in your library or application, you make it harder to work with
-   other applications who also use `sabre/http`.
+3. By controlling the instantation and depend on specific `Request` and
+   `Response` instances in your library or application, you make it harder to
+   work with other applications which also use `sabre/http`.
 
 In short: it would be bad design. Instead, it's recommended to use the
-[decorator pattern][6] to add new behavior in the specific application or
-subsystems where you need them. sabre/http provides helper classes to quickly
-do this.
+[decorator pattern][6] to add new behavior where you need it. sabre/http
+provides helper classes to quickly do this.
 
 Example:
 
@@ -179,10 +178,13 @@ This package also contains a simple wrapper around [cURL][4], which will allow
 you to write simple clients, using the `Request` and `Response` objects you're
 already familiar with.
 
+It's by no means a replacement for something like [guzzle][7], but it provides
+a simple and lightweight api for making the occasional API call.
+
+### Usage
+
 ```php
 use Sabre\HTTP;
-
-include 'vendor/autoload.php';
 
 $request = new HTTP\Request('GET', 'http://example.org/');
 $request->setHeader('X-Foo', 'Bar');
@@ -233,7 +235,6 @@ $client->on('error:401', function($request, $response, &$retry, $retryCount) {
 
 });
 ```
-
 
 The Request and Response API's
 ------------------------------
@@ -651,3 +652,4 @@ function getHttpVersion();
 [4]: http://uk3.php.net/curl
 [5]: https://github.com/fruux/sabre-event
 [6]: http://en.wikipedia.org/wiki/Decorator_pattern
+[7]: http://guzzlephp.org/

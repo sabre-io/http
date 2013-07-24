@@ -646,6 +646,11 @@ function setHttpVersion($version);
 function getHttpVersion();
 ```
 
+Made at fruux
+-------------
+
+This library is being developed by [fruux](https://fruux.com/). Drop us a line for commercial services or enterprise support.
+
 [1]: http://getcomposer.org/
 [2]: http://code.google.com/p/sabredav
 [3]: https://github.com/symfony/HttpFoundation

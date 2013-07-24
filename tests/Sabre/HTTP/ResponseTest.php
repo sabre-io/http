@@ -46,4 +46,13 @@ class ResponseTest extends \PHPUnit_Framework_TestCase {
 
     }
 
+    /**
+     * @expectedException InvalidArgumentException
+     */
+    function testInvalidStatus() {
+
+        $response = new Response(1000);
+
+    }
+
 }

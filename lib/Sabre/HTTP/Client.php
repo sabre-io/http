@@ -14,6 +14,24 @@ use
  * This is by no means intended as the next best HTTP client, but it does the
  * job and provides a simple integration with the rest of sabre/http.
  *
+ * This client emits the following events:
+ *   beforeRequest(RequestInterface $request)
+ *   afterRequest(RequestInterface $request, Response $response)
+ *   error(RequestInterface $request, ResponseInterface $response, bool &$retry)
+ *
+ * The beforeRequest event allows you to do some last minute changes to the
+ * request before it's done, such as adding authentication headers.
+ *
+ * The afterRequest event will be emitted after the request is completed
+ * succesfully.
+ *
+ * If a HTTP error is returned (status code higher than 399) the error event is
+ * triggered. It's possible using this event to retry the request, by setting
+ * retry to true.
+ *
+ * It's also possible to intercept specific http errors, by subscribing to for
+ * example 'error:401'.
+ *
  * @copyright Copyright (C) 2009-2013 fruux GmbH. All rights reserved.
  * @author Evert Pot (http://evertpot.com/)
  * @license http://code.google.com/p/sabredav/wiki/License Modified BSD License
@@ -53,6 +71,37 @@ class Client extends EventEmitter {
     public function send(RequestInterface $request) {
 
         $this->emit('beforeRequest', [$request]);
+
+        do {
+
+            $response = $this->doRequest($request);
+
+            $retry = false;
+            $code = (int)$response->getStatus();
+
+            // This was a HTTP error
+            if ($code > 399) {
+
+                $this->emit('error', [$request, $response, &$retry]);
+                $this->emit('error:' . $code, [$request, $response, &$retry]);
+
+            }
+
+        } while ($retry);
+
+        $this->emit('afterRequest', [$request, $response]);
+
+        return $response;
+
+    }
+
+    /**
+     * This method is responsible for performing a single request.
+     *
+     * @param RequestInterface $request
+     * @return Response
+     */
+    protected function doRequest(RequestInterface $request) {
 
         $settings = $this->curlSettings;
 
@@ -129,7 +178,6 @@ class Client extends EventEmitter {
         $response->setHeaders($headers);
         $response->setBody($responseBody);
 
-        $this->emit('afterRequest', [$request, $response]);
 
         return $response;
 

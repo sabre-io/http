@@ -277,6 +277,68 @@ class ClientTest extends \PHPUnit_Framework_TestCase {
         $client->send($request);
 
     }
+
+    function testSendRetryAfterError() {
+
+        $client = new ClientMock();
+
+        $foo = 0;
+
+        $client->on('curl', function($settings, &$result) use (&$foo) {
+
+            $foo++;
+            if ($foo === 1) {
+                $returnCode = '400 Bad request';
+            } else {
+                $returnCode = '200 OK';
+            }
+
+            $returnHeaders = [
+                "HTTP/1.1 " . $returnCode,
+                "X-Zim: Gir",
+            ];
+
+            $returnHeaders = implode("\r\n", $returnHeaders) . "\r\n\r\n";
+
+            $returnBody = "hi!";
+
+            $result = [
+                $returnHeaders . $returnBody,
+                [
+                    'header_size' => strlen($returnHeaders),
+                    'http_code' => (int)$returnCode,
+                ],
+                0,
+                '',
+            ];
+
+
+        });
+
+        $request = new Request('PUT','http://example.org/', ['X-Foo' => 'bar'], 'boo');
+        $response = $client->send($request);
+
+        $this->assertEquals(
+            '400 Bad request',
+            $response->getStatus()
+        );
+        $this->assertEquals(1, $foo);
+
+        // Doing this again, but retrying this time.
+        $foo = 0;
+        $client->on('error:400', function($request, $response, &$retry) {
+            $retry = true;
+        });
+
+        $response = $client->send($request);
+
+        $this->assertEquals(
+            '200 OK',
+            $response->getStatus()
+        );
+        $this->assertEquals(2, $foo);
+
+    }
 }
 
 class ClientMock extends Client {

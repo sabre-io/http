@@ -1,4 +1,4 @@
-2.0.0-alpha3 (2013-??-??)
+2.0.0-alpha3 (2013-07-24)
 	* Changed: Now depends on sabre/event package.
 	* Changed: setHeaders() now overwrites any existing http headers.
 	* Added: getQueryParameters to RequestInterface.

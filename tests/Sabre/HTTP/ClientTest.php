@@ -326,8 +326,8 @@ class ClientTest extends \PHPUnit_Framework_TestCase {
 
         // Doing this again, but retrying this time.
         $foo = 0;
-        $client->on('error:400', function($request, $response, &$retry) {
-            $retry = true;
+        $client->on('error:400', function($request, $response, &$retry, $retryCount) {
+            if ($retryCount === 0) $retry = true;
         });
 
         $response = $client->send($request);

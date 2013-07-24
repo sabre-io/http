@@ -17,7 +17,7 @@ use
  * This client emits the following events:
  *   beforeRequest(RequestInterface $request)
  *   afterRequest(RequestInterface $request, Response $response)
- *   error(RequestInterface $request, ResponseInterface $response, bool &$retry)
+ *   error(RequestInterface $request, ResponseInterface $response, bool &$retry, int $retryCount)
  *
  * The beforeRequest event allows you to do some last minute changes to the
  * request before it's done, such as adding authentication headers.
@@ -28,6 +28,10 @@ use
  * If a HTTP error is returned (status code higher than 399) the error event is
  * triggered. It's possible using this event to retry the request, by setting
  * retry to true.
+ *
+ * The amount of times a request has retried is passed as $retryCount, which
+ * can be used to avoid retrying indefinitely. The first time the event is
+ * called, this will be 0.
  *
  * It's also possible to intercept specific http errors, by subscribing to for
  * example 'error:401'.
@@ -72,6 +76,8 @@ class Client extends EventEmitter {
 
         $this->emit('beforeRequest', [$request]);
 
+        $retryCount = 0;
+
         do {
 
             $response = $this->doRequest($request);
@@ -82,9 +88,12 @@ class Client extends EventEmitter {
             // This was a HTTP error
             if ($code > 399) {
 
-                $this->emit('error', [$request, $response, &$retry]);
-                $this->emit('error:' . $code, [$request, $response, &$retry]);
+                $this->emit('error', [$request, $response, &$retry, $retryCount]);
+                $this->emit('error:' . $code, [$request, $response, &$retry, $retryCount]);
 
+            }
+            if ($retry) {
+                $retryCount++;
             }
 
         } while ($retry);

@@ -98,7 +98,7 @@ include 'vendor/autoload.php';
 $response = new HTTP\Response();
 $response->setStatus(201); // created !
 $response->setHeader('X-Foo', 'bar');
-$response->body(
+$response->setBody(
     'success!'
 );
 

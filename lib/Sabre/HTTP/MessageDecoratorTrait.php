@@ -34,6 +34,7 @@ trait MessageDecoratorTrait {
      * prepared to duplicate the stream and set it again.
      *
      * @param int $returnType
+     * @throws InvalidArgumentException when no valid $returnType is given.
      * @return resource|string
      */
     public function getBody($returnType = self::BODY_STREAM) {

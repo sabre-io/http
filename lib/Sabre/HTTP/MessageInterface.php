@@ -43,6 +43,7 @@ interface MessageInterface {
      * prepared to duplicate the stream and set it again.
      *
      * @param int $returnType
+     * @throws InvalidArgumentException when no valid $returnType is given.
      * @return resource|string
      */
     function getBody($returnType = self::BODY_STREAM);

@@ -21,11 +21,14 @@ class MessageTest extends \PHPUnit_Framework_TestCase {
         $message = new MessageMock();
         $message->setBody($h);
 
-        $this->assertEquals($body, $message->getBody($asString = true));
+        $this->assertEquals($body, $message->getBody(Message::BODY_STRING));
         rewind($h);
         $this->assertEquals($body, stream_get_contents($message->getBody()));
+        rewind($h);
+        $this->assertEquals($body, stream_get_contents($message->getBody(Message::BODY_RAW)));
 
     }
+
     function testStringBody() {
 
         $body = 'foo';
@@ -33,10 +36,12 @@ class MessageTest extends \PHPUnit_Framework_TestCase {
         $message = new MessageMock();
         $message->setBody($body);
 
-        $this->assertEquals($body, $message->getBody($asString = true));
+        $this->assertEquals($body, $message->getBody(Message::BODY_STRING));
         $this->assertEquals($body, stream_get_contents($message->getBody()));
+        $this->assertEquals($body, $message->getBody(Message::BODY_RAW));
 
     }
+
 
     function testGetEmptyBody() {
 
@@ -83,6 +88,42 @@ class MessageTest extends \PHPUnit_Framework_TestCase {
         rewind($body);
 
         $this->assertEquals('bar', stream_get_contents($body));
+
+    }
+
+    function testSetHeaders() {
+
+        $message = new MessageMock();
+        $message->setHeaders([
+            'a' => 'b',
+        ]);
+        $message->setHeaders([
+            'c' => 'd',
+            ]);
+        $this->assertNull($message->getHeader('a'));
+
+    }
+
+    function testAddHeaders() {
+
+        $message = new MessageMock();
+        $message->addHeaders([
+            'a' => 'b',
+        ]);
+        $message->addHeaders([
+            'c' => 'd',
+        ]);
+        $this->assertEquals('b', $message->getHeader('a'));
+
+    }
+
+    /**
+     * @expectedException InvalidArgumentException
+     */
+    function testGetBodyInvalid() {
+
+        $message = new MessageMock();
+        $message->getBody(-1);
 
     }
 

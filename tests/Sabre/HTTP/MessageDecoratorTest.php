@@ -31,6 +31,19 @@ class MessageDecoratorTest extends \PHPUnit_Framework_TestCase {
         $this->assertEquals(['a' => 'b'], $this->inner->getHeaders());
         $this->assertEquals(['a' => 'b'], $this->outer->getHeaders());
 
+        $this->outer->setHeaders([
+            'c' => 'd',
+            ]);
+
+        $this->assertEquals(['c' => 'd'], $this->inner->getHeaders());
+        $this->assertEquals(['c' => 'd'], $this->outer->getHeaders());
+
+        $this->outer->addHeaders([
+            'e' => 'f',
+            ]);
+
+        $this->assertEquals(['c' => 'd', 'e' => 'f'], $this->inner->getHeaders());
+        $this->assertEquals(['c' => 'd', 'e' => 'f'], $this->outer->getHeaders());
     }
 
     function testHeader() {

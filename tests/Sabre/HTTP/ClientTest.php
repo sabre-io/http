@@ -20,6 +20,7 @@ class ClientTest extends \PHPUnit_Framework_TestCase {
                 CURLOPT_POSTREDIR => 0,
                 CURLOPT_HTTPHEADER => ['X-Foo: bar'],
                 CURLOPT_URL => 'http://example.org/',
+                CURLOPT_CUSTOMREQUEST => 'GET',
             ], $settings);
 
             $returnHeaders = [

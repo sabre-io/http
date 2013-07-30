@@ -120,6 +120,7 @@ class Client extends EventEmitter {
                 $settings[CURLOPT_CUSTOMREQUEST] = 'HEAD';
                 break;
             case 'GET' :
+                $settings[CURLOPT_CUSTOMREQUEST] = 'GET';
                 break;
             default :
                 $body = $request->getBody(MessageInterface::BODY_RAW);

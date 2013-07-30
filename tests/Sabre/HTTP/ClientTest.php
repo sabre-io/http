@@ -21,6 +21,9 @@ class ClientTest extends \PHPUnit_Framework_TestCase {
                 CURLOPT_HTTPHEADER => ['X-Foo: bar'],
                 CURLOPT_URL => 'http://example.org/',
                 CURLOPT_CUSTOMREQUEST => 'GET',
+                CURLOPT_POSTFIELDS => null,
+                CURLOPT_PUT => false,
+                CURLOPT_INFILE => null,
             ], $settings);
 
             $returnHeaders = [
@@ -83,6 +86,9 @@ class ClientTest extends \PHPUnit_Framework_TestCase {
                 CURLOPT_CUSTOMREQUEST => 'HEAD',
                 CURLOPT_HTTPHEADER => ['X-Foo: bar'],
                 CURLOPT_URL => 'http://example.org/',
+                CURLOPT_POSTFIELDS => null,
+                CURLOPT_PUT => false,
+                CURLOPT_INFILE => null,
             ], $settings);
 
             $returnHeaders = [

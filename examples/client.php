@@ -34,8 +34,8 @@ foreach($paths as $path) {
 $request = new Request('GET', 'http://feeds.feedburner.com/bijsterespoor');
 
 $client = new Client();
-$client->addCurlSetting(CURLOPT_PROXY,'localhost:8888');
-$response = $client->request($request);
+//$client->addCurlSetting(CURLOPT_PROXY,'localhost:8888');
+$response = $client->send($request);
 
 echo "Response: " . $response->getStatus() . "\n";
 echo "Headers:\n";

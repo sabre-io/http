@@ -50,6 +50,13 @@ class Client extends EventEmitter {
     protected $curlSettings = [];
 
     /**
+     * Wether or not exceptions should be thrown when a HTTP error is returned.
+     *
+     * @var bool
+     */
+    protected $throwExceptions = false;
+
+    /**
      * Initializes the client.
      *
      * @return void
@@ -100,7 +107,37 @@ class Client extends EventEmitter {
 
         $this->emit('afterRequest', [$request, $response]);
 
+        if ($this->throwExceptions && $code > 399) {
+            throw new ClientHttpException($response);
+        }
+
         return $response;
+
+    }
+
+    /**
+     * If this is set to true, the Client will automatically throw exceptions
+     * upon http errors.
+     *
+     * @param bool $throwExceptions
+     * @return void
+     */
+    public function setThrowExceptions($throwExceptions) {
+
+        $this->throwExceptions = $throwExceptions;
+
+    }
+
+    /**
+     * Adds a CURL setting.
+     *
+     * @param int $name
+     * @param mixed $value
+     * @return void
+     */
+    public function addCurlSetting($name, $value) {
+
+        $this->curlSettings[$name] = $value;
 
     }
 
@@ -197,18 +234,6 @@ class Client extends EventEmitter {
 
     }
 
-    /**
-     * Adds a CURL setting.
-     *
-     * @param int $name
-     * @param mixed $value
-     * @return void
-     */
-    public function addCurlSetting($name, $value) {
-
-        $this->curlSettings[$name] = $value;
-
-    }
 
     /**
      * Cached curl handle.

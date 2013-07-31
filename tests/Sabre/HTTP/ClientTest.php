@@ -344,6 +344,60 @@ class ClientTest extends \PHPUnit_Framework_TestCase {
         $this->assertEquals(2, $foo);
 
     }
+
+    function testThrowExceptions() {
+
+        $client = new ClientMock();
+
+        $foo = 0;
+
+        $client->on('curl', function($settings, &$result) use (&$foo) {
+
+            $foo++;
+            if ($foo === 1) {
+                $returnCode = '400 Bad request';
+            } else {
+                $returnCode = '200 OK';
+            }
+
+            $returnHeaders = [
+                "HTTP/1.1 " . $returnCode,
+                "X-Zim: Gir",
+            ];
+
+            $returnHeaders = implode("\r\n", $returnHeaders) . "\r\n\r\n";
+
+            $returnBody = "hi!";
+
+            $result = [
+                $returnHeaders . $returnBody,
+                [
+                    'header_size' => strlen($returnHeaders),
+                    'http_code' => (int)$returnCode,
+                ],
+                0,
+                '',
+            ];
+
+
+        });
+
+        $client->setThrowExceptions(true);
+
+        try {
+            $request = new Request('PUT','http://example.org/', ['X-Foo' => 'bar'], 'boo');
+            $response = $client->send($request);
+            $this->fail('We expected an exception to be thrown, so this should be unreachable');
+        } catch (ClientHttpException $e) {
+
+            $this->assertEquals('400 Bad request', $e->getHttpStatus());
+            $this->assertEquals('Gir', $e->getResponse()->getHeader('X-Zim'));
+
+        }
+
+
+    }
+
 }
 
 class ClientMock extends Client {

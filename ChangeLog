@@ -1,6 +1,9 @@
 2.0.0-alpha4 (2013-??-??)
 	* Fixed: Doing a GET request with the client uses the last used HTTP
 	  method instead.
+	* Added: HttpException
+	* Added: The Client class can now automatically emit exceptions when HTTP
+	  errors occurred.
 
 2.0.0-alpha3 (2013-07-24)
 	* Changed: Now depends on sabre/event package.

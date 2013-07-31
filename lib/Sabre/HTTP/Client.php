@@ -16,7 +16,7 @@ use
  *
  * This client emits the following events:
  *   beforeRequest(RequestInterface $request)
- *   afterRequest(RequestInterface $request, Response $response)
+ *   afterRequest(RequestInterface $request, ResponseInterface $response)
  *   error(RequestInterface $request, ResponseInterface $response, bool &$retry, int $retryCount)
  *
  * The beforeRequest event allows you to do some last minute changes to the
@@ -70,7 +70,7 @@ class Client extends EventEmitter {
      * Sends a request to a HTTP server, and returns a response.
      *
      * @param RequestInterface $request
-     * @return Response
+     * @return ResponseInterface
      */
     public function send(RequestInterface $request) {
 
@@ -108,7 +108,7 @@ class Client extends EventEmitter {
      * This method is responsible for performing a single request.
      *
      * @param RequestInterface $request
-     * @return Response
+     * @return ResponseInterface
      */
     protected function doRequest(RequestInterface $request) {
 

@@ -247,6 +247,12 @@ class Client extends EventEmitter {
         ];
 
     }
+    
+    public function __destruct() {
+        if ($this->curlHandle) {
+            curl_close($this->curlHandle);
+        }
+    }
     // @codeCoverageIgnoreEnd
 
 }

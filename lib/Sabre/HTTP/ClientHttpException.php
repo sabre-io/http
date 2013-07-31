@@ -30,7 +30,7 @@ class ClientHttpException extends \Exception implements HttpException {
 
         $this->response = $response;
 
-        list($httpCode, $humanReadable) = explode(' ', $response->getStatus());
+        list($httpCode, $humanReadable) = explode(' ', $response->getStatus(), 2);
         parent::__construct($humanReadable, $httpCode);
 
     }

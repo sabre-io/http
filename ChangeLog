@@ -1,3 +1,7 @@
+2.0.0-beta1 (2013-??-??)
+	* Added: HTTP Status 451 Unavailable For Legal Reasons. Fight government
+	  censorship!
+
 2.0.0-alpha4 (2013-08-07)
 	* Fixed: Doing a GET request with the client uses the last used HTTP
 	  method instead.

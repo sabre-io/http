@@ -283,6 +283,48 @@ class ClientTest extends \PHPUnit_Framework_TestCase {
 
     }
 
+    function testCurlErrorRetry() {
+
+        $client = new ClientMock();
+
+        $client->on('curl', function($settings, &$result) {
+
+            $result = [
+                '',
+                [
+                    'header_size' => 0,
+                    'http_code' => 200,
+                ],
+                1,
+                'Error',
+            ];
+
+        });
+
+        $hits = 0;
+
+        $client->on('exception', function(Request $request, ClientException $e, &$retry, $retryCount) use (&$hits) {
+
+            $hits++;
+            if ($retryCount < 1) {
+                $retry = true;
+            }
+
+        });
+
+        $caught = false;
+        try {
+            $request = new Request('PUT','http://example.org/', ['X-Foo' => 'bar'], 'boo');
+            $client->send($request);
+        } catch (ClientException $e) {
+            $caught = true;
+        }
+
+        $this->assertTrue($caught);
+        $this->assertEquals(2, $hits);
+
+    }
+
     function testSendRetryAfterError() {
 
         $client = new ClientMock();

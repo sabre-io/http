@@ -87,17 +87,30 @@ class Client extends EventEmitter {
 
         do {
 
-            $response = $this->doRequest($request);
-
             $retry = false;
-            $code = (int)$response->getStatus();
 
-            // This was a HTTP error
-            if ($code > 399) {
+            try {
+                $response = $this->doRequest($request);
 
-                $this->emit('error', [$request, $response, &$retry, $retryCount]);
-                $this->emit('error:' . $code, [$request, $response, &$retry, $retryCount]);
+                $code = (int)$response->getStatus();
 
+                // This was a HTTP error
+                if ($code > 399) {
+
+                    $this->emit('error', [$request, $response, &$retry, $retryCount]);
+                    $this->emit('error:' . $code, [$request, $response, &$retry, $retryCount]);
+
+                }
+
+            } catch (ClientException $e) {
+                $this->emit('exception', [$request, $e, &$retry, $retryCount]);
+
+                // If retry was still set to false, it means no event handler
+                // dealt with the problem. In this case we just re-throw the
+                // exception.
+                if (!$retry) {
+                    throw $e;
+                }
             }
             if ($retry) {
                 $retryCount++;

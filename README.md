@@ -143,7 +143,7 @@ Example:
 ```php
 use Sabre\HTTP;
 
-class MyRequest extends HTTP\RequestDectorator {
+class MyRequest extends HTTP\RequestDecorator {
 
     function isLoggedIn() {
 

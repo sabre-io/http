@@ -309,6 +309,8 @@ class Request extends Message implements RequestInterface {
 
         if (strpos($uri,$this->getBaseUrl())===0) {
 
+            // We're not interested in the query part (everything after the ?).
+            list($uri) = explode('?', $uri);
             return trim(URLUtil::decodePath(substr($uri,strlen($this->getBaseUrl()))),'/');
 
         // A special case, if the baseUri was accessed without a trailing

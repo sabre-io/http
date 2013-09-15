@@ -166,6 +166,16 @@ class RequestTest extends \PHPUnit_Framework_TestCase {
 
     }
 
+    function testGetPathStrippedQuery() {
+
+        $request = new Request();
+        $request->setBaseUrl('/foo');
+        $request->setUrl('/foo/bar/?a=b');
+
+        $this->assertEquals('bar', $request->getPath());
+
+    }
+
     function testGetPathMissingSlash() {
 
         $request = new Request();

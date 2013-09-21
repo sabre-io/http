@@ -2,8 +2,7 @@
 
 namespace Sabre\HTTP;
 
-use
-    Sabre\Event\EventEmitter;
+use Sabre\Event\EventEmitter;
 
 /**
  * A rudimentary HTTP client.
@@ -43,36 +42,93 @@ use
 class Client extends EventEmitter {
 
     /**
-     * List of curl settings
-     *
-     * @var array
-     */
-    protected $curlSettings = [];
-
-    /**
      * Wether or not exceptions should be thrown when a HTTP error is returned.
      *
      * @var bool
      */
     protected $throwExceptions = false;
-
+    /*
+     * @var array Default cURL settings
+     */
+    protected static $defaultCurlSettings=[
+        CURLOPT_RETURNTRANSFER => true,
+        // Return headers as part of the response
+        CURLOPT_HEADER => true,
+        // Automatically follow redirects
+        CURLOPT_FOLLOWLOCATION => true,
+        CURLOPT_MAXREDIRS => 5,
+        CURLOPT_POSTREDIR => 3,
+    ];
+    
     /**
      * Initializes the client.
      *
      * @return void
      */
-    public function __construct() {
-
-        $this->curlSettings = [
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_HEADER => true,
-            CURLOPT_FOLLOWLOCATION => true,
-            CURLOPT_MAXREDIRS => 5,
-            CURLOPT_POSTREDIR => 3,
-        ];
-
+    public function __construct(array $settings=null) {
+        static::initCurl();
+        
+        if (isset($settings['encoding'])) {
+            static::setEncodings($settings['encoding']);
+        }else{
+            static::setEncodings(self::ENCODING_DEFAULT);
+        }
+        
+        if (isset($settings['proxy'])) {
+            static::setProxy($settings['proxy']);
+        }
+        
+        $authType=isset($settings['authType'])?$settings['authType']:self::AUTH_DEFAULT;
+        
+        if (isset($settings['userName'])) {
+            static::setAuth($settings['userName'],$settings['password'],$authType);
+        }
+        
+        if (isset($settings['verifyPeer'])) {
+            $this->setVerifyPeer($settings['verifyPeer']);
+        }
+        
+        if (isset($settings['cert'])) {
+            $this->addTrustedCertificates($settings['cert']);
+        }
     }
-
+    
+    public function __destruct() {
+        if($this->curlHandle)curl_close($this->curlHandle);
+    }
+    
+    /**
+    * Initializes CURL handle
+    * look for __construct docs
+    * @param array $settings settings for CURL in format for curlopt_setopt_array
+    */
+    protected function initCurl(array &$settings=null){
+        $this->curlHandle=curl_init();
+        if (!$this->curlHandle) {
+            throw new Sabre_DAV_Exception('[CURL] unable to initialize curl handle');
+        }
+        $curlSettings = static::$defaultCurlSettings;
+        if (isset($settings)&&is_array($settings)){
+            $curlSettings+=$settings;
+            unset($settings);
+        }
+        static::setCurlSettings($curlSettings);
+        unset($curlSettings);
+    }
+    
+    const AUTH_BASIC = 1;//<Basic authentication
+    const AUTH_DIGEST = 2;//<Digest authentication
+    const AUTH_DEFAULT= 3;//<Default auth type
+    
+    
+    const ENCODING_IDENTITY = 1;//<Identity encoding, which basically does not nothing.
+    const ENCODING_DEFLATE = 2;//<Deflate encoding
+    const ENCODING_GZIP = 4;//<Gzip encoding
+    const ENCODING_ALL = 7;//<Sends all encoding headers.
+    const ENCODING_DEFAULT = self::ENCODING_IDENTITY;//<Default encoding.
+    
+    
+    
     /**
      * Sends a request to a HTTP server, and returns a response.
      *
@@ -142,16 +198,137 @@ class Client extends EventEmitter {
     }
 
     /**
-     * Adds a CURL setting.
+     * Adds a cURL setting.
      *
-     * @param int $name
+     * @param int $optName
      * @param mixed $value
      * @return void
      */
-    public function addCurlSetting($name, $value) {
-
-        $this->curlSettings[$name] = $value;
-
+    public function addCurlSetting($optName, $value) {
+        static::setCurlSetting($optName,$value);
+    }
+    
+    /**
+     * Sets a cURL setting.
+     *
+     * @param int $optName cURL constant for option
+     * @param mixed $value value
+     * @return boolean the same that cURL returns
+     */
+    public function setCurlSetting($optName,$value){
+        return curl_setopt($this->curlHandle,$optName,$value);
+    }
+    
+    /**
+     * Sets an array of cURL settings.
+     *
+     * @param $arrayOfSettings the same that for cor_setopt_array
+     * @return boolean the same that cURL returns
+     */
+    public function setCurlSettings(array $arrayOfSettings){
+        return curl_setopt_array($this->curlHandle,$arrayOfSettings);
+    }
+    
+    
+     /** converts
+     * @param number $encodings bitwise OR of needed ENCODING_* constants of this class
+     * to format, suitable for CURL
+     */
+    protected static function convertEncodingsToInnerFormat(&$encodings){
+        $encodingsList = [];
+        if ($encodings & self::ENCODING_IDENTITY) {
+            $encodingsList[] = 'identity';
+        }
+        if ($encodings & self::ENCODING_DEFLATE) {
+            $encodingsList[] = 'deflate';
+        }
+        if ($encodings & self::ENCODING_GZIP) {
+            $encodingsList[] = 'gzip';
+        }
+        return implode(',', $encodingsList);
+    }
+    
+     /** converts
+     * @param number $authType bitwise OR of needed AUTH_* constants of this class
+     * to format, suitable for CURL
+     */
+    protected static function convertAuthTypeToInnerFormat(int &$authType){
+        $curlAuthType = 0;
+        if ($authType & self::AUTH_BASIC) {
+            $curlAuthType |= CURLAUTH_BASIC;
+        }
+        if ($authType & self::AUTH_DIGEST) {
+            $curlAuthType |= CURLAUTH_DIGEST;
+        }
+        return $curlAuthType;
+    }
+    
+     /**
+     * Used to set enconings
+     *
+     * @param integer $encodings  bitwise OR of needed ENCODING_* constants of this class
+     */
+    public function setEncodings($encodings=self::ENCODING_DEFAULT){
+        static::setCurlSetting(CURLOPT_ENCODING,static::convertEncodingsToInnerFormat($encodings));
+    }
+    
+     /**
+     * Used to set proxy
+     *
+     * @param string $proxyAddr address of proxy in format host:port
+     */
+    public function setProxy(string $proxyAddr) {
+        static::setCurlSetting(CURLOPT_PROXY,$proxyAddr);
+    }
+    
+    
+    /**
+     * Used to set auth type
+     *  
+     * @param string $userName 
+     * @param string $password 
+     * @param integer $authType  If DIGEST is used, the client makes 1 extra request per request, to get the authentication tokens.
+     */
+    public function setAuth($userName='',$password='',$authType=self::AUTH_DEFAULT) {
+        if ($userName && $authType) {
+            static::setCurlSetting(CURLOPT_USERPWD,$userName.':'.$password);
+        }
+        static::setCurlSetting(CURLOPT_HTTPAUTH,static::convertAuthTypeToInnerFormat($authType));
+    }
+    
+    /**
+     * Used to set certificates file.
+     * Not for usage by end user because addTrustedCertificates checks wheither file exist in call time but
+     * this function will check this requirement during execution curl request.
+     *
+     * @param string $certificatesPath
+     */
+     
+    protected function setCertificates($certificatesPath){
+        static::setCurlSetting(CURLOPT_CAINFO,$certificatesPath);
+    }
+    
+    /**
+     * Enables/disables SSL peer verification
+     *
+     * @param boolean $shouldVerifyPeer
+     */
+    public function setVerifyPeer($shouldVerifyPeer){
+        static::setCurlSetting(CURLOPT_SSL_VERIFYPEER,$shouldVerifyPeer);
+    }
+    
+    /**
+     * Add trusted root certificates to the webdav client.
+     *
+     * @param string $certificatesPath absolute path to a file which contains all trusted certificates
+     */
+    public function addTrustedCertificates($certificatesPath) {
+        if(is_string($certificatesPath)){
+            if(!file_exists($certificatesPath))throw new Exception('certificates path is not valid');
+            static::setCertificates($certificatesPath);
+        }else{
+            throw new Exception('$certificates must be the absolute path of a file holding one or more certificates to verify the peer with.');
+        }
     }
 
     /**
@@ -162,18 +339,18 @@ class Client extends EventEmitter {
      */
     protected function doRequest(RequestInterface $request) {
 
-        $settings = $this->curlSettings;
+        //$settings = $this->curlSettings;
 
         switch($request->getMethod()) {
             case 'HEAD' :
                 $settings[CURLOPT_NOBODY] = true;
                 $settings[CURLOPT_CUSTOMREQUEST] = 'HEAD';
-                $settings[CURLOPT_POSTFIELDS] = '';
+                $settings[CURLOPT_POSTFIELDS] = null;
                 $settings[CURLOPT_PUT] = false;
                 break;
             case 'GET' :
                 $settings[CURLOPT_CUSTOMREQUEST] = 'GET';
-                $settings[CURLOPT_POSTFIELDS] = '';
+                $settings[CURLOPT_POSTFIELDS] = null;
                 $settings[CURLOPT_PUT] = false;
                 break;
             default :
@@ -201,13 +378,14 @@ class Client extends EventEmitter {
         }
         $settings[CURLOPT_HTTPHEADER] = $nHeaders;
         $settings[CURLOPT_URL] = $request->getUrl();
-
+        static::setCurlSettings($settings);
+        
         list(
             $response,
             $curlInfo,
             $curlErrNo,
             $curlError
-        ) = $this->curlRequest($settings);
+        ) = static::curlRequest();
 
         if ($curlErrNo) {
             throw new ClientException($curlError, $curlErrNo);
@@ -229,7 +407,7 @@ class Client extends EventEmitter {
         // Splitting headers
         $headerBlob = explode("\r\n", $headerBlob);
 
-        $headers = array();
+        $headers = [];
         foreach($headerBlob as $header) {
             $parts = explode(':', $header, 2);
             if (count($parts)==2) {
@@ -264,19 +442,10 @@ class Client extends EventEmitter {
      * The only reason this was split out in a separate method, is so it
      * becomes easier to unittest.
      *
-     * @param string $url
-     * @param array $settings
      * @return array
      */
     // @codeCoverageIgnoreStart
-    protected function curlRequest($settings) {
-
-        if (!$this->curlHandle) {
-            $this->curlHandle = curl_init();
-        }
-
-        curl_setopt_array($this->curlHandle, $settings);
-
+    protected function curlRequest() {
         return [
             curl_exec($this->curlHandle),
             curl_getinfo($this->curlHandle),

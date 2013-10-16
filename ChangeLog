@@ -5,6 +5,7 @@
 	  curl error occurs.
 	* Changed: Request::getPath does not return the query part of the url, so
 	  everything after the ? is stripped.
+	* Added: a reverse proxy example.
 
 2.0.0-alpha4 (2013-08-07)
 	* Fixed: Doing a GET request with the client uses the last used HTTP

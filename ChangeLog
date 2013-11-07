@@ -1,4 +1,4 @@
-2.0.0-beta1 (2013-??-??)
+2.0.0alpha5 (2013-11-07)
 	* Added: HTTP Status 451 Unavailable For Legal Reasons. Fight government
 	  censorship!
 	* Added: Ability to catch and retry http requests in the client when a
@@ -7,14 +7,14 @@
 	  everything after the ? is stripped.
 	* Added: a reverse proxy example.
 
-2.0.0-alpha4 (2013-08-07)
+2.0.0alpha4 (2013-08-07)
 	* Fixed: Doing a GET request with the client uses the last used HTTP
 	  method instead.
 	* Added: HttpException
 	* Added: The Client class can now automatically emit exceptions when HTTP
 	  errors occurred.
 
-2.0.0-alpha3 (2013-07-24)
+2.0.0alpha3 (2013-07-24)
 	* Changed: Now depends on sabre/event package.
 	* Changed: setHeaders() now overwrites any existing http headers.
 	* Added: getQueryParameters to RequestInterface.
@@ -27,7 +27,7 @@
 	* Fixed: Much better README.md
 	* Changed: getBody() now uses a bitfield to specify what type to return.
 
-2.0.0-alpha2 (2013-07-02)
+2.0.0alpha2 (2013-07-02)
 	* Added: Digest & AWS Authentication.
 	* Added: Message::getHttpVersion and Message::setHttpVersion.
 	* Added: Request::setRawServerArray, getRawServerValue.
@@ -40,7 +40,7 @@
 	* Added: URLUtil, methods for calculation relative and base urls.
 	* Removed: Response::sendBody
 
-2.0.0-alpha1 (2012-10-07)
+2.0.0alpha1 (2012-10-07)
 	* Fixed: Lots of small naming improvements
 	* Added: Introduction of Message, MessageInterface, Response,
 	  ResponseInterface.

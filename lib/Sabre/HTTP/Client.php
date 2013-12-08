@@ -63,6 +63,11 @@ class Client extends EventEmitter {
      */
     public function __construct() {
 
+        // hhvm compatibility.
+        if (!defined('CURLOPT_POSTREDIR')) {
+            define('CURLOPT_POSTREDIR', 161);
+        }
+
         $this->curlSettings = [
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_HEADER => true,

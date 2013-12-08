@@ -1,5 +1,8 @@
 2.0.0alpha6 (2013-??-??)
 	* Fixed: Issue #4: Don't escape colon (:) when it's not needed.
+	* Fixed: Fixed a bug in the content negotation script.
+	* Fixed: Fallback for when CURLOPT_POSTREDIR is not defined (mainly for
+	  hhvm).
 
 2.0.0alpha5 (2013-11-07)
 	* Added: HTTP Status 451 Unavailable For Legal Reasons. Fight government

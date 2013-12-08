@@ -141,14 +141,15 @@ class Util {
 
             function($a, $b) {
 
-                // Comparing quality
-                $result = $a[1] - $b[1];
-                if ($result === 0) {
-                    // Comparing original index
-                    $result = $a[2] - $b[2];
+                // If quality is identical, we compare the original index.
+                if ($a[1]===$b[1]) {
+                    // Indexes are ints, so we can just subtract
+                    return $a[2] - $b[2];
+                } else {
+                    // Quality are floats, so we need to make sure we're
+                    // returning the correct integers.
+                    return $a[1] > $b[1]?-1:1;
                 }
-
-                return $result;
 
             }
 

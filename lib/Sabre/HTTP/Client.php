@@ -144,23 +144,12 @@ class Client extends EventEmitter {
      */
     public function sendAsync(RequestInterface $request, callable $success = null, callable $error = null) {
 
-        if (!$this->curlMultiHandle) {
-            $this->curlMultiHandle = curl_multi_init();
-        }
-        $curl = curl_init();
-        curl_setopt_array(
-            $curl,
-            $this->createCurlSettingsArray($request)
-        );
-        curl_multi_add_handle($this->curlMultiHandle, $curl);
-        $this->curlMultiMap[intval($curl)] = [
-            $request,
-            $success,
-            $error
-        ];
+        $this->emit('beforeRequest', [$request]);
+        $this->sendAsyncInternal($request, $success, $error);
         $this->poll();
 
     }
+
 
     /**
      * This method checks if any http requests have gotten results, and if so,
@@ -175,7 +164,7 @@ class Client extends EventEmitter {
 
         // nothing to do?
         if(!$this->curlMultiMap) {
-            return;
+            return false;
         }
 
         do {
@@ -186,6 +175,9 @@ class Client extends EventEmitter {
         } while ($r === CURLM_CALL_MULTI_PERFORM);
 
         do {
+
+            messageQueue:
+
             $status = curl_multi_info_read(
                 $this->curlMultiHandle,
                 $messagesInQueue
@@ -196,17 +188,49 @@ class Client extends EventEmitter {
                 list(
                     $request,
                     $successCallback,
-                    $errorCallback
+                    $errorCallback,
+                    $retryCount,
                 ) = $this->curlMultiMap[$resourceId];
 
                 unset($this->curlMultiMap[$resourceId]);
 
-                $curlResult = $this->parseCurlResult(curl_multi_getcontent(), $status['handle']);
-                if ($curlResult['status'] === self::STATUS_CURLERROR || $curlResult['status'] === self::STATUS_HTTPERROR) {
+                $curlResult = $this->parseCurlResult(curl_multi_getcontent($status['handle']), $status['handle']);
+
+                $retry = false;
+
+                if ($curlResult['status'] === self::STATUS_CURLERROR) {
+
+                    $e = new ClientException($curlResult['curl_errmsg'], $curlResult['curl_errno']);
+                    $this->emit('exception', [$request, $e, &$retry, $retryCount]);
+                    if ($retry) {
+                        $retryCount++;
+                        $this->sendASyncInternal($request, $successCallback, $errorCallback, $retryCount);
+                        goto messageQueue;
+                    }
                     $curlResult['request'] = $request;
-                    $errorCallback($curlResult);
+                    if ($errorCallback) {
+                        $errorCallback($curlResult);
+                    }
+
+                } elseif ($curlResult['status'] === self::STATUS_HTTPERROR) {
+
+                    $this->emit('error', [$request, $curlResult['response'], &$retry, $retryCount]);
+                    $this->emit('error:' . $curlResult['http_code'], [$request, $curlResult['response'], &$retry, $retryCount]);
+
+                    if ($retry) {
+                        $retryCount++;
+                        $this->sendASyncInternal($request, $successCallback, $errorCallback, $retryCount);
+                        goto messageQueue;
+                    }
+                    $curlResult['request'] = $request;
+                    if ($errorCallback) {
+                        $errorCallback($curlResult);
+                    }
                 } else {
-                    $successCallback($curlResult['response']);
+                    $this->emit('afterRequest', [$request, $curlResult['response']]);
+                    if ($successCallback) {
+                        $successCallback($curlResult['response']);
+                    }
                 }
             }
         } while ($messagesInQueue > 0);
@@ -225,7 +249,7 @@ class Client extends EventEmitter {
 
         do {
             curl_multi_select($this->curlMultiHandle);
-            $stillRunning = $this->processQueue();
+            $stillRunning = $this->poll();
         } while ($stillRunning);
 
     }
@@ -446,6 +470,37 @@ class Client extends EventEmitter {
             'status'    => $httpCode >= 400 ? self::STATUS_HTTPERROR : self::STATUS_SUCCESS,
             'response'  => $response,
             'http_code' => $httpCode,
+        ];
+
+    }
+
+    /**
+     * Sends a asynchrous http request.
+     *
+     * We keep this in a separate method, so we can call it without triggering
+     * the beforeRequest event and don't do the poll().
+     *
+     * @param RequestInterface $request
+     * @param callable $success
+     * @param callable $error
+     * @param int $retryCount
+     */
+    protected function sendAsyncInternal(RequestInterface $request, callable $success, callable $error, $retryCount = 0) {
+
+        if (!$this->curlMultiHandle) {
+            $this->curlMultiHandle = curl_multi_init();
+        }
+        $curl = curl_init();
+        curl_setopt_array(
+            $curl,
+            $this->createCurlSettingsArray($request)
+        );
+        curl_multi_add_handle($this->curlMultiHandle, $curl);
+        $this->curlMultiMap[intval($curl)] = [
+            $request,
+            $success,
+            $error,
+            $retryCount
         ];
 
     }

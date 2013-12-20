@@ -95,7 +95,7 @@ class Client extends EventEmitter {
                 $code = (int)$response->getStatus();
 
                 // This was a HTTP error
-                if ($code > 399) {
+                if ($code >= 400) {
 
                     $this->emit('error', [$request, $response, &$retry, $retryCount]);
                     $this->emit('error:' . $code, [$request, $response, &$retry, $retryCount]);
@@ -129,8 +129,116 @@ class Client extends EventEmitter {
     }
 
     /**
+     * Sends a HTTP request asynchronously.
+     *
+     * Due to the nature of PHP, you must from time to time poll to see if any
+     * new responses came in.
+     *
+     * After calling sendAsync, you must therefore occasionally call the poll()
+     * method, or wait().
+     *
+     * @param RequestInterface $request
+     * @param callable $success
+     * @param callable $error
+     * @return void
+     */
+    public function sendAsync(RequestInterface $request, callable $success = null, callable $error = null) {
+
+        if (!$this->curlMultiHandle) {
+            $this->curlMultiHandle = curl_multi_init();
+        }
+        $curl = curl_init();
+        curl_setopt_array(
+            $curl,
+            $this->createCurlSettingsArray($request)
+        );
+        curl_multi_add_handle($this->curlMultiHandle, $curl);
+        $this->curlMultiMap[intval($curl)] = [
+            $request,
+            $success,
+            $error
+        ];
+        $this->poll();
+
+    }
+
+    /**
+     * This method checks if any http requests have gotten results, and if so,
+     * call the appropriate success or error handlers.
+     *
+     * This method will return true if there are still requests waiting to
+     * return, and false if all the work is done.
+     *
+     * @return bool
+     */
+    public function poll() {
+
+        // nothing to do?
+        if(!$this->curlMultiMap) {
+            return;
+        }
+
+        do {
+            $r = curl_multi_exec(
+                $this->curlMultiHandle,
+                $stillRunning
+            );
+        } while ($r === CURLM_CALL_MULTI_PERFORM);
+
+        do {
+            $status = curl_multi_info_read(
+                $this->curlMultiHandle,
+                $messagesInQueue
+            );
+            if ($status && $status['msg'] === CURLMSG_DONE) {
+
+                $resourceId = intval($status['handle']);
+                list(
+                    $request,
+                    $successCallback,
+                    $errorCallback
+                ) = $this->curlMultiMap[$resourceId];
+
+                unset($this->curlMultiMap[$resourceId]);
+
+                $curlResult = $this->parseCurlResult(curl_multi_getcontent(), $status['handle']);
+                if ($curlResult['status'] === self::STATUS_CURLERROR || $curlResult['status'] === self::STATUS_HTTPERROR) {
+                    $curlResult['request'] = $request;
+                    $errorCallback($curlResult);
+                } else {
+                    $successCallback($curlResult['response']);
+                }
+            }
+        } while ($messagesInQueue > 0);
+
+        return $stillRunning;
+
+    }
+
+    /**
+     * Processes every HTTP request in the queue, and waits till they are all
+     * completed.
+     *
+     * @return void
+     */
+    public function wait() {
+
+        do {
+            curl_multi_select($this->curlMultiHandle);
+            $stillRunning = $this->processQueue();
+        } while ($stillRunning);
+
+    }
+
+    /**
      * If this is set to true, the Client will automatically throw exceptions
      * upon http errors.
+     *
+     * This means that if a response came back with a status code of 400 or
+     * higher, we will throw a ClientHttpException.
+     *
+     * This only works for the send() method. Throwing exceptions for
+     * sendAsync() is not supported.
      *
      * @param bool $throwExceptions
      * @return void
@@ -143,6 +251,8 @@ class Client extends EventEmitter {
 
     /**
      * Adds a CURL setting.
+     *
+     * These settings will be included in every HTTP request.
      *
      * @param int $name
      * @param mixed $value
@@ -161,6 +271,61 @@ class Client extends EventEmitter {
      * @return ResponseInterface
      */
     protected function doRequest(RequestInterface $request) {
+
+        $settings = $this->createCurlSettingsArray($request);
+
+        if (!$this->curlHandle) {
+            $this->curlHandle = curl_init();
+        }
+
+        curl_setopt_array($this->curlHandle, $settings);
+        $response = $this->curlExec($this->curlHandle);
+
+        $response = $this->parseCurlResult($response, $this->curlHandle);
+
+        if ($response['status'] === self::STATUS_CURLERROR) {
+            throw new ClientException($response['curl_errmsg'], $response['curl_errno']);
+        }
+
+        return $response['response'];
+
+    }
+
+    /**
+     * Cached curl handle.
+     *
+     * By keeping this resource around for the lifetime of this object, things
+     * like persistent connections are possible.
+     *
+     * @var resource
+     */
+    private $curlHandle;
+
+    /**
+     * Handler for curl_multi requests.
+     *
+     * The first time sendAsync is used, this will be created.
+     *
+     * @var resource
+     */
+    private $curlMultiHandle;
+
+    /**
+     * Has a list of curl handles, as well as their associated success and
+     * error callbacks.
+     *
+     * @var array
+     */
+    private $curlMultiMap = [];
+
+    /**
+     * Turns a RequestInterface object into an array with settings that can be
+     * fed to curl_setopt
+     *
+     * @param RequestInterface $request
+     * @return array
+     */
+    protected function createCurlSettingsArray(RequestInterface $request) {
 
         $settings = $this->curlSettings;
 
@@ -202,15 +367,45 @@ class Client extends EventEmitter {
         $settings[CURLOPT_HTTPHEADER] = $nHeaders;
         $settings[CURLOPT_URL] = $request->getUrl();
 
-        list(
-            $response,
-            $curlInfo,
-            $curlErrNo,
-            $curlError
-        ) = $this->curlRequest($settings);
+        return $settings;
+
+    }
+
+    const STATUS_SUCCESS = 0;
+    const STATUS_CURLERROR = 1;
+    const STATUS_HTTPERROR = 2;
+
+    /**
+     * Parses the result of a curl call in a format that's a bit more
+     * convenient to work with.
+     *
+     * The method returns an array with the following elements:
+     *   * status - one of the 3 STATUS constants.
+     *   * curl_errno - A curl error number. Only set if status is
+     *                  STATUS_CURLERROR.
+     *   * curl_errmsg - A current error message. Only set if status is
+     *                   STATUS_CURLERROR.
+     *   * response - Response object. Only set if status is STATUS_SUCCESS, or
+     *                STATUS_HTTPERROR.
+     *   * http_code - HTTP status code, as an int. Only set if Only set if
+     *                 status is STATUS_SUCCESS, or STATUS_HTTPERROR
+     *
+     * @param string $response
+     * @param resource $curlHandle
+     * @return Response
+     */
+    protected function parseCurlResult($response, $curlHandle) {
+
+        $curlInfo   = curl_getinfo($curlHandle);
+        $curlErrNo  = curl_errno($curlHandle);
+        $curlErrMsg = curl_error($curlHandle);
 
         if ($curlErrNo) {
-            throw new ClientException($curlError, $curlErrNo);
+            return [
+                'status' => self::STATUS_CURLERROR,
+                'curl_errno' => $curlErrNo,
+                'curl_errmsg' => $curlErrMsg,
+            ];
         }
 
         $headerBlob = substr($response, 0, $curlInfo['header_size']);
@@ -219,6 +414,7 @@ class Client extends EventEmitter {
         unset($response);
 
         // In the case of 100 Continue, or redirects we'll have multiple lists
+        //
         // of headers for each separate HTTP response. We can easily split this
         // because they are separated by \r\n\r\n
         $headerBlob = explode("\r\n\r\n", trim($headerBlob, "\r\n"));
@@ -242,49 +438,28 @@ class Client extends EventEmitter {
         $response->setHeaders($headers);
         $response->setBody($responseBody);
 
-
-        return $response;
-
-    }
-
-
-    /**
-     * Cached curl handle.
-     *
-     * By keeping this resource around for the lifetime of this object, things
-     * like persistent connections are possible.
-     *
-     * @var resource
-     */
-    private $curlHandle;
-
-    /**
-     * Wrapper for all curl functions.
-     *
-     * The only reason this was split out in a separate method, is so it
-     * becomes easier to unittest.
-     *
-     * @param string $url
-     * @param array $settings
-     * @return array
-     */
-    // @codeCoverageIgnoreStart
-    protected function curlRequest($settings) {
-
-        if (!$this->curlHandle) {
-            $this->curlHandle = curl_init();
-        }
-
-        curl_setopt_array($this->curlHandle, $settings);
+        $httpCode = intval($response->getStatus());
 
         return [
-            curl_exec($this->curlHandle),
-            curl_getinfo($this->curlHandle),
-            curl_errno($this->curlHandle),
-            curl_error($this->curlHandle)
+            'status'    => $httpCode >= 400 ? self::STATUS_HTTPERROR : self::STATUS_SUCCESS,
+            'response'  => $response,
+            'http_code' => $httpCode,
         ];
 
     }
-    // @codeCoverageIgnoreEnd
+
+    /**
+     * Calls curl_exec
+     *
+     * This method exists so it can easily be overridden and mocked.
+     * 
+     * @param mixed $curlHandle 
+     * @return string 
+     */
+    protected function curlExec($curlHandle) {
+
+        return curl_exec($curlHandle);
+
+    }
 
 }

@@ -31,7 +31,7 @@ foreach($paths as $path) {
     }
 }
 
-// This is the request we're repeating a 1000 times. 
+// This is the request we're repeating a 1000 times.
 $request = new Request('GET', 'http://localhost/');
 $client = new Client();
 
@@ -46,10 +46,10 @@ for($i = 0; $i < 1000; $i++) {
             echo "$i -> " . $response->getStatus() . "\n";
         },
 
-        // This is the 'error' callback. It is called for general connection 
-        // problems (such as not being able to connect to a host, dns errors, 
-        // etc.) and also cases where a response was returned, but it had a 
-        // status code of 400 or higher. 
+        // This is the 'error' callback. It is called for general connection
+        // problems (such as not being able to connect to a host, dns errors,
+        // etc.) and also cases where a response was returned, but it had a
+        // status code of 400 or higher.
         function($error) use ($i) {
 
             if ($error['status'] === Client::STATUS_CURLERROR) {
@@ -63,6 +63,6 @@ for($i = 0; $i < 1000; $i++) {
     );
 }
 
-// After everything is done, we call 'wait'. This causes the client to wait for 
+// After everything is done, we call 'wait'. This causes the client to wait for
 // all outstanding http requests to complete.
 $client->wait();

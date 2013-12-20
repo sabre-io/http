@@ -1,4 +1,5 @@
 2.0.0alpha6 (2013-??-??)
+	* Added: Asynchronous HTTP client. See examples/asyncclient.php.
 	* Fixed: Issue #4: Don't escape colon (:) when it's not needed.
 
 2.0.0alpha5 (2013-11-07)

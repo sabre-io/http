@@ -450,6 +450,8 @@ class Client extends EventEmitter {
 
     }
 
+    // @codeCoverageIgnoreStart
+
     /**
      * Calls curl_exec
      *
@@ -457,6 +459,7 @@ class Client extends EventEmitter {
      *
      * @param resource $curlHandle
      * @return string
+
      */
     protected function curlExec($curlHandle) {
 
@@ -481,5 +484,6 @@ class Client extends EventEmitter {
         ];
 
     }
+    // @codeCoverageIgnoreEnd
 
 }

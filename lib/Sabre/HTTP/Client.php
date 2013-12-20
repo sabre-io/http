@@ -396,9 +396,11 @@ class Client extends EventEmitter {
      */
     protected function parseCurlResult($response, $curlHandle) {
 
-        $curlInfo   = curl_getinfo($curlHandle);
-        $curlErrNo  = curl_errno($curlHandle);
-        $curlErrMsg = curl_error($curlHandle);
+        list(
+            $curlInfo,
+            $curlErrNo,
+            $curlErrMsg
+        ) = $this->curlStuff($curlHandle);
 
         if ($curlErrNo) {
             return [
@@ -452,13 +454,31 @@ class Client extends EventEmitter {
      * Calls curl_exec
      *
      * This method exists so it can easily be overridden and mocked.
-     * 
-     * @param mixed $curlHandle 
-     * @return string 
+     *
+     * @param resource $curlHandle
+     * @return string
      */
     protected function curlExec($curlHandle) {
 
         return curl_exec($curlHandle);
+
+    }
+
+    /**
+     * Returns a bunch of information about a curl request.
+     *
+     * This method exists so it can easily be overridden and mocked.
+     *
+     * @param resource $curlHandle
+     * @return array
+     */
+    protected function curlStuff($curlHandle) {
+
+        return [
+            curl_getinfo($curlHandle),
+            curl_errno($curlHandle),
+            curl_error($curlHandle),
+        ];
 
     }
 

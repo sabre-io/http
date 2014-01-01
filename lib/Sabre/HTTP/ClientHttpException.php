@@ -36,7 +36,7 @@ class ClientHttpException extends \Exception implements HttpException {
     /**
      * The http status code for the error.
      *
-     * @return string|null
+     * @return int
      */
     public function getHttpStatus() {
 

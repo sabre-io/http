@@ -4,6 +4,9 @@
 	* Fixed: Fixed a bug in the content negotation script.
 	* Fixed: Fallback for when CURLOPT_POSTREDIR is not defined (mainly for
 	  hhvm).
+	* Added: The Request and Response object now have a __toString() method
+	  that serializes the objects into a standard HTTP message. This is mainly
+	  for debugging purposes.
 	* Changed: Added Response::getStatusText(). This method returns the
 	  human-readable HTTP status message. This part has been removed from
 	  Response::getStatus(), which now always returns just the status code as

@@ -188,4 +188,23 @@ class Response extends Message implements ResponseInterface {
 
     }
 
+    /**
+     * Serializes the response object as a string.
+     *
+     * This is useful for debugging purposes.
+     *
+     * @return string
+     */
+    public function __toString() {
+
+        $str = 'HTTP/' . $this->httpVersion . ' ' . $this->getStatus() . ' ' . $this->getStatusText() . "\r\n";
+        foreach($this->getHeaders() as $key=>$value) {
+            $str.= $key . ": " . $value . "\r\n";
+        }
+        $str.="\r\n";
+        $str.=$this->getBody(Message::BODY_STRING);
+        return $str;
+
+    }
+
 }

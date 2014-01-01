@@ -397,4 +397,24 @@ class Request extends Message implements RequestInterface {
         $this->rawServerData = $data;
 
     }
+
+    /**
+     * Serializes the request object as a string.
+     *
+     * This is useful for debugging purposes.
+     *
+     * @return string
+     */
+    public function __toString() {
+
+        $str = $this->getMethod() . ' ' . $this->getUrl() . ' HTTP/' . $this->getHTTPVersion() . "\r\n";
+        foreach($this->getHeaders() as $key=>$value) {
+            $str.= $key . ": " . $value . "\r\n";
+        }
+        $str.="\r\n";
+        $str.=$this->getBody(Message::BODY_STRING);
+        return $str;
+
+    }
+
 }

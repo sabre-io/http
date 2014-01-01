@@ -8,7 +8,7 @@ namespace Sabre\HTTP;
  * By default the Client will not emit these, this has to be explicitly enabled
  * with the setThrowExceptions method.
  *
- * @copyright Copyright (C) 2009-2013 fruux GmbH. All rights reserved.
+ * @copyright Copyright (C) 2009-2014 fruux GmbH. All rights reserved.
  * @author Evert Pot (http://evertpot.com/)
  * @license http://code.google.com/p/sabredav/wiki/License Modified BSD License
  */

@@ -11,15 +11,21 @@ namespace Sabre\HTTP;
  */
 interface ResponseInterface extends MessageInterface {
 
+    /**
+     * Returns the current HTTP status code.
+     *
+     * @return int
+     */
+    function getStatus();
 
     /**
-     * Returns the current HTTP status.
+     * Returns the human-readable status string.
      *
-     * This is the status-code as well as the human readable string.
+     * In the case of a 200, this may for example be 'OK'.
      *
      * @return string
      */
-    function getStatus();
+    function getStatusText();
 
     /**
      * Sets the HTTP status code.

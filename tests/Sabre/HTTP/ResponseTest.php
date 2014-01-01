@@ -7,7 +7,8 @@ class ResponseTest extends \PHPUnit_Framework_TestCase {
     function testConstruct() {
 
         $response = new Response(200, ['Content-Type' => 'text/xml']);
-        $this->assertEquals('200 OK', $response->getStatus());
+        $this->assertEquals(200, $response->getStatus());
+        $this->assertEquals('OK', $response->getStatusText());
 
     }
 

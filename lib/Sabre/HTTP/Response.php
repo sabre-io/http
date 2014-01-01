@@ -82,9 +82,16 @@ class Response extends Message implements ResponseInterface {
     /**
      * HTTP status code
      *
-     * @var string
+     * @var int
      */
     protected $status;
+
+    /**
+     * HTTP status text
+     *
+     * @var string
+     */
+    protected $statusText;
 
     /**
      * Creates the response object
@@ -104,15 +111,26 @@ class Response extends Message implements ResponseInterface {
 
 
     /**
-     * Returns the current HTTP status.
+     * Returns the current HTTP status code.
      *
-     * This is the status-code as well as the human readable string.
-     *
-     * @return string
+     * @return int
      */
     public function getStatus() {
 
         return $this->status;
+
+    }
+
+    /**
+     * Returns the human-readable status string.
+     *
+     * In the case of a 200, this may for example be 'OK'.
+     *
+     * @return string
+     */
+    public function getStatusText() {
+
+        return $this->statusText;
 
     }
 
@@ -133,15 +151,21 @@ class Response extends Message implements ResponseInterface {
 
         if (ctype_digit($status) || is_int($status)) {
 
-            $statusMessage = isset(self::$statusCodes[$status])?self::$statusCodes[$status]:'Unknown';
-            $status = $status . ' ' . $statusMessage;
+            $statusCode = $status;
+            $statusText = isset(self::$statusCodes[$status])?self::$statusCodes[$status]:'Unknown';
 
+        } else {
+            list(
+                $statusCode,
+                $statusText
+            ) = explode(' ', $status, 2);
         }
-        if ((int)$status < 100 || (int)$status>999) {
+        if ($statusCode < 100 || $statusCode > 999) {
             throw new \InvalidArgumentException('The HTTP status code must be exactly 3 digits');
         }
 
-        $this->status = $status;
+        $this->status = $statusCode;
+        $this->statusText = $statusText;
 
     }
 
@@ -154,7 +178,7 @@ class Response extends Message implements ResponseInterface {
      */
     public function send() {
 
-        header('HTTP/' . $this->httpVersion . ' ' . $this->status);
+        header('HTTP/' . $this->httpVersion . ' ' . $this->status . ' ' . $this->statusText);
         foreach($this->headers as $key=>$value) {
 
             header($key . ': ' . $value);

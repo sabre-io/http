@@ -114,7 +114,7 @@ class ClientTest extends \PHPUnit_Framework_TestCase {
 
         $response = $client->send($request);
 
-        $this->assertEquals("200 OK", $response->getStatus());
+        $this->assertEquals(200, $response->getStatus());
 
     }
 
@@ -188,7 +188,7 @@ class ClientTest extends \PHPUnit_Framework_TestCase {
         $response = $client->send($request);
         $this->assertEquals(3,$called);
         $this->assertEquals(2,$errorCalled);
-        $this->assertEquals('200 OK', $response->getStatus());
+        $this->assertEquals(200, $response->getStatus());
 
     }
 
@@ -206,7 +206,7 @@ class ClientTest extends \PHPUnit_Framework_TestCase {
             $client->send($request);
             $this->fail('An exception should have been thrown');
         } catch (ClientHttpException $e) {
-            $this->assertEquals('404 Not Found', $e->getHttpStatus());
+            $this->assertEquals(404, $e->getHttpStatus());
             $this->assertInstanceOf('Sabre\HTTP\Response', $e->getResponse());
         }
 
@@ -233,7 +233,7 @@ class ClientTest extends \PHPUnit_Framework_TestCase {
 
         $this->assertEquals(Client::STATUS_SUCCESS, $result['status']);
         $this->assertEquals(200, $result['http_code']);
-        $this->assertEquals('200 OK', $result['response']->getStatus());
+        $this->assertEquals(200, $result['response']->getStatus());
         $this->assertEquals(['Header1' => 'Val1'], $result['response']->getHeaders());
         $this->assertEquals('Foo', $result['response']->getBody(Message::BODY_STRING));
 
@@ -283,7 +283,7 @@ class ClientTest extends \PHPUnit_Framework_TestCase {
 
         });
         $response = $client->doRequest($request);
-        $this->assertEquals('200 OK', $response->getStatus());
+        $this->assertEquals(200, $response->getStatus());
         $this->assertEquals(['Header1' => 'Val1'], $response->getHeaders());
         $this->assertEquals('Foo', $response->getBody(Message::BODY_STRING));
 

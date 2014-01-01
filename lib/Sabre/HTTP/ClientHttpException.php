@@ -29,17 +29,12 @@ class ClientHttpException extends \Exception implements HttpException {
     public function __construct(ResponseInterface $response) {
 
         $this->response = $response;
-
-        list($httpCode, $humanReadable) = explode(' ', $response->getStatus(), 2);
-        parent::__construct($humanReadable, $httpCode);
+        parent::__construct($response->getStatusText(), $response->getStatus());
 
     }
 
     /**
      * The http status code for the error.
-     *
-     * This may either be just the number, or a number and a human-readable
-     * message, separated by a space.
      *
      * @return string|null
      */

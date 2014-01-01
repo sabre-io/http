@@ -26,12 +26,11 @@ class ResponseDecorator implements ResponseInterface {
         $this->inner = $inner;
 
     }
+
     /**
-     * Returns the current HTTP status.
+     * Returns the current HTTP status code.
      *
-     * This is the status-code as well as the human readable string.
-     *
-     * @return string
+     * @return int
      */
     public function getStatus() {
 
@@ -39,6 +38,19 @@ class ResponseDecorator implements ResponseInterface {
 
     }
 
+
+    /**
+     * Returns the human-readable status string.
+     *
+     * In the case of a 200, this may for example be 'OK'.
+     *
+     * @return string
+     */
+    public function getStatusText() {
+
+        return $this->inner->getStatusText();
+
+    }
     /**
      * Sets the HTTP status code.
      *

@@ -32,8 +32,10 @@ class ResponseDecoratorTest extends \PHPUnit_Framework_TestCase {
     function testStatus() {
 
         $this->outer->setStatus(201);
-        $this->assertEquals('201 Created', $this->inner->getStatus());
-        $this->assertEquals('201 Created', $this->outer->getStatus());
+        $this->assertEquals(201, $this->inner->getStatus());
+        $this->assertEquals(201, $this->outer->getStatus());
+        $this->assertEquals('Created', $this->inner->getStatusText());
+        $this->assertEquals('Created', $this->outer->getStatusText());
 
     }
 

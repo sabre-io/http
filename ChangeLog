@@ -11,6 +11,8 @@
 	  human-readable HTTP status message. This part has been removed from
 	  Response::getStatus(), which now always returns just the status code as
 	  an int.
+	* Changed: Response::send() is now Sapi::sendResponse($response).
+	* Changed: Request::createFromPHPRequest is now Sapi::getRequest().
 
 2.0.0alpha5 (2013-11-07)
 	* Added: HTTP Status 451 Unavailable For Legal Reasons. Fight government

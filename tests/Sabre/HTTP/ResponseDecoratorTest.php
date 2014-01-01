@@ -14,21 +14,6 @@ class ResponseDecoratorTest extends \PHPUnit_Framework_TestCase {
 
     }
 
-    /**
-     * @runInSeparateProcess
-     */
-    function testSend() {
-
-        $this->inner->setBody('foo');
-
-        ob_start();
-        $this->outer->send();
-
-        $this->assertEquals('foo', ob_get_clean());
-
-    }
-
-
     function testStatus() {
 
         $this->outer->setStatus(201);

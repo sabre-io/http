@@ -70,19 +70,6 @@ class ResponseDecorator implements ResponseInterface {
     }
 
     /**
-     * Sends the HTTP response back to a HTTP client.
-     *
-     * This calls php's header() function and streams the body to php://output.
-     *
-     * @return void
-     */
-    public function send() {
-
-        $this->inner->send();
-
-    }
-
-    /**
      * Serializes the request object as a string.
      *
      * This is useful for debugging purposes.

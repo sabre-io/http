@@ -42,13 +42,4 @@ interface ResponseInterface extends MessageInterface {
      */
     function setStatus($status);
 
-    /**
-     * Sends the HTTP response back to a HTTP client.
-     *
-     * This calls php's header() function and streams the body to php://output.
-     *
-     * @return void
-     */
-    function send();
-
 }

@@ -37,48 +37,56 @@ abstract class Message implements MessageInterface {
     protected $httpVersion = '1.1';
 
     /**
-     * Returns the message body, as a stream.
+     * Returns the body as a readable stream resource.
      *
-     * Note that streams are usually 'read once' and depending on the stream,
-     * they can not always be rewinded.
+     * Note that the stream may not be rewindable, and therefore may only be
+     * read once.
      *
-     * If you plan to read the body here, but need it later as well; be
-     * prepared to duplicate the stream and set it again.
+     * @return resource
+     */
+    public function getBodyAsStream() {
+
+        $body = $this->getBody();
+        if (is_string($body) || is_null($body)) {
+            $stream = fopen('php://temp', 'r+');
+            fwrite($stream, $body);
+            rewind($stream);
+            return $stream;
+        } else {
+            return $body;
+        }
+
+    }
+
+    /**
+     * Returns the body as a string.
      *
-     * @param int $returnType
-     * @throws InvalidArgumentException when no valid $returnType is given.
+     * Note that because the underlying data may be based on a stream, this
+     * method could only work correctly the first time.
+     *
+     * @return string
+     */
+    public function getBodyAsString() {
+
+        $body = $this->getBody();
+        if (is_string($body)) {
+            return $body;
+        } else {
+            return stream_get_contents($body);
+        }
+
+    }
+
+    /**
+     * Returns the message body, as it's internal representation.
+     *
+     * This could be either a string or a stream.
+     *
      * @return resource|string
      */
-    public function getBody($returnType = self::BODY_STREAM) {
+    public function getBody() {
 
-        if (!$this->body) {
-            $this->body = '';
-        }
-
-        switch($returnType) {
-            case self::BODY_STREAM :
-                if (is_string($this->body)) {
-                    $stream = fopen('php://temp', 'r+');
-                    fwrite($stream, $this->body);
-                    rewind($stream);
-                    return $stream;
-                } else {
-                    return $this->body;
-                }
-                /* No break */
-            case self::BODY_STRING :
-                if (is_string($this->body)) {
-                    return $this->body;
-                } else {
-                    return stream_get_contents($this->body);
-                }
-                /* No break */
-            case self::BODY_RAW :
-                return $this->body;
-                /* No break */
-        }
-
-        throw new \InvalidArgumentException('Uknown value for ' . $returnType);
+        return $this->body;
 
     }
 

@@ -371,7 +371,7 @@ class Client extends EventEmitter {
                 $settings[CURLOPT_PUT] = false;
                 break;
             default :
-                $body = $request->getBody(MessageInterface::BODY_RAW);
+                $body = $request->getBody();
                 if (is_resource($body)) {
                     // This needs to be set to PUT, regardless of the actual
                     // method used. Without it, INFILE will be ignored for some

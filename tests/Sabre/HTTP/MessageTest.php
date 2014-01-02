@@ -21,11 +21,11 @@ class MessageTest extends \PHPUnit_Framework_TestCase {
         $message = new MessageMock();
         $message->setBody($h);
 
-        $this->assertEquals($body, $message->getBody(Message::BODY_STRING));
+        $this->assertEquals($body, $message->getBodyAsString());
+        rewind($h);
+        $this->assertEquals($body, stream_get_contents($message->getBodyAsStream()));
         rewind($h);
         $this->assertEquals($body, stream_get_contents($message->getBody()));
-        rewind($h);
-        $this->assertEquals($body, stream_get_contents($message->getBody(Message::BODY_RAW)));
 
     }
 
@@ -36,9 +36,9 @@ class MessageTest extends \PHPUnit_Framework_TestCase {
         $message = new MessageMock();
         $message->setBody($body);
 
-        $this->assertEquals($body, $message->getBody(Message::BODY_STRING));
-        $this->assertEquals($body, stream_get_contents($message->getBody()));
-        $this->assertEquals($body, $message->getBody(Message::BODY_RAW));
+        $this->assertEquals($body, $message->getBodyAsString());
+        $this->assertEquals($body, stream_get_contents($message->getBodyAsStream()));
+        $this->assertEquals($body, $message->getBody());
 
     }
 
@@ -46,7 +46,7 @@ class MessageTest extends \PHPUnit_Framework_TestCase {
     function testGetEmptyBody() {
 
         $message = new MessageMock();
-        $body = $message->getBody();
+        $body = $message->getBodyAsStream();
 
         $this->assertEquals('', stream_get_contents($body));
 
@@ -114,16 +114,6 @@ class MessageTest extends \PHPUnit_Framework_TestCase {
             'c' => 'd',
         ]);
         $this->assertEquals('b', $message->getHeader('a'));
-
-    }
-
-    /**
-     * @expectedException InvalidArgumentException
-     */
-    function testGetBodyInvalid() {
-
-        $message = new MessageMock();
-        $message->getBody(-1);
 
     }
 

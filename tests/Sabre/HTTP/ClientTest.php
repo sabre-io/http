@@ -235,7 +235,7 @@ class ClientTest extends \PHPUnit_Framework_TestCase {
         $this->assertEquals(200, $result['http_code']);
         $this->assertEquals(200, $result['response']->getStatus());
         $this->assertEquals(['Header1' => 'Val1'], $result['response']->getHeaders());
-        $this->assertEquals('Foo', $result['response']->getBody(Message::BODY_STRING));
+        $this->assertEquals('Foo', $result['response']->getBodyAsString());
 
     }
 
@@ -285,7 +285,7 @@ class ClientTest extends \PHPUnit_Framework_TestCase {
         $response = $client->doRequest($request);
         $this->assertEquals(200, $response->getStatus());
         $this->assertEquals(['Header1' => 'Val1'], $response->getHeaders());
-        $this->assertEquals('Foo', $response->getBody(Message::BODY_STRING));
+        $this->assertEquals('Foo', $response->getBodyAsString());
 
     }
 

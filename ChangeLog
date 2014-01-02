@@ -13,6 +13,9 @@
 	  an int.
 	* Changed: Response::send() is now Sapi::sendResponse($response).
 	* Changed: Request::createFromPHPRequest is now Sapi::getRequest().
+	* Changed: Message::getBodyAsStream and Message::getBodyAsString were
+	  added. The existing Message::getBody changed it's behavior, so be
+	  careful.
 
 2.0.0alpha5 (2013-11-07)
 	* Added: HTTP Status 451 Unavailable For Legal Reasons. Fight government

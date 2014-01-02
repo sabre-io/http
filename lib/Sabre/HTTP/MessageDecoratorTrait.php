@@ -25,21 +25,43 @@ trait MessageDecoratorTrait {
     protected $inner;
 
     /**
-     * Returns the message body, as a stream.
+     * Returns the body as a readable stream resource.
      *
-     * Note that streams are usually 'read once' and depending on the stream,
-     * they can not always be rewinded.
+     * Note that the stream may not be rewindable, and therefore may only be
+     * read once.
      *
-     * If you plan to read the body here, but need it later as well; be
-     * prepared to duplicate the stream and set it again.
+     * @return resource
+     */
+    public function getBodyAsStream() {
+
+        return $this->inner->getBodyAsStream();
+
+    }
+
+    /**
+     * Returns the body as a string.
      *
-     * @param int $returnType
-     * @throws InvalidArgumentException when no valid $returnType is given.
+     * Note that because the underlying data may be based on a stream, this
+     * method could only work correctly the first time.
+     *
+     * @return string
+     */
+    public function getBodyAsString() {
+
+        return $this->inner->getBodyAsString();
+
+    }
+
+    /**
+     * Returns the message body, as it's internal representation.
+     *
+     * This could be either a string or a stream.
+     *
      * @return resource|string
      */
-    public function getBody($returnType = self::BODY_STREAM) {
+    public function getBody() {
 
-        return $this->inner->getBody($returnType);
+        return $this->inner->getBody();
 
     }
 

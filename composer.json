@@ -9,6 +9,9 @@
         "ext-mbstring" : "*",
         "sabre/event"  : "~1.0.0"
     },
+    "require-dev" : {
+        "phpunit/phpunit" : "*"
+    },
     "suggest" : {
         "ext-curl" : " to make http requests with the Client class"
     },
@@ -28,5 +31,8 @@
         "psr-0" : {
             "Sabre\\HTTP" : "lib/"
         }
+    },
+    "config" : {
+        "bin-dir" : "bin/"
     }
 }

@@ -4,3 +4,6 @@ composer.lock
 
 # Tests
 tests/cov/
+
+# Composer binaries
+bin/phpunit

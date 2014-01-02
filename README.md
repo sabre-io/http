@@ -71,7 +71,7 @@ use Sabre\HTTP;
 
 include 'vendor/autoload.php';
 
-$request = HTTP\Request::createFromPHPRequest();
+$request = HTTP\Sapi::getRequest();
 ```
 
 This line should only happen once in your entire application. Everywhere else
@@ -107,7 +107,7 @@ $response->setBody(
 After you fully constructed your response, you must call:
 
 ```php
-$response->send();
+HTTP\Sapi::sendResponse($response);
 ```
 
 This line should generally also appear once in your application (at the very
@@ -128,7 +128,7 @@ Simply extending Request and Response may pose some problems:
 
 1. You may want to extend the objects with new behavior differently, in
    different subsystems of your application.
-2. The `Request::createFromPHPRequest` factory always returns a instance of
+2. The `Sapi::getRequest` factory always returns a instance of
    `Request` so you would have to override the factory method as well.
 3. By controlling the instantation and depend on specific `Request` and
    `Response` instances in your library or application, you make it harder to
@@ -156,7 +156,7 @@ class MyRequest extends HTTP\RequestDecorator {
 
 Our application assumes that the true `Request` object was instantiated
 somewhere else, by some other subsystem. This could simply be a call like
-`$request = Request::createFromPHPRequest()` at the top of your application,
+`$request = Sapi::getRequest()` at the top of your application,
 but could also be somewhere in a unittest.
 
 All we know in the current subsystem, is that we received a `$request` and
@@ -192,7 +192,7 @@ $request->setHeader('X-Foo', 'Bar');
 $client = new HTTP\Client();
 $response = $client->send($request);
 
-echo $response->getBody();
+echo $response->getBodyAsString();
 ```
 
 The client emits 3 event using [sabre/event][5]. `beforeRequest`,
@@ -386,38 +386,33 @@ function getRawServerValue($valueName);
 function setRawServerData(array $data);
 
 /**
- * This static method will create a new Request object, based on the
- * current PHP request.
+ * Returns the body as a readable stream resource.
  *
- * @param resource $body
- * @return Request
+ * Note that the stream may not be rewindable, and therefore may only be
+ * read once.
+ *
+ * @return resource
  */
-static public function createFromPHPRequest();
+function getBodyAsStream();
 
 /**
- * This static method will create a new Request object, based on a PHP
- * $_SERVER array.
+ * Returns the body as a string.
  *
- * @param array $serverArray
- * @param resource $body
- * @return Request
+ * Note that because the underlying data may be based on a stream, this
+ * method could only work correctly the first time.
+ *
+ * @return string
  */
-static public function createFromServerArray(array $serverArray);
+function getBodyAsString();
 
 /**
- * Returns the message body, as a stream.
+ * Returns the message body, as it's internal representation.
  *
- * Note that streams are usually 'read once' and depending on the stream,
- * they can not always be rewinded.
+ * This could be either a string or a stream.
  *
- * If you plan to read the body here, but need it later as well; be
- * prepared to duplicate the stream and set it again.
- *
- * @param int $returnType
- * @throws InvalidArgumentException when no valid $returnType is given.
  * @return resource|string
  */
-function getBody($returnType = self::BODY_STREAM);
+function getBody();
 
 /**
  * Updates the body resource with a new stream.
@@ -535,28 +530,34 @@ function getStatus();
 function setStatus($status);
 
 /**
- * Sends the HTTP response back to a HTTP client.
+ * Returns the body as a readable stream resource.
  *
- * This calls php's header() function and streams the body to php://output.
+ * Note that the stream may not be rewindable, and therefore may only be
+ * read once.
  *
- * @return void
+ * @return resource
  */
-function send();
+function getBodyAsStream();
 
 /**
- * Returns the message body, as a stream.
+ * Returns the body as a string.
  *
- * Note that streams are usually 'read once' and depending on the stream,
- * they can not always be rewinded.
+ * Note that because the underlying data may be based on a stream, this
+ * method could only work correctly the first time.
  *
- * If you plan to read the body here, but need it later as well; be
- * prepared to duplicate the stream and set it again.
+ * @return string
+ */
+function getBodyAsString();
+
+/**
+ * Returns the message body, as it's internal representation.
  *
- * @param int $returnType
- * @throws InvalidArgumentException when no valid $returnType is given.
+ * This could be either a string or a stream.
+ *
  * @return resource|string
  */
-function getBody($returnType = self::BODY_STREAM);
+function getBody();
+
 
 /**
  * Updates the body resource with a new stream.

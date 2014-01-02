@@ -183,7 +183,7 @@ class Response extends Message implements ResponseInterface {
             $str.= $key . ": " . $value . "\r\n";
         }
         $str.="\r\n";
-        $str.=$this->getBody(Message::BODY_STRING);
+        $str.=$this->getBodyAsString();
         return $str;
 
     }

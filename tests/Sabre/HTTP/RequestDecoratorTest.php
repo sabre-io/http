@@ -98,5 +98,15 @@ class RequestDecoratorTest extends \PHPUnit_Framework_TestCase {
         $this->assertNull($this->outer->getRawServerValue('FOO'));
     }
 
+    function testToString() {
+
+        $this->inner->setMethod('POST');
+        $this->inner->setUrl('/foo/bar/');
+        $this->inner->setBody('foo');
+        $this->inner->setHeader('foo','bar');
+
+        $this->assertEquals((string)$this->inner, (string)$this->outer);
+
+    }
 
 }

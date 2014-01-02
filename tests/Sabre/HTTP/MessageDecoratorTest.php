@@ -19,6 +19,10 @@ class MessageDecoratorTest extends \PHPUnit_Framework_TestCase {
         $this->outer->setBody('foo');
         $this->assertEquals('foo', stream_get_contents($this->inner->getBodyAsStream()));
         $this->assertEquals('foo', stream_get_contents($this->outer->getBodyAsStream()));
+        $this->assertEquals('foo', $this->inner->getBodyAsString());
+        $this->assertEquals('foo', $this->outer->getBodyAsString());
+        $this->assertEquals('foo', $this->inner->getBody());
+        $this->assertEquals('foo', $this->outer->getBody());
 
     }
 

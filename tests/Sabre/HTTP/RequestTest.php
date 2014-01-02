@@ -123,4 +123,19 @@ class RequestTest extends \PHPUnit_Framework_TestCase {
         $request->getPath();
 
     }
+
+    function testToString() {
+
+        $request = new Request('PUT', '/foo/bar', ['Content-Type' => 'text/xml']);
+        $request->setBody('foo');
+
+        $expected = <<<HI
+PUT /foo/bar HTTP/1.1\r
+Content-Type: text/xml\r
+\r
+foo
+HI;
+        $this->assertEquals($expected, (string)$request);
+
+    }
 }

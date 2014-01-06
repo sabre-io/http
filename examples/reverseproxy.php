@@ -13,6 +13,7 @@ $myBaseUrl = '/reverseproxy.php';
 
 use
     Sabre\HTTP\Request,
+    Sabre\HTTP\Sapi,
     Sabre\HTTP\Client;
 
 // Find the autoloader
@@ -31,7 +32,7 @@ foreach($paths as $path) {
 }
 
 
-$request = Request::createFromPHPRequest();
+$request = Sapi::getRequest();
 $request->setBaseUrl($myBaseUrl);
 
 $subRequest = clone $request;
@@ -48,4 +49,4 @@ $client = new Client();
 $response = $client->send($subRequest);
 
 // Sends the response back to the client that connected to the proxy.
-$response->send();
+Sapi::sendResponse($response);

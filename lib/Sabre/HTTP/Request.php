@@ -5,9 +5,8 @@ namespace Sabre\HTTP;
 /**
  * The Request class represents a single HTTP request.
  *
- * You can either simply construct the object from scratch, or if you would
- * like to create the request from the $_SERVER array, use the
- * createFromServerArray static method.
+ * You can either simply construct the object from scratch, or if you need
+ * access to the current HTTP request, use Sapi::getRequest.
  *
  * @copyright Copyright (C) 2009-2014 fruux GmbH (https://fruux.com/).
  * @author Evert Pot (http://evertpot.com/)
@@ -43,19 +42,6 @@ class Request extends Message implements RequestInterface {
         if (!is_null($url))         $this->setUrl($url);
         if (!is_null($headers))     $this->setHeaders($headers);
         if (!is_null($body))        $this->setBody($body);
-
-    }
-
-    /**
-     * This static method will create a new Request object, based on the
-     * current PHP request.
-     *
-     * @param resource $body
-     * @return Request
-     */
-    static public function createFromPHPRequest() {
-
-        return Sapi::getRequest();
 
     }
 

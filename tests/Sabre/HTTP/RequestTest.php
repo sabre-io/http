@@ -42,7 +42,7 @@ class RequestTest extends \PHPUnit_Framework_TestCase {
 
         $_SERVER['REQUEST_METHOD'] = 'PUT';
 
-        $request = Request::createFromPHPRequest();
+        $request = Sapi::getRequest();
         $this->assertEquals('PUT', $request->getMethod());
 
     }

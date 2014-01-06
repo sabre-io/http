@@ -30,13 +30,12 @@ foreach($paths as $path) {
 }
 
 // Constructing the request.
-
-$request = new Request('GET', 'http://feeds.feedburner.com/bijsterespoor');
+$request = new Request('GET', 'http://localhost/');
 
 $client = new Client();
 //$client->addCurlSetting(CURLOPT_PROXY,'localhost:8888');
 $response = $client->send($request);
 
-echo "Response: " . $response->getStatus() . "\n";
-echo "Headers:\n";
-print_r($response->getHeaders());
+echo "Response:\n";
+
+echo (string)$response;

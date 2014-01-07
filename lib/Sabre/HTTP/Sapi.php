@@ -21,6 +21,9 @@ namespace Sabre\HTTP;
  * * header()
  * * php://output
  *
+ * You can choose to either call all these methods statically, but you can also
+ * instantiate this as an object to allow for polymorhpism.
+ *
  * @copyright Copyright (C) 2007-2014 fruux GmbH. All rights reserved.
  * @author Evert Pot (http://evertpot.com/)
  * @license http://code.google.com/p/sabredav/wiki/License Modified BSD License

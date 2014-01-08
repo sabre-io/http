@@ -12,7 +12,6 @@ $myBaseUrl = '/reverseproxy.php';
 // $myBaseUrl = '/~evert/sabre/http/examples/reverseproxy.php/';
 
 use
-    Sabre\HTTP\Request,
     Sabre\HTTP\Sapi,
     Sabre\HTTP\Client;
 

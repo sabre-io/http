@@ -36,7 +36,7 @@ or edit a `composer.json` file, and make sure it contains something like this:
 ```json
 {
     "require" : {
-        "sabre/http" : "2.0@alpha"
+        "sabre/http" : "~2.0.0"
     }
 }
 ```
@@ -235,6 +235,87 @@ $client->on('error:401', function($request, $response, &$retry, $retryCount) {
 
 });
 ```
+
+### Asynchronous requests
+
+The Client also supports doing asynchronous requests. This is especially handy
+if you need to perform a number of requests, that are allowed to be executed
+in parallel.
+
+The underlying system for this is simply [curl's multi request handler][8],
+but this provides a much nicer API to handle this.
+
+Sample usage:
+
+```php
+
+use Sabre\HTTP;
+
+$request = new Request('GET', 'http://localhost/');
+$client = new Client();
+
+// Executing 1000 requests
+for ($i = 0; $i < 1000; $i++) {
+    $client->sendAsync(
+        $request,
+        function(ResponseInterface $response) {
+            // Success handler
+        },
+        function($error) {
+            // Error handler
+        }
+    ); 
+}
+
+// Wait for all requests to get a result.
+$client->wait();
+
+```
+
+Check out examples/asyncclient.php for more information.
+
+Writing a reverse proxy
+-----------------------
+
+With all these tools combined, it becomes very easy to write a simple reverse
+http proxy.
+
+```php
+use
+    Sabre\HTTP\Sapi,
+    Sabre\HTTP\Client;
+
+// The url we're proxying to.
+$remoteUrl = 'http://example.org/';
+
+// The url we're proxying from. Please note that this must be a relative url,
+// and basically acts as the base url.
+//
+// If youre $remoteUrl doesn't end with a slash, this one probably shouldn't
+// either.
+$myBaseUrl = '/reverseproxy.php';
+// $myBaseUrl = '/~evert/sabre/http/examples/reverseproxy.php/';
+
+$request = Sapi::getRequest();
+$request->setBaseUrl($myBaseUrl);
+
+$subRequest = clone $request;
+
+// Removing the Host header.
+$subRequest->removeHeader('Host');
+
+// Rewriting the url.
+$subRequest->setUrl($remoteUrl . $request->getPath());
+
+$client = new Client();
+
+// Sends the HTTP request to the server
+$response = $client->send($subRequest);
+
+// Sends the response back to the client that connected to the proxy.
+Sapi::sendResponse($response);
+```
+
 
 The Request and Response API's
 ------------------------------
@@ -659,3 +740,4 @@ This library is being developed by [fruux](https://fruux.com/). Drop us a line f
 [5]: https://github.com/fruux/sabre-event
 [6]: http://en.wikipedia.org/wiki/Decorator_pattern
 [7]: http://guzzlephp.org/
+[8]: http://www.php.net/manual/en/function.curl-multi-init.php

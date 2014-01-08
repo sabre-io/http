@@ -1,8 +1,8 @@
-2.0.0 (2014-??-??)
+2.0.0-stable (2014-01-08)
 	* Removed: Request::createFromPHPRequest. This is now handled by
 	  Sapi::getRequest.
 
-2.0.0alpha6 (2014-01-14)
+2.0.0alpha6 (2014-01-03)
 	* Added: Asynchronous HTTP client. See examples/asyncclient.php.
 	* Fixed: Issue #4: Don't escape colon (:) when it's not needed.
 	* Fixed: Fixed a bug in the content negotation script.

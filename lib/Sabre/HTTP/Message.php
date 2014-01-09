@@ -71,6 +71,8 @@ abstract class Message implements MessageInterface {
         $body = $this->getBody();
         if (is_string($body)) {
             return $body;
+        } elseif (is_null($body)) {
+            return '';
         } else {
             return stream_get_contents($body);
         }

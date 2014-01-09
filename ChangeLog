@@ -1,3 +1,7 @@
+2.0.1-stable (2014-01-09)
+	* Fixed: getBodyAsString on an empty body now works.
+	* Fixed: Version string
+
 2.0.0-stable (2014-01-08)
 	* Removed: Request::createFromPHPRequest. This is now handled by
 	  Sapi::getRequest.

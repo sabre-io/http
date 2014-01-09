@@ -43,12 +43,21 @@ class MessageTest extends \PHPUnit_Framework_TestCase {
     }
 
 
-    function testGetEmptyBody() {
+    function testGetEmptyBodyStream() {
 
         $message = new MessageMock();
         $body = $message->getBodyAsStream();
 
         $this->assertEquals('', stream_get_contents($body));
+
+    }
+
+    function testGetEmptyBodyString() {
+
+        $message = new MessageMock();
+        $body = $message->getBodyAsString();
+
+        $this->assertEquals('', $body);
 
     }
 

@@ -15,7 +15,7 @@ use
  *  1. Create the object
  *  2. Call the setRealm() method with the realm you plan to use
  *  3. Call the init method function.
- *  4. Call the getUserName() function. This function may return false if no
+ *  4. Call the getUserName() function. This function may return null if no
  *     authentication information was supplied. Based on the username you
  *     should check your internal database for either the associated password,
  *     or the so-called A1 hash of the digest.

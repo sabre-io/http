@@ -26,6 +26,14 @@ What this library provides, is a `Request` object, and a `Response` object.
 
 The objects are extendable and easily mockable.
 
+Build status
+------------
+
+| branch | status |
+| ------ | ------ |
+| master | [![Build Status](https://travis-ci.org/fruux/sabre-http.png?branch=master)](https://travis-ci.org/fruux/sabre-http) |
+| hhvm   | [![Build Status](https://travis-ci.org/fruux/sabre-http.png?branch=hhvm)](https://travis-ci.org/fruux/sabre-http) |
+
 Installation
 ------------
 

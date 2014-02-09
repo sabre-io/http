@@ -1,3 +1,6 @@
+2.0.2-stable (2014-02-09)
+	* Fixed: Potential security problem in the client.
+
 2.0.1-stable (2014-01-09)
 	* Fixed: getBodyAsString on an empty body now works.
 	* Fixed: Version string

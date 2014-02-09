@@ -379,8 +379,10 @@ class Client extends EventEmitter {
                     $settings[CURLOPT_PUT] = true;
                     $settings[CURLOPT_INFILE] = $request->getBody();
                 } else {
-                    // Else, it's a string.
-                    $settings[CURLOPT_POSTFIELDS] = $body;
+                    // For security we cast this to a string. If somehow an array could
+                    // be passed here, it would be possible for an attacker to use @ to
+                    // post local files.
+                    $settings[CURLOPT_POSTFIELDS] = (string)$body;
                 }
                 $settings[CURLOPT_CUSTOMREQUEST] = $request->getMethod();
                 break;

@@ -138,4 +138,14 @@ HI;
         $this->assertEquals($expected, (string)$request);
 
     }
+
+    /**
+     * @expectedException \InvalidArgumentException
+     */
+    function testConstructorWithArray() {
+
+        $request = new Request(array());
+
+    }
+
 }

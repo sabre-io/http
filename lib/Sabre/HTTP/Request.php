@@ -2,6 +2,8 @@
 
 namespace Sabre\HTTP;
 
+use InvalidArgumentException;
+
 /**
  * The Request class represents a single HTTP request.
  *
@@ -38,6 +40,9 @@ class Request extends Message implements RequestInterface {
      */
     public function __construct($method = null, $url = null, array $headers = null, $body = null) {
 
+        if (is_array($method)) {
+            throw new InvalidArgumentException('The first argument for this constructor should be a string or null, not an array. Did you upgrade from sabre/http 1.0 to 2.0?');
+        }
         if (!is_null($method))      $this->setMethod($method);
         if (!is_null($url))         $this->setUrl($url);
         if (!is_null($headers))     $this->setHeaders($headers);

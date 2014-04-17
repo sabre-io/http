@@ -1,4 +1,4 @@
-2.0.3-stable (2014-04-17)
+2.0.3-stable (2014-??-??)
 	* Now works on hhvm!
 	* Fixed: Now throwing an error when a Request object is being created with
 	  arguments that were valid for sabre/http 1.0. Hopefully this will aid

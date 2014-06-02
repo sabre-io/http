@@ -442,7 +442,10 @@ class Client extends EventEmitter {
         }
 
         $headerBlob = substr($response, 0, $curlInfo['header_size']);
-        $responseBody = substr($response, $curlInfo['header_size']);
+        // In the case of 204 No Content, strlen($response) == $curlInfo['header_size].
+        // This will cause substr($response, $curlInfo['header_size']) return FALSE instead of NULL
+        // An exception will be thrown when calling getBodyAsString then
+        $responseBody = substr($response, $curlInfo['header_size']) ?: NULL;
 
         unset($response);
 

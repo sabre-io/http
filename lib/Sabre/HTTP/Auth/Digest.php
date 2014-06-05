@@ -48,7 +48,7 @@ class Digest extends AbstractAuth {
     public function __construct($realm = 'SabreTooth', RequestInterface $request, ResponseInterface $response) {
 
         $this->nonce = uniqid();
-        $this->opaque = md5($this->realm);
+        $this->opaque = md5($realm);
         parent::__construct($realm, $request, $response);
 
     }

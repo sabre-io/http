@@ -10,7 +10,7 @@ namespace Sabre\HTTP;
  *    the PHP process.
  * 2. Sending the Response object back to the client.
  *
- * It could be said that this object provides a mapping between the Request and
+ * It could be said that this class provides a mapping between the Request and
  * Response objects, and php's:
  *
  * * $_SERVER
@@ -34,7 +34,6 @@ class Sapi {
      * This static method will create a new Request object, based on the
      * current PHP request.
      *
-     * @param resource $body
      * @return Request
      */
     static function getRequest() {
@@ -51,6 +50,7 @@ class Sapi {
      *
      * This calls php's header() function and streams the body to php://output.
      *
+     * @param ResponseInterface $response
      * @return void
      */
     static function sendResponse(ResponseInterface $response) {
@@ -69,6 +69,7 @@ class Sapi {
      * This static method will create a new Request object, based on a PHP
      * $_SERVER array.
      *
+     * @param array $serverArray
      * @return Request
      */
     static function createFromServerArray(array $serverArray) {

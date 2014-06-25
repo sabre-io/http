@@ -10,7 +10,8 @@
         "sabre/event"  : ">=1.0.0,<3.0.0"
     },
     "require-dev" : {
-        "phpunit/phpunit" : "*"
+        "phpunit/phpunit" : "*",
+        "squizlabs/php_codesniffer": "~1.5.3"
     },
     "suggest" : {
         "ext-curl" : " to make http requests with the Client class"

@@ -52,7 +52,6 @@
     <severity>0</severity>
    </rule>
     -->
-   <rule ref="PEAR.Functions.ValidDefaultValue"/>
    <rule ref="PEAR.WhiteSpace.ScopeClosingBrace"/>
 
 </ruleset>

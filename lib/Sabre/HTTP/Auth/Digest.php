@@ -171,9 +171,15 @@ class Digest extends AbstractAuth {
 
         $qop = '';
         switch($this->qop) {
-            case self::QOP_AUTH    : $qop = 'auth'; break;
-            case self::QOP_AUTHINT : $qop = 'auth-int'; break;
-            case self::QOP_AUTH | self::QOP_AUTHINT : $qop = 'auth,auth-int'; break;
+            case self::QOP_AUTH    :
+                $qop = 'auth';
+                break;
+            case self::QOP_AUTHINT :
+                $qop = 'auth-int';
+                break;
+            case self::QOP_AUTH | self::QOP_AUTHINT :
+                $qop = 'auth,auth-int';
+                break;
         }
 
         $this->response->setHeader('WWW-Authenticate','Digest realm="' . $this->realm . '",qop="'.$qop.'",nonce="' . $this->nonce . '",opaque="' . $this->opaque . '"');

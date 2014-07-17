@@ -198,9 +198,10 @@ class Request extends Message implements RequestInterface {
             list($uri) = explode('?', $uri);
             return trim(URLUtil::decodePath(substr($uri,strlen($this->getBaseUrl()))),'/');
 
+        }
         // A special case, if the baseUri was accessed without a trailing
         // slash, we'll accept it as well.
-        } elseif ($uri.'/' === $this->getBaseUrl()) {
+        elseif ($uri.'/' === $this->getBaseUrl()) {
 
             return '';
 

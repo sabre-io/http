@@ -61,8 +61,8 @@ abstract class AbstractAuth {
     abstract public function requireLogin();
 
     /**
-     * Returns the HTTP realm 
-     * 
+     * Returns the HTTP realm
+     *
      * @return string
      */
     public function getRealm() {

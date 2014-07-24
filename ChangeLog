@@ -1,4 +1,8 @@
+2.0.5-stable (2014-07-14)
+	* Added: URLUtil::resove() to make resolving relative urls super easy.
+
 2.0.4-stable (2014-07-14)
+
 	* Changed: No longer escaping @ in urls when it's not needed.
 	* Fixed: #7: Client now correctly deals with responses without a body.
 

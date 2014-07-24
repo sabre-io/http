@@ -119,14 +119,14 @@ class URLUtil {
     }
 
     /**
-     * Resolves relative urls, like a browswer would.
+     * Resolves relative urls, like a browser would.
      *
      * This function takes a basePath, which itself _may_ also be relative, and
      * then applies the relative path on top of it.
      *
      * @param string $basePath
      * @param string $newPath
-     * @return void
+     * @return string 
      */
     static function resolve($basePath, $newPath) {
 

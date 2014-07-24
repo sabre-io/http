@@ -57,23 +57,22 @@ class Client extends EventEmitter {
     protected $throwExceptions = false;
 
     /**
+     * The maximum number of times we'll follow a redirect.
+     *
+     * @var int
+     */
+    protected $maxRedirects = 5;
+
+    /**
      * Initializes the client.
      *
      * @return void
      */
     public function __construct() {
 
-        // hhvm compatibility.
-        if (!defined('CURLOPT_POSTREDIR')) {
-            define('CURLOPT_POSTREDIR', 161);
-        }
-
         $this->curlSettings = [
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_HEADER => true,
-            CURLOPT_FOLLOWLOCATION => true,
-            CURLOPT_MAXREDIRS => 5,
-            CURLOPT_POSTREDIR => 3,
         ];
 
     }
@@ -89,15 +88,36 @@ class Client extends EventEmitter {
         $this->emit('beforeRequest', [$request]);
 
         $retryCount = 0;
+        $redirects = 0;
 
         do {
 
+            $doRedirect = false;
             $retry = false;
 
             try {
+
                 $response = $this->doRequest($request);
 
                 $code = (int)$response->getStatus();
+
+                if (in_array($code, [301, 302, 307, 308]) && $redirects < $this->maxRedirects) {
+
+                    $oldLocation = $request->getUrl();
+
+                    // Creating an new instance of the request object.
+                    $request = clone $request;
+
+                    // Setting the new location
+                    $request->setUrl(URLUtil::resolve(
+                        $oldLocation,
+                        $response->getHeader('Location')
+                    ));
+
+                    $doRedirect = true;
+                    $redirects++;
+
+                }
 
                 // This was a HTTP error
                 if ($code >= 400) {
@@ -121,7 +141,7 @@ class Client extends EventEmitter {
                 $retryCount++;
             }
 
-        } while ($retry);
+        } while ($retry || $doRedirect);
 
         $this->emit('afterRequest', [$request, $response]);
 

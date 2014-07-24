@@ -126,7 +126,7 @@ class URLUtil {
      *
      * @param string $basePath
      * @param string $newPath
-     * @return string 
+     * @return string
      */
     static function resolve($basePath, $newPath) {
 

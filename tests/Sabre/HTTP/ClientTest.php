@@ -16,9 +16,7 @@ class ClientTest extends \PHPUnit_Framework_TestCase {
         $this->assertEquals(
             [
                 CURLOPT_RETURNTRANSFER => true,
-                CURLOPT_FOLLOWLOCATION => true,
                 CURLOPT_HEADER => true,
-                CURLOPT_MAXREDIRS => 5,
                 CURLOPT_POSTREDIR => 0,
                 CURLOPT_HTTPHEADER => ['X-Foo: bar'],
                 CURLOPT_URL => 'http://example.org/',
@@ -39,10 +37,7 @@ class ClientTest extends \PHPUnit_Framework_TestCase {
         $this->assertEquals(
             [
                 CURLOPT_RETURNTRANSFER => true,
-                CURLOPT_FOLLOWLOCATION => true,
                 CURLOPT_HEADER => true,
-                CURLOPT_MAXREDIRS => 5,
-                CURLOPT_POSTREDIR => 3,
                 CURLOPT_NOBODY => true,
                 CURLOPT_CUSTOMREQUEST => 'HEAD',
                 CURLOPT_HTTPHEADER => ['X-Foo: bar'],
@@ -66,10 +61,7 @@ class ClientTest extends \PHPUnit_Framework_TestCase {
         $this->assertEquals(
             [
                 CURLOPT_RETURNTRANSFER => true,
-                CURLOPT_FOLLOWLOCATION => true,
                 CURLOPT_HEADER => true,
-                CURLOPT_MAXREDIRS => 5,
-                CURLOPT_POSTREDIR => 3,
                 CURLOPT_PUT => true,
                 CURLOPT_INFILE => $h,
                 CURLOPT_CUSTOMREQUEST => 'PUT',
@@ -89,10 +81,7 @@ class ClientTest extends \PHPUnit_Framework_TestCase {
         $this->assertEquals(
             [
                 CURLOPT_RETURNTRANSFER => true,
-                CURLOPT_FOLLOWLOCATION => true,
                 CURLOPT_HEADER => true,
-                CURLOPT_MAXREDIRS => 5,
-                CURLOPT_POSTREDIR => 3,
                 CURLOPT_POSTFIELDS => 'boo',
                 CURLOPT_CUSTOMREQUEST => 'PUT',
                 CURLOPT_HTTPHEADER => ['X-Foo: bar'],

@@ -1,5 +1,8 @@
-2.0.5-stable (2014-07-14)
+2.0.5-stable (2014-??-??)
 	* Added: URLUtil::resolve() to make resolving relative urls super easy.
+	* #12: Circumventing CURL's FOLLOW_LOCATION and doing it in PHP instead.
+	  This fixes compatibility issues with people that have open_basedir
+	  turned on.
 
 2.0.4-stable (2014-07-14)
 

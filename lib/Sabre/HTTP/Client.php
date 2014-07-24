@@ -101,6 +101,11 @@ class Client extends EventEmitter {
 
                 $code = (int)$response->getStatus();
 
+                // We are doing in-PHP redirects, because curl's
+                // FOLLOW_LOCATION throws errors when PHP is configured with
+                // open_basedir.
+                //
+                // https://github.com/fruux/sabre-http/issues/12
                 if (in_array($code, [301, 302, 307, 308]) && $redirects < $this->maxRedirects) {
 
                     $oldLocation = $request->getUrl();

@@ -5,7 +5,6 @@
 	  turned on.
 
 2.0.4-stable (2014-07-14)
-
 	* Changed: No longer escaping @ in urls when it's not needed.
 	* Fixed: #7: Client now correctly deals with responses without a body.
 

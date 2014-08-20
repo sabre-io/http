@@ -131,6 +131,32 @@ class UtilTest extends \PHPUnit_Framework_TestCase {
                 ['application/xml'],
                 null,
             ],
+            [
+                'text/vcard; version=4.0',
+                [
+                    // Most often used mime-type. Version 3
+                    'text/x-vcard',
+                    // The correct standard mime-type. Defaults to version 3 as
+                    // well.
+                    'text/vcard',
+                    // vCard 4
+                    'text/vcard; version=4.0',
+                    // vCard 3
+                    'text/vcard; version=3.0',
+                    // jCard
+                    'application/vcard+json',
+                ],
+                'text/vcard; version=4.0',
+
+            ],
+            [ // rfc7231 example 1
+                'audio/*; q=0.2, audio/basic',
+                [
+                    'audio/pcm',
+                    'audio/basic',
+                ],
+                'audio/basic',
+            ]
 
         ];
 

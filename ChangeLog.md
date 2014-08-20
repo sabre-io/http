@@ -1,12 +1,16 @@
 ChangeLog
 =========
 
-2.0.5 (2014-??-??)
+2.1.0 (2014-??-??)
 ------------------
 
-* Added: URLUtil::resolve() to make resolving relative urls super easy.
+* Added: `URLUtil::resolve()` to make resolving relative urls super easy.
 * #12: Circumventing CURL's FOLLOW_LOCATION and doing it in PHP instead. This
   fixes compatibility issues with people that have open_basedir turned on.
+* Added: Content negotiation now correctly support mime-type parameters such as
+  charset.
+* Changed: `Util::negotiate()` is now deprecated. Use
+  `Util::negotiateContentType()` instead.
 
 
 2.0.4 (2014-07-14)

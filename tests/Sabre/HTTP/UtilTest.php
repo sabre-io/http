@@ -131,7 +131,7 @@ class UtilTest extends \PHPUnit_Framework_TestCase {
                 ['application/xml'],
                 null,
             ],
-            [
+            [ // This is used in sabre/dav
                 'text/vcard; version=4.0',
                 [
                     // Most often used mime-type. Version 3
@@ -156,7 +156,31 @@ class UtilTest extends \PHPUnit_Framework_TestCase {
                     'audio/basic',
                 ],
                 'audio/basic',
-            ]
+            ],
+            [ // No whitepace after type, should pick the one that is the most specific.
+                'text/vcard;version=3.0, text/vcard',
+                [
+                    'text/vcard',
+                    'text/vcard; version=3.0'
+                ],
+                'text/vcard; version=3.0',
+            ],
+            [ // Same as last one, but order is different
+                'text/vcard, text/vcard;version=3.0',
+                [
+                    'text/vcard; version=3.0',
+                    'text/vcard',
+                ],
+                'text/vcard; version=3.0',
+            ],
+            [ // Charset should be ignored here.
+                'text/vcard; charset=utf-8; version=3.0, text/vcard',
+                [
+                    'text/vcard',
+                    'text/vcard; version=3.0'
+                ],
+                'text/vcard; version=3.0',
+            ],
 
         ];
 

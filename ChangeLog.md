@@ -11,7 +11,7 @@ ChangeLog
   charset.
 * Changed: `Util::negotiate()` is now deprecated. Use
   `Util::negotiateContentType()` instead.
-
+* #14: The client now only follows http and https urls.
 
 2.0.4 (2014-07-14)
 ------------------

@@ -13,8 +13,7 @@ class ClientTest extends \PHPUnit_Framework_TestCase {
 
         $request = new Request('GET','http://example.org/', ['X-Foo' => 'bar']);
 
-        $this->assertEquals(
-            [
+        $settings = [
                 CURLOPT_RETURNTRANSFER => true,
                 CURLOPT_HEADER => true,
                 CURLOPT_POSTREDIR => 0,
@@ -23,9 +22,17 @@ class ClientTest extends \PHPUnit_Framework_TestCase {
                 CURLOPT_CUSTOMREQUEST => 'GET',
                 CURLOPT_POSTFIELDS => null,
                 CURLOPT_PUT => false,
-            ],
-            $client->createCurlSettingsArray($request)
-        );
+            ];
+
+        // FIXME: CURLOPT_PROTOCOLS and CURLOPT_REDIR_PROTOCOLS are currently unsupported by HHVM
+        // at least if this unit test fails in the future we know it is :)
+        if(defined('HHVM_VERSION') === false) {
+            $settings[CURLOPT_PROTOCOLS] = CURLPROTO_HTTP | CURLPROTO_HTTPS;
+            $settings[CURLOPT_REDIR_PROTOCOLS] = CURLPROTO_HTTP | CURLPROTO_HTTPS;
+        }
+
+
+        $this->assertEquals($settings, $client->createCurlSettingsArray($request));
 
     }
 
@@ -34,8 +41,8 @@ class ClientTest extends \PHPUnit_Framework_TestCase {
         $client = new ClientMock();
         $request = new Request('HEAD','http://example.org/', ['X-Foo' => 'bar']);
 
-        $this->assertEquals(
-            [
+
+        $settings = [
                 CURLOPT_RETURNTRANSFER => true,
                 CURLOPT_HEADER => true,
                 CURLOPT_NOBODY => true,
@@ -44,9 +51,16 @@ class ClientTest extends \PHPUnit_Framework_TestCase {
                 CURLOPT_URL => 'http://example.org/',
                 CURLOPT_POSTFIELDS => null,
                 CURLOPT_PUT => false,
-            ],
-            $client->createCurlSettingsArray($request)
-        );
+            ];
+
+        // FIXME: CURLOPT_PROTOCOLS and CURLOPT_REDIR_PROTOCOLS are currently unsupported by HHVM
+        // at least if this unit test fails in the future we know it is :)
+        if(defined('HHVM_VERSION') === false) {
+            $settings[CURLOPT_PROTOCOLS] = CURLPROTO_HTTP | CURLPROTO_HTTPS;
+            $settings[CURLOPT_REDIR_PROTOCOLS] = CURLPROTO_HTTP | CURLPROTO_HTTPS;
+        }
+
+        $this->assertEquals($settings, $client->createCurlSettingsArray($request));
 
     }
 
@@ -58,8 +72,7 @@ class ClientTest extends \PHPUnit_Framework_TestCase {
         fwrite($h, 'booh');
         $request = new Request('PUT','http://example.org/', ['X-Foo' => 'bar'], $h);
 
-        $this->assertEquals(
-            [
+        $settings = [
                 CURLOPT_RETURNTRANSFER => true,
                 CURLOPT_HEADER => true,
                 CURLOPT_PUT => true,
@@ -67,9 +80,16 @@ class ClientTest extends \PHPUnit_Framework_TestCase {
                 CURLOPT_CUSTOMREQUEST => 'PUT',
                 CURLOPT_HTTPHEADER => ['X-Foo: bar'],
                 CURLOPT_URL => 'http://example.org/',
-            ],
-            $client->createCurlSettingsArray($request)
-        );
+            ];
+
+        // FIXME: CURLOPT_PROTOCOLS and CURLOPT_REDIR_PROTOCOLS are currently unsupported by HHVM
+        // at least if this unit test fails in the future we know it is :)
+        if(defined('HHVM_VERSION') === false) {
+            $settings[CURLOPT_PROTOCOLS] = CURLPROTO_HTTP | CURLPROTO_HTTPS;
+            $settings[CURLOPT_REDIR_PROTOCOLS] = CURLPROTO_HTTP | CURLPROTO_HTTPS;
+        }
+
+        $this->assertEquals($settings, $client->createCurlSettingsArray($request));
 
     }
 
@@ -78,17 +98,23 @@ class ClientTest extends \PHPUnit_Framework_TestCase {
         $client = new ClientMock();
         $request = new Request('PUT','http://example.org/', ['X-Foo' => 'bar'], 'boo');
 
-        $this->assertEquals(
-            [
+        $settings = [
                 CURLOPT_RETURNTRANSFER => true,
                 CURLOPT_HEADER => true,
                 CURLOPT_POSTFIELDS => 'boo',
                 CURLOPT_CUSTOMREQUEST => 'PUT',
                 CURLOPT_HTTPHEADER => ['X-Foo: bar'],
                 CURLOPT_URL => 'http://example.org/',
-            ],
-            $client->createCurlSettingsArray($request)
-        );
+            ];
+
+        // FIXME: CURLOPT_PROTOCOLS and CURLOPT_REDIR_PROTOCOLS are currently unsupported by HHVM
+        // at least if this unit test fails in the future we know it is :)
+        if(defined('HHVM_VERSION') === false) {
+            $settings[CURLOPT_PROTOCOLS] = CURLPROTO_HTTP | CURLPROTO_HTTPS;
+            $settings[CURLOPT_REDIR_PROTOCOLS] = CURLPROTO_HTTP | CURLPROTO_HTTPS;
+        }
+
+        $this->assertEquals($settings, $client->createCurlSettingsArray($request));
 
     }
 

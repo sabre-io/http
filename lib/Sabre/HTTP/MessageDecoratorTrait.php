@@ -32,7 +32,7 @@ trait MessageDecoratorTrait {
      *
      * @return resource
      */
-    public function getBodyAsStream() {
+    function getBodyAsStream() {
 
         return $this->inner->getBodyAsStream();
 
@@ -46,7 +46,7 @@ trait MessageDecoratorTrait {
      *
      * @return string
      */
-    public function getBodyAsString() {
+    function getBodyAsString() {
 
         return $this->inner->getBodyAsString();
 
@@ -59,7 +59,7 @@ trait MessageDecoratorTrait {
      *
      * @return resource|string
      */
-    public function getBody() {
+    function getBody() {
 
         return $this->inner->getBody();
 
@@ -71,7 +71,7 @@ trait MessageDecoratorTrait {
      * @param resource $body
      * @return void
      */
-    public function setBody($body) {
+    function setBody($body) {
 
         $this->inner->setBody($body);
 
@@ -80,9 +80,12 @@ trait MessageDecoratorTrait {
     /**
      * Returns all the HTTP headers as an array.
      *
+     * Any HTTP headers with more than one value will be concatenated with
+     * comma (,).
+     *
      * @return array
      */
-    public function getHeaders() {
+    function getHeaders() {
 
         return $this->inner->getHeaders();
 
@@ -92,15 +95,38 @@ trait MessageDecoratorTrait {
      * Returns a specific HTTP header, based on it's name.
      *
      * The name must be treated as case-insensitive.
-     *
      * If the header does not exist, this method must return null.
+     *
+     * If a header appeared more than once in a http request, this method will
+     * concatenate all the values with a comma.
+     *
+     * Note that this not make sense for all headers. Some, such as
+     * `Set-Cookie` cannot be logically combined with a comma. In those cases
+     * you *should* use getHeaderAsArray().
      *
      * @param string $name
      * @return string|null
      */
-    public function getHeader($name) {
+    function getHeader($name) {
 
         return $this->inner->getHeader($name);
+
+    }
+
+    /**
+     * Returns a HTTP header as an array.
+     *
+     * For every time the http header appeared in the request or response, an
+     * item will appear in the array.
+     *
+     * If the header did not exists, this method will return an empty array.
+     *
+     * @param string $name
+     * @return string[]
+     */
+    function getHeaderAsArray($name) {
+
+        return $this->inner->getHeaderAsArray($name);
 
     }
 
@@ -109,40 +135,61 @@ trait MessageDecoratorTrait {
      *
      * The case-sensitity of the name value must be retained as-is.
      *
+     * If the header already existed, it will be overwritten.
+     *
      * @param string $name
-     * @param string $value
+     * @param string|string[] $value
      * @return void
      */
-    public function setHeader($name, $value) {
+    function setHeader($name, $value) {
 
         $this->inner->setHeader($name, $value);
 
     }
 
     /**
-     * Resets HTTP headers
+     * Sets a new set of HTTP headers.
      *
-     * This method overwrites all existing HTTP headers
+     * The headers array should contain headernames for keys, and their value
+     * should be specified as either a string or an array.
+     *
+     * Any header that already existed will be overwritten.
      *
      * @param array $headers
      * @return void
      */
-    public function setHeaders(array $headers) {
+    function setHeaders(array $headers) {
 
         $this->inner->setHeaders($headers);
 
     }
 
     /**
+     * Adds a HTTP header.
+     *
+     * This method will not overwrite any existing HTTP header, but instead add
+     * another value. Individual values can be retrieved with
+     * getHeadersAsArray.
+     *
+     * @param string $name
+     * @param string $value
+     * @return void
+     */
+    function addHeader($name, $value) {
+
+        $this->inner->addHeader($name, $value);
+
+    }
+
+    /**
      * Adds a new set of HTTP headers.
      *
-     * Any header specified in the array that already exists will be
-     * overwritten, but any other existing headers will be retained.
+     * Any existing headers will not be overwritten.
      *
      * @param array $headers
      * @return void
      */
-    public function addHeaders(array $headers) {
+    function addHeaders(array $headers) {
 
         $this->inner->addHeaders($headers);
 
@@ -158,7 +205,7 @@ trait MessageDecoratorTrait {
      *
      * @return bool
      */
-    public function removeHeader($name) {
+    function removeHeader($name) {
 
         $this->inner->removeHeader($name);
 
@@ -172,7 +219,7 @@ trait MessageDecoratorTrait {
      * @param string $version
      * @return void
      */
-    public function setHttpVersion($version) {
+    function setHttpVersion($version) {
 
         $this->inner->setHttpVersion($version);
 
@@ -183,7 +230,7 @@ trait MessageDecoratorTrait {
      *
      * @return string
      */
-    public function getHttpVersion() {
+    function getHttpVersion() {
 
         return $this->inner->getHttpVersion();
 

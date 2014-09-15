@@ -108,8 +108,8 @@ class MessageTest extends \PHPUnit_Framework_TestCase {
         ]);
         $message->setHeaders([
             'c' => 'd',
-            ]);
-        $this->assertNull($message->getHeader('a'));
+        ]);
+        $this->assertEquals('b', $message->getHeader('a'));
 
     }
 
@@ -123,6 +123,36 @@ class MessageTest extends \PHPUnit_Framework_TestCase {
             'c' => 'd',
         ]);
         $this->assertEquals('b', $message->getHeader('a'));
+
+    }
+
+    function testMultipleHeaders() {
+
+        $message = new MessageMock();
+        $message->setHeader('a', '1');
+        $message->addHeader('A', '2');
+
+        $this->assertEquals(
+            "1,2",
+            $message->getHeader('A')
+        );
+        $this->assertEquals(
+            "1,2",
+            $message->getHeader('a')
+        );
+
+        $this->assertEquals(
+            ['1','2'],
+            $message->getHeaderAsArray('a')
+        );
+        $this->assertEquals(
+            ['1','2'],
+            $message->getHeaderAsArray('A')
+        );
+        $this->assertEquals(
+            [],
+            $message->getHeaderAsArray('B')
+        );
 
     }
 

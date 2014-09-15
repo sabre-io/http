@@ -52,6 +52,9 @@ interface MessageInterface {
     /**
      * Returns all the HTTP headers as an array.
      *
+     * Any HTTP headers with more than one value will be concatenated with
+     * comma (,).
+     *
      * @return array
      */
     function getHeaders();
@@ -60,8 +63,14 @@ interface MessageInterface {
      * Returns a specific HTTP header, based on it's name.
      *
      * The name must be treated as case-insensitive.
-     *
      * If the header does not exist, this method must return null.
+     *
+     * If a header appeared more than once in a http request, this method will
+     * concatenate all the values with a comma.
+     *
+     * Note that this not make sense for all headers. Some, such as
+     * `Set-Cookie` cannot be logically combined with a comma. In those cases
+     * you *should* use getHeaderAsArray().
      *
      * @param string $name
      * @return string|null
@@ -69,20 +78,38 @@ interface MessageInterface {
     function getHeader($name);
 
     /**
+     * Returns a HTTP header as an array.
+     *
+     * For every time the http header appeared in the request or response, an
+     * item will appear in the array.
+     *
+     * If the header did not exists, this method will return an empty array.
+     *
+     * @param string $name
+     * @return string[]
+     */
+    function getHeaderAsArray($name);
+
+    /**
      * Updates a HTTP header.
      *
      * The case-sensitity of the name value must be retained as-is.
      *
+     * If the header already existed, it will be overwritten.
+     *
      * @param string $name
-     * @param string $value
+     * @param string|string[] $value
      * @return void
      */
     function setHeader($name, $value);
 
     /**
-     * Resets HTTP headers
+     * Sets a new set of HTTP headers.
      *
-     * This method overwrites all existing HTTP headers
+     * The headers array should contain headernames for keys, and their value
+     * should be specified as either a string or an array.
+     *
+     * Any header that already existed will be overwritten.
      *
      * @param array $headers
      * @return void
@@ -90,10 +117,22 @@ interface MessageInterface {
     function setHeaders(array $headers);
 
     /**
+     * Adds a HTTP header.
+     *
+     * This method will not overwrite any existing HTTP header, but instead add
+     * another value. Individual values can be retrieved with
+     * getHeadersAsArray.
+     *
+     * @param string $name
+     * @param string $value
+     * @return void
+     */
+    function addHeader($name, $value);
+
+    /**
      * Adds a new set of HTTP headers.
      *
-     * Any header specified in the array that already exists will be
-     * overwritten, but any other existing headers will be retained.
+     * Any existing headers will not be overwritten.
      *
      * @param array $headers
      * @return void

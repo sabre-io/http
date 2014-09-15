@@ -44,7 +44,7 @@ abstract class Message implements MessageInterface {
      *
      * @return resource
      */
-    public function getBodyAsStream() {
+    function getBodyAsStream() {
 
         $body = $this->getBody();
         if (is_string($body) || is_null($body)) {
@@ -66,7 +66,7 @@ abstract class Message implements MessageInterface {
      *
      * @return string
      */
-    public function getBodyAsString() {
+    function getBodyAsString() {
 
         $body = $this->getBody();
         if (is_string($body)) {
@@ -86,7 +86,7 @@ abstract class Message implements MessageInterface {
      *
      * @return resource|string
      */
-    public function getBody() {
+    function getBody() {
 
         return $this->body;
 
@@ -97,7 +97,7 @@ abstract class Message implements MessageInterface {
      *
      * @param resource $body
      */
-    public function setBody($body) {
+    function setBody($body) {
 
         $this->body = $body;
 
@@ -106,11 +106,18 @@ abstract class Message implements MessageInterface {
     /**
      * Returns all the HTTP headers as an array.
      *
+     * Any HTTP headers with more than one value will be concatenated with
+     * comma (,).
+     *
      * @return array
      */
-    public function getHeaders() {
+    function getHeaders() {
 
-        return $this->headers;
+        $result = [];
+        foreach($this->headers as $headerInfo) {
+            $result[$headerInfo[0]] = implode(',', $headerInfo[1]);
+        }
+        return $result;
 
     }
 
@@ -118,51 +125,49 @@ abstract class Message implements MessageInterface {
      * Returns a specific HTTP header, based on it's name.
      *
      * The name must be treated as case-insensitive.
-     *
      * If the header does not exist, this method must return null.
+     *
+     * If a header appeared more than once in a http request, this method will
+     * concatenate all the values with a comma.
+     *
+     * Note that this not make sense for all headers. Some, such as
+     * `Set-Cookie` cannot be logically combined with a comma. In those cases
+     * you *should* use getHeaderAsArray().
      *
      * @param string $name
      * @return string|null
      */
-    public function getHeader($name) {
+    function getHeader($name) {
 
-        foreach($this->headers as $key=>$value) {
-            if (strtolower($key)===strtolower($name)) {
-                return $value;
-            }
+        $name = strtolower($name);
+
+        if (isset($this->headers[$name])) {
+            return implode(',', $this->headers[$name][1]);
         }
-
         return null;
 
     }
 
     /**
-     * Sets a new set of HTTP headers.
+     * Returns a HTTP header as an array.
      *
-     * This method should append the new headers, not wipe out the existing
-     * ones.
+     * For every time the http header appeared in the request or response, an
+     * item will appear in the array.
      *
-     * @param array $headers
-     * @return void
+     * If the header did not exists, this method will return an empty array.
+     *
+     * @param string $name
+     * @return string[]
      */
-    public function setHeaders(array $headers) {
+    function getHeaderAsArray($name) {
 
-        $this->headers = $headers;
+        $name = strtolower($name);
 
-    }
+        if (isset($this->headers[$name])) {
+            return $this->headers[$name][1];
+        }
 
-    /**
-     * Adds a new set of HTTP headers.
-     *
-     * Any header specified in the array that already exists will be
-     * overwritten, but any other existing headers will be retained.
-     *
-     * @param array $headers
-     * @return void
-     */
-    public function addHeaders(array $headers) {
-
-        $this->headers = array_merge($this->headers, $headers);
+        return [];
 
     }
 
@@ -171,15 +176,83 @@ abstract class Message implements MessageInterface {
      *
      * The case-sensitity of the name value must be retained as-is.
      *
+     * If the header already existed, it will be overwritten.
+     *
+     * @param string $name
+     * @param string|string[] $value
+     * @return void
+     */
+    function setHeader($name, $value) {
+
+        $this->headers[
+            strtolower($name)
+        ] = [$name, (array)$value];
+
+    }
+
+    /**
+     * Sets a new set of HTTP headers.
+     *
+     * The headers array should contain headernames for keys, and their value
+     * should be specified as either a string or an array.
+     *
+     * Any header that already existed will be overwritten.
+     *
+     * @param array $headers
+     * @return void
+     */
+    function setHeaders(array $headers) {
+
+        foreach($headers as $name => $value) {
+            $this->setHeader($name, $value);
+        }
+
+    }
+
+    /**
+     * Adds a HTTP header.
+     *
+     * This method will not overwrite any existing HTTP header, but instead add
+     * another value. Individual values can be retrieved with
+     * getHeadersAsArray.
+     *
      * @param string $name
      * @param string $value
      * @return void
      */
-    public function setHeader($name, $value) {
+    function addHeader($name, $value) {
 
-        $this->headers[$name] = $value;
+        $lName = strtolower($name);
+        if (isset($this->headers[$lName])) {
+            $this->headers[$lName][1] = array_merge(
+                $this->headers[$lName][1],
+                (array)$value
+            );
+        } else {
+            $this->headers[$lName] = [
+                $name,
+                (array)$value
+            ];
+        }
 
     }
+
+    /**
+     * Adds a new set of HTTP headers.
+     *
+     * Any existing headers will not be overwritten.
+     *
+     * @param array $headers
+     * @return void
+     */
+    function addHeaders(array $headers) {
+
+        foreach($headers as $name => $value) {
+            $this->addHeader($name, $value);
+        }
+
+    }
+
 
     /**
      * Removes a HTTP header.
@@ -190,15 +263,15 @@ abstract class Message implements MessageInterface {
      *
      * @return bool
      */
-    public function removeHeader($name) {
+    function removeHeader($name) {
 
-        foreach($this->headers as $key=>$value) {
-            if (strtolower($key)===strtolower($name)) {
-                unset($this->headers[$key]);
-                return true;
-            }
+        $name = strtolower($name);
+        if (!isset($this->headers[$name])) {
+            return false;
+        } else {
+            unset($this->headers[$name]);
+            return true;
         }
-        return false;
 
     }
 
@@ -210,7 +283,7 @@ abstract class Message implements MessageInterface {
      * @param string $version
      * @return void
      */
-    public function setHttpVersion($version) {
+    function setHttpVersion($version) {
 
         $this->httpVersion = $version;
 
@@ -221,7 +294,7 @@ abstract class Message implements MessageInterface {
      *
      * @return string
      */
-    public function getHttpVersion() {
+    function getHttpVersion() {
 
         return $this->httpVersion;
 

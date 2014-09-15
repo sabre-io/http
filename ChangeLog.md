@@ -4,6 +4,19 @@ ChangeLog
 2.1.0 (2014-??-??)
 ------------------
 
+* Changed: Copied most of the header-semantics for the PSR draft for
+  representing HTTP messages. [Reference here][psr-http].
+* This means that `setHeaders()` does not wipe out every existing header
+  anymore.
+* We also support multiple headers with the same name.
+* Use `Request::getHeadersAsArray()` and `Response::getHeadersAsArray()` to
+  get a hold off multiple headers with the same name.
+* If you use `getHeader()`, and there's more than 1 header with that name, we
+  concatenate all these with a comma.
+* `addHeader()` will now preserve an existing header with that name, and add a
+  second header with the same name.
+* The message class should be a lot faster now for looking up headers. No more
+  array traversal, because we maintain a tiny index.
 * Added: `URLUtil::resolve()` to make resolving relative urls super easy.
 * #12: Circumventing CURL's FOLLOW_LOCATION and doing it in PHP instead. This
   fixes compatibility issues with people that have open_basedir turned on.
@@ -131,3 +144,5 @@ ChangeLog
 
 Before 2.0.0, this package was built-into SabreDAV, where it first appeared in
 January 2009.
+
+[psr-http]: https://github.com/php-fig/fig-standards/blob/master/proposed/http-message.md

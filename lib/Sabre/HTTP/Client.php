@@ -494,17 +494,17 @@ class Client extends EventEmitter {
         // Splitting headers
         $headerBlob = explode("\r\n", $headerBlob);
 
+        $response = new Response();
+        $response->setStatus($curlInfo['http_code']);
+
         $headers = array();
         foreach($headerBlob as $header) {
             $parts = explode(':', $header, 2);
             if (count($parts)==2) {
-                $headers[trim($parts[0])] = trim($parts[1]);
+                $response->addHeader(trim($parts[0]), trim($parts[1]));
             }
         }
 
-        $response = new Response();
-        $response->setStatus($curlInfo['http_code']);
-        $response->setHeaders($headers);
         $response->setBody($responseBody);
 
         $httpCode = intval($response->getStatus());

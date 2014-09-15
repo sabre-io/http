@@ -45,7 +45,7 @@ class Digest extends AbstractAuth {
     /**
      * Initializes the object
      */
-    public function __construct($realm = 'SabreTooth', RequestInterface $request, ResponseInterface $response) {
+    function __construct($realm = 'SabreTooth', RequestInterface $request, ResponseInterface $response) {
 
         $this->nonce = uniqid();
         $this->opaque = md5($realm);
@@ -60,7 +60,7 @@ class Digest extends AbstractAuth {
      *
      * @return void
      */
-    public function init() {
+    function init() {
 
         $digest = $this->getDigest();
         $this->digestParts = $this->parseDigest($digest);
@@ -83,7 +83,7 @@ class Digest extends AbstractAuth {
      * @param int $qop
      * @return void
      */
-    public function setQOP($qop) {
+    function setQOP($qop) {
 
         $this->qop = $qop;
 
@@ -97,7 +97,7 @@ class Digest extends AbstractAuth {
      * @param string $A1
      * @return bool
      */
-    public function validateA1($A1) {
+    function validateA1($A1) {
 
         $this->A1 = $A1;
         return $this->validate();
@@ -111,7 +111,7 @@ class Digest extends AbstractAuth {
      * @param string $password
      * @return bool
      */
-    public function validatePassword($password) {
+    function validatePassword($password) {
 
         $this->A1 = md5($this->digestParts['username'] . ':' . $this->realm . ':' . $password);
         return $this->validate();
@@ -123,7 +123,7 @@ class Digest extends AbstractAuth {
      *
      * @return string
      */
-    public function getUsername() {
+    function getUsername() {
 
         return $this->digestParts['username'];
 
@@ -167,7 +167,7 @@ class Digest extends AbstractAuth {
      *
      * @return void
      */
-    public function requireLogin() {
+    function requireLogin() {
 
         $qop = '';
         switch($this->qop) {
@@ -197,7 +197,7 @@ class Digest extends AbstractAuth {
      *
      * @return mixed
      */
-    public function getDigest() {
+    function getDigest() {
 
         return $this->request->getHeader('Authorization');
 
@@ -215,8 +215,8 @@ class Digest extends AbstractAuth {
     protected function parseDigest($digest) {
 
         // protect against missing data
-        $needed_parts = array('nonce'=>1, 'nc'=>1, 'cnonce'=>1, 'qop'=>1, 'username'=>1, 'uri'=>1, 'response'=>1);
-        $data = array();
+        $needed_parts = ['nonce'=>1, 'nc'=>1, 'cnonce'=>1, 'qop'=>1, 'username'=>1, 'uri'=>1, 'response'=>1];
+        $data = [];
 
         preg_match_all('@(\w+)=(?:(?:")([^"]+)"|([^\s,$]+))@', $digest, $matches, PREG_SET_ORDER);
 

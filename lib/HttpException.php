@@ -25,6 +25,6 @@ interface HttpException {
      *
      * @return string|null
      */
-    public function getHttpStatus();
+    function getHttpStatus();
 
 }

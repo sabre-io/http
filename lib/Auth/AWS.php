@@ -51,7 +51,7 @@ class AWS extends AbstractAuth {
      *
      * @return bool
      */
-    public function init() {
+    function init() {
 
         $authHeader = $this->request->getHeader('Authorization');
         $authHeader = explode(' ',$authHeader);
@@ -72,7 +72,7 @@ class AWS extends AbstractAuth {
      *
      * @return string
      */
-    public function getAccessKey() {
+    function getAccessKey() {
 
         return $this->accessKey;
 
@@ -84,7 +84,7 @@ class AWS extends AbstractAuth {
      * @param string $secretKey
      * @return bool
      */
-    public function validate($secretKey) {
+    function validate($secretKey) {
 
         $contentMD5 = $this->request->getHeader('Content-MD5');
 
@@ -139,7 +139,7 @@ class AWS extends AbstractAuth {
      *
      * @return void
      */
-    public function requireLogin() {
+    function requireLogin() {
 
         $this->response->setHeader('WWW-Authenticate','AWS');
         $this->response->setStatus(401);
@@ -188,11 +188,11 @@ class AWS extends AbstractAuth {
      */
     protected function getAmzHeaders() {
 
-        $amzHeaders = array();
+        $amzHeaders = [];
         $headers = $this->request->getHeaders();
         foreach($headers as $headerName => $headerValue) {
             if (strpos(strtolower($headerName),'x-amz-')===0) {
-                $amzHeaders[strtolower($headerName)] = str_replace(array("\r\n"),array(' '),$headerValue) . "\n";
+                $amzHeaders[strtolower($headerName)] = str_replace( ["\r\n"], [' '],$headerValue) . "\n";
             }
         }
         ksort($amzHeaders);

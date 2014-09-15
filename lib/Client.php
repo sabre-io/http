@@ -68,7 +68,7 @@ class Client extends EventEmitter {
      *
      * @return void
      */
-    public function __construct() {
+    function __construct() {
 
         $this->curlSettings = [
             CURLOPT_RETURNTRANSFER => true,
@@ -83,7 +83,7 @@ class Client extends EventEmitter {
      * @param RequestInterface $request
      * @return ResponseInterface
      */
-    public function send(RequestInterface $request) {
+    function send(RequestInterface $request) {
 
         $this->emit('beforeRequest', [$request]);
 
@@ -172,7 +172,7 @@ class Client extends EventEmitter {
      * @param callable $error
      * @return void
      */
-    public function sendAsync(RequestInterface $request, callable $success = null, callable $error = null) {
+    function sendAsync(RequestInterface $request, callable $success = null, callable $error = null) {
 
         $this->emit('beforeRequest', [$request]);
         $this->sendAsyncInternal($request, $success, $error);
@@ -190,7 +190,7 @@ class Client extends EventEmitter {
      *
      * @return bool
      */
-    public function poll() {
+    function poll() {
 
         // nothing to do?
         if(!$this->curlMultiMap) {
@@ -275,7 +275,7 @@ class Client extends EventEmitter {
      *
      * @return void
      */
-    public function wait() {
+    function wait() {
 
         do {
             curl_multi_select($this->curlMultiHandle);
@@ -297,7 +297,7 @@ class Client extends EventEmitter {
      * @param bool $throwExceptions
      * @return void
      */
-    public function setThrowExceptions($throwExceptions) {
+    function setThrowExceptions($throwExceptions) {
 
         $this->throwExceptions = $throwExceptions;
 
@@ -312,7 +312,7 @@ class Client extends EventEmitter {
      * @param mixed $value
      * @return void
      */
-    public function addCurlSetting($name, $value) {
+    function addCurlSetting($name, $value) {
 
         $this->curlSettings[$name] = $value;
 
@@ -497,7 +497,6 @@ class Client extends EventEmitter {
         $response = new Response();
         $response->setStatus($curlInfo['http_code']);
 
-        $headers = array();
         foreach($headerBlob as $header) {
             $parts = explode(':', $header, 2);
             if (count($parts)==2) {

@@ -38,7 +38,7 @@ class Request extends Message implements RequestInterface {
      * @param array $headers
      * @param resource $body
      */
-    public function __construct($method = null, $url = null, array $headers = null, $body = null) {
+    function __construct($method = null, $url = null, array $headers = null, $body = null) {
 
         if (is_array($method)) {
             throw new InvalidArgumentException('The first argument for this constructor should be a string or null, not an array. Did you upgrade from sabre/http 1.0 to 2.0?');
@@ -55,7 +55,7 @@ class Request extends Message implements RequestInterface {
      *
      * @return string
      */
-    public function getMethod() {
+    function getMethod() {
 
         return $this->method;
 
@@ -67,7 +67,7 @@ class Request extends Message implements RequestInterface {
      * @param string $method
      * @return void
      */
-    public function setMethod($method) {
+    function setMethod($method) {
 
         $this->method = $method;
 
@@ -78,7 +78,7 @@ class Request extends Message implements RequestInterface {
      *
      * @return string
      */
-    public function getUrl() {
+    function getUrl() {
 
         return $this->url;
 
@@ -90,7 +90,7 @@ class Request extends Message implements RequestInterface {
      * @param string $url
      * @return void
      */
-    public function setUrl($url) {
+    function setUrl($url) {
 
         $this->url = $url;
 
@@ -103,7 +103,7 @@ class Request extends Message implements RequestInterface {
      *
      * @return array
      */
-    public function getQueryParameters() {
+    function getQueryParameters() {
 
         $url = $this->getUrl();
         if (($index = strpos($url,'?'))===false) {
@@ -121,7 +121,7 @@ class Request extends Message implements RequestInterface {
      * @param string $url
      * @return void
      */
-    public function setAbsoluteUrl($url) {
+    function setAbsoluteUrl($url) {
 
         $this->absoluteUrl = $url;
 
@@ -132,7 +132,7 @@ class Request extends Message implements RequestInterface {
      *
      * @return string
      */
-    public function getAbsoluteUrl() {
+    function getAbsoluteUrl() {
 
         return $this->absoluteUrl;
 
@@ -153,7 +153,7 @@ class Request extends Message implements RequestInterface {
      * @param string $url
      * @return void
      */
-    public function setBaseUrl($url) {
+    function setBaseUrl($url) {
 
         $this->baseUrl = $url;
 
@@ -164,7 +164,7 @@ class Request extends Message implements RequestInterface {
      *
      * @return string
      */
-    public function getBaseUrl() {
+    function getBaseUrl() {
 
         return $this->baseUrl;
 
@@ -187,7 +187,7 @@ class Request extends Message implements RequestInterface {
      *
      * @return string
      */
-    public function getPath() {
+    function getPath() {
 
         // Removing duplicated slashes.
         $uri = str_replace('//','/',$this->getUrl());
@@ -230,7 +230,7 @@ class Request extends Message implements RequestInterface {
      * @param array $postData
      * @return void
      */
-    public function setPostData(array $postData) {
+    function setPostData(array $postData) {
 
         $this->postData = $postData;
 
@@ -243,7 +243,7 @@ class Request extends Message implements RequestInterface {
      *
      * @return array
      */
-    public function getPostData() {
+    function getPostData() {
 
         return $this->postData;
 
@@ -264,7 +264,7 @@ class Request extends Message implements RequestInterface {
      * @param string $valueName
      * @return string|null
      */
-    public function getRawServerValue($valueName) {
+    function getRawServerValue($valueName) {
 
         if (isset($this->rawServerData[$valueName])) {
             return $this->rawServerData[$valueName];
@@ -278,7 +278,7 @@ class Request extends Message implements RequestInterface {
      * @param array $data
      * @return void
      */
-    public function setRawServerData(array $data) {
+    function setRawServerData(array $data) {
 
         $this->rawServerData = $data;
 
@@ -291,7 +291,7 @@ class Request extends Message implements RequestInterface {
      *
      * @return string
      */
-    public function __toString() {
+    function __toString() {
 
         $str = $this->getMethod() . ' ' . $this->getUrl() . ' HTTP/' . $this->getHTTPVersion() . "\r\n";
         foreach($this->getHeaders() as $key=>$value) {

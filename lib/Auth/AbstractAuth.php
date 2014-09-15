@@ -44,7 +44,7 @@ abstract class AbstractAuth {
      * @param string $realm
      * @return void
      */
-    public function __construct($realm = 'SabreTooth', RequestInterface $request, ResponseInterface $response) {
+    function __construct($realm = 'SabreTooth', RequestInterface $request, ResponseInterface $response) {
 
         $this->realm = $realm;
         $this->request = $request;
@@ -58,14 +58,14 @@ abstract class AbstractAuth {
      *
      * @return void
      */
-    abstract public function requireLogin();
+    abstract function requireLogin();
 
     /**
      * Returns the HTTP realm
      *
      * @return string
      */
-    public function getRealm() {
+    function getRealm() {
 
         return $this->realm;
 

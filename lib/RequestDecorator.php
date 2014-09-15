@@ -21,7 +21,7 @@ class RequestDecorator implements RequestInterface {
      *
      * @param RequestInterface $inner
      */
-    public function __construct(RequestInterface $inner) {
+    function __construct(RequestInterface $inner) {
 
         $this->inner = $inner;
 
@@ -32,7 +32,7 @@ class RequestDecorator implements RequestInterface {
      *
      * @return string
      */
-    public function getMethod() {
+    function getMethod() {
 
         return $this->inner->getMethod();
 
@@ -44,7 +44,7 @@ class RequestDecorator implements RequestInterface {
      * @param string $method
      * @return void
      */
-    public function setMethod($method) {
+    function setMethod($method) {
 
         $this->inner->setMethod($method);
 
@@ -55,7 +55,7 @@ class RequestDecorator implements RequestInterface {
      *
      * @return string
      */
-    public function getUrl() {
+    function getUrl() {
 
         return $this->inner->getUrl();
 
@@ -67,7 +67,7 @@ class RequestDecorator implements RequestInterface {
      * @param string $url
      * @return void
      */
-    public function setUrl($url) {
+    function setUrl($url) {
 
         $this->inner->setUrl($url);
 
@@ -78,7 +78,7 @@ class RequestDecorator implements RequestInterface {
      *
      * @return string
      */
-    public function getAbsoluteUrl() {
+    function getAbsoluteUrl() {
 
         return $this->inner->getAbsoluteUrl();
 
@@ -90,7 +90,7 @@ class RequestDecorator implements RequestInterface {
      * @param string $url
      * @return void
      */
-    public function setAbsoluteUrl($url) {
+    function setAbsoluteUrl($url) {
 
         $this->inner->setAbsoluteUrl($url);
 
@@ -101,7 +101,7 @@ class RequestDecorator implements RequestInterface {
      *
      * @return string
      */
-    public function getBaseUrl() {
+    function getBaseUrl() {
 
         return $this->inner->getBaseUrl();
 
@@ -117,7 +117,7 @@ class RequestDecorator implements RequestInterface {
      * @param string $url
      * @return void
      */
-    public function setBaseUrl($url) {
+    function setBaseUrl($url) {
 
         $this->inner->setBaseUrl($url);
 
@@ -140,7 +140,7 @@ class RequestDecorator implements RequestInterface {
      *
      * @return string
      */
-    public function getPath() {
+    function getPath() {
 
         return $this->inner->getPath();
 
@@ -153,7 +153,7 @@ class RequestDecorator implements RequestInterface {
      *
      * @return array
      */
-    public function getQueryParameters() {
+    function getQueryParameters() {
 
         return $this->inner->getQueryParameters();
 
@@ -166,7 +166,7 @@ class RequestDecorator implements RequestInterface {
      *
      * @return array
      */
-    public function getPostData() {
+    function getPostData() {
 
         return $this->inner->getPostData();
 
@@ -183,7 +183,7 @@ class RequestDecorator implements RequestInterface {
      * @param array $postData
      * @return void
      */
-    public function setPostData(array $postData) {
+    function setPostData(array $postData) {
 
         $this->inner->setPostData($postData);
 
@@ -198,7 +198,7 @@ class RequestDecorator implements RequestInterface {
      * @param string $valueName
      * @return string|null
      */
-    public function getRawServerValue($valueName) {
+    function getRawServerValue($valueName) {
 
         return $this->inner->getRawServerValue($valueName);
 
@@ -210,7 +210,7 @@ class RequestDecorator implements RequestInterface {
      * @param array $data
      * @return void
      */
-    public function setRawServerData(array $data) {
+    function setRawServerData(array $data) {
 
         $this->inner->setRawServerData($data);
 
@@ -223,7 +223,7 @@ class RequestDecorator implements RequestInterface {
      *
      * @return string
      */
-    public function __toString() {
+    function __toString() {
 
         return $this->inner->__toString();
 

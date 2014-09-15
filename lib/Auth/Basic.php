@@ -29,7 +29,7 @@ class Basic extends AbstractAuth {
      *
      * @return null|array
      */
-    public function getCredentials() {
+    function getCredentials() {
 
         $auth = $this->request->getHeader('Authorization');
 
@@ -51,7 +51,7 @@ class Basic extends AbstractAuth {
      *
      * @return void
      */
-    public function requireLogin() {
+    function requireLogin() {
 
         $this->response->setHeader('WWW-Authenticate','Basic realm="' . $this->realm . '"');
         $this->response->setStatus(401);

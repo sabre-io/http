@@ -18,6 +18,7 @@ ChangeLog
 * The message class should be a lot faster now for looking up headers. No more
   array traversal, because we maintain a tiny index.
 * Added: `URLUtil::resolve()` to make resolving relative urls super easy.
+* Switched to PSR-4.
 * #12: Circumventing CURL's FOLLOW_LOCATION and doing it in PHP instead. This
   fixes compatibility issues with people that have open_basedir turned on.
 * Added: Content negotiation now correctly support mime-type parameters such as

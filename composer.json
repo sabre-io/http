@@ -29,8 +29,8 @@
         "source" : "https://github.com/fruux/sabre-http"
     },
     "autoload" : {
-        "psr-0" : {
-            "Sabre\\HTTP" : "lib/"
+        "psr-4" : {
+            "Sabre\\HTTP\\" : "lib/"
         }
     },
     "config" : {

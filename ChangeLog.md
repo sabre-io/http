@@ -1,8 +1,8 @@
 ChangeLog
 =========
 
-2.1.0 (2014-??-??)
-------------------
+2.1.0-alpha1 (2014-09-15)
+-------------------------
 
 * Changed: Copied most of the header-semantics for the PSR draft for
   representing HTTP messages. [Reference here][psr-http].

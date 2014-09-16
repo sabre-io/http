@@ -80,6 +80,58 @@ class MessageTest extends \PHPUnit_Framework_TestCase {
 
     }
 
+    function testSetHeaders() {
+
+        $message = new MessageMock();
+
+        $headers = [
+            'X-Foo' => '1',
+            'X-Bar' => '2',
+        ];
+
+        $message->setHeaders($headers);
+        $this->assertEquals($headers, $message->getHeaders());
+
+        $message->setHeaders([
+            'X-Foo' => ['3','4'],
+            'X-Bar' => '5',
+        ]);
+
+        $expected = [
+            'X-Foo' => '3,4',
+            'X-Bar' => '5',
+        ];
+
+        $this->assertEquals($expected, $message->getHeaders());
+
+    }
+
+    function testAddHeaders() {
+
+        $message = new MessageMock();
+
+        $headers = [
+            'X-Foo' => '1',
+            'X-Bar' => '2',
+        ];
+
+        $message->addHeaders($headers);
+        $this->assertEquals($headers, $message->getHeaders());
+
+        $message->addHeaders([
+            'X-Foo' => ['3','4'],
+            'X-Bar' => '5',
+        ]);
+
+        $expected = [
+            'X-Foo' => '1,3,4',
+            'X-Bar' => '2,5',
+        ];
+
+        $this->assertEquals($expected, $message->getHeaders());
+
+    }
+
     function testSendBody() {
 
         $message = new MessageMock();
@@ -97,32 +149,6 @@ class MessageTest extends \PHPUnit_Framework_TestCase {
         rewind($body);
 
         $this->assertEquals('bar', stream_get_contents($body));
-
-    }
-
-    function testSetHeaders() {
-
-        $message = new MessageMock();
-        $message->setHeaders([
-            'a' => 'b',
-        ]);
-        $message->setHeaders([
-            'c' => 'd',
-        ]);
-        $this->assertEquals('b', $message->getHeader('a'));
-
-    }
-
-    function testAddHeaders() {
-
-        $message = new MessageMock();
-        $message->addHeaders([
-            'a' => 'b',
-        ]);
-        $message->addHeaders([
-            'c' => 'd',
-        ]);
-        $this->assertEquals('b', $message->getHeader('a'));
 
     }
 

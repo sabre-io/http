@@ -91,7 +91,7 @@ class SapiTest extends \PHPUnit_Framework_TestCase {
             $this->markTestSkipped('XDebug needs to be installed for this test to run');
         }
 
-        $response = new Response(204, ['Content-Type' => 'text/xml']);
+        $response = new Response(204, ['Content-Type' => 'text/xml;charset=UTF-8']);
 
         // Second Content-Type header. Normally this doesn't make sense.
         $response->addHeader('Content-Type', 'application/xml');
@@ -107,7 +107,7 @@ class SapiTest extends \PHPUnit_Framework_TestCase {
 
         $this->assertEquals(
             [
-                "Content-Type: text/xml",
+                "Content-Type: text/xml;charset=UTF-8",
                 "Content-Type: application/xml",
             ],
             $headers

@@ -1,6 +1,13 @@
 ChangeLog
 =========
 
+3.0.0 (2014-09-23)
+------------------
+
+* No changes from 2.1.0-alpha1, but doing a major version bump due to the
+  api breaks.
+
+
 2.1.0-alpha1 (2014-09-15)
 -------------------------
 
@@ -26,6 +33,7 @@ ChangeLog
 * Changed: `Util::negotiate()` is now deprecated. Use
   `Util::negotiateContentType()` instead.
 * #14: The client now only follows http and https urls.
+
 
 2.0.4 (2014-07-14)
 ------------------

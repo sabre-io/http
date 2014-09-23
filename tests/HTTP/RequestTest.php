@@ -12,7 +12,7 @@ class RequestTest extends \PHPUnit_Framework_TestCase {
         $this->assertEquals('GET', $request->getMethod());
         $this->assertEquals('/foo', $request->getUrl());
         $this->assertEquals(array(
-            'User-Agent' => 'Evert',
+            'User-Agent' => ['Evert'],
         ), $request->getHeaders());
 
     }

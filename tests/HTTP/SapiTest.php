@@ -18,9 +18,9 @@ class SapiTest extends \PHPUnit_Framework_TestCase {
         $this->assertEquals('GET', $request->getMethod());
         $this->assertEquals('/foo', $request->getUrl());
         $this->assertEquals(array(
-            'User-Agent' => 'Evert',
-            'Content-Type' => 'text/xml',
-            'Content-Length' => '400',
+            'User-Agent' => ['Evert'],
+            'Content-Type' => ['text/xml'],
+            'Content-Length' => ['400'],
         ), $request->getHeaders());
 
         $this->assertEquals('1.0', $request->getHttpVersion());
@@ -42,7 +42,7 @@ class SapiTest extends \PHPUnit_Framework_TestCase {
         $this->assertEquals('GET', $request->getMethod());
         $this->assertEquals('/foo', $request->getUrl());
         $this->assertEquals(array(
-            'Authorization' => 'Basic ' . base64_encode('user:pass'),
+            'Authorization' => ['Basic ' . base64_encode('user:pass')],
         ), $request->getHeaders());
 
     }
@@ -58,7 +58,7 @@ class SapiTest extends \PHPUnit_Framework_TestCase {
         $this->assertEquals('GET', $request->getMethod());
         $this->assertEquals('/foo', $request->getUrl());
         $this->assertEquals(array(
-            'Authorization' => 'Digest blabla',
+            'Authorization' => ['Digest blabla'],
         ), $request->getHeaders());
 
     }
@@ -74,7 +74,7 @@ class SapiTest extends \PHPUnit_Framework_TestCase {
         $this->assertEquals('GET', $request->getMethod());
         $this->assertEquals('/foo', $request->getUrl());
         $this->assertEquals(array(
-            'Authorization' => 'Basic bla',
+            'Authorization' => ['Basic bla'],
         ), $request->getHeaders());
 
     }
@@ -91,7 +91,10 @@ class SapiTest extends \PHPUnit_Framework_TestCase {
             $this->markTestSkipped('XDebug needs to be installed for this test to run');
         }
 
-        $response = new Response(204, ['Content-Type', 'text/xml']);
+        $response = new Response(204, ['Content-Type' => 'text/xml']);
+
+        // Second Content-Type header. Normally this doesn't make sense.
+        $response->addHeader('Content-Type', 'application/xml');
         $response->setBody('foo');
 
         ob_start();
@@ -104,8 +107,8 @@ class SapiTest extends \PHPUnit_Framework_TestCase {
 
         $this->assertEquals(
             [
-                "0: Content-Type",
-                "1: text/xml",
+                "Content-Type: text/xml",
+                "Content-Type: application/xml",
             ],
             $headers
         );

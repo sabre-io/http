@@ -106,8 +106,7 @@ abstract class Message implements MessageInterface {
     /**
      * Returns all the HTTP headers as an array.
      *
-     * Any HTTP headers with more than one value will be concatenated with
-     * comma (,).
+     * Every header is returned as an array, with one or more values.
      *
      * @return array
      */
@@ -115,9 +114,21 @@ abstract class Message implements MessageInterface {
 
         $result = [];
         foreach($this->headers as $headerInfo) {
-            $result[$headerInfo[0]] = implode(',', $headerInfo[1]);
+            $result[$headerInfo[0]] = $headerInfo[1];
         }
         return $result;
+
+    }
+
+    /**
+     * Will return true or false, depending on if a http header exists.
+     *
+     * @param string $name
+     * @return bool
+     */
+    function hasHeader($name) {
+
+        return isset($this->headers[strtolower($name)]);
 
     }
 

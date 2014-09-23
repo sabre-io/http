@@ -58,7 +58,13 @@ class Sapi {
         header('HTTP/' . $response->getHttpVersion() . ' ' . $response->getStatus() . ' ' . $response->getStatusText());
         foreach($response->getHeaders() as $key=>$value) {
 
-            header($key . ': ' . $value);
+            foreach($value as $k=>$v) {
+                if ($k === 0) {
+                    header($key . ': ' . $v);
+                } else {
+                    header($key . ': ' . $v, false);
+                }
+            }
 
         }
         file_put_contents('php://output', $response->getBody());

@@ -80,14 +80,25 @@ trait MessageDecoratorTrait {
     /**
      * Returns all the HTTP headers as an array.
      *
-     * Any HTTP headers with more than one value will be concatenated with
-     * comma (,).
+     * Every header is returned as an array, with one or more values.
      *
      * @return array
      */
     function getHeaders() {
 
         return $this->inner->getHeaders();
+
+    }
+
+    /**
+     * Will return true or false, depending on if a http header exists.
+     *
+     * @param string $name
+     * @return bool
+     */
+    function hasHeader($name) {
+
+        return $this->inner->hasHeader($name);
 
     }
 

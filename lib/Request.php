@@ -295,7 +295,9 @@ class Request extends Message implements RequestInterface {
 
         $str = $this->getMethod() . ' ' . $this->getUrl() . ' HTTP/' . $this->getHTTPVersion() . "\r\n";
         foreach($this->getHeaders() as $key=>$value) {
-            $str.= $key . ": " . $value . "\r\n";
+            foreach($value as $v) {
+                $str.= $key . ": " . $v . "\r\n";
+            }
         }
         $str.="\r\n";
         $str.=$this->getBodyAsString();

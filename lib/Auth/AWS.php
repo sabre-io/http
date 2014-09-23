@@ -192,7 +192,7 @@ class AWS extends AbstractAuth {
         $headers = $this->request->getHeaders();
         foreach($headers as $headerName => $headerValue) {
             if (strpos(strtolower($headerName),'x-amz-')===0) {
-                $amzHeaders[strtolower($headerName)] = str_replace( ["\r\n"], [' '],$headerValue) . "\n";
+                $amzHeaders[strtolower($headerName)] = str_replace( ["\r\n"], [' '],$headerValue[0]) . "\n";
             }
         }
         ksort($amzHeaders);

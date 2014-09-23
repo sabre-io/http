@@ -4,9 +4,8 @@ ChangeLog
 3.0.0 (2014-09-23)
 ------------------
 
-* No changes from 2.1.0-alpha1, but doing a major version bump due to the
-  api breaks.
-
+* `getHeaders()` now returns header values as an array, just like psr/http.
+* Added `hasHeader()`.
 
 2.1.0-alpha1 (2014-09-15)
 -------------------------
@@ -16,7 +15,7 @@ ChangeLog
 * This means that `setHeaders()` does not wipe out every existing header
   anymore.
 * We also support multiple headers with the same name.
-* Use `Request::getHeadersAsArray()` and `Response::getHeadersAsArray()` to
+* Use `Request::getHeaderAsArray()` and `Response::getHeaderAsArray()` to
   get a hold off multiple headers with the same name.
 * If you use `getHeader()`, and there's more than 1 header with that name, we
   concatenate all these with a comma.

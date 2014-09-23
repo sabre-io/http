@@ -415,9 +415,11 @@ class Client extends EventEmitter {
         }
 
         $nHeaders = [];
-        foreach($request->getHeaders() as $key=>$value) {
+        foreach($request->getHeaders() as $key=>$values) {
 
-            $nHeaders[] = $key . ': ' . $value;
+            foreach($values as $value) {
+                $nHeaders[] = $key . ': ' . $value;
+            }
 
         }
         $settings[CURLOPT_HTTPHEADER] = $nHeaders;

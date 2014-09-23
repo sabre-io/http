@@ -106,6 +106,35 @@ class DigestTest extends \PHPUnit_Framework_TestCase {
 
     public function testDigestAuthInt() {
 
+        $this->auth->setQOP(Digest::QOP_AUTHINT);
+        list($nonce,$opaque) = $this->getServerTokens(Digest::QOP_AUTHINT);
+
+        $username = 'admin';
+        $password = 12345;
+        $nc = '00003';
+        $cnonce = uniqid();
+
+        $digestHash = md5(
+            md5($username . ':' . self::REALM . ':' . $password) . ':' .
+            $nonce . ':' .
+            $nc . ':' .
+            $cnonce . ':' .
+            'auth-int:' .
+            md5('POST' . ':' . '/' . ':' . md5('body'))
+        );
+
+        $this->request->setMethod('POST');
+        $this->request->setHeader('Authorization','Digest username="'.$username.'", realm="' . self::REALM . '", nonce="' . $nonce . '", uri="/", response="' . $digestHash . '", opaque="' . $opaque . '", qop=auth-int,nc='.$nc.',cnonce="' . $cnonce . '"');
+        $this->request->setBody('body');
+
+        $this->auth->init();
+
+        $this->assertTrue($this->auth->validateA1(md5($username . ':' . self::REALM . ':' . $password)),'Authentication is deemed invalid through validateA1');
+
+    }
+
+    public function testDigestAuthBoth() {
+
         $this->auth->setQOP(Digest::QOP_AUTHINT | Digest::QOP_AUTH);
         list($nonce,$opaque) = $this->getServerTokens(Digest::QOP_AUTHINT| Digest::QOP_AUTH);
 
@@ -132,6 +161,7 @@ class DigestTest extends \PHPUnit_Framework_TestCase {
         $this->assertTrue($this->auth->validateA1(md5($username . ':' . self::REALM . ':' . $password)),'Authentication is deemed invalid through validateA1');
 
     }
+
 
     private function getServerTokens($qop = Digest::QOP_AUTH) {
 

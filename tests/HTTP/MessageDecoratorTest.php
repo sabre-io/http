@@ -32,27 +32,31 @@ class MessageDecoratorTest extends \PHPUnit_Framework_TestCase {
             'a' => 'b',
             ]);
 
-        $this->assertEquals(['a' => 'b'], $this->inner->getHeaders());
-        $this->assertEquals(['a' => 'b'], $this->outer->getHeaders());
+        $this->assertEquals(['a' => ['b']], $this->inner->getHeaders());
+        $this->assertEquals(['a' => ['b']], $this->outer->getHeaders());
 
         $this->outer->setHeaders([
             'c' => 'd',
         ]);
 
-        $this->assertEquals(['a' => 'b', 'c' => 'd'], $this->inner->getHeaders());
-        $this->assertEquals(['a' => 'b', 'c' => 'd'], $this->outer->getHeaders());
+        $this->assertEquals(['a' => ['b'], 'c' => ['d']], $this->inner->getHeaders());
+        $this->assertEquals(['a' => ['b'], 'c' => ['d']], $this->outer->getHeaders());
 
         $this->outer->addHeaders([
             'e' => 'f',
             ]);
 
-        $this->assertEquals(['a' => 'b', 'c' => 'd', 'e' => 'f'], $this->inner->getHeaders());
-        $this->assertEquals(['a' => 'b', 'c' => 'd', 'e' => 'f'], $this->outer->getHeaders());
+        $this->assertEquals(['a' => ['b'], 'c' => ['d'], 'e' => ['f']], $this->inner->getHeaders());
+        $this->assertEquals(['a' => ['b'], 'c' => ['d'], 'e' => ['f']], $this->outer->getHeaders());
     }
 
     function testHeader() {
 
+        $this->assertFalse($this->outer->hasHeader('a'));
+        $this->assertFalse($this->inner->hasHeader('a'));
         $this->outer->setHeader('a', 'c');
+        $this->assertTrue($this->outer->hasHeader('a'));
+        $this->assertTrue($this->inner->hasHeader('a'));
 
         $this->assertEquals('c', $this->inner->getHeader('A'));
         $this->assertEquals('c', $this->outer->getHeader('A'));

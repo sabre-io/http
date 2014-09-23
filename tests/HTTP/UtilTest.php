@@ -157,6 +157,22 @@ class UtilTest extends \PHPUnit_Framework_TestCase {
                 ],
                 'audio/basic',
             ],
+            [ // Lower quality after
+                'audio/pcm; q=0.2, audio/basic; q=0.1',
+                [
+                    'audio/pcm',
+                    'audio/basic',
+                ],
+                'audio/pcm',
+            ],
+            [ // Random parameter, should be ignored
+                'audio/pcm; hello; q=0.2, audio/basic; q=0.1',
+                [
+                    'audio/pcm',
+                    'audio/basic',
+                ],
+                'audio/pcm',
+            ],
             [ // No whitepace after type, should pick the one that is the most specific.
                 'text/vcard;version=3.0, text/vcard',
                 [

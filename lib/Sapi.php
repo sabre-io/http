@@ -80,7 +80,7 @@ class Sapi {
      */
     static function createFromServerArray(array $serverArray) {
 
-        $headers = array();
+        $headers = [];
         $method = null;
         $url = null;
         $httpVersion = '1.1';

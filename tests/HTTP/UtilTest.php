@@ -197,6 +197,11 @@ class UtilTest extends \PHPUnit_Framework_TestCase {
                 ],
                 'text/vcard; version=3.0',
             ],
+            [ // Undefined offset issue.
+                'text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2',
+                ['application/xml', 'application/json', 'image/png'],
+                'application/xml',
+            ],
 
         ];
 

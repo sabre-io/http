@@ -13,8 +13,7 @@
 
 use
     Sabre\HTTP\Request,
-    Sabre\HTTP\Response,
-    Sabre\HTTP\Client;
+    Sabre\HTTP\Response;
 
 
 // Find the autoloader

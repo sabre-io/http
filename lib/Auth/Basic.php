@@ -2,10 +2,6 @@
 
 namespace Sabre\HTTP\Auth;
 
-use
-    Sabre\HTTP\RequestInterface,
-    Sabre\HTTP\ResponseInterface;
-
 /**
  * HTTP Basic authentication utility.
  *

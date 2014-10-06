@@ -126,6 +126,9 @@ class Util {
 
         foreach($proposals as $proposal) {
 
+            // Ignoring broken values.
+            if (is_null($proposal)) continue;
+
             // If the quality is lower we don't have to bother comparing.
             if ($proposal['quality'] < $lastQuality) {
                 continue;
@@ -205,7 +208,13 @@ class Util {
 
         // The first part is the mime-type.
         $mimeType = array_shift($parts);
-        list($type, $subType) = explode('/', trim($mimeType));
+
+        $mimeType = explode('/', trim($mimeType));
+        if (count($mimeType)!==2) {
+            // Illegal value
+            return null;
+        }
+        list($type, $subType) = $mimeType;
 
         foreach($parts as $part) {
 

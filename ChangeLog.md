@@ -1,11 +1,16 @@
 ChangeLog
 =========
 
+3.0.2 (2014-10-06)
+------------------
+
+* When parsing `Accept:` headers, we're ignoring invalid parts. Before we
+  would throw a PHP E_NOTICE.
+
 3.0.1 (2014-09-29)
 ------------------
 
 * Minor change in unittests.
-
 
 3.0.0 (2014-09-23)
 ------------------

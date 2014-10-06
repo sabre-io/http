@@ -43,7 +43,7 @@ or edit a `composer.json` file, and make sure it contains something like this:
 ```json
 {
     "require" : {
-        "sabre/http" : "~2.0.0"
+        "sabre/http" : "~3.0.0"
     }
 }
 ```

@@ -1,7 +1,7 @@
 ChangeLog
 =========
 
-3.0.2 (2014-10-06)
+3.0.2 (2014-10-09)
 ------------------
 
 * When parsing `Accept:` headers, we're ignoring invalid parts. Before we

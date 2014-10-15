@@ -139,6 +139,22 @@ HI;
 
     }
 
+    function testToStringAuthorization() {
+
+        $request = new Request('PUT', '/foo/bar', ['Content-Type' => 'text/xml', 'Authorization' => 'Basic foobar']);
+        $request->setBody('foo');
+
+        $expected = <<<HI
+PUT /foo/bar HTTP/1.1\r
+Content-Type: text/xml\r
+Authorization: Basic REDACTED\r
+\r
+foo
+HI;
+        $this->assertEquals($expected, (string)$request);
+
+    }
+
     /**
      * @expectedException \InvalidArgumentException
      */

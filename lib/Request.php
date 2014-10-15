@@ -296,6 +296,10 @@ class Request extends Message implements RequestInterface {
         $str = $this->getMethod() . ' ' . $this->getUrl() . ' HTTP/' . $this->getHTTPVersion() . "\r\n";
         foreach($this->getHeaders() as $key=>$value) {
             foreach($value as $v) {
+                if ($key==='Authorization') {
+                    list($v) = explode(' ', $v,2);
+                    $v  .= ' REDACTED';
+                }
                 $str.= $key . ": " . $v . "\r\n";
             }
         }

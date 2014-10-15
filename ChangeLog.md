@@ -1,22 +1,31 @@
 ChangeLog
 =========
 
+3.0.3 (????-??-??)
+------------------
+
+* Hiding `Authorization` header value from `Request::__toString`.
+
+
 3.0.2 (2014-10-09)
 ------------------
 
 * When parsing `Accept:` headers, we're ignoring invalid parts. Before we
   would throw a PHP E_NOTICE.
 
+
 3.0.1 (2014-09-29)
 ------------------
 
 * Minor change in unittests.
+
 
 3.0.0 (2014-09-23)
 ------------------
 
 * `getHeaders()` now returns header values as an array, just like psr/http.
 * Added `hasHeader()`.
+
 
 2.1.0-alpha1 (2014-09-15)
 -------------------------

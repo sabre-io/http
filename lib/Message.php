@@ -2,6 +2,8 @@
 
 namespace Sabre\HTTP;
 
+use Psr\Http\Message\StreamableInterface;
+
 /**
  * This is the abstract base class for both the Request and Response objects.
  *
@@ -12,6 +14,8 @@ namespace Sabre\HTTP;
  * @license http://code.google.com/p/sabredav/wiki/License Modified BSD License
  */
 abstract class Message implements MessageInterface {
+
+    use BC\MessageTrait;
 
     /**
      * Request body
@@ -30,61 +34,45 @@ abstract class Message implements MessageInterface {
     protected $headers = [];
 
     /**
-     * HTTP message version (1.0 or 1.1)
+     * HTTP protocol version (1.0 or 1.1)
      *
      * @var string
      */
-    protected $httpVersion = '1.1';
+    protected $protocolVersion = '1.1';
 
     /**
-     * Returns the body as a readable stream resource.
+     * Gets the HTTP protocol version as a string.
      *
-     * Note that the stream may not be rewindable, and therefore may only be
-     * read once.
+     * The string MUST contain only the HTTP version number (e.g., "1.1", "1.0").
      *
-     * @return resource
+     * @return string HTTP protocol version.
      */
-    function getBodyAsStream() {
+    function getProtocolVersion() {
 
-        $body = $this->getBody();
-        if (is_string($body) || is_null($body)) {
-            $stream = fopen('php://temp', 'r+');
-            fwrite($stream, $body);
-            rewind($stream);
-            return $stream;
-        } else {
-            return $body;
-        }
+        return $this->protocolVersion;
 
     }
 
     /**
-     * Returns the body as a string.
+     * Set the HTTP protocol version.
      *
-     * Note that because the underlying data may be based on a stream, this
-     * method could only work correctly the first time.
+     * The version string MUST contain only the HTTP version number (e.g.,
+     * "1.1", "1.0").
      *
-     * @return string
+     * @param string $version HTTP protocol version
+     * @return void
      */
-    function getBodyAsString() {
+    function setProtocolVersion($version) {
 
-        $body = $this->getBody();
-        if (is_string($body)) {
-            return $body;
-        } elseif (is_null($body)) {
-            return '';
-        } else {
-            return stream_get_contents($body);
-        }
+        $this->protocolVersion = $version;
 
     }
 
+
     /**
-     * Returns the message body, as it's internal representation.
+     * Gets the body of the message.
      *
-     * This could be either a string or a stream.
-     *
-     * @return resource|string
+     * @return StreamableInterface|null Returns the body, or null if not set.
      */
     function getBody() {
 
@@ -93,22 +81,34 @@ abstract class Message implements MessageInterface {
     }
 
     /**
-     * Replaces the body resource with a new stream or string.
+     * Sets the body of the message.
      *
-     * @param resource $body
+     * The body MUST be a StreamableInterface object. Setting the body to null MUST
+     * remove the existing body.
+     *
+     * @param StreamableInterface|null $body Body.
+     * @return void
+     * @throws \InvalidArgumentException When the body is not valid.
      */
-    function setBody($body) {
+    function setBody(StreamableInterface $body = null) {
 
         $this->body = $body;
 
     }
 
     /**
-     * Returns all the HTTP headers as an array.
+     * Gets all message headers.
      *
-     * Every header is returned as an array, with one or more values.
+     * The keys represent the header name as it will be sent over the wire, and
+     * each value is an array of strings associated with the header.
      *
-     * @return array
+     *     // Represent the headers as a string
+     *     foreach ($message->getHeaders() as $name => $values) {
+     *         echo $name . ": " . implode(", ", $values);
+     *     }
+     *
+     * @return array Returns an associative array of the message's headers. Each
+     *     key MUST be a header name, and each value MUST be an array of strings.
      */
     function getHeaders() {
 
@@ -121,10 +121,12 @@ abstract class Message implements MessageInterface {
     }
 
     /**
-     * Will return true or false, depending on if a http header exists.
+     * Checks if a header exists by the given case-insensitive name.
      *
-     * @param string $name
-     * @return bool
+     * @param string $header Case-insensitive header name.
+     * @return bool Returns true if any header names match the given header
+     *     name using a case-insensitive string comparison. Returns false if
+     *     no matching header name is found in the message.
      */
     function hasHeader($name) {
 
@@ -133,20 +135,11 @@ abstract class Message implements MessageInterface {
     }
 
     /**
-     * Returns a specific HTTP header, based on it's name.
+     * Retrieves a header by the given case-insensitive name as an array of
+     * strings.
      *
-     * The name must be treated as case-insensitive.
-     * If the header does not exist, this method must return null.
-     *
-     * If a header appeared more than once in a http request, this method will
-     * concatenate all the values with a comma.
-     *
-     * Note that this not make sense for all headers. Some, such as
-     * `Set-Cookie` cannot be logically combined with a comma. In those cases
-     * you *should* use getHeaderAsArray().
-     *
-     * @param string $name
-     * @return string|null
+     * @param string $header Case-insensitive header name.
+     * @return string[]
      */
     function getHeader($name) {
 
@@ -160,14 +153,9 @@ abstract class Message implements MessageInterface {
     }
 
     /**
-     * Returns a HTTP header as an array.
+     * Retrieves a header by the given case-insensitive name as an array of strings.
      *
-     * For every time the http header appeared in the request or response, an
-     * item will appear in the array.
-     *
-     * If the header did not exists, this method will return an empty array.
-     *
-     * @param string $name
+     * @param string $header Case-insensitive header name.
      * @return string[]
      */
     function getHeaderAsArray($name) {
@@ -183,15 +171,16 @@ abstract class Message implements MessageInterface {
     }
 
     /**
-     * Updates a HTTP header.
+     * Sets a header, replacing any existing values of any headers with the
+     * same case-insensitive name.
      *
-     * The case-sensitity of the name value must be retained as-is.
+     * The header name is case-insensitive. The header values MUST be a string
+     * or an array of strings.
      *
-     * If the header already existed, it will be overwritten.
-     *
-     * @param string $name
-     * @param string|string[] $value
+     * @param string $header Header name
+     * @param string|string[] $value Header value(s).
      * @return void
+     * @throws \InvalidArgumentException for invalid header names or values.
      */
     function setHeader($name, $value) {
 
@@ -202,34 +191,15 @@ abstract class Message implements MessageInterface {
     }
 
     /**
-     * Sets a new set of HTTP headers.
+     * Appends a header value for the specified header.
      *
-     * The headers array should contain headernames for keys, and their value
-     * should be specified as either a string or an array.
+     * Existing values for the specified header will be maintained. The new
+     * value(s) will be appended to the existing list.
      *
-     * Any header that already existed will be overwritten.
-     *
-     * @param array $headers
+     * @param string $header Header name to add
+     * @param string|string[] $value Header value(s).
      * @return void
-     */
-    function setHeaders(array $headers) {
-
-        foreach($headers as $name => $value) {
-            $this->setHeader($name, $value);
-        }
-
-    }
-
-    /**
-     * Adds a HTTP header.
-     *
-     * This method will not overwrite any existing HTTP header, but instead add
-     * another value. Individual values can be retrieved with
-     * getHeadersAsArray.
-     *
-     * @param string $name
-     * @param string $value
-     * @return void
+     * @throws \InvalidArgumentException for invalid header names or values.
      */
     function addHeader($name, $value) {
 
@@ -249,30 +219,10 @@ abstract class Message implements MessageInterface {
     }
 
     /**
-     * Adds a new set of HTTP headers.
+     * Remove a specific header by case-insensitive name.
      *
-     * Any existing headers will not be overwritten.
-     *
-     * @param array $headers
+     * @param string $header HTTP header to remove
      * @return void
-     */
-    function addHeaders(array $headers) {
-
-        foreach($headers as $name => $value) {
-            $this->addHeader($name, $value);
-        }
-
-    }
-
-
-    /**
-     * Removes a HTTP header.
-     *
-     * The specified header name must be treated as case-insenstive.
-     * This method should return true if the header was successfully deleted,
-     * and false if the header did not exist.
-     *
-     * @return bool
      */
     function removeHeader($name) {
 
@@ -286,28 +236,4 @@ abstract class Message implements MessageInterface {
 
     }
 
-    /**
-     * Sets the HTTP version.
-     *
-     * Should be 1.0 or 1.1.
-     *
-     * @param string $version
-     * @return void
-     */
-    function setHttpVersion($version) {
-
-        $this->httpVersion = $version;
-
-    }
-
-    /**
-     * Returns the HTTP version.
-     *
-     * @return string
-     */
-    function getHttpVersion() {
-
-        return $this->httpVersion;
-
-    }
 }

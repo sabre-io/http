@@ -2,9 +2,9 @@
 
 namespace Sabre\HTTP\Auth;
 
-use
-    Sabre\HTTP\Request,
-    Sabre\HTTP\Response;
+use Sabre\HTTP\Request;
+use Sabre\HTTP\Response;
+use Sabre\HTTP\Stream;
 
 class DigestTest extends \PHPUnit_Framework_TestCase {
 
@@ -27,7 +27,7 @@ class DigestTest extends \PHPUnit_Framework_TestCase {
 
     const REALM = 'SabreDAV unittest';
 
-    public function setUp() {
+    function setUp() {
 
         $this->response = new Response();
         $this->request = new Request();
@@ -36,7 +36,7 @@ class DigestTest extends \PHPUnit_Framework_TestCase {
 
     }
 
-    public function testDigest() {
+    function testDigest() {
 
         list($nonce,$opaque) = $this->getServerTokens();
 
@@ -66,7 +66,7 @@ class DigestTest extends \PHPUnit_Framework_TestCase {
 
     }
 
-    public function testInvalidDigest() {
+    function testInvalidDigest() {
 
         list($nonce,$opaque) = $this->getServerTokens();
 
@@ -93,7 +93,7 @@ class DigestTest extends \PHPUnit_Framework_TestCase {
 
     }
 
-    public function testInvalidDigest2() {
+    function testInvalidDigest2() {
 
         $this->request->setMethod('GET');
         $this->request->setHeader('Authorization','basic blablabla');
@@ -104,7 +104,7 @@ class DigestTest extends \PHPUnit_Framework_TestCase {
     }
 
 
-    public function testDigestAuthInt() {
+    function testDigestAuthInt() {
 
         $this->auth->setQOP(Digest::QOP_AUTHINT);
         list($nonce,$opaque) = $this->getServerTokens(Digest::QOP_AUTHINT);
@@ -125,7 +125,7 @@ class DigestTest extends \PHPUnit_Framework_TestCase {
 
         $this->request->setMethod('POST');
         $this->request->setHeader('Authorization','Digest username="'.$username.'", realm="' . self::REALM . '", nonce="' . $nonce . '", uri="/", response="' . $digestHash . '", opaque="' . $opaque . '", qop=auth-int,nc='.$nc.',cnonce="' . $cnonce . '"');
-        $this->request->setBody('body');
+        $this->request->setBody(new Stream('body'));
 
         $this->auth->init();
 
@@ -133,7 +133,7 @@ class DigestTest extends \PHPUnit_Framework_TestCase {
 
     }
 
-    public function testDigestAuthBoth() {
+    function testDigestAuthBoth() {
 
         $this->auth->setQOP(Digest::QOP_AUTHINT | Digest::QOP_AUTH);
         list($nonce,$opaque) = $this->getServerTokens(Digest::QOP_AUTHINT| Digest::QOP_AUTH);
@@ -154,7 +154,7 @@ class DigestTest extends \PHPUnit_Framework_TestCase {
 
         $this->request->setMethod('POST');
         $this->request->setHeader('Authorization','Digest username="'.$username.'", realm="' . self::REALM . '", nonce="' . $nonce . '", uri="/", response="' . $digestHash . '", opaque="' . $opaque . '", qop=auth-int,nc='.$nc.',cnonce="' . $cnonce . '"');
-        $this->request->setBody('body');
+        $this->request->setBody(new Stream('body'));
 
         $this->auth->init();
 
@@ -185,7 +185,7 @@ class DigestTest extends \PHPUnit_Framework_TestCase {
         $this->setUp();
         $this->auth->setQOP($qop);
 
-        return array($nonce,$opaque);
+        return [$nonce,$opaque];
 
     }
 

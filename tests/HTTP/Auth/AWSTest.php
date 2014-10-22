@@ -2,9 +2,9 @@
 
 namespace Sabre\HTTP\Auth;
 
-use
-    Sabre\HTTP\Request,
-    Sabre\HTTP\Response;
+use Sabre\HTTP\Request;
+use Sabre\HTTP\Response;
+use Sabre\HTTP\Stream;
 
 class AWSTest extends \PHPUnit_Framework_TestCase {
 
@@ -25,7 +25,7 @@ class AWSTest extends \PHPUnit_Framework_TestCase {
 
     const REALM = 'SabreDAV unittest';
 
-    public function setUp() {
+    function setUp() {
 
         $this->response = new Response();
         $this->request = new Request();
@@ -33,7 +33,7 @@ class AWSTest extends \PHPUnit_Framework_TestCase {
 
     }
 
-    public function testNoHeader() {
+    function testNoHeader() {
 
         $this->request->setMethod('GET');
         $result = $this->auth->init();
@@ -43,7 +43,7 @@ class AWSTest extends \PHPUnit_Framework_TestCase {
 
     }
 
-    public function testIncorrectContentMD5() {
+    function testIncorrectContentMD5() {
 
         $accessKey = 'accessKey';
         $secretKey = 'secretKey';
@@ -63,7 +63,7 @@ class AWSTest extends \PHPUnit_Framework_TestCase {
 
     }
 
-    public function testNoDate() {
+    function testNoDate() {
 
         $accessKey = 'accessKey';
         $secretKey = 'secretKey';
@@ -76,7 +76,7 @@ class AWSTest extends \PHPUnit_Framework_TestCase {
             'Content-MD5'   => $contentMD5,
         ]);
         $this->request->setUrl('/');
-        $this->request->setBody($content);
+        $this->request->setBody(new Stream($content));
 
         $this->auth->init();
         $result = $this->auth->validate($secretKey);
@@ -86,7 +86,7 @@ class AWSTest extends \PHPUnit_Framework_TestCase {
 
     }
 
-    public function testFutureDate() {
+    function testFutureDate() {
 
         $accessKey = 'accessKey';
         $secretKey = 'secretKey';
@@ -104,7 +104,7 @@ class AWSTest extends \PHPUnit_Framework_TestCase {
             'Date'          => $date,
         ]);
 
-        $this->request->setBody($content);
+        $this->request->setBody(new Stream($content));
 
         $this->auth->init();
         $result = $this->auth->validate($secretKey);
@@ -114,7 +114,7 @@ class AWSTest extends \PHPUnit_Framework_TestCase {
 
     }
 
-    public function testPastDate() {
+    function testPastDate() {
 
         $accessKey = 'accessKey';
         $secretKey = 'secretKey';
@@ -132,7 +132,7 @@ class AWSTest extends \PHPUnit_Framework_TestCase {
             'Date'          => $date,
         ]);
 
-        $this->request->setBody($content);
+        $this->request->setBody(new Stream($content));
 
         $this->auth->init();
         $result = $this->auth->validate($secretKey);
@@ -142,7 +142,7 @@ class AWSTest extends \PHPUnit_Framework_TestCase {
 
     }
 
-    public function testIncorrectSignature() {
+    function testIncorrectSignature() {
 
         $accessKey = 'accessKey';
         $secretKey = 'secretKey';
@@ -161,9 +161,7 @@ class AWSTest extends \PHPUnit_Framework_TestCase {
             'Content-MD5'   => $contentMD5,
             'X-amz-date'    => $date,
         ]);
-        $this->request->setBody($content);
-
-        $this->request->setBody($content);
+        $this->request->setBody(new Stream($content));
 
         $this->auth->init();
         $result = $this->auth->validate($secretKey);
@@ -173,7 +171,7 @@ class AWSTest extends \PHPUnit_Framework_TestCase {
 
     }
 
-    public function testValidRequest() {
+    function testValidRequest() {
 
         $accessKey = 'accessKey';
         $secretKey = 'secretKey';
@@ -197,7 +195,7 @@ class AWSTest extends \PHPUnit_Framework_TestCase {
             'X-amz-date'    => $date,
         ]);
 
-        $this->request->setBody($content);
+        $this->request->setBody(new Stream($content));
 
         $this->auth->init();
         $result = $this->auth->validate($secretKey);
@@ -207,7 +205,7 @@ class AWSTest extends \PHPUnit_Framework_TestCase {
 
     }
 
-    public function test401() {
+    function test401() {
 
         $this->auth->requireLogin();
         $test = preg_match('/^AWS$/',$this->response->getHeader('WWW-Authenticate'),$matches);

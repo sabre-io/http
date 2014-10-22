@@ -2,6 +2,9 @@
 
 namespace Sabre\HTTP;
 
+use Psr\Http\Message\StreamableInterface;
+use Psr\Http\Message\MessageInterface as PsrMessageInterface;
+
 /**
  * This trait contains a bunch of methods, shared by both the RequestDecorator
  * and the ResponseDecorator.
@@ -20,44 +23,42 @@ trait MessageDecoratorTrait {
      *
      * All method calls will be forwarded here.
      *
-     * @var MessageInterface
+     * @var PsrMessageInterface
      */
     protected $inner;
 
     /**
-     * Returns the body as a readable stream resource.
+     * Gets the HTTP protocol version as a string.
      *
-     * Note that the stream may not be rewindable, and therefore may only be
-     * read once.
+     * The string MUST contain only the HTTP version number (e.g., "1.1", "1.0").
      *
-     * @return resource
+     * @return string HTTP protocol version.
      */
-    function getBodyAsStream() {
+    function getProtocolVersion() {
 
-        return $this->inner->getBodyAsStream();
+        return $this->inner->getProtocolVersion();
 
     }
 
     /**
-     * Returns the body as a string.
+     * Set the HTTP protocol version.
      *
-     * Note that because the underlying data may be based on a stream, this
-     * method could only work correctly the first time.
+     * The version string MUST contain only the HTTP version number (e.g.,
+     * "1.1", "1.0").
      *
-     * @return string
+     * @param string $version HTTP protocol version
+     * @return void
      */
-    function getBodyAsString() {
+    function setProtocolVersion($version) {
 
-        return $this->inner->getBodyAsString();
+        $this->inner->setProtocolVersion($version);
 
     }
 
     /**
-     * Returns the message body, as it's internal representation.
+     * Gets the body of the message.
      *
-     * This could be either a string or a stream.
-     *
-     * @return resource|string
+     * @return StreamableInterface|null Returns the body, or null if not set.
      */
     function getBody() {
 
@@ -66,23 +67,41 @@ trait MessageDecoratorTrait {
     }
 
     /**
-     * Updates the body resource with a new stream.
+     * Sets the body of the message.
      *
-     * @param resource $body
+     * The body MUST be a StreamableInterface object. Setting the body to null MUST
+     * remove the existing body.
+     *
+     * @param StreamableInterface|null $body Body.
      * @return void
+     * @throws \InvalidArgumentException When the body is not valid.
      */
-    function setBody($body) {
+    function setBody(StreamableInterface $body = null) {
 
         $this->inner->setBody($body);
 
     }
 
     /**
-     * Returns all the HTTP headers as an array.
+     * Gets all message headers.
      *
-     * Every header is returned as an array, with one or more values.
+     * The keys represent the header name as it will be sent over the wire, and
+     * each value is an array of strings associated with the header.
      *
-     * @return array
+     *     // Represent the headers as a string
+     *     foreach ($message->getHeaders() as $name => $values) {
+     *         echo $name . ": " . implode(", ", $values);
+     *     }
+     *
+     *     // Emit headers iteratively:
+     *     foreach ($message->getHeaders() as $name => $values) {
+     *         foreach ($values as $value) {
+     *             header(sprintf('%s: %s', $name, $value), false);
+     *         }
+     *     }
+     *
+     * @return array Returns an associative array of the message's headers. Each
+     *     key MUST be a header name, and each value MUST be an array of strings.
      */
     function getHeaders() {
 
@@ -91,159 +110,91 @@ trait MessageDecoratorTrait {
     }
 
     /**
-     * Will return true or false, depending on if a http header exists.
+     * Checks if a header exists by the given case-insensitive name.
      *
-     * @param string $name
-     * @return bool
+     * @param string $header Case-insensitive header name.
+     * @return bool Returns true if any header names match the given header
+     *     name using a case-insensitive string comparison. Returns false if
+     *     no matching header name is found in the message.
      */
-    function hasHeader($name) {
+    function hasHeader($header) {
 
-        return $this->inner->hasHeader($name);
+        return $this->inner->hasHeader($header);
 
-    }
+    } 
 
     /**
-     * Returns a specific HTTP header, based on it's name.
+     * Retrieve a header by the given case-insensitive name as a string.
      *
-     * The name must be treated as case-insensitive.
-     * If the header does not exist, this method must return null.
+     * This method returns all of the header values of the given
+     * case-insensitive header name as a string concatenated together using
+     * a comma.
      *
-     * If a header appeared more than once in a http request, this method will
-     * concatenate all the values with a comma.
-     *
-     * Note that this not make sense for all headers. Some, such as
-     * `Set-Cookie` cannot be logically combined with a comma. In those cases
-     * you *should* use getHeaderAsArray().
-     *
-     * @param string $name
-     * @return string|null
-     */
-    function getHeader($name) {
-
-        return $this->inner->getHeader($name);
-
-    }
-
-    /**
-     * Returns a HTTP header as an array.
-     *
-     * For every time the http header appeared in the request or response, an
-     * item will appear in the array.
-     *
-     * If the header did not exists, this method will return an empty array.
-     *
-     * @param string $name
-     * @return string[]
-     */
-    function getHeaderAsArray($name) {
-
-        return $this->inner->getHeaderAsArray($name);
-
-    }
-
-    /**
-     * Updates a HTTP header.
-     *
-     * The case-sensitity of the name value must be retained as-is.
-     *
-     * If the header already existed, it will be overwritten.
-     *
-     * @param string $name
-     * @param string|string[] $value
-     * @return void
-     */
-    function setHeader($name, $value) {
-
-        $this->inner->setHeader($name, $value);
-
-    }
-
-    /**
-     * Sets a new set of HTTP headers.
-     *
-     * The headers array should contain headernames for keys, and their value
-     * should be specified as either a string or an array.
-     *
-     * Any header that already existed will be overwritten.
-     *
-     * @param array $headers
-     * @return void
-     */
-    function setHeaders(array $headers) {
-
-        $this->inner->setHeaders($headers);
-
-    }
-
-    /**
-     * Adds a HTTP header.
-     *
-     * This method will not overwrite any existing HTTP header, but instead add
-     * another value. Individual values can be retrieved with
-     * getHeadersAsArray.
-     *
-     * @param string $name
-     * @param string $value
-     * @return void
-     */
-    function addHeader($name, $value) {
-
-        $this->inner->addHeader($name, $value);
-
-    }
-
-    /**
-     * Adds a new set of HTTP headers.
-     *
-     * Any existing headers will not be overwritten.
-     *
-     * @param array $headers
-     * @return void
-     */
-    function addHeaders(array $headers) {
-
-        $this->inner->addHeaders($headers);
-
-    }
-
-
-    /**
-     * Removes a HTTP header.
-     *
-     * The specified header name must be treated as case-insenstive.
-     * This method should return true if the header was successfully deleted,
-     * and false if the header did not exist.
-     *
-     * @return bool
-     */
-    function removeHeader($name) {
-
-        $this->inner->removeHeader($name);
-
-    }
-
-    /**
-     * Sets the HTTP version.
-     *
-     * Should be 1.0 or 1.1.
-     *
-     * @param string $version
-     * @return void
-     */
-    function setHttpVersion($version) {
-
-        $this->inner->setHttpVersion($version);
-
-    }
-
-    /**
-     * Returns the HTTP version.
-     *
+     * @param string $header Case-insensitive header name.
      * @return string
      */
-    function getHttpVersion() {
+    function getHeader($header) {
 
-        return $this->inner->getHttpVersion();
+        return $this->inner->getHeader($header);
+
+    }
+
+    /**
+     * Retrieves a header by the given case-insensitive name as an array of strings.
+     *
+     * @param string $header Case-insensitive header name.
+     * @return string[]
+     */
+    function getHeaderAsArray($header) {
+
+        return $this->inner->getHeaderAsArray($header);
+
+    }
+
+    /**
+     * Sets a header, replacing any existing values of any headers with the
+     * same case-insensitive name.
+     *
+     * The header name is case-insensitive. The header values MUST be a string
+     * or an array of strings.
+     *
+     * @param string $header Header name
+     * @param string|string[] $value Header value(s).
+     * @return void
+     * @throws \InvalidArgumentException for invalid header names or values.
+     */
+    function setHeader($header, $value) {
+
+        $this->inner->setHeader($header, $value);
+
+    }
+
+    /**
+     * Appends a header value for the specified header.
+     *
+     * Existing values for the specified header will be maintained. The new
+     * value(s) will be appended to the existing list.
+     *
+     * @param string $header Header name to add
+     * @param string|string[] $value Header value(s).
+     * @return void
+     * @throws \InvalidArgumentException for invalid header names or values.
+     */
+    function addHeader($header, $value) {
+
+        $this->inner->addHeader($header, $value);
+
+    }
+
+    /**
+     * Remove a specific header by case-insensitive name.
+     *
+     * @param string $header HTTP header to remove
+     * @return void
+     */
+    function removeHeader($header) {
+
+        $this->inner->removeHeader($header);
 
     }
 

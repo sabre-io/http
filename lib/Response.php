@@ -80,20 +80,6 @@ class Response extends Message implements ResponseInterface {
     ];
 
     /**
-     * HTTP status code
-     *
-     * @var int
-     */
-    protected $status;
-
-    /**
-     * HTTP status text
-     *
-     * @var string
-     */
-    protected $statusText;
-
-    /**
      * Creates the response object
      *
      * @param string|int $status
@@ -109,15 +95,91 @@ class Response extends Message implements ResponseInterface {
 
     }
 
+    /**
+     * HTTP status code
+     *
+     * @var int
+     */
+    protected $statusCode;
+
+    /**
+     * Gets the response Status-Code.
+     *
+     * The Status-Code is a 3-digit integer result code of the server's attempt
+     * to understand and satisfy the request.
+     *
+     * @return integer Status code.
+     */
+    function getStatusCode() {
+
+        return $this->statusCode;
+
+    }
+
+    /**
+     * Sets the status code of this response.
+     *
+     * @param integer $code The 3-digit integer result code to set.
+     * @throws \InvalidArgumentException For invalid status code arguments.
+     */
+    function setStatusCode($code) {
+
+        $this->statusCode = $code;
+
+    }
 
     /**
      * Returns the current HTTP status code.
      *
+     * @deprecated use getStatusCode instead.
      * @return int
      */
     function getStatus() {
 
-        return $this->status;
+        return $this->getStatusCode();
+
+    }
+
+    /**
+     * HTTP status text
+     *
+     * @var string
+     */
+    protected $reasonPhrase;
+
+    /**
+     * Gets the response Reason-Phrase, a short textual description of the
+     * Status-Code.
+     *
+     * Because a Reason-Phrase is not a required element in a response
+     * Status-Line, the Reason-Phrase value MAY be null. Implementations MAY
+     * choose to return the default RFC 7231 recommended reason phrase (or those
+     * listed in the IANA HTTP Status Code Registry) for the response's
+     * Status-Code.
+     *
+     * @link http://tools.ietf.org/html/rfc7231#section-6
+     * @link http://www.iana.org/assignments/http-status-codes/http-status-codes.xhtml
+     * @return string|null Reason phrase, or null if unknown.
+     */
+    function getReasonPhrase() {
+
+        return $this->reasonPhrase;
+
+    }
+
+    /**
+     * Sets the Reason-Phrase of the response.
+     *
+     * If no Reason-Phrase is specified, implementations MAY choose to default
+     * to the RFC 7231 or IANA recommended reason phrase for the response's
+     * Status-Code.
+     *
+     * @param string $phrase The Reason-Phrase to set.
+     * @throws \InvalidArgumentException For non-string $phrase arguments.
+     */
+    function setReasonPhrase($phrase) {
+
+        $this->reasonPhrase = $phrase;
 
     }
 
@@ -126,11 +188,12 @@ class Response extends Message implements ResponseInterface {
      *
      * In the case of a 200, this may for example be 'OK'.
      *
+     * @deprecated Use getReasonPhrase instead.
      * @return string
      */
     function getStatusText() {
 
-        return $this->statusText;
+        return $this->getReasonPhrase();
 
     }
 
@@ -164,8 +227,8 @@ class Response extends Message implements ResponseInterface {
             throw new \InvalidArgumentException('The HTTP status code must be exactly 3 digits');
         }
 
-        $this->status = $statusCode;
-        $this->statusText = $statusText;
+        $this->setStatusCode($statusCode);
+        $this->setReasonPhrase($statusText);
 
     }
 

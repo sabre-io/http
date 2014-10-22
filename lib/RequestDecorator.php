@@ -216,7 +216,7 @@ class RequestDecorator implements RequestInterface {
      */
     function getAttributes() {
 
-        return $this->getAttributes();
+        return $this->inner->getAttributes();
 
     }
 
@@ -232,7 +232,7 @@ class RequestDecorator implements RequestInterface {
      */
     function setAttributes(array $attributes) {
 
-        $this->setAttributes($attributes);
+        $this->inner->setAttributes($attributes);
 
     }
 

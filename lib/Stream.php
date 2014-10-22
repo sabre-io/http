@@ -182,7 +182,7 @@ class Stream implements \Psr\Http\Message\StreamableInterface {
      */
     function seek($offset, $whence = SEEK_SET) {
 
-        fseek($this->stream, $offset, $whence);
+        return fseek($this->stream, $offset, $whence);
 
     }
 
@@ -208,7 +208,7 @@ class Stream implements \Psr\Http\Message\StreamableInterface {
      */
     function write($string) {
 
-        fwrite($this->stream, $string);
+        return fwrite($this->stream, $string);
 
     }
 

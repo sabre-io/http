@@ -200,7 +200,7 @@ class Request extends Message implements RequestInterface {
      */
     function getFileParams() {
 
-        $this->fileParams = $_FILES;
+        return $this->fileParams;
 
     }
 

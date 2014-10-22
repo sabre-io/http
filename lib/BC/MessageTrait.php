@@ -21,7 +21,8 @@ trait MessageTrait {
      * Note that the stream may not be rewindable, and therefore may only be
      * read once.
      *
-     * @return resource
+     * @deprecated Use getBody() to get access to the body's contents instead.
+     * @return resource;
      */
     function getBodyAsStream() {
 
@@ -40,6 +41,7 @@ trait MessageTrait {
      * Note that because the underlying data may be based on a stream, this
      * method could only work correctly the first time.
      *
+     * @deprecated Use getBody() to get access to the body's contents instead.
      * @return string
      */
     function getBodyAsString() {
@@ -60,6 +62,7 @@ trait MessageTrait {
      *
      * Any existing headers will not be overwritten.
      *
+     * @deprecated Use addHeader to set individual headers instead.
      * @param array $headers
      * @return void
      */
@@ -79,6 +82,7 @@ trait MessageTrait {
      *
      * Any header that already existed will be overwritten.
      *
+     * @deprecated Use setHeader to set individual headers instead.
      * @param array $headers
      * @return void
      */
@@ -95,6 +99,7 @@ trait MessageTrait {
      *
      * Should be 1.0 or 1.1.
      *
+     * @deprecated use setProtocolVersion instead.
      * @param string $version
      * @return void
      */
@@ -107,6 +112,7 @@ trait MessageTrait {
     /**
      * Returns the HTTP version.
      *
+     * @deprecated use getProtocolVersion instead.
      * @return string
      */
     function getHttpVersion() {

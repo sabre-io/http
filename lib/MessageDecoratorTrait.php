@@ -121,7 +121,7 @@ trait MessageDecoratorTrait {
 
         return $this->inner->hasHeader($header);
 
-    } 
+    }
 
     /**
      * Retrieve a header by the given case-insensitive name as a string.

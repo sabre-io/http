@@ -107,7 +107,7 @@ class RequestDecorator implements RequestInterface {
 
         return $this->inner->getCookieParams();
 
-    } 
+    }
 
     /**
      * Set cookie parameters.

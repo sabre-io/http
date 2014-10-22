@@ -19,13 +19,17 @@ class MessageTest extends \PHPUnit_Framework_TestCase {
         rewind($h);
 
         $message = new MessageMock();
-        $message->setBody($h);
 
+        $message->setBody(new Stream($h));
         $this->assertEquals($body, $message->getBodyAsString());
+
         rewind($h);
+        $message->setBody(new Stream($h));
         $this->assertEquals($body, stream_get_contents($message->getBodyAsStream()));
+
         rewind($h);
-        $this->assertEquals($body, stream_get_contents($message->getBody()));
+        $message->setBody(new Stream($h));
+        $this->assertEquals($body, stream_get_contents($message->getBody()->detach()));
 
     }
 
@@ -34,10 +38,14 @@ class MessageTest extends \PHPUnit_Framework_TestCase {
         $body = 'foo';
 
         $message = new MessageMock();
-        $message->setBody($body);
 
+        $message->setBody(new Stream($body));
         $this->assertEquals($body, $message->getBodyAsString());
+
+        $message->setBody(new Stream($body));
         $this->assertEquals($body, stream_get_contents($message->getBodyAsStream()));
+
+        $message->setBody(new Stream($body));
         $this->assertEquals($body, $message->getBody());
 
     }
@@ -137,15 +145,15 @@ class MessageTest extends \PHPUnit_Framework_TestCase {
         $message = new MessageMock();
 
         // String
-        $message->setBody('foo');
+        $message->setBody(new Stream('foo'));
 
         // Stream
         $h = fopen('php://memory','r+');
         fwrite($h,'bar');
         rewind($h);
-        $message->setBody($h);
+        $message->setBody(new Stream($h));
 
-        $body = $message->getBody();
+        $body = $message->getBody()->detach();
         rewind($body);
 
         $this->assertEquals('bar', stream_get_contents($body));

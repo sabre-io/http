@@ -11,6 +11,8 @@ namespace Sabre\HTTP;
  */
 class Response extends Message implements ResponseInterface {
 
+    use BC\ResponseTrait;
+
     /**
      * This is the list of currently registered HTTP status codes.
      *
@@ -129,18 +131,6 @@ class Response extends Message implements ResponseInterface {
     }
 
     /**
-     * Returns the current HTTP status code.
-     *
-     * @deprecated use getStatusCode instead.
-     * @return int
-     */
-    function getStatus() {
-
-        return $this->getStatusCode();
-
-    }
-
-    /**
      * HTTP status text
      *
      * @var string
@@ -184,55 +174,6 @@ class Response extends Message implements ResponseInterface {
     }
 
     /**
-     * Returns the human-readable status string.
-     *
-     * In the case of a 200, this may for example be 'OK'.
-     *
-     * @deprecated Use getReasonPhrase instead.
-     * @return string
-     */
-    function getStatusText() {
-
-        return $this->getReasonPhrase();
-
-    }
-
-    /**
-     * Sets the HTTP status code.
-     *
-     * This can be either the full HTTP status code with human readable string,
-     * for example: "403 I can't let you do that, Dave".
-     *
-     * Or just the code, in which case the appropriate default message will be
-     * added.
-     *
-     * @param string|int $status
-     * @throws \InvalidArgumentExeption
-     * @return void
-     */
-    function setStatus($status) {
-
-        if (ctype_digit($status) || is_int($status)) {
-
-            $statusCode = $status;
-            $statusText = isset(self::$statusCodes[$status])?self::$statusCodes[$status]:'Unknown';
-
-        } else {
-            list(
-                $statusCode,
-                $statusText
-            ) = explode(' ', $status, 2);
-        }
-        if ($statusCode < 100 || $statusCode > 999) {
-            throw new \InvalidArgumentException('The HTTP status code must be exactly 3 digits');
-        }
-
-        $this->setStatusCode($statusCode);
-        $this->setReasonPhrase($statusText);
-
-    }
-
-    /**
      * Serializes the response object as a string.
      *
      * This is useful for debugging purposes.
@@ -241,7 +182,7 @@ class Response extends Message implements ResponseInterface {
      */
     function __toString() {
 
-        $str = 'HTTP/' . $this->httpVersion . ' ' . $this->getStatus() . ' ' . $this->getStatusText() . "\r\n";
+        $str = 'HTTP/' . $this->getProtocolVersion() . ' ' . $this->getStatus() . ' ' . $this->getStatusText() . "\r\n";
         foreach($this->getHeaders() as $key=>$value) {
             foreach($value as $v) {
                 $str.= $key . ": " . $v . "\r\n";

@@ -16,6 +16,8 @@ use InvalidArgumentException;
  */
 class Request extends Message implements RequestInterface {
 
+    use BC\RequestTrait;
+
     /**
      * Creates the request object
      *
@@ -224,7 +226,7 @@ class Request extends Message implements RequestInterface {
      */
     function getBodyParams() {
 
-        return $this->getBodyParams;
+        return $this->bodyParams;
 
     }
 

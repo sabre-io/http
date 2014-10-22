@@ -2,6 +2,8 @@
 
 namespace Sabre\HTTP;
 
+use Psr\Http\Message\ResponseInterface as PsrResponseInterface;
+
 /**
  * Response Decorator
  *
@@ -15,57 +17,78 @@ namespace Sabre\HTTP;
 class ResponseDecorator implements ResponseInterface {
 
     use MessageDecoratorTrait;
+    use BC\MessageTrait;
+    use BC\ResponseTrait;
 
     /**
      * Constructor.
      *
      * @param ResponseInterface $inner
      */
-    function __construct(ResponseInterface $inner) {
+    function __construct(PsrResponseInterface $inner) {
 
         $this->inner = $inner;
 
     }
 
     /**
-     * Returns the current HTTP status code.
+     * Gets the response Status-Code.
      *
-     * @return int
+     * The Status-Code is a 3-digit integer result code of the server's attempt
+     * to understand and satisfy the request.
+     *
+     * @return integer Status code.
      */
-    function getStatus() {
+    function getStatusCode() {
 
-        return $this->inner->getStatus();
+        return $this->inner->getStatusCode();
 
     }
 
-
     /**
-     * Returns the human-readable status string.
+     * Sets the status code of this response.
      *
-     * In the case of a 200, this may for example be 'OK'.
-     *
-     * @return string
+     * @param integer $code The 3-digit integer result code to set.
+     * @throws \InvalidArgumentException For invalid status code arguments.
      */
-    function getStatusText() {
+    function setStatusCode($code) {
 
-        return $this->inner->getStatusText();
+        $this->inner->setStatusCode($code);
 
     }
-    /**
-     * Sets the HTTP status code.
-     *
-     * This can be either the full HTTP status code with human readable string,
-     * for example: "403 I can't let you do that, Dave".
-     *
-     * Or just the code, in which case the appropriate default message will be
-     * added.
-     *
-     * @param string|int $status
-     * @return void
-     */
-    function setStatus($status) {
 
-        $this->inner->setStatus($status);
+    /**
+     * Gets the response Reason-Phrase, a short textual description of the Status-Code.
+     *
+     * Because a Reason-Phrase is not a required element in a response
+     * Status-Line, the Reason-Phrase value MAY be null. Implementations MAY
+     * choose to return the default RFC 7231 recommended reason phrase (or those
+     * listed in the IANA HTTP Status Code Registry) for the response's
+     * Status-Code.
+     *
+     * @link http://tools.ietf.org/html/rfc7231#section-6
+     * @link http://www.iana.org/assignments/http-status-codes/http-status-codes.xhtml
+     * @return string|null Reason phrase, or null if unknown.
+     */
+    function getReasonPhrase() {
+
+        return $this->inner->getReasonPhrase();
+
+    }
+
+    /**
+     * Sets the Reason-Phrase of the response.
+     *
+     * If no Reason-Phrase is specified, implementations MAY choose to default
+     * to the RFC 7231 or IANA recommended reason phrase for the response's
+     * Status-Code.
+     *
+     * @param string $phrase The Reason-Phrase to set.
+     * @throws \InvalidArgumentException For non-string $phrase arguments.
+     */
+    function setReasonPhrase($phrase) {
+
+        $this->inner->setReasonPhrase($phrase);
 
     }
 

@@ -39,7 +39,7 @@ class Sapi {
     static function getRequest() {
 
         $r = self::createFromServerArray($_SERVER);
-        $r->setBody(fopen('php://input','r'));
+        $r->setBody(new Stream(fopen('php://input','r')));
         $r->setPostData($_POST);
         return $r;
 

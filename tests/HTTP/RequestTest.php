@@ -127,7 +127,7 @@ class RequestTest extends \PHPUnit_Framework_TestCase {
     function testToString() {
 
         $request = new Request('PUT', '/foo/bar', ['Content-Type' => 'text/xml']);
-        $request->setBody('foo');
+        $request->setBody(new Stream('foo'));
 
         $expected = <<<HI
 PUT /foo/bar HTTP/1.1\r
@@ -142,7 +142,7 @@ HI;
     function testToStringAuthorization() {
 
         $request = new Request('PUT', '/foo/bar', ['Content-Type' => 'text/xml', 'Authorization' => 'Basic foobar']);
-        $request->setBody('foo');
+        $request->setBody(new Stream('foo'));
 
         $expected = <<<HI
 PUT /foo/bar HTTP/1.1\r
@@ -160,7 +160,7 @@ HI;
      */
     function testConstructorWithArray() {
 
-        $request = new Request(array());
+        $request = new Request([]);
 
     }
 

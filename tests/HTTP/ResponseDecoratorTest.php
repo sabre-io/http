@@ -27,7 +27,7 @@ class ResponseDecoratorTest extends \PHPUnit_Framework_TestCase {
     function testToString() {
 
         $this->inner->setStatus(201);
-        $this->inner->setBody('foo');
+        $this->inner->setBody(new Stream('foo'));
         $this->inner->setHeader('foo','bar');
 
         $this->assertEquals((string)$this->inner, (string)$this->outer);

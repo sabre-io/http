@@ -8,6 +8,10 @@ use Sabre\HTTP\Stream;
  * This trait adds backwards-compatiblity features for both Message objects.
  *
  * Both the Request and the Response objects are examples of Message objects.
+
+ * @copyright Copyright (C) 2009-2014 fruux GmbH. All rights reserved.
+ * @author Evert Pot (http://evertpot.com/)
+ * @license http://code.google.com/p/sabredav/wiki/License Modified BSD License
  */
 trait MessageTrait {
 
@@ -107,7 +111,7 @@ trait MessageTrait {
      */
     function getHttpVersion() {
 
-        return $this->getProtocolVersion($version);
+        return $this->getProtocolVersion();
 
     }
 

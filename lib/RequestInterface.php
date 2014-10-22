@@ -2,6 +2,8 @@
 
 namespace Sabre\HTTP;
 
+use Psr\Http\Message\IncomingRequestInterface as PsrRequestInterface;
+
 /**
  * The RequestInterface represents a HTTP request.
  *
@@ -9,7 +11,7 @@ namespace Sabre\HTTP;
  * @author Evert Pot (http://evertpot.com/)
  * @license http://code.google.com/p/sabredav/wiki/License Modified BSD License
  */
-interface RequestInterface extends \Psr\Http\Message\RequestInterface, \Psr\Http\Message\IncomingRequestInterface, MessageInterface {
+interface RequestInterface extends PsrRequestInterface, MessageInterface {
 
     /**
      * Returns the absolute url.

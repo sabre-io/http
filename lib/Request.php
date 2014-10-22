@@ -205,6 +205,18 @@ class Request extends Message implements RequestInterface {
     }
 
     /**
+     * Populates the $_FILES array.
+     *
+     * This should generally only be done by the Sapi.
+     */
+    function setFileParams(array $files) {
+
+        $this->fileParams = $files;
+
+    }
+
+
+    /**
      * A $_POST-like array
      *
      * @var array

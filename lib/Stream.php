@@ -109,6 +109,7 @@ class Stream implements \Psr\Http\Message\StreamableInterface {
     function attach($stream) {
 
         if (is_string($stream)) {
+            $this->size = strlen($stream);
             $h = fopen('php://temp','r+');
             fwrite($h, $stream);
             rewind($h);

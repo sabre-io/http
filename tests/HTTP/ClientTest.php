@@ -389,7 +389,7 @@ class ClientMock extends Client {
 
         // If nothing modified $return, we're using the default behavior.
         if (is_null($return)) {
-            return parent::curlStufF($curlHandle);
+            return parent::curlStuff($curlHandle);
         } else {
             return $return;
         }

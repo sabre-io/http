@@ -205,11 +205,9 @@ class Request extends Message implements RequestInterface {
 
             return '';
 
-        } else {
-
-            throw new \LogicException('Requested uri (' . $this->getUrl() . ') is out of base uri (' . $this->getBaseUrl() . ')');
-
         }
+
+        throw new \LogicException('Requested uri (' . $this->getUrl() . ') is out of base uri (' . $this->getBaseUrl() . ')');
     }
 
     /**

@@ -291,19 +291,21 @@ class Request extends Message implements RequestInterface {
      */
     function __toString() {
 
-        $str = $this->getMethod() . ' ' . $this->getUrl() . ' HTTP/' . $this->getHTTPVersion() . "\r\n";
+        $out = $this->getMethod() . ' ' . $this->getUrl() . ' HTTP/' . $this->getHTTPVersion() . "\r\n";
+
         foreach($this->getHeaders() as $key=>$value) {
             foreach($value as $v) {
                 if ($key==='Authorization') {
                     list($v) = explode(' ', $v,2);
                     $v  .= ' REDACTED';
                 }
-                $str.= $key . ": " . $v . "\r\n";
+                $out .= $key . ": " . $v . "\r\n";
             }
         }
-        $str.="\r\n";
-        $str.=$this->getBodyAsString();
-        return $str;
+        $out .= "\r\n";
+        $out .= $this->getBodyAsString();
+
+        return $out;
 
     }
 

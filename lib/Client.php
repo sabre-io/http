@@ -110,7 +110,7 @@ class Client extends EventEmitter {
 
                     $oldLocation = $request->getUrl();
 
-                    // Creating an new instance of the request object.
+                    // Creating a new instance of the request object.
                     $request = clone $request;
 
                     // Setting the new location
@@ -286,10 +286,10 @@ class Client extends EventEmitter {
 
     /**
      * If this is set to true, the Client will automatically throw exceptions
-     * upon http errors.
+     * upon HTTP errors.
      *
-     * This means that if a response came back with a status code of 400 or
-     * higher, we will throw a ClientHttpException.
+     * This means that if a response came back with a status code greater than
+     * or equal to 400, we will throw a ClientHttpException.
      *
      * This only works for the send() method. Throwing exceptions for
      * sendAsync() is not supported.

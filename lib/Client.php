@@ -150,7 +150,7 @@ class Client extends EventEmitter {
 
         $this->emit('afterRequest', [$request, $response]);
 
-        if ($this->throwExceptions && $code > 399) {
+        if ($this->throwExceptions && $code >= 400) {
             throw new ClientHttpException($response);
         }
 

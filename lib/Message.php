@@ -52,9 +52,8 @@ abstract class Message implements MessageInterface {
             fwrite($stream, $body);
             rewind($stream);
             return $stream;
-        } else {
-            return $body;
         }
+        return $body;
 
     }
 
@@ -71,11 +70,11 @@ abstract class Message implements MessageInterface {
         $body = $this->getBody();
         if (is_string($body)) {
             return $body;
-        } elseif (is_null($body)) {
-            return '';
-        } else {
-            return stream_get_contents($body);
         }
+        if (is_null($body)) {
+            return '';
+        }
+        return stream_get_contents($body);
 
     }
 
@@ -195,9 +194,7 @@ abstract class Message implements MessageInterface {
      */
     function setHeader($name, $value) {
 
-        $this->headers[
-            strtolower($name)
-        ] = [$name, (array)$value];
+        $this->headers[strtolower($name)] = [$name, (array)$value];
 
     }
 
@@ -279,10 +276,9 @@ abstract class Message implements MessageInterface {
         $name = strtolower($name);
         if (!isset($this->headers[$name])) {
             return false;
-        } else {
-            unset($this->headers[$name]);
-            return true;
         }
+        unset($this->headers[$name]);
+        return true;
 
     }
 

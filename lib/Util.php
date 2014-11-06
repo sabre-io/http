@@ -27,11 +27,11 @@ class Util {
         $month = '(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)';
         $weekday = '(Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday)';
         $wkday = '(Mon|Tue|Wed|Thu|Fri|Sat|Sun)';
-        $time = '[0-2]\d(\:[0-5]\d){2}';
-        $date3 = $month . ' ([1-3]\d| \d)';
-        $date2 = '[0-3]\d\-' . $month . '\-\d\d';
+        $time = '([0-1]\d|2[0-3])(\:[0-5]\d){2}';
+        $date3 = $month . ' ([12]\d|3[01]| [1-9])';
+        $date2 = '(0[1-9]|[12]\d|3[01])\-' . $month . '\-\d{2}';
         //4-digit year cannot begin with 0 - unix timestamp begins in 1970
-        $date1 = '[0-3]\d ' . $month . ' [1-9]\d{3}';
+        $date1 = '(0[1-9]|[12]\d|3[01]) ' . $month . ' [1-9]\d{3}';
 
         //ANSI C's asctime() format
         //4-digit year cannot begin with 0 - unix timestamp begins in 1970

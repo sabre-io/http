@@ -110,7 +110,7 @@ class URLUtil {
     static function splitPath($path) {
 
         $matches = array();
-        if(preg_match('/^(?:(?:(.*)(?:\/+))?([^\/]+))(?:\/?)$/u',$path,$matches)) {
+        if(preg_match('/^(?:(.*)\/+)?([^\/]+)\/?$/u',$path,$matches)) {
             return array($matches[1],$matches[2]);
         } else {
             return array(null,null);

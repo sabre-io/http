@@ -215,9 +215,14 @@ class AWS extends AbstractAuth {
      */
     private function hmacsha1($key, $message) {
 
+        if (function_exists('hash_hmac')) {
+            return hash_hmac('sha1', $message, $key, true);
+        }
+
         $blocksize=64;
-        if (strlen($key)>$blocksize)
+        if (strlen($key)>$blocksize) {
             $key=pack('H*', sha1($key));
+        }
         $key=str_pad($key,$blocksize,chr(0x00));
         $ipad=str_repeat(chr(0x36),$blocksize);
         $opad=str_repeat(chr(0x5c),$blocksize);

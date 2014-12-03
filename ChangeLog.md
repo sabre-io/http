@@ -1,7 +1,7 @@
 ChangeLog
 =========
 
-3.0.3 (????-??-??)
+3.0.3 (2014-12-03)
 ------------------
 
 * Hiding `Authorization` header value from `Request::__toString`.

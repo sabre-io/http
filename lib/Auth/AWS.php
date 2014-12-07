@@ -141,7 +141,7 @@ class AWS extends AbstractAuth {
      */
     function requireLogin() {
 
-        $this->response->setHeader('WWW-Authenticate','AWS');
+        $this->response->addHeader('WWW-Authenticate','AWS');
         $this->response->setStatus(401);
 
     }

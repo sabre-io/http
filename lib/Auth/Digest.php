@@ -182,7 +182,7 @@ class Digest extends AbstractAuth {
                 break;
         }
 
-        $this->response->setHeader('WWW-Authenticate','Digest realm="' . $this->realm . '",qop="'.$qop.'",nonce="' . $this->nonce . '",opaque="' . $this->opaque . '"');
+        $this->response->addHeader('WWW-Authenticate','Digest realm="' . $this->realm . '",qop="'.$qop.'",nonce="' . $this->nonce . '",opaque="' . $this->opaque . '"');
         $this->response->setStatus(401);
 
     }

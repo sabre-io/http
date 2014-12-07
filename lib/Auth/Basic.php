@@ -49,7 +49,7 @@ class Basic extends AbstractAuth {
      */
     function requireLogin() {
 
-        $this->response->setHeader('WWW-Authenticate','Basic realm="' . $this->realm . '"');
+        $this->response->addHeader('WWW-Authenticate','Basic realm="' . $this->realm . '"');
         $this->response->setStatus(401);
 
     }

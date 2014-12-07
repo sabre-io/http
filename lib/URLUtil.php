@@ -76,7 +76,7 @@ class URLUtil {
     static function decodePathSegment($path) {
 
         $path = rawurldecode($path);
-        $encoding = mb_detect_encoding($path, array('UTF-8','ISO-8859-1'));
+        $encoding = mb_detect_encoding($path, ['UTF-8','ISO-8859-1']);
 
         switch($encoding) {
 
@@ -109,11 +109,11 @@ class URLUtil {
      */
     static function splitPath($path) {
 
-        $matches = array();
+        $matches = [];
         if(preg_match('/^(?:(?:(.*)(?:\/+))?([^\/]+))(?:\/?)$/u',$path,$matches)) {
-            return array($matches[1],$matches[2]);
+            return [$matches[1], $matches[2]];
         } else {
-            return array(null,null);
+            return [null, null];
         }
 
     }

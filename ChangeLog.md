@@ -1,13 +1,19 @@
 ChangeLog
 =========
 
-3.0.3 (????-??-??)
+3.0.4 (201?-??-??)
 ------------------
 
-* Hiding `Authorization` header value from `Request::__toString`.
 * #38: The Authentication helpers no longer overwrite any existing
   `WWW-Authenticate` headers, but instead append new headers. This ensures
   that multiple authentication systems can exist in the same environment.
+
+
+3.0.3 (2014-12-03)
+------------------
+
+* Hiding `Authorization` header value from `Request::__toString`.
+
 
 3.0.2 (2014-10-09)
 ------------------

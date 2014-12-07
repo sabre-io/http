@@ -8,7 +8,7 @@ namespace Sabre\HTTP;
  *
  * @copyright Copyright (C) 2009-2014 fruux GmbH (https://fruux.com/).
  * @author Evert Pot (http://evertpot.com/)
- * @license http://code.google.com/p/sabredav/wiki/License Modified BSD License
+ * @license http://sabre.io/license/ Modified BSD License
  */
 interface MessageInterface {
 
@@ -59,7 +59,7 @@ interface MessageInterface {
     function getHeaders();
 
     /**
-     * Will return true or false, depending on if a http header exists.
+     * Will return true or false, depending on if a HTTP header exists.
      *
      * @param string $name
      * @return bool
@@ -72,7 +72,7 @@ interface MessageInterface {
      * The name must be treated as case-insensitive.
      * If the header does not exist, this method must return null.
      *
-     * If a header appeared more than once in a http request, this method will
+     * If a header appeared more than once in a HTTP request, this method will
      * concatenate all the values with a comma.
      *
      * Note that this not make sense for all headers. Some, such as
@@ -87,7 +87,7 @@ interface MessageInterface {
     /**
      * Returns a HTTP header as an array.
      *
-     * For every time the http header appeared in the request or response, an
+     * For every time the HTTP header appeared in the request or response, an
      * item will appear in the array.
      *
      * If the header did not exists, this method will return an empty array.

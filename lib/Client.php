@@ -38,7 +38,7 @@ use
  *
  * @copyright Copyright (C) 2009-2014 fruux GmbH. All rights reserved.
  * @author Evert Pot (http://evertpot.com/)
- * @license http://code.google.com/p/sabredav/wiki/License Modified BSD License
+ * @license http://sabre.io/license/ Modified BSD License
  */
 class Client extends EventEmitter {
 
@@ -110,7 +110,7 @@ class Client extends EventEmitter {
 
                     $oldLocation = $request->getUrl();
 
-                    // Creating an new instance of the request object.
+                    // Creating a new instance of the request object.
                     $request = clone $request;
 
                     // Setting the new location
@@ -150,7 +150,7 @@ class Client extends EventEmitter {
 
         $this->emit('afterRequest', [$request, $response]);
 
-        if ($this->throwExceptions && $code > 399) {
+        if ($this->throwExceptions && $code >= 400) {
             throw new ClientHttpException($response);
         }
 
@@ -286,10 +286,10 @@ class Client extends EventEmitter {
 
     /**
      * If this is set to true, the Client will automatically throw exceptions
-     * upon http errors.
+     * upon HTTP errors.
      *
-     * This means that if a response came back with a status code of 400 or
-     * higher, we will throw a ClientHttpException.
+     * This means that if a response came back with a status code greater than
+     * or equal to 400, we will throw a ClientHttpException.
      *
      * This only works for the send() method. Throwing exceptions for
      * sendAsync() is not supported.

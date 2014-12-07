@@ -9,7 +9,7 @@ namespace Sabre\HTTP;
  *
  * @copyright Copyright (C) 2009-2014 fruux GmbH (https://fruux.com/).
  * @author Evert Pot (http://evertpot.com/)
- * @license http://code.google.com/p/sabredav/wiki/License Modified BSD License
+ * @license http://sabre.io/license/ Modified BSD License
  */
 abstract class Message implements MessageInterface {
 
@@ -52,9 +52,8 @@ abstract class Message implements MessageInterface {
             fwrite($stream, $body);
             rewind($stream);
             return $stream;
-        } else {
-            return $body;
         }
+        return $body;
 
     }
 
@@ -71,11 +70,11 @@ abstract class Message implements MessageInterface {
         $body = $this->getBody();
         if (is_string($body)) {
             return $body;
-        } elseif (is_null($body)) {
-            return '';
-        } else {
-            return stream_get_contents($body);
         }
+        if (is_null($body)) {
+            return '';
+        }
+        return stream_get_contents($body);
 
     }
 
@@ -121,7 +120,7 @@ abstract class Message implements MessageInterface {
     }
 
     /**
-     * Will return true or false, depending on if a http header exists.
+     * Will return true or false, depending on if a HTTP header exists.
      *
      * @param string $name
      * @return bool
@@ -138,7 +137,7 @@ abstract class Message implements MessageInterface {
      * The name must be treated as case-insensitive.
      * If the header does not exist, this method must return null.
      *
-     * If a header appeared more than once in a http request, this method will
+     * If a header appeared more than once in a HTTP request, this method will
      * concatenate all the values with a comma.
      *
      * Note that this not make sense for all headers. Some, such as
@@ -162,7 +161,7 @@ abstract class Message implements MessageInterface {
     /**
      * Returns a HTTP header as an array.
      *
-     * For every time the http header appeared in the request or response, an
+     * For every time the HTTP header appeared in the request or response, an
      * item will appear in the array.
      *
      * If the header did not exists, this method will return an empty array.
@@ -195,9 +194,7 @@ abstract class Message implements MessageInterface {
      */
     function setHeader($name, $value) {
 
-        $this->headers[
-            strtolower($name)
-        ] = [$name, (array)$value];
+        $this->headers[strtolower($name)] = [$name, (array)$value];
 
     }
 
@@ -279,10 +276,9 @@ abstract class Message implements MessageInterface {
         $name = strtolower($name);
         if (!isset($this->headers[$name])) {
             return false;
-        } else {
-            unset($this->headers[$name]);
-            return true;
         }
+        unset($this->headers[$name]);
+        return true;
 
     }
 

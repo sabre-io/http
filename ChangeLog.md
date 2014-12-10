@@ -1,7 +1,7 @@
 ChangeLog
 =========
 
-3.0.4 (201?-??-??)
+3.0.4 (2014-12-10)
 ------------------
 
 * #38: The Authentication helpers no longer overwrite any existing

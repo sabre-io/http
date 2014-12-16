@@ -185,7 +185,7 @@ REGEX;
      * an array with each spliced value.
      *
      * @param string|string[] $header
-     * @return void
+     * @return string[]
      */
     static function getHeaderValues($header) {
 

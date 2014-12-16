@@ -17,7 +17,7 @@ class HeaderHelper {
     /**
      * Parses a HTTP date-string.
      *
-     * This method returns null if the date is invalid.
+     * This method returns false if the date is invalid.
      *
      * The following formats are supported:
      *    Sun, 06 Nov 1994 08:49:37 GMT    ; IMF-fixdate

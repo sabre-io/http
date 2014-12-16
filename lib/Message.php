@@ -152,7 +152,12 @@ abstract class Message implements MessageInterface {
         $name = strtolower($name);
 
         if (isset($this->headers[$name])) {
-            return implode(',', $this->headers[$name][1]);
+            if (is_array($this->headers[$name])) {
+                return $this->headers[$name][1];
+            } else {
+                return implode(',', $this->headers[$name][1]);
+            }
+
         }
         return null;
 
@@ -174,7 +179,13 @@ abstract class Message implements MessageInterface {
         $name = strtolower($name);
 
         if (isset($this->headers[$name])) {
-            return $this->headers[$name][1];
+            if (is_array($this->headers[$name][1])) {
+                return $this->headers[$name][1];
+            } else {
+                return HeaderHelper::getHeaderValues(
+                    $this->headers[$name][1]
+                );
+            }
         }
 
         return [];
@@ -194,7 +205,10 @@ abstract class Message implements MessageInterface {
      */
     function setHeader($name, $value) {
 
-        $this->headers[strtolower($name)] = [$name, (array)$value];
+        $this->headers[strtolower($name)] = [
+            $name,
+            $value
+        ];
 
     }
 
@@ -224,6 +238,9 @@ abstract class Message implements MessageInterface {
      * another value. Individual values can be retrieved with
      * getHeadersAsArray.
      *
+     * Be aware that multiple values for a HTTP header is not always valid for
+     * every HTTP header.
+     *
      * @param string $name
      * @param string $value
      * @return void
@@ -232,14 +249,14 @@ abstract class Message implements MessageInterface {
 
         $lName = strtolower($name);
         if (isset($this->headers[$lName])) {
-            $this->headers[$lName][1] = array_merge(
+            $this->headers[$lName][1] = HeaderHelper::getHeaderValues(
                 $this->headers[$lName][1],
-                (array)$value
+                $value
             );
         } else {
             $this->headers[$lName] = [
                 $name,
-                (array)$value
+                $value
             ];
         }
 

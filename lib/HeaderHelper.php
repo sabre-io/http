@@ -184,13 +184,19 @@ REGEX;
      * You can pass either a string, or an array. The resulting value is always
      * an array with each spliced value.
      *
+     * If the second headers argument is set, this value will simply be merged
+     * in. This makes it quicker to merge an old list of values with a new set.
+     *
      * @param string|string[] $header
      * @return string[]
      */
-    static function getHeaderValues($header) {
+    static function getHeaderValues($values, $values2 = null) {
 
-        $result = [];
-        foreach((array)$header as $l1) {
+        $values = (array)$values;
+        if ($values2) {
+            $values = array_merge($values, (array)$values2);
+        }
+        foreach($values as $l1) {
             foreach(explode(',', $l1) as $l2) {
                 $result[] = trim($l2);
             }

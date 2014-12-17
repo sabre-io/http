@@ -30,7 +30,7 @@ class HeaderHelper {
      * @param string $dateString
      * @return bool|DateTime
      */
-    static function parseHttpDate($dateString) {
+    static function parseDate($dateString) {
 
         // Only the format is checked, valid ranges are checked by strtotime below
         $month = '(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)';
@@ -75,7 +75,7 @@ class HeaderHelper {
      * @param DateTime $dateTime
      * @return string
      */
-    static function toHttpDate(DateTime $dateTime) {
+    static function toDate(DateTime $dateTime) {
 
         // We need to clone it, as we don't want to affect the existing
         // DateTime.
@@ -114,7 +114,7 @@ class HeaderHelper {
      */
     static function parsePrefer($input) {
 
-        $token = '[!#$%&\'*+-.^_`~A-Za-z0-9]+';
+        $token = '[!#$%&\'*+\-.^_`~A-Za-z0-9]+';
 
         // Work in progress
         $word = '(?: [a-zA-Z0-9]+ | "[a-zA-Z0-9]*" )';
@@ -122,12 +122,12 @@ class HeaderHelper {
         $regex = <<<REGEX
 /
    ^
-   (?P<name> $token)      # Prefer property name
-   \s*                    # Optional space
-   (?: = \s*              # Prefer property value
-       (?P<value> $word)
+   (?<name> $token)      # Prefer property name
+   \s*                   # Optional space
+   (?: = \s*             # Prefer property value
+       (?<value> $word)
    )?
-   (?: \s* ; (?: .*))?                # Prefer parameters (ignored)
+   (?: \s* ; (?: .*))?   # Prefer parameters (ignored)
    $
 /x
 REGEX;
@@ -176,7 +176,7 @@ REGEX;
     /**
      * This method splits up headers into all their individual values.
      *
-     * A http header may have more than one header, such as this:
+     * A HTTP header may have more than one header, such as this:
      *   Cache-Control: private, no-store
      *
      * Header values are always split with a comma.
@@ -187,7 +187,8 @@ REGEX;
      * If the second headers argument is set, this value will simply be merged
      * in. This makes it quicker to merge an old list of values with a new set.
      *
-     * @param string|string[] $header
+     * @param string|string[] $values
+     * @param string|string[] $values2
      * @return string[]
      */
     static function getHeaderValues($values, $values2 = null) {

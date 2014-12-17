@@ -207,7 +207,7 @@ class Util {
      */
     static function parseHTTPDate($dateHeader) {
 
-        return HeaderHelper::parseHttpDate($dateHeader);
+        return HeaderHelper::parseDate($dateHeader);
 
     }
 
@@ -223,7 +223,7 @@ class Util {
      */
     static function toHTTPDate(\DateTime $dateTime) {
 
-        return HeaderHelper::toHttpDate($dateTime);
+        return HeaderHelper::toDate($dateTime);
 
     }
 }

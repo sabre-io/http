@@ -113,7 +113,9 @@ abstract class Message implements MessageInterface {
 
         $result = [];
         foreach($this->headers as $headerInfo) {
-            $result[$headerInfo[0]] = $headerInfo[1];
+            if (is_array($headerInfo[1]) {)
+                $result[$headerInfo[0]] = $headerInfo[1];
+            }
         }
         return $result;
 
@@ -182,9 +184,7 @@ abstract class Message implements MessageInterface {
             if (is_array($this->headers[$name][1])) {
                 return $this->headers[$name][1];
             } else {
-                return HeaderHelper::getHeaderValues(
-                    $this->headers[$name][1]
-                );
+                return [$this->headers[$name][1]];
             }
         }
 

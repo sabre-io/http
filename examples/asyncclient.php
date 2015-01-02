@@ -6,7 +6,7 @@
  * By default up to 10 requests will be executed in paralel. HTTP connections
  * are re-used and DNS is cached, all thanks to the power of curl.
  *
- * @copyright Copyright (C) 2009-2014 fruux GmbH. All rights reserved.
+ * @copyright Copyright (C) 2009-2015 fruux GmbH (https://fruux.com/).
  * @author Evert Pot (http://evertpot.com/)
  * @license http://sabre.io/license/ Modified BSD License
  */

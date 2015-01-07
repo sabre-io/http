@@ -5,8 +5,15 @@ php:
   - 5.6
   - hhvm
 
+env:
+  matrix:
+    - PREFER_LOWEST=""
+    - PREFER_LOWEST="--prefer-lowest"
+
+before_script:
+    - composer self-update
+    - composer update --prefer-source $PREFER_LOWEST
+
 script:
   - ./bin/phpunit --configuration tests/phpunit.xml
   - ./bin/phpcs  -p --standard=tests/phpcs/ruleset.xml lib/
-
-before_script: composer install --dev

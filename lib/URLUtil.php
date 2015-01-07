@@ -14,9 +14,9 @@ namespace Sabre\HTTP;
  * ). Since these are reserved, but don't have a reserved meaning in url, these characters are
  * kept as-is.
  *
- * @copyright Copyright (C) 2009-2014 fruux GmbH (https://fruux.com/).
+ * @copyright Copyright (C) 2009-2015 fruux GmbH (https://fruux.com/).
  * @author Evert Pot (http://evertpot.com/)
- * @license http://code.google.com/p/sabredav/wiki/License Modified BSD License
+ * @license http://sabre.io/license/ Modified BSD License
  */
 class URLUtil {
 
@@ -76,7 +76,7 @@ class URLUtil {
     static function decodePathSegment($path) {
 
         $path = rawurldecode($path);
-        $encoding = mb_detect_encoding($path, array('UTF-8','ISO-8859-1'));
+        $encoding = mb_detect_encoding($path, ['UTF-8','ISO-8859-1']);
 
         switch($encoding) {
 
@@ -109,11 +109,11 @@ class URLUtil {
      */
     static function splitPath($path) {
 
-        $matches = array();
-        if(preg_match('/^(?:(?:(.*)(?:\/+))?([^\/]+))(?:\/?)$/u',$path,$matches)) {
-            return array($matches[1],$matches[2]);
+        $matches = [];
+        if(preg_match('/^(?:(.*)\/+)?([^\/]+)\/?$/u',$path,$matches)) {
+            return [$matches[1], $matches[2]];
         } else {
-            return array(null,null);
+            return [null, null];
         }
 
     }

@@ -10,9 +10,9 @@ use Sabre\HTTP\Stream;
  *
  * Use this class to leverage amazon's AWS authentication header
  *
- * @copyright Copyright (C) 2009-2014 fruux GmbH (https://fruux.com/).
+ * @copyright Copyright (C) 2009-2015 fruux GmbH (https://fruux.com/).
  * @author Evert Pot (http://evertpot.com/)
- * @license http://code.google.com/p/sabredav/wiki/License Modified BSD License
+ * @license http://sabre.io/license/ Modified BSD License
  */
 class AWS extends AbstractAuth {
 
@@ -143,7 +143,7 @@ class AWS extends AbstractAuth {
      */
     function requireLogin() {
 
-        $this->response->setHeader('WWW-Authenticate','AWS');
+        $this->response->addHeader('WWW-Authenticate','AWS');
         $this->response->setStatus(401);
 
     }
@@ -217,9 +217,14 @@ class AWS extends AbstractAuth {
      */
     private function hmacsha1($key, $message) {
 
+        if (function_exists('hash_hmac')) {
+            return hash_hmac('sha1', $message, $key, true);
+        }
+
         $blocksize=64;
-        if (strlen($key)>$blocksize)
+        if (strlen($key)>$blocksize) {
             $key=pack('H*', sha1($key));
+        }
         $key=str_pad($key,$blocksize,chr(0x00));
         $ipad=str_repeat(chr(0x36),$blocksize);
         $opad=str_repeat(chr(0x5c),$blocksize);

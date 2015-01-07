@@ -5,9 +5,9 @@ namespace Sabre\HTTP;
 /**
  * This class represents a single HTTP response.
  *
- * @copyright Copyright (C) 2009-2014 fruux GmbH (https://fruux.com/).
+ * @copyright Copyright (C) 2009-2015 fruux GmbH (https://fruux.com/).
  * @author Evert Pot (http://evertpot.com/)
- * @license http://code.google.com/p/sabredav/wiki/License Modified BSD License
+ * @license http://sabre.io/license/ Modified BSD License
  */
 class Response extends Message implements ResponseInterface {
 
@@ -38,9 +38,9 @@ class Response extends Message implements ResponseInterface {
         303 => 'See Other',
         304 => 'Not Modified',
         305 => 'Use Proxy',
-        306 => 'Reserved',
         307 => 'Temporary Redirect',
-        400 => 'Bad request',
+        308 => 'Permanent Redirect',
+        400 => 'Bad Request',
         401 => 'Unauthorized',
         402 => 'Payment Required',
         403 => 'Forbidden',
@@ -62,8 +62,8 @@ class Response extends Message implements ResponseInterface {
         422 => 'Unprocessable Entity', // RFC 4918
         423 => 'Locked', // RFC 4918
         424 => 'Failed Dependency', // RFC 4918
-        426 => 'Upgrade required',
-        428 => 'Precondition required', // RFC 6585
+        426 => 'Upgrade Required',
+        428 => 'Precondition Required', // RFC 6585
         429 => 'Too Many Requests', // RFC 6585
         431 => 'Request Header Fields Too Large', // RFC 6585
         451 => 'Unavailable For Legal Reasons', // draft-tbray-http-legally-restricted-status

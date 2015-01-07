@@ -11,7 +11,7 @@
         "psr/http-message" : "0.4.0"
     },
     "require-dev" : {
-        "phpunit/phpunit" : "*",
+        "phpunit/phpunit" : "~4.3",
         "squizlabs/php_codesniffer": "~1.5.3"
     },
     "suggest" : {
@@ -20,8 +20,8 @@
     "authors" : [
         {
             "name" : "Evert Pot",
-            "email" : "evert@rooftopsolutions.nl",
-            "homepage" : "http://www.rooftopsolutions.nl/",
+            "email" : "me@evertpot.com",
+            "homepage" : "http://evertpot.com/",
             "role" : "Developer"
         }
     ],

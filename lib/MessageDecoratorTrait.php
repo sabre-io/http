@@ -12,9 +12,9 @@ use Psr\Http\Message\MessageInterface as PsrMessageInterface;
  * Didn't seem needed to create a full class for this, so we're just
  * implementing it as a trait.
  *
- * @copyright Copyright (C) 2009-2014 fruux GmbH (https://fruux.com/).
+ * @copyright Copyright (C) 2009-2015 fruux GmbH (https://fruux.com/).
  * @author Evert Pot (http://evertpot.com/)
- * @license http://code.google.com/p/sabredav/wiki/License Modified BSD License
+ * @license http://sabre.io/license/ Modified BSD License
  */
 trait MessageDecoratorTrait {
 
@@ -142,7 +142,9 @@ trait MessageDecoratorTrait {
     /**
      * Retrieves a header by the given case-insensitive name as an array of strings.
      *
-     * @param string $header Case-insensitive header name.
+     * If the header did not exists, this method will return an empty array.
+     *
+     * @param string $name
      * @return string[]
      */
     function getHeaderAsArray($header) {

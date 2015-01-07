@@ -9,9 +9,9 @@ use Psr\Http\Message\StreamableInterface;
  *
  * This object contains a few simple methods that are shared by both.
  *
- * @copyright Copyright (C) 2009-2014 fruux GmbH (https://fruux.com/).
+ * @copyright Copyright (C) 2009-2015 fruux GmbH (https://fruux.com/).
  * @author Evert Pot (http://evertpot.com/)
- * @license http://code.google.com/p/sabredav/wiki/License Modified BSD License
+ * @license http://sabre.io/license/ Modified BSD License
  */
 abstract class Message implements MessageInterface {
 
@@ -67,7 +67,6 @@ abstract class Message implements MessageInterface {
         $this->protocolVersion = $version;
 
     }
-
 
     /**
      * Gets the body of the message.
@@ -135,8 +134,13 @@ abstract class Message implements MessageInterface {
     }
 
     /**
-     * Retrieves a header by the given case-insensitive name as an array of
-     * strings.
+     * Returns a specific HTTP header, based on it's name.
+     *
+     * The name must be treated as case-insensitive.
+     * If the header does not exist, this method must return null.
+     *
+     * If a header appeared more than once in a HTTP request, this method will
+     * concatenate all the values with a comma.
      *
      * @param string $header Case-insensitive header name.
      * @return string[]
@@ -154,6 +158,8 @@ abstract class Message implements MessageInterface {
 
     /**
      * Retrieves a header by the given case-insensitive name as an array of strings.
+     *
+     * If the header did not exists, this method will return an empty array.
      *
      * @param string $header Case-insensitive header name.
      * @return string[]
@@ -184,9 +190,7 @@ abstract class Message implements MessageInterface {
      */
     function setHeader($name, $value) {
 
-        $this->headers[
-            strtolower($name)
-        ] = [$name, (array)$value];
+        $this->headers[strtolower($name)] = [$name, (array)$value];
 
     }
 
@@ -229,10 +233,9 @@ abstract class Message implements MessageInterface {
         $name = strtolower($name);
         if (!isset($this->headers[$name])) {
             return false;
-        } else {
-            unset($this->headers[$name]);
-            return true;
         }
+        unset($this->headers[$name]);
+        return true;
 
     }
 

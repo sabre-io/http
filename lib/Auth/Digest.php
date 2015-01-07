@@ -24,9 +24,9 @@ use
  *  6. To make sure an authentication prompt is displayed, call the
  *     requireLogin() method.
  *
- * @copyright Copyright (C) 2009-2014 fruux GmbH (https://fruux.com/).
+ * @copyright Copyright (C) 2009-2015 fruux GmbH (https://fruux.com/).
  * @author Evert Pot (http://evertpot.com/)
- * @license http://code.google.com/p/sabredav/wiki/License Modified BSD License
+ * @license http://sabre.io/license/ Modified BSD License
  */
 class Digest extends AbstractAuth {
 
@@ -182,7 +182,7 @@ class Digest extends AbstractAuth {
                 break;
         }
 
-        $this->response->setHeader('WWW-Authenticate','Digest realm="' . $this->realm . '",qop="'.$qop.'",nonce="' . $this->nonce . '",opaque="' . $this->opaque . '"');
+        $this->response->addHeader('WWW-Authenticate','Digest realm="' . $this->realm . '",qop="'.$qop.'",nonce="' . $this->nonce . '",opaque="' . $this->opaque . '"');
         $this->response->setStatus(401);
 
     }

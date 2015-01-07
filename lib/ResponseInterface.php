@@ -9,23 +9,7 @@ namespace Sabre\HTTP;
  * @author Evert Pot (http://evertpot.com/)
  * @license http://sabre.io/license/ Modified BSD License
  */
-interface ResponseInterface extends MessageInterface {
-
-    /**
-     * Returns the current HTTP status code.
-     *
-     * @return int
-     */
-    function getStatus();
-
-    /**
-     * Returns the human-readable status string.
-     *
-     * In the case of a 200, this may for example be 'OK'.
-     *
-     * @return string
-     */
-    function getStatusText();
+interface ResponseInterface extends \Psr\Http\Message\ResponseInterface, MessageInterface {
 
     /**
      * Sets the HTTP status code.
@@ -41,5 +25,23 @@ interface ResponseInterface extends MessageInterface {
      * @return void
      */
     function setStatus($status);
+
+    /**
+     * Returns the current HTTP status code.
+     *
+     * @deprecated use getStatusCode instead.
+     * @return int
+     */
+    function getStatus();
+
+    /**
+     * Returns the human-readable status string.
+     *
+     * In the case of a 200, this may for example be 'OK'.
+     *
+     * @deprecated Use setReasonPhrase instead.
+     * @return string
+     */
+    function getStatusText();
 
 }

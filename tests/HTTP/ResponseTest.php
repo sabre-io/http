@@ -33,7 +33,7 @@ class ResponseTest extends \PHPUnit_Framework_TestCase {
     function testToString() {
 
         $response = new Response(200, ['Content-Type' => 'text/xml']);
-        $response->setBody('foo');
+        $response->setBody(new Stream('foo'));
 
         $expected = <<<HI
 HTTP/1.1 200 OK\r

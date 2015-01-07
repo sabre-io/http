@@ -95,7 +95,7 @@ class SapiTest extends \PHPUnit_Framework_TestCase {
 
         // Second Content-Type header. Normally this doesn't make sense.
         $response->addHeader('Content-Type', 'application/xml');
-        $response->setBody('foo');
+        $response->setBody(new Stream('foo'));
 
         ob_start();
 

@@ -48,7 +48,7 @@ abstract class Message implements MessageInterface {
 
         $body = $this->getBody();
         if (is_string($body) || is_null($body)) {
-            $stream = fopen('php://temp', 'r+');
+            $stream = fopen('php://temp', 'r+b');
             fwrite($stream, $body);
             rewind($stream);
             return $stream;

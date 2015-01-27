@@ -8,7 +8,7 @@
         "php"          : ">=5.4",
         "ext-mbstring" : "*",
         "sabre/event"  : ">=1.0.0,<3.0.0",
-        "sabre/uri"    : "dev-normalize"
+        "sabre/uri"    : "~1.0"
     },
     "require-dev" : {
         "phpunit/phpunit" : "~4.3",

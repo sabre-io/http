@@ -2,8 +2,8 @@
 
 namespace Sabre\HTTP;
 
-use
-    Sabre\Event\EventEmitter;
+use Sabre\Event\EventEmitter;
+use Sabre\Uri;
 
 /**
  * A rudimentary HTTP client.
@@ -114,7 +114,7 @@ class Client extends EventEmitter {
                     $request = clone $request;
 
                     // Setting the new location
-                    $request->setUrl(URLUtil::resolve(
+                    $request->setUrl(Uri\resolve(
                         $oldLocation,
                         $response->getHeader('Location')
                     ));

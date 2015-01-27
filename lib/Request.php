@@ -3,6 +3,7 @@
 namespace Sabre\HTTP;
 
 use InvalidArgumentException;
+use Sabre\Uri;
 
 /**
  * The Request class represents a single HTTP request.
@@ -192,16 +193,19 @@ class Request extends Message implements RequestInterface {
         // Removing duplicated slashes.
         $uri = str_replace('//','/',$this->getUrl());
 
-        if (strpos($uri,$this->getBaseUrl())===0) {
+        $uri = Uri\normalize($uri);
+        $baseUri = Uri\normalize($this->getBaseUrl());
+
+        if (strpos($uri,$baseUri)===0) {
 
             // We're not interested in the query part (everything after the ?).
             list($uri) = explode('?', $uri);
-            return trim(URLUtil::decodePath(substr($uri,strlen($this->getBaseUrl()))),'/');
+            return trim(URLUtil::decodePath(substr($uri,strlen($baseUri))),'/');
 
         }
         // A special case, if the baseUri was accessed without a trailing
         // slash, we'll accept it as well.
-        elseif ($uri.'/' === $this->getBaseUrl()) {
+        elseif ($uri.'/' === $baseUri) {
 
             return '';
 

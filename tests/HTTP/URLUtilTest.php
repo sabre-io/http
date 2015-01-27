@@ -180,12 +180,6 @@ class URLUtilTest extends \PHPUnit_Framework_TestCase{
                 'bar2/bar3',
                 'http://example.org/foo/bar/bar2/bar3',
             ],
-            // .. and .
-            [
-                'http://example.org/foo/bar/',
-                '../bar2/.././/bar3/',
-                'http://example.org/foo/bar3/',
-            ],
         ];
 
     }

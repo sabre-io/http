@@ -1,6 +1,13 @@
 ChangeLog
 =========
 
+4.0.0 (2015-??-??)
+------------------
+
+* #41: Fixing bugs related to comparing URLs in `Request::getPath()`.
+* #41: This library now uses the `sabre/uri` package for uri handling.
+
+
 3.0.4 (2014-12-10)
 ------------------
 

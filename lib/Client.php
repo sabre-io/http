@@ -99,7 +99,7 @@ class Client extends EventEmitter {
 
                 $response = $this->doRequest($request);
 
-                $code = (int)$response->getStatus();
+                $code = (int) $response->getStatus();
 
                 // We are doing in-PHP redirects, because curl's
                 // FOLLOW_LOCATION throws errors when PHP is configured with
@@ -133,6 +133,7 @@ class Client extends EventEmitter {
                 }
 
             } catch (ClientException $e) {
+
                 $this->emit('exception', [$request, $e, &$retry, $retryCount]);
 
                 // If retry was still set to false, it means no event handler
@@ -141,7 +142,9 @@ class Client extends EventEmitter {
                 if (!$retry) {
                     throw $e;
                 }
+
             }
+
             if ($retry) {
                 $retryCount++;
             }
@@ -212,6 +215,7 @@ class Client extends EventEmitter {
                 $this->curlMultiHandle,
                 $messagesInQueue
             );
+
             if ($status && $status['msg'] === CURLMSG_DONE) {
 
                 $resourceId = intval($status['handle']);
@@ -221,23 +225,23 @@ class Client extends EventEmitter {
                     $errorCallback,
                     $retryCount,
                 ) = $this->curlMultiMap[$resourceId];
-
                 unset($this->curlMultiMap[$resourceId]);
-
                 $curlResult = $this->parseCurlResult(curl_multi_getcontent($status['handle']), $status['handle']);
-
                 $retry = false;
 
                 if ($curlResult['status'] === self::STATUS_CURLERROR) {
 
                     $e = new ClientException($curlResult['curl_errmsg'], $curlResult['curl_errno']);
                     $this->emit('exception', [$request, $e, &$retry, $retryCount]);
+
                     if ($retry) {
                         $retryCount++;
                         $this->sendASyncInternal($request, $successCallback, $errorCallback, $retryCount);
                         goto messageQueue;
                     }
+
                     $curlResult['request'] = $request;
+
                     if ($errorCallback) {
                         $errorCallback($curlResult);
                     }
@@ -248,21 +252,30 @@ class Client extends EventEmitter {
                     $this->emit('error:' . $curlResult['http_code'], [$request, $curlResult['response'], &$retry, $retryCount]);
 
                     if ($retry) {
+
                         $retryCount++;
                         $this->sendASyncInternal($request, $successCallback, $errorCallback, $retryCount);
                         goto messageQueue;
+
                     }
+
                     $curlResult['request'] = $request;
+
                     if ($errorCallback) {
                         $errorCallback($curlResult);
                     }
+
                 } else {
+
                     $this->emit('afterRequest', [$request, $curlResult['response']]);
+
                     if ($successCallback) {
                         $successCallback($curlResult['response']);
                     }
+
                 }
             }
+
         } while ($messagesInQueue > 0);
 
         return $stillRunning;
@@ -334,7 +347,6 @@ class Client extends EventEmitter {
 
         curl_setopt_array($this->curlHandle, $settings);
         $response = $this->curlExec($this->curlHandle);
-
         $response = $this->parseCurlResult($response, $this->curlHandle);
 
         if ($response['status'] === self::STATUS_CURLERROR) {
@@ -485,7 +497,6 @@ class Client extends EventEmitter {
         unset($response);
 
         // In the case of 100 Continue, or redirects we'll have multiple lists
-        //
         // of headers for each separate HTTP response. We can easily split this
         // because they are separated by \r\n\r\n
         $headerBlob = explode("\r\n\r\n", trim($headerBlob, "\r\n"));
@@ -519,7 +530,7 @@ class Client extends EventEmitter {
     }
 
     /**
-     * Sends a asynchrous http request.
+     * Sends an asynchronous HTTP request.
      *
      * We keep this in a separate method, so we can call it without triggering
      * the beforeRequest event and don't do the poll().
@@ -558,7 +569,6 @@ class Client extends EventEmitter {
      *
      * @param resource $curlHandle
      * @return string
-
      */
     protected function curlExec($curlHandle) {
 

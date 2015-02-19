@@ -57,6 +57,7 @@ class Response extends Message implements ResponseInterface {
         416 => 'Requested Range Not Satisfiable',
         417 => 'Expectation Failed',
         418 => 'I\'m a teapot', // RFC 2324
+        421 => 'Misdirected Request', // draft-ietf-httpbis-http2
         422 => 'Unprocessable Entity', // RFC 4918
         423 => 'Locked', // RFC 4918
         424 => 'Failed Dependency', // RFC 4918

@@ -4,8 +4,7 @@ sabre/http
 This library provides a toolkit to make working with the HTTP protocol easier.
 
 Most PHP scripts run within a HTTP request but accessing information about the
-HTTP request is cumbersome at least, mainly do to superglobals and the CGI
-standard.
+HTTP request is cumbersome at least.
 
 There's bad practices, inconsistencies and confusion. This library is
 effectively a wrapper around the following PHP constructs:

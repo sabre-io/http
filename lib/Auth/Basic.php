@@ -37,7 +37,13 @@ class Basic extends AbstractAuth {
             return null;
         }
 
-        return explode(':',base64_decode(substr($auth, 6)), 2);
+        $credentials = explode(':',base64_decode(substr($auth, 6)), 2);
+
+        if (2 !== count($credentials)) {
+            return null;
+        }
+
+        return $credentials;
 
     }
 

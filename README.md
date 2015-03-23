@@ -30,8 +30,8 @@ Build status
 
 | branch | status |
 | ------ | ------ |
-| master | [![Build Status](https://travis-ci.org/fruux/sabre-http.png?branch=master)](https://travis-ci.org/fruux/sabre-http) |
-| 3.0    | [![Build Status](https://travis-ci.org/fruux/sabre-http.png?branch=3.0)](https://travis-ci.org/fruux/sabre-http) |
+| master | [![Build Status](https://travis-ci.org/fruux/sabre-http.svg?branch=master)](https://travis-ci.org/fruux/sabre-http) |
+| 3.0    | [![Build Status](https://travis-ci.org/fruux/sabre-http.svg?branch=3.0)](https://travis-ci.org/fruux/sabre-http) |
 
 Installation
 ------------

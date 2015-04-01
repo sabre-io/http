@@ -117,4 +117,49 @@ class SapiTest extends \PHPUnit_Framework_TestCase {
 
     }
 
+    /**
+     * @runInSeparateProcess
+     */
+    function testSendLimitedByContentLengthString() {
+
+        $response = new Response(200);
+
+        $response->addHeader('Content-Length', 19);
+        $response->setBody('Send this sentence. Ignore this one.');
+
+        ob_start();
+
+        Sapi::sendResponse($response);
+
+        $result = ob_get_clean();
+        header_remove();
+
+        $this->assertEquals('Send this sentence.', $result);
+
+    }
+
+    /**
+     * @runInSeparateProcess
+     */
+    function testSendLimitedByContentLengthStream() {
+
+        $response = new Response(200, ['Content-Length' => 19]);
+
+        $body = fopen('php://memory', 'w');
+        fwrite($body, 'Ignore this. Send this sentence. Ignore this too.');
+        rewind($body);
+        fread($body, 13);
+        $response->setBody($body);
+
+        ob_start();
+
+        Sapi::sendResponse($response);
+
+        $result = ob_get_clean();
+        header_remove();
+
+        $this->assertEquals('Send this sentence.', $result);
+
+    }
+
 }

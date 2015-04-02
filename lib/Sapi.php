@@ -67,7 +67,21 @@ class Sapi {
             }
 
         }
-        file_put_contents('php://output', $response->getBody());
+
+        $body = $response->getBody();
+        if(is_null($body)) return;
+
+        $contentLength = $response->getHeader('Content-Length');
+        if($contentLength !== null) {
+            $output = fopen('php://output', 'wb');
+            if(is_resource($body) && get_resource_type($body) == 'stream') {
+                stream_copy_to_stream($body, $output, $contentLength);
+            } else {
+                fwrite($output, $body, $contentLength);
+            }
+        } else {
+            file_put_contents('php://output', $body);
+        }
 
     }
 

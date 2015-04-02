@@ -119,6 +119,7 @@ class SapiTest extends \PHPUnit_Framework_TestCase {
 
     /**
      * @runInSeparateProcess
+     * @depends testSend
      */
     function testSendLimitedByContentLengthString() {
 
@@ -140,6 +141,7 @@ class SapiTest extends \PHPUnit_Framework_TestCase {
 
     /**
      * @runInSeparateProcess
+     * @depends testSend
      */
     function testSendLimitedByContentLengthStream() {
 

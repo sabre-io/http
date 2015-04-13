@@ -94,7 +94,7 @@ abstract class Message implements MessageInterface {
     /**
      * Replaces the body resource with a new stream or string.
      *
-     * @param resource $body
+     * @param resource|string $body
      */
     function setBody($body) {
 

@@ -73,6 +73,7 @@ class Client extends EventEmitter {
         $this->curlSettings = [
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_HEADER => true,
+            CURLOPT_NOBODY => false,
         ];
 
     }

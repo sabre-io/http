@@ -1,6 +1,13 @@
 ChangeLog
 =========
 
+3.0.5 (2015-05-11)
+------------------
+
+* #47: When re-using the client and doing any request after a `HEAD` request,
+  the client discards the body.
+
+
 3.0.4 (2014-12-10)
 ------------------
 

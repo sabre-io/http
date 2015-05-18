@@ -107,10 +107,10 @@ class Request extends Message implements RequestInterface {
     function getQueryParameters() {
 
         $url = $this->getUrl();
-        if (($index = strpos($url,'?'))===false) {
+        if (($index = strpos($url, '?')) === false) {
             return [];
         } else {
-            parse_str(substr($url, $index+1), $queryParams);
+            parse_str(substr($url, $index + 1), $queryParams);
             return $queryParams;
         }
 
@@ -191,21 +191,21 @@ class Request extends Message implements RequestInterface {
     function getPath() {
 
         // Removing duplicated slashes.
-        $uri = str_replace('//','/',$this->getUrl());
+        $uri = str_replace('//', '/', $this->getUrl());
 
         $uri = Uri\normalize($uri);
         $baseUri = Uri\normalize($this->getBaseUrl());
 
-        if (strpos($uri,$baseUri)===0) {
+        if (strpos($uri, $baseUri) === 0) {
 
             // We're not interested in the query part (everything after the ?).
             list($uri) = explode('?', $uri);
-            return trim(URLUtil::decodePath(substr($uri,strlen($baseUri))),'/');
+            return trim(URLUtil::decodePath(substr($uri, strlen($baseUri))), '/');
 
         }
         // A special case, if the baseUri was accessed without a trailing
         // slash, we'll accept it as well.
-        elseif ($uri.'/' === $baseUri) {
+        elseif ($uri . '/' === $baseUri) {
 
             return '';
 
@@ -297,10 +297,10 @@ class Request extends Message implements RequestInterface {
 
         $out = $this->getMethod() . ' ' . $this->getUrl() . ' HTTP/' . $this->getHTTPVersion() . "\r\n";
 
-        foreach($this->getHeaders() as $key=>$value) {
+        foreach($this->getHeaders() as $key => $value) {
             foreach($value as $v) {
-                if ($key==='Authorization') {
-                    list($v) = explode(' ', $v,2);
+                if ($key === 'Authorization') {
+                    list($v) = explode(' ', $v, 2);
                     $v  .= ' REDACTED';
                 }
                 $out .= $key . ": " . $v . "\r\n";

@@ -32,9 +32,9 @@ class URLUtil {
      */
     static function encodePath($path) {
 
-        return preg_replace_callback('/([^A-Za-z0-9_\-\.~\(\)\/:@])/',function($match) {
+        return preg_replace_callback('/([^A-Za-z0-9_\-\.~\(\)\/:@])/', function($match) {
 
-            return '%'.sprintf('%02x',ord($match[0]));
+            return '%' . sprintf('%02x', ord($match[0]));
 
         }, $path);
 
@@ -50,9 +50,9 @@ class URLUtil {
      */
     static function encodePathSegment($pathSegment) {
 
-        return preg_replace_callback('/([^A-Za-z0-9_\-\.~\(\):@])/',function($match) {
+        return preg_replace_callback('/([^A-Za-z0-9_\-\.~\(\):@])/', function($match) {
 
-            return '%'.sprintf('%02x',ord($match[0]));
+            return '%' . sprintf('%02x', ord($match[0]));
 
         }, $pathSegment);
     }
@@ -78,7 +78,7 @@ class URLUtil {
     static function decodePathSegment($path) {
 
         $path = rawurldecode($path);
-        $encoding = mb_detect_encoding($path, ['UTF-8','ISO-8859-1']);
+        $encoding = mb_detect_encoding($path, ['UTF-8', 'ISO-8859-1']);
 
         switch($encoding) {
 

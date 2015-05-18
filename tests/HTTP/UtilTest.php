@@ -6,11 +6,11 @@ class UtilTest extends \PHPUnit_Framework_TestCase {
 
     function testParseHTTPDate() {
 
-        $times = array(
+        $times = [
             'Wed, 13 Oct 2010 10:26:00 GMT',
             'Wednesday, 13-Oct-10 10:26:00 GMT',
             'Wed Oct 13 10:26:00 2010',
-        );
+        ];
 
         $expected = 1286965560;
 
@@ -26,7 +26,7 @@ class UtilTest extends \PHPUnit_Framework_TestCase {
 
     function testParseHTTPDateFail() {
 
-        $times = array(
+        $times = [
             //random string
             'NOW',
             // not-GMT timezone
@@ -43,7 +43,7 @@ class UtilTest extends \PHPUnit_Framework_TestCase {
             'Wed, 13 Oct 2010 24:26:00 GMT',
             'Wednesday, 13-Oct-10 24:26:00 GMT',
             'Wed Oct 13 24:26:00 2010',
-        );
+        ];
 
         foreach($times as $time) {
             $this->assertFalse(Util::parseHTTPDate($time), 'We used the string: ' . $time);

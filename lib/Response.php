@@ -153,7 +153,7 @@ class Response extends Message implements ResponseInterface {
         if (ctype_digit($status) || is_int($status)) {
 
             $statusCode = $status;
-            $statusText = isset(self::$statusCodes[$status])?self::$statusCodes[$status]:'Unknown';
+            $statusText = isset(self::$statusCodes[$status]) ? self::$statusCodes[$status] : 'Unknown';
 
         } else {
             list(
@@ -180,13 +180,13 @@ class Response extends Message implements ResponseInterface {
     function __toString() {
 
         $str = 'HTTP/' . $this->httpVersion . ' ' . $this->getStatus() . ' ' . $this->getStatusText() . "\r\n";
-        foreach($this->getHeaders() as $key=>$value) {
+        foreach($this->getHeaders() as $key => $value) {
             foreach($value as $v) {
-                $str.= $key . ": " . $v . "\r\n";
+                $str .= $key . ": " . $v . "\r\n";
             }
         }
-        $str.="\r\n";
-        $str.=$this->getBodyAsString();
+        $str .= "\r\n";
+        $str .= $this->getBodyAsString();
         return $str;
 
     }

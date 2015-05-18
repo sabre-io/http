@@ -72,8 +72,8 @@ class Client extends EventEmitter {
 
         $this->curlSettings = [
             CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_HEADER => true,
-            CURLOPT_NOBODY => false,
+            CURLOPT_HEADER         => true,
+            CURLOPT_NOBODY         => false,
         ];
 
     }
@@ -100,7 +100,7 @@ class Client extends EventEmitter {
 
                 $response = $this->doRequest($request);
 
-                $code = (int) $response->getStatus();
+                $code = (int)$response->getStatus();
 
                 // We are doing in-PHP redirects, because curl's
                 // FOLLOW_LOCATION throws errors when PHP is configured with
@@ -428,7 +428,7 @@ class Client extends EventEmitter {
         }
 
         $nHeaders = [];
-        foreach($request->getHeaders() as $key=>$values) {
+        foreach($request->getHeaders() as $key => $values) {
 
             foreach($values as $value) {
                 $nHeaders[] = $key . ': ' . $value;
@@ -483,8 +483,8 @@ class Client extends EventEmitter {
 
         if ($curlErrNo) {
             return [
-                'status' => self::STATUS_CURLERROR,
-                'curl_errno' => $curlErrNo,
+                'status'      => self::STATUS_CURLERROR,
+                'curl_errno'  => $curlErrNo,
                 'curl_errmsg' => $curlErrMsg,
             ];
         }
@@ -503,7 +503,7 @@ class Client extends EventEmitter {
         $headerBlob = explode("\r\n\r\n", trim($headerBlob, "\r\n"));
 
         // We only care about the last set of headers
-        $headerBlob = $headerBlob[count($headerBlob)-1];
+        $headerBlob = $headerBlob[count($headerBlob) - 1];
 
         // Splitting headers
         $headerBlob = explode("\r\n", $headerBlob);
@@ -513,7 +513,7 @@ class Client extends EventEmitter {
 
         foreach($headerBlob as $header) {
             $parts = explode(':', $header, 2);
-            if (count($parts)==2) {
+            if (count($parts) == 2) {
                 $response->addHeader(trim($parts[0]), trim($parts[1]));
             }
         }

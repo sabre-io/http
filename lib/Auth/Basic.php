@@ -33,11 +33,11 @@ class Basic extends AbstractAuth {
             return null;
         }
 
-        if (strtolower(substr($auth,0,6))!=='basic ') {
+        if (strtolower(substr($auth, 0, 6)) !== 'basic ') {
             return null;
         }
 
-        $credentials = explode(':',base64_decode(substr($auth, 6)), 2);
+        $credentials = explode(':', base64_decode(substr($auth, 6)), 2);
 
         if (2 !== count($credentials)) {
             return null;
@@ -55,7 +55,7 @@ class Basic extends AbstractAuth {
      */
     function requireLogin() {
 
-        $this->response->addHeader('WWW-Authenticate','Basic realm="' . $this->realm . '"');
+        $this->response->addHeader('WWW-Authenticate', 'Basic realm="' . $this->realm . '"');
         $this->response->setStatus(401);
 
     }

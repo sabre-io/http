@@ -169,7 +169,7 @@ class DigestTest extends \PHPUnit_Framework_TestCase {
         switch($qop) {
             case Digest::QOP_AUTH    : $qopstr = 'auth'; break;
             case Digest::QOP_AUTHINT : $qopstr = 'auth-int'; break;
-            default                                 : $qopstr = 'auth,auth-int'; break;
+            default                  : $qopstr = 'auth,auth-int'; break;
         }
 
         $test = preg_match('/Digest realm="' . self::REALM . '",qop="' . $qopstr . '",nonce="([0-9a-f]*)",opaque="([0-9a-f]*)"/',

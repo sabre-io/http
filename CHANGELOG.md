@@ -7,7 +7,7 @@ ChangeLog
 * #45: Don't send more data than what is promised in the HTTP content-length.
   (@dratini0).
 * #43: `getCredentials` returns null if incomplete. (@Hywan)
-* Now using php-cs-fixer to make our CS consistent (yay!)
+* #48: Now using php-cs-fixer to make our CS consistent (yay!)
 * This includes fixes released in version 3.0.5.
 
 

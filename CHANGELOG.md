@@ -1,6 +1,15 @@
 ChangeLog
 =========
 
+4.0.0-alpha2 (2015-05-18)
+-------------------------
+
+* #45: Don't send more data than what is promised in the HTTP content-length.
+  (@dratini0).
+* #43: `getCredentials` returns null if incomplete. (@Hywan)
+* This includes fixes released in version 3.0.5.
+
+
 4.0.0-alpha1 (2015-02-25)
 -------------------------
 
@@ -12,8 +21,8 @@ ChangeLog
 3.0.5 (2015-05-11)
 ------------------
 
-* #47: When re-using the client and doing any request after a `HEAD` request,
-  the client discards the body.
+* #47 #35: When re-using the client and doing any request after a `HEAD`
+  request, the client discards the body.
 
 
 3.0.4 (2014-12-10)

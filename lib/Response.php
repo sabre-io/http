@@ -180,8 +180,8 @@ class Response extends Message implements ResponseInterface {
     function __toString() {
 
         $str = 'HTTP/' . $this->httpVersion . ' ' . $this->getStatus() . ' ' . $this->getStatusText() . "\r\n";
-        foreach($this->getHeaders() as $key => $value) {
-            foreach($value as $v) {
+        foreach ($this->getHeaders() as $key => $value) {
+            foreach ($value as $v) {
                 $str .= $key . ": " . $v . "\r\n";
             }
         }

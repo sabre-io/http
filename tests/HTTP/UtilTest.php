@@ -14,7 +14,7 @@ class UtilTest extends \PHPUnit_Framework_TestCase {
 
         $expected = 1286965560;
 
-        foreach($times as $time) {
+        foreach ($times as $time) {
             $result = Util::parseHTTPDate($time);
             $this->assertEquals($expected, $result->format('U'));
         }
@@ -45,7 +45,7 @@ class UtilTest extends \PHPUnit_Framework_TestCase {
             'Wed Oct 13 24:26:00 2010',
         ];
 
-        foreach($times as $time) {
+        foreach ($times as $time) {
             $this->assertFalse(Util::parseHTTPDate($time), 'We used the string: ' . $time);
         }
 

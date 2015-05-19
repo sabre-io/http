@@ -24,7 +24,7 @@ $paths = [
 
 ];
 
-foreach($paths as $path) {
+foreach ($paths as $path) {
     if (file_exists($path)) {
         include $path;
         break;

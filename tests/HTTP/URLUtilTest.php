@@ -7,7 +7,7 @@ class URLUtilTest extends \PHPUnit_Framework_TestCase{
     function testEncodePath() {
 
         $str = '';
-        for($i = 0;$i < 128;$i++) $str .= chr($i);
+        for ($i = 0;$i < 128;$i++) $str .= chr($i);
 
         $newStr = URLUtil::encodePath($str);
 
@@ -29,7 +29,7 @@ class URLUtilTest extends \PHPUnit_Framework_TestCase{
     function testEncodePathSegment() {
 
         $str = '';
-        for($i = 0;$i < 128;$i++) $str .= chr($i);
+        for ($i = 0;$i < 128;$i++) $str .= chr($i);
 
         $newStr = URLUtil::encodePathSegment($str);
 
@@ -117,7 +117,7 @@ class URLUtilTest extends \PHPUnit_Framework_TestCase{
 
         ];
 
-        foreach($strings as $input => $expected) {
+        foreach ($strings as $input => $expected) {
 
             $output = URLUtil::splitPath($input);
             $this->assertEquals($expected, $output, 'The expected output for \'' . $input . '\' was incorrect');

@@ -57,7 +57,7 @@ class Util {
         $lastOptionIndex = 0;
         $lastChoice = null;
 
-        foreach($proposals as $proposal) {
+        foreach ($proposals as $proposal) {
 
             // Ignoring broken values.
             if (is_null($proposal)) continue;
@@ -67,7 +67,7 @@ class Util {
                 continue;
             }
 
-            foreach($options as $optionIndex => $option) {
+            foreach ($options as $optionIndex => $option) {
 
                 if ($proposal['type'] !== '*' && $proposal['type'] !== $option['type']) {
                     // no match on type.
@@ -80,7 +80,7 @@ class Util {
 
                 // Any parameters appearing on the options must appear on
                 // proposals.
-                foreach($option['parameters'] as $paramName => $paramValue) {
+                foreach ($option['parameters'] as $paramName => $paramValue) {
                     if (!array_key_exists($paramName, $proposal['parameters'])) {
                         continue 2;
                     }
@@ -149,7 +149,7 @@ class Util {
         }
         list($type, $subType) = $mimeType;
 
-        foreach($parts as $part) {
+        foreach ($parts as $part) {
 
             $part = trim($part);
             if (strpos($part, '=')) {

@@ -132,7 +132,7 @@ $
 REGEX;
 
     $output = [];
-    foreach(getHeaderValues($input) as $value) {
+    foreach (getHeaderValues($input) as $value) {
 
         if (!preg_match($regex, $value, $matches)) {
             // Ignore
@@ -140,7 +140,7 @@ REGEX;
         }
 
         // Mapping old values to their new counterparts
-        switch($matches['name']) {
+        switch ($matches['name']) {
             case 'return-asynch' :
                 $output['respond-async'] = true;
                 break;
@@ -196,8 +196,8 @@ function getHeaderValues($values, $values2 = null) {
     if ($values2) {
         $values = array_merge($values, (array)$values2);
     }
-    foreach($values as $l1) {
-        foreach(explode(',', $l1) as $l2) {
+    foreach ($values as $l1) {
+        foreach (explode(',', $l1) as $l2) {
             $result[] = trim($l2);
         }
     }

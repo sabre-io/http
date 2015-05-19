@@ -166,7 +166,7 @@ class DigestTest extends \PHPUnit_Framework_TestCase {
 
         $this->auth->requireLogin();
 
-        switch($qop) {
+        switch ($qop) {
             case Digest::QOP_AUTH    : $qopstr = 'auth'; break;
             case Digest::QOP_AUTHINT : $qopstr = 'auth-int'; break;
             default                  : $qopstr = 'auth,auth-int'; break;

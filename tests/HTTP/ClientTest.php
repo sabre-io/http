@@ -27,7 +27,7 @@ class ClientTest extends \PHPUnit_Framework_TestCase {
 
         // FIXME: CURLOPT_PROTOCOLS and CURLOPT_REDIR_PROTOCOLS are currently unsupported by HHVM
         // at least if this unit test fails in the future we know it is :)
-        if(defined('HHVM_VERSION') === false) {
+        if (defined('HHVM_VERSION') === false) {
             $settings[CURLOPT_PROTOCOLS] = CURLPROTO_HTTP | CURLPROTO_HTTPS;
             $settings[CURLOPT_REDIR_PROTOCOLS] = CURLPROTO_HTTP | CURLPROTO_HTTPS;
         }
@@ -56,7 +56,7 @@ class ClientTest extends \PHPUnit_Framework_TestCase {
 
         // FIXME: CURLOPT_PROTOCOLS and CURLOPT_REDIR_PROTOCOLS are currently unsupported by HHVM
         // at least if this unit test fails in the future we know it is :)
-        if(defined('HHVM_VERSION') === false) {
+        if (defined('HHVM_VERSION') === false) {
             $settings[CURLOPT_PROTOCOLS] = CURLPROTO_HTTP | CURLPROTO_HTTPS;
             $settings[CURLOPT_REDIR_PROTOCOLS] = CURLPROTO_HTTP | CURLPROTO_HTTPS;
         }
@@ -91,7 +91,7 @@ class ClientTest extends \PHPUnit_Framework_TestCase {
 
         // FIXME: CURLOPT_PROTOCOLS and CURLOPT_REDIR_PROTOCOLS are currently unsupported by HHVM
         // at least if this unit test fails in the future we know it is :)
-        if(defined('HHVM_VERSION') === false) {
+        if (defined('HHVM_VERSION') === false) {
             $settings[CURLOPT_PROTOCOLS] = CURLPROTO_HTTP | CURLPROTO_HTTPS;
             $settings[CURLOPT_REDIR_PROTOCOLS] = CURLPROTO_HTTP | CURLPROTO_HTTPS;
         }
@@ -121,7 +121,7 @@ class ClientTest extends \PHPUnit_Framework_TestCase {
 
         // FIXME: CURLOPT_PROTOCOLS and CURLOPT_REDIR_PROTOCOLS are currently unsupported by HHVM
         // at least if this unit test fails in the future we know it is :)
-        if(defined('HHVM_VERSION') === false) {
+        if (defined('HHVM_VERSION') === false) {
             $settings[CURLOPT_PROTOCOLS] = CURLPROTO_HTTP | CURLPROTO_HTTPS;
             $settings[CURLOPT_REDIR_PROTOCOLS] = CURLPROTO_HTTP | CURLPROTO_HTTPS;
         }
@@ -147,7 +147,7 @@ class ClientTest extends \PHPUnit_Framework_TestCase {
 
         // FIXME: CURLOPT_PROTOCOLS and CURLOPT_REDIR_PROTOCOLS are currently unsupported by HHVM
         // at least if this unit test fails in the future we know it is :)
-        if(defined('HHVM_VERSION') === false) {
+        if (defined('HHVM_VERSION') === false) {
             $settings[CURLOPT_PROTOCOLS] = CURLPROTO_HTTP | CURLPROTO_HTTPS;
             $settings[CURLOPT_REDIR_PROTOCOLS] = CURLPROTO_HTTP | CURLPROTO_HTTPS;
         }

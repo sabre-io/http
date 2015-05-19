@@ -1,6 +1,14 @@
 ChangeLog
 =========
 
+4.0.0-alpha3 (2015-05-19)
+-------------------------
+
+* Added a parser for the HTTP `Prefer` header, as defined in [RFC7240][rfc7240].
+* Deprecated `Sabre\HTTP\Util::parseHTTPDate`, use `Sabre\HTTP\parseDate()`.
+* Deprecated `Sabre\HTTP\Util::toHTTPDate` use `Sabre\HTTP\toDate()`.
+
+
 4.0.0-alpha2 (2015-05-18)
 -------------------------
 
@@ -207,3 +215,4 @@ Before 2.0.0, this package was built-into SabreDAV, where it first appeared in
 January 2009.
 
 [psr-http]: https://github.com/php-fig/fig-standards/blob/master/proposed/http-message.md
+[rfc-7240]: http://tools.ietf.org/html/rfc7240

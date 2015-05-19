@@ -80,7 +80,7 @@ class URLUtil {
         $path = rawurldecode($path);
         $encoding = mb_detect_encoding($path, ['UTF-8', 'ISO-8859-1']);
 
-        switch($encoding) {
+        switch ($encoding) {
 
             case 'ISO-8859-1' :
                 $path = utf8_encode($path);

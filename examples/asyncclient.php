@@ -21,7 +21,7 @@ $paths = [
 
 ];
 
-foreach($paths as $path) {
+foreach ($paths as $path) {
     if (file_exists($path)) {
         include $path;
         break;
@@ -32,7 +32,7 @@ foreach($paths as $path) {
 $request = new Request('GET', 'http://localhost/');
 $client = new Client();
 
-for($i = 0; $i < 1000; $i++) {
+for ($i = 0; $i < 1000; $i++) {
 
     echo "$i sending\n";
     $client->sendAsync(

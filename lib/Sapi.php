@@ -56,9 +56,9 @@ class Sapi {
     static function sendResponse(ResponseInterface $response) {
 
         header('HTTP/' . $response->getHttpVersion() . ' ' . $response->getStatus() . ' ' . $response->getStatusText());
-        foreach($response->getHeaders() as $key => $value) {
+        foreach ($response->getHeaders() as $key => $value) {
 
-            foreach($value as $k => $v) {
+            foreach ($value as $k => $v) {
                 if ($k === 0) {
                     header($key . ': ' . $v);
                 } else {
@@ -69,12 +69,12 @@ class Sapi {
         }
 
         $body = $response->getBody();
-        if(is_null($body)) return;
+        if (is_null($body)) return;
 
         $contentLength = $response->getHeader('Content-Length');
-        if($contentLength !== null) {
+        if ($contentLength !== null) {
             $output = fopen('php://output', 'wb');
-            if(is_resource($body) && get_resource_type($body) == 'stream') {
+            if (is_resource($body) && get_resource_type($body) == 'stream') {
                 stream_copy_to_stream($body, $output, $contentLength);
             } else {
                 fwrite($output, $body, $contentLength);
@@ -102,9 +102,9 @@ class Sapi {
         $protocol = 'http';
         $hostName = 'localhost';
 
-        foreach($serverArray as $key => $value) {
+        foreach ($serverArray as $key => $value) {
 
-            switch($key) {
+            switch ($key) {
 
                 case 'SERVER_PROTOCOL' :
                     if ($value === 'HTTP/1.0') {

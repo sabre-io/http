@@ -169,7 +169,7 @@ class Digest extends AbstractAuth {
     function requireLogin() {
 
         $qop = '';
-        switch($this->qop) {
+        switch ($this->qop) {
             case self::QOP_AUTH    :
                 $qop = 'auth';
                 break;

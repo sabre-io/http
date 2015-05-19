@@ -197,7 +197,7 @@ class Client extends EventEmitter {
     function poll() {
 
         // nothing to do?
-        if(!$this->curlMultiMap) {
+        if (!$this->curlMultiMap) {
             return false;
         }
 
@@ -396,7 +396,7 @@ class Client extends EventEmitter {
 
         $settings = $this->curlSettings;
 
-        switch($request->getMethod()) {
+        switch ($request->getMethod()) {
             case 'HEAD' :
                 $settings[CURLOPT_NOBODY] = true;
                 $settings[CURLOPT_CUSTOMREQUEST] = 'HEAD';
@@ -428,9 +428,9 @@ class Client extends EventEmitter {
         }
 
         $nHeaders = [];
-        foreach($request->getHeaders() as $key => $values) {
+        foreach ($request->getHeaders() as $key => $values) {
 
-            foreach($values as $value) {
+            foreach ($values as $value) {
                 $nHeaders[] = $key . ': ' . $value;
             }
 
@@ -438,11 +438,11 @@ class Client extends EventEmitter {
         $settings[CURLOPT_HTTPHEADER] = $nHeaders;
         $settings[CURLOPT_URL] = $request->getUrl();
         // FIXME: CURLOPT_PROTOCOLS is currently unsupported by HHVM
-        if(defined('CURLOPT_PROTOCOLS')) {
+        if (defined('CURLOPT_PROTOCOLS')) {
             $settings[CURLOPT_PROTOCOLS] = CURLPROTO_HTTP | CURLPROTO_HTTPS;
         }
         // FIXME: CURLOPT_REDIR_PROTOCOLS is currently unsupported by HHVM
-        if(defined('CURLOPT_REDIR_PROTOCOLS')) {
+        if (defined('CURLOPT_REDIR_PROTOCOLS')) {
             $settings[CURLOPT_REDIR_PROTOCOLS] = CURLPROTO_HTTP | CURLPROTO_HTTPS;
         }
 
@@ -511,7 +511,7 @@ class Client extends EventEmitter {
         $response = new Response();
         $response->setStatus($curlInfo['http_code']);
 
-        foreach($headerBlob as $header) {
+        foreach ($headerBlob as $header) {
             $parts = explode(':', $header, 2);
             if (count($parts) == 2) {
                 $response->addHeader(trim($parts[0]), trim($parts[1]));

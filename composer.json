@@ -30,6 +30,9 @@
         "source" : "https://github.com/fruux/sabre-http"
     },
     "autoload" : {
+        "files" : [
+            "lib/functions.php"
+        ],
         "psr-4" : {
             "Sabre\\HTTP\\" : "lib/"
         }

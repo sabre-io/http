@@ -158,7 +158,7 @@ REGEX;
                 break;
             default :
                 if (isset($matches['value'])) {
-                    $value = trim($matches['value'],'"');
+                    $value = trim($matches['value'], '"');
                 } else {
                     $value = true;
                 }
@@ -204,4 +204,3 @@ function getHeaderValues($values, $values2 = null) {
     return $result;
 
 }
-

@@ -94,18 +94,7 @@ class URLUtil {
     /**
      * Returns the 'dirname' and 'basename' for a path.
      *
-     * The reason there is a custom function for this purpose, is because
-     * basename() is locale aware (behaviour changes if C locale or a UTF-8 locale is used)
-     * and we need a method that just operates on UTF-8 characters.
-     *
-     * In addition basename and dirname are platform aware, and will treat backslash (\) as a
-     * directory separator on windows.
-     *
-     * This method returns the 2 components as an array.
-     *
-     * If there is no dirname, it will return an empty string. Any / appearing at the end of the
-     * string is stripped off.
-     *
+     * @deprecated Use Sabre\Uri\split().
      * @param string $path
      * @return array
      */
@@ -118,9 +107,7 @@ class URLUtil {
     /**
      * Resolves relative urls, like a browser would.
      *
-     * This function takes a basePath, which itself _may_ also be relative, and
-     * then applies the relative path on top of it.
-     *
+     * @deprecated Use Sabre\Uri\resolve().
      * @param string $basePath
      * @param string $newPath
      * @return string

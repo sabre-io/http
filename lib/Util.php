@@ -5,7 +5,7 @@ namespace Sabre\HTTP;
 /**
  * HTTP utility methods
  *
- * @copyright Copyright (C) 2009-2014 fruux GmbH (https://fruux.com/).
+ * @copyright Copyright (C) 2009-2015 fruux GmbH (https://fruux.com/).
  * @author Evert Pot (http://evertpot.com/)
  * @author Paul Voegler
  * @license http://sabre.io/license/ Modified BSD License
@@ -93,8 +93,8 @@ class Util {
                 // subtype. We need to calculate a score for how specific the
                 // match was.
                 $specificity =
-                    ($proposal['type']!=='*'?20:0) +
-                    ($proposal['subType']!=='*'?10:0) +
+                    ($proposal['type'] !== '*' ? 20 : 0) +
+                    ($proposal['subType'] !== '*' ? 10 : 0) +
                     count($option['parameters']);
 
 
@@ -143,7 +143,7 @@ class Util {
         $mimeType = array_shift($parts);
 
         $mimeType = explode('/', trim($mimeType));
-        if (count($mimeType)!==2) {
+        if (count($mimeType) !== 2) {
             // Illegal value
             return null;
         }
@@ -164,7 +164,7 @@ class Util {
             // the parameter list. Anything after the q= counts as an
             // 'accept extension' and could introduce new semantics in
             // content-negotation.
-            if ($partName!=='q') {
+            if ($partName !== 'q') {
                 $parameters[$partName] = $part;
             } else {
                 $quality = (float)$partValue;
@@ -174,9 +174,9 @@ class Util {
         }
 
         return [
-            'type' => $type,
-            'subType' => $subType,
-            'quality' => $quality,
+            'type'       => $type,
+            'subType'    => $subType,
+            'quality'    => $quality,
             'parameters' => $parameters,
         ];
 

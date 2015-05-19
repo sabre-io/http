@@ -113,11 +113,7 @@ abstract class Message implements MessageInterface {
 
         $result = [];
         foreach($this->headers as $headerInfo) {
-            if (is_array($headerInfo[1])) {
-                $result[$headerInfo[0]] = $headerInfo[1];
-            } else {
-                $result[$headerInfo[0]] = [$headerInfo[1]];
-            }
+            $result[$headerInfo[0]] = $headerInfo[1];
         }
         return $result;
 
@@ -156,12 +152,7 @@ abstract class Message implements MessageInterface {
         $name = strtolower($name);
 
         if (isset($this->headers[$name])) {
-            if (is_array($this->headers[$name])) {
-                return implode(',', $this->headers[$name][1]);
-            } else {
-                return $this->headers[$name][1];
-            }
-
+            return implode(',', $this->headers[$name][1]);
         }
         return null;
 
@@ -183,11 +174,7 @@ abstract class Message implements MessageInterface {
         $name = strtolower($name);
 
         if (isset($this->headers[$name])) {
-            if (is_array($this->headers[$name][1])) {
-                return $this->headers[$name][1];
-            } else {
-                return [$this->headers[$name][1]];
-            }
+            return $this->headers[$name][1];
         }
 
         return [];
@@ -207,10 +194,7 @@ abstract class Message implements MessageInterface {
      */
     function setHeader($name, $value) {
 
-        $this->headers[strtolower($name)] = [
-            $name,
-            $value
-        ];
+        $this->headers[strtolower($name)] = [$name, (array)$value];
 
     }
 
@@ -240,9 +224,6 @@ abstract class Message implements MessageInterface {
      * another value. Individual values can be retrieved with
      * getHeadersAsArray.
      *
-     * Be aware that multiple values for a HTTP header is not always valid for
-     * every HTTP header.
-     *
      * @param string $name
      * @param string $value
      * @return void
@@ -251,14 +232,14 @@ abstract class Message implements MessageInterface {
 
         $lName = strtolower($name);
         if (isset($this->headers[$lName])) {
-            $this->headers[$lName][1] = getHeaderValues(
+            $this->headers[$lName][1] = array_merge(
                 $this->headers[$lName][1],
-                $value
+                (array)$value
             );
         } else {
             $this->headers[$lName] = [
                 $name,
-                $value
+                (array)$value
             ];
         }
 

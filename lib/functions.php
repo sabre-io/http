@@ -29,7 +29,7 @@ use DateTime;
  * @param string $dateString
  * @return bool|DateTime
  */
-static function parseDate($dateString) {
+function parseDate($dateString) {
 
     // Only the format is checked, valid ranges are checked by strtotime below
     $month = '(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)';
@@ -74,7 +74,7 @@ static function parseDate($dateString) {
  * @param DateTime $dateTime
  * @return string
  */
-static function toDate(DateTime $dateTime) {
+function toDate(DateTime $dateTime) {
 
     // We need to clone it, as we don't want to affect the existing
     // DateTime.
@@ -111,7 +111,7 @@ static function toDate(DateTime $dateTime) {
  * @param string|string[] $header
  * @return array
  */
-static function parsePrefer($input) {
+function parsePrefer($input) {
 
     $token = '[!#$%&\'*+\-.^_`~A-Za-z0-9]+';
 
@@ -132,7 +132,7 @@ $
 REGEX;
 
     $output = [];
-    foreach(self::getHeaderValues($input) as $value) {
+    foreach(getHeaderValues($input) as $value) {
 
         if (!preg_match($regex, $value, $matches)) {
             // Ignore
@@ -190,7 +190,7 @@ REGEX;
  * @param string|string[] $values2
  * @return string[]
  */
-static function getHeaderValues($values, $values2 = null) {
+function getHeaderValues($values, $values2 = null) {
 
     $values = (array)$values;
     if ($values2) {

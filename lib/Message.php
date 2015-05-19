@@ -251,7 +251,7 @@ abstract class Message implements MessageInterface {
 
         $lName = strtolower($name);
         if (isset($this->headers[$lName])) {
-            $this->headers[$lName][1] = HeaderHelper::getHeaderValues(
+            $this->headers[$lName][1] = getHeaderValues(
                 $this->headers[$lName][1],
                 $value
             );

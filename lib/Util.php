@@ -201,13 +201,13 @@ class Util {
      *
      * This method returns false if the date is invalid
      *
-     * @deprecated Use HeaderHelper::parseHttpDate
+     * @deprecated Use parseDate
      * @param string $dateHeader
      * @return bool|DateTime
      */
     static function parseHTTPDate($dateHeader) {
 
-        return HeaderHelper::parseDate($dateHeader);
+        return parseDate($dateHeader);
 
     }
 
@@ -217,13 +217,13 @@ class Util {
      * We're serializing it as the RFC 1123 date, which, for HTTP must be
      * specified as GMT.
      *
-     * @deprecated Use HeaderHelper::toToHttpDate
+     * @deprecated Use toDate
      * @param \DateTime $dateTime
      * @return string
      */
     static function toHTTPDate(\DateTime $dateTime) {
 
-        return HeaderHelper::toDate($dateTime);
+        return toDate($dateTime);
 
     }
 }

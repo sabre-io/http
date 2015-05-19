@@ -2,7 +2,7 @@
 
 namespace Sabre\HTTP;
 
-class HeaderHelperTest extends \PHPUnit_Framework_TestCase {
+class FunctionsTest extends \PHPUnit_Framework_TestCase {
 
     /**
      * @dataProvider getHeaderValuesData
@@ -11,7 +11,7 @@ class HeaderHelperTest extends \PHPUnit_Framework_TestCase {
 
         $this->assertEquals(
             $output,
-            HeaderHelper::getHeaderValues($input)
+            getHeaderValues($input)
         );
 
     }
@@ -50,7 +50,7 @@ class HeaderHelperTest extends \PHPUnit_Framework_TestCase {
 
         $this->assertEquals(
             $output,
-            HeaderHelper::parsePrefer($input)
+            parsePrefer($input)
         );
 
     }

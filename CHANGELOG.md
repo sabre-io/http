@@ -1,6 +1,15 @@
 ChangeLog
 =========
 
+4.0.0 (2015-05-20)
+------------------
+
+* Deprecated: All static functions from `Sabre\HTTP\URLUtil` and
+  `Sabre\HTTP\Util` moved to a separate `functions.php`, which is also
+  autoloaded. The old functions are still there, but will be removed in a
+  future version. (#49)
+
+
 4.0.0-alpha3 (2015-05-19)
 -------------------------
 

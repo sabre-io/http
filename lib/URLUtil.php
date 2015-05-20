@@ -7,15 +7,10 @@ use Sabre\URI;
 /**
  * URL utility class
  *
- * This class provides methods to deal with encoding and decoding url (percent encoded) strings.
+ * Note: this class is deprecated. All its functionality moved to functions.php
+ * or sabre\uri.
  *
- * It was not possible to use PHP's built-in methods for this, because some clients don't like
- * encoding of certain characters.
- *
- * Specifically, it was found that GVFS (gnome's webdav client) does not like encoding of ( and
- * ). Since these are reserved, but don't have a reserved meaning in url, these characters are
- * kept as-is.
- *
+ * @deprectated
  * @copyright Copyright (C) 2009-2015 fruux GmbH (https://fruux.com/).
  * @author Evert Pot (http://evertpot.com/)
  * @license http://sabre.io/license/ Modified BSD License
@@ -27,16 +22,13 @@ class URLUtil {
      *
      * slashes (/) are treated as path-separators.
      *
+     * @deprecated use \Sabre\HTTP\encodePath()
      * @param string $path
      * @return string
      */
     static function encodePath($path) {
 
-        return preg_replace_callback('/([^A-Za-z0-9_\-\.~\(\)\/:@])/', function($match) {
-
-            return '%' . sprintf('%02x', ord($match[0]));
-
-        }, $path);
+        return encodePath($path);
 
     }
 
@@ -45,49 +37,39 @@ class URLUtil {
      *
      * Slashes are considered part of the name, and are encoded as %2f
      *
+     * @deprecated use \Sabre\HTTP\encodePathSegment()
      * @param string $pathSegment
      * @return string
      */
     static function encodePathSegment($pathSegment) {
 
-        return preg_replace_callback('/([^A-Za-z0-9_\-\.~\(\):@])/', function($match) {
+        return encodePathSegment($pathSegment);
 
-            return '%' . sprintf('%02x', ord($match[0]));
-
-        }, $pathSegment);
     }
 
     /**
      * Decodes a url-encoded path
      *
+     * @deprecated use \Sabre\HTTP\decodePath
      * @param string $path
      * @return string
      */
     static function decodePath($path) {
 
-        return self::decodePathSegment($path);
+        return decodePath($path);
 
     }
 
     /**
      * Decodes a url-encoded path segment
      *
+     * @deprecated use \Sabre\HTTP\decodePathSegment()
      * @param string $path
      * @return string
      */
     static function decodePathSegment($path) {
 
-        $path = rawurldecode($path);
-        $encoding = mb_detect_encoding($path, ['UTF-8', 'ISO-8859-1']);
-
-        switch ($encoding) {
-
-            case 'ISO-8859-1' :
-                $path = utf8_encode($path);
-
-        }
-
-        return $path;
+        return decodePathSegment($path);
 
     }
 

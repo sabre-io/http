@@ -1,11 +1,12 @@
 ChangeLog
 =========
 
-4.0.1 (2015-??-??)
+4.1.0 (2015-??-??)
 ------------------
 
 * The async client wouldn't `wait()` for new http requests being started
   after the (previous) last request in the queue was resolved.
+* Added `Sabre\HTTP\Auth\Bearer`, to easily extract a OAuth2 bearer token.
 
 
 4.0.0 (2015-05-20)

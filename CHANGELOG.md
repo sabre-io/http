@@ -1,7 +1,7 @@
 ChangeLog
 =========
 
-4.1.0 (2015-??-??)
+4.1.0 (2015-09-04)
 ------------------
 
 * The async client wouldn't `wait()` for new http requests being started

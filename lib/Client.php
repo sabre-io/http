@@ -237,7 +237,7 @@ class Client extends EventEmitter {
 
                     if ($retry) {
                         $retryCount++;
-                        $this->sendASyncInternal($request, $successCallback, $errorCallback, $retryCount);
+                        $this->sendAsyncInternal($request, $successCallback, $errorCallback, $retryCount);
                         goto messageQueue;
                     }
 
@@ -255,7 +255,7 @@ class Client extends EventEmitter {
                     if ($retry) {
 
                         $retryCount++;
-                        $this->sendASyncInternal($request, $successCallback, $errorCallback, $retryCount);
+                        $this->sendAsyncInternal($request, $successCallback, $errorCallback, $retryCount);
                         goto messageQueue;
 
                     }

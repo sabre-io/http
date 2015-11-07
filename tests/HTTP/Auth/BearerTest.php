@@ -17,7 +17,7 @@ class BearerTest extends \PHPUnit_Framework_TestCase {
 
         $this->assertEquals(
             '12345',
-            $bearer->getToken($request)
+            $bearer->getToken()
         );
 
     }
@@ -27,7 +27,7 @@ class BearerTest extends \PHPUnit_Framework_TestCase {
         $request = new Request('GET', '/', []);
         $bearer = new Bearer('Dagger', $request, new Response());
 
-        $this->assertNull($bearer->getToken($request));
+        $this->assertNull($bearer->getToken());
 
     }
 
@@ -38,7 +38,7 @@ class BearerTest extends \PHPUnit_Framework_TestCase {
         ]);
         $bearer = new Bearer('Dagger', $request, new Response());
 
-        $this->assertNull($bearer->getToken($request));
+        $this->assertNull($bearer->getToken());
 
     }
 

@@ -58,7 +58,7 @@ class DigestTest extends \PHPUnit_Framework_TestCase {
 
         $this->auth->init();
 
-        $this->assertEquals($username, $this->auth->getUserName());
+        $this->assertEquals($username, $this->auth->getUsername());
         $this->assertEquals(self::REALM, $this->auth->getRealm());
         $this->assertTrue($this->auth->validateA1(md5($username . ':' . self::REALM . ':' . $password)), 'Authentication is deemed invalid through validateA1');
         $this->assertTrue($this->auth->validatePassword($password), 'Authentication is deemed invalid through validatePassword');

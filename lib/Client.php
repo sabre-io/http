@@ -18,6 +18,7 @@ use Sabre\Uri;
  *   beforeRequest(RequestInterface $request)
  *   afterRequest(RequestInterface $request, ResponseInterface $response)
  *   error(RequestInterface $request, ResponseInterface $response, bool &$retry, int $retryCount)
+ *   exception(RequestInterface $request, ClientException $e, bool &$retry, int $retryCount)
  *
  * The beforeRequest event allows you to do some last minute changes to the
  * request before it's done, such as adding authentication headers.
@@ -237,7 +238,7 @@ class Client extends EventEmitter {
 
                     if ($retry) {
                         $retryCount++;
-                        $this->sendASyncInternal($request, $successCallback, $errorCallback, $retryCount);
+                        $this->sendAsyncInternal($request, $successCallback, $errorCallback, $retryCount);
                         goto messageQueue;
                     }
 
@@ -255,7 +256,7 @@ class Client extends EventEmitter {
                     if ($retry) {
 
                         $retryCount++;
-                        $this->sendASyncInternal($request, $successCallback, $errorCallback, $retryCount);
+                        $this->sendAsyncInternal($request, $successCallback, $errorCallback, $retryCount);
                         goto messageQueue;
 
                     }

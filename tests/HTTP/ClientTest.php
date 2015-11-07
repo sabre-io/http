@@ -4,8 +4,6 @@ namespace Sabre\HTTP;
 
 class ClientTest extends \PHPUnit_Framework_TestCase {
 
-    protected $client;
-
     function testCreateCurlSettingsArrayGET() {
 
         $client = new ClientMock();
@@ -21,7 +19,7 @@ class ClientTest extends \PHPUnit_Framework_TestCase {
                 CURLOPT_NOBODY         => false,
                 CURLOPT_URL            => 'http://example.org/',
                 CURLOPT_CUSTOMREQUEST  => 'GET',
-                CURLOPT_POSTFIELDS     => null,
+                CURLOPT_POSTFIELDS     => '',
                 CURLOPT_PUT            => false,
             ];
 

@@ -90,8 +90,8 @@ class AWS extends AbstractAuth {
 
         if ($contentMD5) {
             // We need to validate the integrity of the request
-            $body = $this->request->getBody(true);
-            $this->request->setBody($body, true);
+            $body = $this->request->getBody();
+            $this->request->setBody($body);
 
             if ($contentMD5 != base64_encode(md5($body, true))) {
                 // content-md5 header did not match md5 signature of body

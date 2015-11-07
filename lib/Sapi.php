@@ -122,7 +122,7 @@ class Sapi {
                     $url = $value;
                     break;
 
-                // These sometimes should up without a HTTP_ prefix
+                // These sometimes show up without a HTTP_ prefix
                 case 'CONTENT_TYPE' :
                     $headers['Content-Type'] = $value;
                     break;

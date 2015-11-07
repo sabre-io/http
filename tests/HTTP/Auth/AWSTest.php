@@ -162,8 +162,6 @@ class AWSTest extends \PHPUnit_Framework_TestCase {
         ]);
         $this->request->setBody($content);
 
-        $this->request->setBody($content);
-
         $this->auth->init();
         $result = $this->auth->validate($secretKey);
 

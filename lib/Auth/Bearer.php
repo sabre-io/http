@@ -11,7 +11,7 @@ namespace Sabre\HTTP\Auth;
  * 2. Call getToken (this will return null or a token as string)
  * 3. If you didn't get a valid token, call 'requireLogin'
  *
- * @copyright Copyright (C) 2009-2015 fruux GmbH (https://fruux.com/).
+ * @copyright Copyright (C) fruux GmbH (https://fruux.com/)
  * @author François Kooman (fkooman@tuxed.net)
  * @license http://sabre.io/license/ Modified BSD License
  */

@@ -5,7 +5,7 @@ namespace Sabre\HTTP;
 /**
  * HTTP utility methods
  *
- * @copyright Copyright (C) 2009-2015 fruux GmbH (https://fruux.com/).
+ * @copyright Copyright (C) fruux GmbH (https://fruux.com/)
  * @author Evert Pot (http://evertpot.com/)
  * @author Paul Voegler
  * @deprecated All these functions moved to functions.php

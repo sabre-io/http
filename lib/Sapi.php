@@ -24,7 +24,7 @@ namespace Sabre\HTTP;
  * You can choose to either call all these methods statically, but you can also
  * instantiate this as an object to allow for polymorhpism.
  *
- * @copyright Copyright (C) 2009-2015 fruux GmbH (https://fruux.com/).
+ * @copyright Copyright (C) fruux GmbH (https://fruux.com/)
  * @author Evert Pot (http://evertpot.com/)
  * @license http://sabre.io/license/ Modified BSD License
  */

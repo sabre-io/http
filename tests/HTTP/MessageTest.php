@@ -57,7 +57,7 @@ class MessageTest extends \PHPUnit_Framework_TestCase {
 
         $body = fopen('php://memory', 'r+');
         fwrite($body, 'abcdefg');
-        fseek($body,2);
+        fseek($body, 2);
 
         $message = new MessageMock();
         $message->setBody($body);

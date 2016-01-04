@@ -1,7 +1,7 @@
 ChangeLog
 =========
 
-4.2.0 (2015-??-??)
+4.2.0 (2016-01-04)
 ------------------
 
 * This package now supports sabre/event 3.0.

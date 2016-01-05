@@ -75,6 +75,7 @@ class Client extends EventEmitter {
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_HEADER         => true,
             CURLOPT_NOBODY         => false,
+            CURLOPT_USERAGENT      => 'sabre-http/' . Version::VERSION . ' (http://sabre.io/)',
         ];
 
     }

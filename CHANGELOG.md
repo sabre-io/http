@@ -13,6 +13,7 @@ ChangeLog
 ------------------
 
 * This package now supports sabre/event 3.0.
+* The client now sets a default `User-Agent` header identifying this library.
 
 
 4.1.0 (2015-09-04)

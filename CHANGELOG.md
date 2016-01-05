@@ -1,6 +1,14 @@
 ChangeLog
 =========
 
+4.2.1 (????-??-??)
+------------------
+
+* #56: `getBodyAsString` now returns at most as many bytes as the contents of
+  the `Content-Length` header. This allows users to pass much larger strings
+  without having to copy and truncate them.
+
+
 4.2.0 (2016-01-04)
 ------------------
 

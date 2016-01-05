@@ -42,6 +42,33 @@ class MessageTest extends \PHPUnit_Framework_TestCase {
 
     }
 
+    /**
+     * It's possible that streams contains more data than the Content-Length.
+     *
+     * The request object should make sure to never emit more than
+     * Content-Length, if Content-Length is set.
+     *
+     * This is in particular useful when respoding to range requests with
+     * streams that represent files on the filesystem, as it's possible to just
+     * seek the stream to a certain point, set the content-length and let the
+     * request object do the rest.
+     */
+    function testLongStreamToStringBody() {
+
+        $body = fopen('php://memory', 'r+');
+        fwrite($body, 'abcdefg');
+        fseek($body, 2);
+
+        $message = new MessageMock();
+        $message->setBody($body);
+        $message->setHeader('Content-Length', '4');
+
+        $this->assertEquals(
+            'cdef',
+            $message->getBodyAsString()
+        );
+
+    }
 
     function testGetEmptyBodyStream() {
 

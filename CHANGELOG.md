@@ -1,7 +1,7 @@
 ChangeLog
 =========
 
-4.2.1 (????-??-??)
+4.2.1 (2016-01-06)
 ------------------
 
 * #56: `getBodyAsString` now returns at most as many bytes as the contents of

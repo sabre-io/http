@@ -10,7 +10,7 @@ use Sabre\URI;
  * Note: this class is deprecated. All its functionality moved to functions.php
  * or sabre\uri.
  *
- * @deprectated
+ * @deprecated
  * @copyright Copyright (C) fruux GmbH (https://fruux.com/)
  * @author Evert Pot (http://evertpot.com/)
  * @license http://sabre.io/license/ Modified BSD License

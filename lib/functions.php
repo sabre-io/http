@@ -216,7 +216,7 @@ function negotiateContentType($acceptHeaderValue, array $availableOptions) {
  * Parameters are currently discarded. There's no known prefer value that
  * uses them.
  *
- * @param string|string[] $header
+ * @param string|string[] $input
  * @return array
  */
 function parsePrefer($input) {

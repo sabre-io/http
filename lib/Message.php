@@ -274,6 +274,7 @@ abstract class Message implements MessageInterface {
      * This method should return true if the header was successfully deleted,
      * and false if the header did not exist.
      *
+     * @param string $name
      * @return bool
      */
     function removeHeader($name) {

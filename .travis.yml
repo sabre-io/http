@@ -16,7 +16,8 @@ env:
 
 
 before_script:
-    - composer self-update
+    - phpenv config-rm xdebug.ini
+#    - composer self-update
     - composer update --prefer-source $PREFER_LOWEST
 
 script:

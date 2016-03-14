@@ -16,7 +16,7 @@ env:
 
 
 before_script:
-    - phpenv config-rm xdebug.ini
+    - rm -f ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/xdebug.ini
 #    - composer self-update
     - composer update --prefer-source $PREFER_LOWEST
 

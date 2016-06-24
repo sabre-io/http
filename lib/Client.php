@@ -413,7 +413,6 @@ class Client extends EventEmitter {
                 if (is_resource($body)) {
                     $settings[CURLOPT_HEADER] = 0;
                     $settings[CURLOPT_FILE] = $request->getBody();
-                    error_log('SETTING CURLOPT_INFILE');
                 }
                 break;
             default :

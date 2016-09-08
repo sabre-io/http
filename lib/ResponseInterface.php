@@ -37,7 +37,7 @@ interface ResponseInterface extends MessageInterface {
      * added.
      *
      * @param string|int $status
-     * @throws \InvalidArgumentExeption
+     * @throws \InvalidArgumentException
      * @return void
      */
     function setStatus($status);

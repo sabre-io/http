@@ -44,7 +44,7 @@ interface MessageInterface {
     /**
      * Updates the body resource with a new stream.
      *
-     * @param resource $body
+     * @param resource|string $body
      * @return void
      */
     function setBody($body);

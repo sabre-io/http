@@ -144,7 +144,7 @@ trait MessageDecoratorTrait {
     /**
      * Updates a HTTP header.
      *
-     * The case-sensitity of the name value must be retained as-is.
+     * The case-sensitivity of the name value must be retained as-is.
      *
      * If the header already existed, it will be overwritten.
      *
@@ -210,7 +210,7 @@ trait MessageDecoratorTrait {
     /**
      * Removes a HTTP header.
      *
-     * The specified header name must be treated as case-insenstive.
+     * The specified header name must be treated as case-insensitive.
      * This method should return true if the header was successfully deleted,
      * and false if the header did not exist.
      *

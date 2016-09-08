@@ -79,7 +79,7 @@ function toDate(DateTime $dateTime) {
     // We need to clone it, as we don't want to affect the existing
     // DateTime.
     $dateTime = clone $dateTime;
-    $dateTime->setTimeZone(new \DateTimeZone('GMT'));
+    $dateTime->setTimezone(new \DateTimeZone('GMT'));
     return $dateTime->format('D, d M Y H:i:s \G\M\T');
 
 }

@@ -12,9 +12,9 @@ $userList = [
     "user2" => "password",
 ];
 
-use Sabre\HTTP\Sapi;
-use Sabre\HTTP\Response;
 use Sabre\HTTP\Auth;
+use Sabre\HTTP\Response;
+use Sabre\HTTP\Sapi;
 
 // Find the autoloader
 $paths = [

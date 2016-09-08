@@ -11,8 +11,8 @@ $remoteUrl = 'http://example.org/';
 $myBaseUrl = '/reverseproxy.php';
 // $myBaseUrl = '/~evert/sabre/http/examples/reverseproxy.php/';
 
-use Sabre\HTTP\Sapi;
 use Sabre\HTTP\Client;
+use Sabre\HTTP\Sapi;
 
 // Find the autoloader
 $paths = [

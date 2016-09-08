@@ -301,7 +301,7 @@ class Request extends Message implements RequestInterface {
             foreach ($value as $v) {
                 if ($key === 'Authorization') {
                     list($v) = explode(' ', $v, 2);
-                    $v  .= ' REDACTED';
+                    $v .= ' REDACTED';
                 }
                 $out .= $key . ": " . $v . "\r\n";
             }

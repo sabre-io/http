@@ -97,18 +97,18 @@ class URLUtilTest extends \PHPUnit_Framework_TestCase{
 
         $strings = [
 
-            // input                    // expected result
-            '/foo/bar'                 => ['/foo','bar'],
-            '/foo/bar/'                => ['/foo','bar'],
-            'foo/bar/'                 => ['foo','bar'],
-            'foo/bar'                  => ['foo','bar'],
-            'foo/bar/baz'              => ['foo/bar','baz'],
-            'foo/bar/baz/'             => ['foo/bar','baz'],
-            'foo'                      => ['','foo'],
-            'foo/'                     => ['','foo'],
-            '/foo/'                    => ['','foo'],
-            '/foo'                     => ['','foo'],
-            ''                         => [null,null],
+            // input       // expected result
+            '/foo/bar'     => ['/foo','bar'],
+            '/foo/bar/'    => ['/foo','bar'],
+            'foo/bar/'     => ['foo','bar'],
+            'foo/bar'      => ['foo','bar'],
+            'foo/bar/baz'  => ['foo/bar','baz'],
+            'foo/bar/baz/' => ['foo/bar','baz'],
+            'foo'          => ['','foo'],
+            'foo/'         => ['','foo'],
+            '/foo/'        => ['','foo'],
+            '/foo'         => ['','foo'],
+            ''             => [null,null],
 
             // UTF-8
             "/\xC3\xA0fo\xC3\xB3/bar"  => ["/\xC3\xA0fo\xC3\xB3",'bar'],

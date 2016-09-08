@@ -33,10 +33,10 @@ class SapiTest extends \PHPUnit_Framework_TestCase {
     function testConstructPHPAuth() {
 
         $request = Sapi::createFromServerArray([
-            'REQUEST_URI'     => '/foo',
-            'REQUEST_METHOD'  => 'GET',
-            'PHP_AUTH_USER'   => 'user',
-            'PHP_AUTH_PW'     => 'pass',
+            'REQUEST_URI'    => '/foo',
+            'REQUEST_METHOD' => 'GET',
+            'PHP_AUTH_USER'  => 'user',
+            'PHP_AUTH_PW'    => 'pass',
         ]);
 
         $this->assertEquals('GET', $request->getMethod());

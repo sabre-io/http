@@ -219,7 +219,7 @@ trait MessageDecoratorTrait {
      */
     function removeHeader($name) {
 
-        $this->inner->removeHeader($name);
+        return $this->inner->removeHeader($name);
 
     }
 

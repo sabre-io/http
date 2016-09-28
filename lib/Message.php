@@ -16,9 +16,9 @@ abstract class Message implements MessageInterface {
     /**
      * Request body
      *
-     * This should be a stream resource
+     * This should be a stream resource, string or a callback writing the body to php://output
      *
-     * @var resource
+     * @var resource|string|callable
      */
     protected $body;
 
@@ -53,6 +53,9 @@ abstract class Message implements MessageInterface {
             rewind($stream);
             return $stream;
         }
+        if (is_callable($body)) {
+            throw new \UnexpectedValueException('Callback to stream not supported');
+        }
         return $body;
 
     }
@@ -74,6 +77,9 @@ abstract class Message implements MessageInterface {
         if (is_null($body)) {
             return '';
         }
+        if (is_callable($body)) {
+            throw new \UnexpectedValueException('Callback to string not supported');
+        }
         $contentLength = $this->getHeader('Content-Length');
         if (null === $contentLength) {
             return stream_get_contents($body);
@@ -86,9 +92,9 @@ abstract class Message implements MessageInterface {
     /**
      * Returns the message body, as it's internal representation.
      *
-     * This could be either a string or a stream.
+     * This could be either a string, a stream or a callback writing the body to php://output.
      *
-     * @return resource|string
+     * @return resource|string|callable
      */
     function getBody() {
 
@@ -97,9 +103,9 @@ abstract class Message implements MessageInterface {
     }
 
     /**
-     * Replaces the body resource with a new stream or string.
+     * Replaces the body resource with a new stream, string or a callback writing the body to php://output.
      *
-     * @param resource|string $body
+     * @param resource|string|callable $body
      */
     function setBody($body) {
 

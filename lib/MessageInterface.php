@@ -35,16 +35,16 @@ interface MessageInterface {
     /**
      * Returns the message body, as it's internal representation.
      *
-     * This could be either a string or a stream.
+     * This could be either a string, a stream or a callback writing the body to php://output
      *
-     * @return resource|string
+     * @return resource|string|callable
      */
     function getBody();
 
     /**
      * Updates the body resource with a new stream.
      *
-     * @param resource|string $body
+     * @param resource|string|callable $body
      * @return void
      */
     function setBody($body);

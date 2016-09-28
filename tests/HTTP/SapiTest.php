@@ -164,4 +164,25 @@ class SapiTest extends \PHPUnit_Framework_TestCase {
 
     }
 
+    /**
+     * @runInSeparateProcess
+     * @depends testSend
+     */
+    function testSendWorksWithCallbackAsBody() {
+        $response = new Response(200, [], function() {
+            $fd = fopen('php://output', 'r+');
+            fwrite($fd, 'foo');
+            fclose($fd);
+        });
+
+        ob_start();
+
+        Sapi::sendResponse($response);
+
+        $result = ob_get_clean();
+
+        $this->assertEquals('foo', $result);
+
+    }
+
 }

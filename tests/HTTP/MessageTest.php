@@ -43,6 +43,45 @@ class MessageTest extends \PHPUnit_Framework_TestCase {
     }
 
     /**
+     * @expectedException \UnexpectedValueException
+     */
+    function testCallbackBodyAsString() {
+
+        $body = $this->createCallback();
+
+        $message = new MessageMock();
+        $message->setBody($body);
+
+        $message->getBodyAsString();
+
+    }
+
+    /**
+     * @expectedException \UnexpectedValueException
+     */
+    function testCallbackBodyAsStream() {
+
+        $body = $this->createCallback();
+
+        $message = new MessageMock();
+        $message->setBody($body);
+
+        $message->getBodyAsStream();
+
+    }
+
+    function testGetBodyWhenCallback() {
+
+        $body = $this->createCallback();
+
+        $message = new MessageMock();
+        $message->setBody($body);
+
+        $this->assertEquals($body, $message->getBody());
+
+    }
+
+    /**
      * It's possible that streams contains more data than the Content-Length.
      *
      * The request object should make sure to never emit more than
@@ -217,6 +256,15 @@ class MessageTest extends \PHPUnit_Framework_TestCase {
         $message->setHeader('X-Foo', 'Bar');
         $this->assertTrue($message->hasHeader('X-Foo'));
 
+    }
+
+    private function createCallback()
+    {
+        return function() {
+            $fd = fopen('php://output', 'r+');
+            fwrite($fd, 'foo');
+            fclose($fd);
+        };
     }
 
 }

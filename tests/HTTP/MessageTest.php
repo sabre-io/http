@@ -87,7 +87,7 @@ class MessageTest extends \PHPUnit_Framework_TestCase {
      * The request object should make sure to never emit more than
      * Content-Length, if Content-Length is set.
      *
-     * This is in particular useful when respoding to range requests with
+     * This is in particular useful when responding to range requests with
      * streams that represent files on the filesystem, as it's possible to just
      * seek the stream to a certain point, set the content-length and let the
      * request object do the rest.
@@ -225,11 +225,11 @@ class MessageTest extends \PHPUnit_Framework_TestCase {
         $message->addHeader('A', '2');
 
         $this->assertEquals(
-            "1,2",
+            '1,2',
             $message->getHeader('A')
         );
         $this->assertEquals(
-            "1,2",
+            '1,2',
             $message->getHeader('a')
         );
 

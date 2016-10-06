@@ -42,42 +42,40 @@ class MessageTest extends \PHPUnit_Framework_TestCase {
 
     }
 
-    /**
-     * @expectedException \UnexpectedValueException
-     */
     function testCallbackBodyAsString() {
 
-        $body = $this->createCallback();
+        $body = $this->createCallback('foo');
 
         $message = new MessageMock();
         $message->setBody($body);
 
-        $message->getBodyAsString();
+        $string = $message->getBodyAsString();
+
+        $this->assertSame('foo', $string);
 
     }
 
-    /**
-     * @expectedException \UnexpectedValueException
-     */
     function testCallbackBodyAsStream() {
 
-        $body = $this->createCallback();
+        $body = $this->createCallback('foo');
 
         $message = new MessageMock();
         $message->setBody($body);
 
-        $message->getBodyAsStream();
+        $stream = $message->getBodyAsStream();
+
+        $this->assertSame('foo', stream_get_contents($stream));
 
     }
 
     function testGetBodyWhenCallback() {
 
-        $body = $this->createCallback();
+        $callback = $this->createCallback('foo');
 
         $message = new MessageMock();
-        $message->setBody($body);
+        $message->setBody($callback);
 
-        $this->assertEquals($body, $message->getBody());
+        $this->assertSame($callback, $message->getBody());
 
     }
 
@@ -258,11 +256,15 @@ class MessageTest extends \PHPUnit_Framework_TestCase {
 
     }
 
-    private function createCallback()
+    /**
+     * @param string $content
+     * @return \Closure Returns a callback printing $content to php://output stream
+     */
+    private function createCallback($content)
     {
-        return function() {
+        return function() use ($content) {
             $fd = fopen('php://output', 'r+');
-            fwrite($fd, 'foo');
+            fwrite($fd, $content);
             fclose($fd);
         };
     }

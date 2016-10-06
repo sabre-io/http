@@ -42,19 +42,20 @@ abstract class Message implements MessageInterface {
      * Note that the stream may not be rewindable, and therefore may only be
      * read once.
      *
+     * @throws \RuntimeException
      * @return resource
      */
     function getBodyAsStream() {
 
         $body = $this->getBody();
+        if (is_callable($body)) {
+            $body = $this->captureCallbackOutput($body);
+        }
         if (is_string($body) || is_null($body)) {
             $stream = fopen('php://temp', 'r+');
             fwrite($stream, $body);
             rewind($stream);
             return $stream;
-        }
-        if (is_callable($body)) {
-            throw new \UnexpectedValueException('Callback to stream not supported');
         }
         return $body;
 
@@ -66,6 +67,7 @@ abstract class Message implements MessageInterface {
      * Note that because the underlying data may be based on a stream, this
      * method could only work correctly the first time.
      *
+     * @throws \RuntimeException
      * @return string
      */
     function getBodyAsString() {
@@ -78,7 +80,7 @@ abstract class Message implements MessageInterface {
             return '';
         }
         if (is_callable($body)) {
-            throw new \UnexpectedValueException('Callback to string not supported');
+            return $this->captureCallbackOutput($body);
         }
         $contentLength = $this->getHeader('Content-Length');
         if (null === $contentLength) {
@@ -317,5 +319,24 @@ abstract class Message implements MessageInterface {
 
         return $this->httpVersion;
 
+    }
+
+    /**
+     * Runs given callback and captures data sent to php://output stream.
+     *
+     * @param callable $callback
+     * @throws \RuntimeException when ob_start() fails to start output buffer
+     * @return string
+     */
+    private function captureCallbackOutput($callback)
+    {
+        $success = ob_start();
+        if ($success === false) {
+            throw new \RuntimeException('Cannot start output buffering');
+        }
+        $callback();
+        $content = ob_get_contents();
+        ob_end_clean();
+        return $content;
     }
 }

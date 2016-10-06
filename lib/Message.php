@@ -335,8 +335,6 @@ abstract class Message implements MessageInterface {
             throw new \RuntimeException('Cannot start output buffering');
         }
         $callback();
-        $content = ob_get_contents();
-        ob_end_clean();
-        return $content;
+        return ob_get_clean();
     }
 }

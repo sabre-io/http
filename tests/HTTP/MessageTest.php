@@ -263,9 +263,7 @@ class MessageTest extends \PHPUnit_Framework_TestCase {
     private function createCallback($content)
     {
         return function() use ($content) {
-            $fd = fopen('php://output', 'r+');
-            fwrite($fd, $content);
-            fclose($fd);
+            echo $content;
         };
     }
 

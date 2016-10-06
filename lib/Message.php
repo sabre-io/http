@@ -42,7 +42,6 @@ abstract class Message implements MessageInterface {
      * Note that the stream may not be rewindable, and therefore may only be
      * read once.
      *
-     * @throws \RuntimeException
      * @return resource
      */
     function getBodyAsStream() {
@@ -67,7 +66,6 @@ abstract class Message implements MessageInterface {
      * Note that because the underlying data may be based on a stream, this
      * method could only work correctly the first time.
      *
-     * @throws \RuntimeException
      * @return string
      */
     function getBodyAsString() {
@@ -325,15 +323,11 @@ abstract class Message implements MessageInterface {
      * Runs given callback and captures data sent to php://output stream.
      *
      * @param callable $callback
-     * @throws \RuntimeException when ob_start() fails to start output buffer
      * @return string
      */
     private function captureCallbackOutput($callback)
     {
-        $success = ob_start();
-        if ($success === false) {
-            throw new \RuntimeException('Cannot start output buffering');
-        }
+        ob_start();
         $callback();
         return ob_get_clean();
     }

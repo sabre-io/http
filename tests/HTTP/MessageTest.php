@@ -42,13 +42,50 @@ class MessageTest extends \PHPUnit_Framework_TestCase {
 
     }
 
+    function testCallbackBodyAsString() {
+
+        $body = $this->createCallback('foo');
+
+        $message = new MessageMock();
+        $message->setBody($body);
+
+        $string = $message->getBodyAsString();
+
+        $this->assertSame('foo', $string);
+
+    }
+
+    function testCallbackBodyAsStream() {
+
+        $body = $this->createCallback('foo');
+
+        $message = new MessageMock();
+        $message->setBody($body);
+
+        $stream = $message->getBodyAsStream();
+
+        $this->assertSame('foo', stream_get_contents($stream));
+
+    }
+
+    function testGetBodyWhenCallback() {
+
+        $callback = $this->createCallback('foo');
+
+        $message = new MessageMock();
+        $message->setBody($callback);
+
+        $this->assertSame($callback, $message->getBody());
+
+    }
+
     /**
      * It's possible that streams contains more data than the Content-Length.
      *
      * The request object should make sure to never emit more than
      * Content-Length, if Content-Length is set.
      *
-     * This is in particular useful when respoding to range requests with
+     * This is in particular useful when responding to range requests with
      * streams that represent files on the filesystem, as it's possible to just
      * seek the stream to a certain point, set the content-length and let the
      * request object do the rest.
@@ -186,11 +223,11 @@ class MessageTest extends \PHPUnit_Framework_TestCase {
         $message->addHeader('A', '2');
 
         $this->assertEquals(
-            "1,2",
+            '1,2',
             $message->getHeader('A')
         );
         $this->assertEquals(
-            "1,2",
+            '1,2',
             $message->getHeader('a')
         );
 
@@ -217,6 +254,17 @@ class MessageTest extends \PHPUnit_Framework_TestCase {
         $message->setHeader('X-Foo', 'Bar');
         $this->assertTrue($message->hasHeader('X-Foo'));
 
+    }
+
+    /**
+     * @param string $content
+     * @return \Closure Returns a callback printing $content to php://output stream
+     */
+    private function createCallback($content)
+    {
+        return function() use ($content) {
+            echo $content;
+        };
     }
 
 }

@@ -71,6 +71,11 @@ class Sapi {
         $body = $response->getBody();
         if (is_null($body)) return;
 
+        if (is_callable($body)) {
+            $body();
+            return;
+        }
+
         $contentLength = $response->getHeader('Content-Length');
         if ($contentLength !== null) {
             $output = fopen('php://output', 'wb');

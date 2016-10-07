@@ -325,7 +325,7 @@ abstract class Message implements MessageInterface {
      * @param callable $callback
      * @return string
      */
-    private function captureCallbackOutput($callback)
+    private function captureCallbackOutput(callable $callback)
     {
         ob_start();
         $callback();

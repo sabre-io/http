@@ -57,7 +57,9 @@ class BasicTest extends \PHPUnit_Framework_TestCase {
     function testRequireLogin() {
 
         $response = new Response();
-        $basic = new Basic('Dagger', new Request(), $response);
+        $request = new Request('GET', '/');
+
+        $basic = new Basic('Dagger', $request, $response);
 
         $basic->requireLogin();
 

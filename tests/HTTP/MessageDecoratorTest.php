@@ -9,7 +9,7 @@ class MessageDecoratorTest extends \PHPUnit_Framework_TestCase {
 
     function setUp() {
 
-        $this->inner = new Request();
+        $this->inner = new Request('GET', '/');
         $this->outer = new RequestDecorator($this->inner);
 
     }

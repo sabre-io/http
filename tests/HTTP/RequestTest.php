@@ -40,6 +40,7 @@ class RequestTest extends \PHPUnit_Framework_TestCase {
      */
     function testCreateFromPHPRequest() {
 
+        $_SERVER['REQUEST_URI'] = '/';
         $_SERVER['REQUEST_METHOD'] = 'PUT';
 
         $request = Sapi::getRequest();
@@ -49,19 +50,17 @@ class RequestTest extends \PHPUnit_Framework_TestCase {
 
     function testGetAbsoluteUrl() {
 
-        $s = [
-            'HTTP_HOST'   => 'sabredav.org',
-            'REQUEST_URI' => '/foo'
-        ];
-
-        $r = Sapi::createFromServerArray($s);
+        $r = new Request('GET', '/foo', [
+            'Host' => 'sabredav.org',
+        ]);
 
         $this->assertEquals('http://sabredav.org/foo', $r->getAbsoluteUrl());
 
         $s = [
-            'HTTP_HOST'   => 'sabredav.org',
-            'REQUEST_URI' => '/foo',
-            'HTTPS'       => 'on',
+            'HTTP_HOST'      => 'sabredav.org',
+            'REQUEST_URI'    => '/foo',
+            'REQUEST_METHOD' => 'GET',
+            'HTTPS'          => 'on',
         ];
 
         $r = Sapi::createFromServerArray($s);
@@ -75,7 +74,7 @@ class RequestTest extends \PHPUnit_Framework_TestCase {
         $post = [
             'bla' => 'foo',
         ];
-        $r = new Request();
+        $r = new Request('POST', '/');
         $r->setPostData($post);
         $this->assertEquals($post, $r->getPostData());
 
@@ -83,7 +82,7 @@ class RequestTest extends \PHPUnit_Framework_TestCase {
 
     function testGetPath() {
 
-        $request = new Request();
+        $request = new Request('GET', '/foo/bar/');
         $request->setBaseUrl('/foo');
         $request->setUrl('/foo/bar/');
 
@@ -93,9 +92,8 @@ class RequestTest extends \PHPUnit_Framework_TestCase {
 
     function testGetPathStrippedQuery() {
 
-        $request = new Request();
+        $request = new Request('GET', '/foo/bar?a=B');
         $request->setBaseUrl('/foo');
-        $request->setUrl('/foo/bar/?a=b');
 
         $this->assertEquals('bar', $request->getPath());
 
@@ -103,9 +101,8 @@ class RequestTest extends \PHPUnit_Framework_TestCase {
 
     function testGetPathMissingSlash() {
 
-        $request = new Request();
+        $request = new Request('GET', '/foo');
         $request->setBaseUrl('/foo/');
-        $request->setUrl('/foo');
 
         $this->assertEquals('', $request->getPath());
 
@@ -116,9 +113,8 @@ class RequestTest extends \PHPUnit_Framework_TestCase {
      */
     function testGetPathOutsideBaseUrl() {
 
-        $request = new Request();
+        $request = new Request('GET', '/bar/');
         $request->setBaseUrl('/foo/');
-        $request->setUrl('/bar/');
 
         $request->getPath();
 

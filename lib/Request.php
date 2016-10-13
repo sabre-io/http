@@ -2,6 +2,7 @@
 
 namespace Sabre\HTTP;
 
+use LogicException;
 use Sabre\Uri;
 
 /**
@@ -35,12 +36,12 @@ class Request extends Message implements RequestInterface {
      *
      * @param resource|callable|string $body
      */
-    function __construct(string $method = null, string $url = null, array $headers = null, $body = null) {
+    function __construct(string $method, string $url, array $headers = [], $body = null) {
 
-        if (!is_null($method))      $this->setMethod($method);
-        if (!is_null($url))         $this->setUrl($url);
-        if (!is_null($headers))     $this->setHeaders($headers);
-        if (!is_null($body))        $this->setBody($body);
+        $this->setMethod($method);
+        $this->setUrl($url);
+        $this->setHeaders($headers);
+        $this->setBody($body);
 
     }
 
@@ -101,6 +102,8 @@ class Request extends Message implements RequestInterface {
 
     }
 
+    protected $absoluteUrl;
+
     /**
      * Sets the absolute url.
      *
@@ -116,6 +119,13 @@ class Request extends Message implements RequestInterface {
      * Returns the absolute url.
      */
     function getAbsoluteUrl() : string {
+
+        if (!$this->absoluteUrl) {
+            // Guessing we're a http endpoint.
+            $this->absoluteUrl = 'http://' .
+                ($this->getHeader('Host') ?? 'localhost') .
+                $this->getUrl();
+        }
 
         return $this->absoluteUrl;
 

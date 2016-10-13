@@ -45,7 +45,8 @@ class BearerTest extends \PHPUnit_Framework_TestCase {
     function testRequireLogin() {
 
         $response = new Response();
-        $bearer = new Bearer('Dagger', new Request(), $response);
+        $request = new Request('GET', '/');
+        $bearer = new Bearer('Dagger', $request, $response);
 
         $bearer->requireLogin();
 

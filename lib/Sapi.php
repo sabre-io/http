@@ -2,6 +2,8 @@
 
 namespace Sabre\HTTP;
 
+use InvalidArgumentException;
+
 /**
  * PHP SAPI
  *
@@ -94,6 +96,8 @@ class Sapi {
     /**
      * This static method will create a new Request object, based on a PHP
      * $_SERVER array.
+     *
+     * REQUEST_URI and REQUEST_METHOD are required.
      */
     static function createFromServerArray(array $serverArray) : Request {
 
@@ -182,6 +186,13 @@ class Sapi {
 
         }
 
+        if (is_null($url)) {
+            throw new InvalidArgumentException('The _SERVER array must have a REQUEST_URI key');
+        }
+
+        if (is_null($method)) {
+            throw new InvalidArgumentException('The _SERVER array must have a REQUEST_METHOD key');
+        }
         $r = new Request($method, $url, $headers);
         $r->setHttpVersion($httpVersion);
         $r->setRawServerData($serverArray);

@@ -62,7 +62,7 @@ class Digest extends AbstractAuth {
     function init() {
 
         $digest = $this->getDigest();
-        $this->digestParts = $this->parseDigest($digest);
+        $this->digestParts = $this->parseDigest((string)$digest);
 
     }
 

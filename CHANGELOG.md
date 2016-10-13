@@ -14,6 +14,8 @@ ChangeLog
   its functions moved to the `sabre/uri` package.
 * Removed `Util` class. Most of its functions moved to the `functions.php`
   file.
+* #68: The `$method` and `$uri` arguments when constructing a Request object
+  are now required.
 
 
 4.2.1 (2016-01-06)

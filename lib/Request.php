@@ -1,8 +1,7 @@
-<?php
+<?php declare (strict_types=1);
 
 namespace Sabre\HTTP;
 
-use InvalidArgumentException;
 use Sabre\Uri;
 
 /**
@@ -34,16 +33,10 @@ class Request extends Message implements RequestInterface {
     /**
      * Creates the request object
      *
-     * @param string $method
-     * @param string $url
-     * @param array $headers
-     * @param resource $body
+     * @param resource|callable|string $body
      */
-    function __construct($method = null, $url = null, array $headers = null, $body = null) {
+    function __construct(string $method = null, string $url = null, array $headers = null, $body = null) {
 
-        if (is_array($method)) {
-            throw new InvalidArgumentException('The first argument for this constructor should be a string or null, not an array. Did you upgrade from sabre/http 1.0 to 2.0?');
-        }
         if (!is_null($method))      $this->setMethod($method);
         if (!is_null($url))         $this->setUrl($url);
         if (!is_null($headers))     $this->setHeaders($headers);
@@ -53,10 +46,8 @@ class Request extends Message implements RequestInterface {
 
     /**
      * Returns the current HTTP method
-     *
-     * @return string
      */
-    function getMethod() {
+    function getMethod() : string {
 
         return $this->method;
 
@@ -65,10 +56,9 @@ class Request extends Message implements RequestInterface {
     /**
      * Sets the HTTP method
      *
-     * @param string $method
      * @return void
      */
-    function setMethod($method) {
+    function setMethod(string $method) {
 
         $this->method = $method;
 
@@ -76,10 +66,8 @@ class Request extends Message implements RequestInterface {
 
     /**
      * Returns the request url.
-     *
-     * @return string
      */
-    function getUrl() {
+    function getUrl() : string {
 
         return $this->url;
 
@@ -88,10 +76,9 @@ class Request extends Message implements RequestInterface {
     /**
      * Sets the request url.
      *
-     * @param string $url
      * @return void
      */
-    function setUrl($url) {
+    function setUrl(string $url) {
 
         $this->url = $url;
 
@@ -101,10 +88,8 @@ class Request extends Message implements RequestInterface {
      * Returns the list of query parameters.
      *
      * This is equivalent to PHP's $_GET superglobal.
-     *
-     * @return array
      */
-    function getQueryParameters() {
+    function getQueryParameters() : array {
 
         $url = $this->getUrl();
         if (($index = strpos($url, '?')) === false) {
@@ -119,10 +104,9 @@ class Request extends Message implements RequestInterface {
     /**
      * Sets the absolute url.
      *
-     * @param string $url
      * @return void
      */
-    function setAbsoluteUrl($url) {
+    function setAbsoluteUrl(string $url) {
 
         $this->absoluteUrl = $url;
 
@@ -130,10 +114,8 @@ class Request extends Message implements RequestInterface {
 
     /**
      * Returns the absolute url.
-     *
-     * @return string
      */
-    function getAbsoluteUrl() {
+    function getAbsoluteUrl() : string {
 
         return $this->absoluteUrl;
 
@@ -151,10 +133,9 @@ class Request extends Message implements RequestInterface {
      *
      * This url is used for relative path calculations.
      *
-     * @param string $url
      * @return void
      */
-    function setBaseUrl($url) {
+    function setBaseUrl(string $url) {
 
         $this->baseUrl = $url;
 
@@ -162,10 +143,8 @@ class Request extends Message implements RequestInterface {
 
     /**
      * Returns the current base url.
-     *
-     * @return string
      */
-    function getBaseUrl() {
+    function getBaseUrl() : string {
 
         return $this->baseUrl;
 
@@ -185,10 +164,8 @@ class Request extends Message implements RequestInterface {
      * ISO-8859-1, it will convert it to UTF-8.
      *
      * If the path is outside of the base url, a LogicException will be thrown.
-     *
-     * @return string
      */
-    function getPath() {
+    function getPath() : string {
 
         // Removing duplicated slashes.
         $uri = str_replace('//', '/', $this->getUrl());
@@ -229,7 +206,6 @@ class Request extends Message implements RequestInterface {
      * This would not have been needed, if POST data was accessible as
      * php://input, but unfortunately we need to special case it.
      *
-     * @param array $postData
      * @return void
      */
     function setPostData(array $postData) {
@@ -242,10 +218,8 @@ class Request extends Message implements RequestInterface {
      * Returns the POST data.
      *
      * This is equivalent to PHP's $_POST superglobal.
-     *
-     * @return array
      */
-    function getPostData() {
+    function getPostData() : array {
 
         return $this->postData;
 
@@ -263,10 +237,9 @@ class Request extends Message implements RequestInterface {
      *
      * If the value does not exist in the array, null is returned.
      *
-     * @param string $valueName
      * @return string|null
      */
-    function getRawServerValue($valueName) {
+    function getRawServerValue(string $valueName) {
 
         if (isset($this->rawServerData[$valueName])) {
             return $this->rawServerData[$valueName];
@@ -277,7 +250,6 @@ class Request extends Message implements RequestInterface {
     /**
      * Sets the _SERVER array.
      *
-     * @param array $data
      * @return void
      */
     function setRawServerData(array $data) {
@@ -290,10 +262,8 @@ class Request extends Message implements RequestInterface {
      * Serializes the request object as a string.
      *
      * This is useful for debugging purposes.
-     *
-     * @return string
      */
-    function __toString() {
+    function __toString() : string {
 
         $out = $this->getMethod() . ' ' . $this->getUrl() . ' HTTP/' . $this->getHTTPVersion() . "\r\n";
 

@@ -1,4 +1,4 @@
-<?php
+<?php declare (strict_types=1);
 
 namespace Sabre\HTTP;
 
@@ -47,12 +47,12 @@ abstract class Message implements MessageInterface {
     function getBodyAsStream() {
 
         $body = $this->getBody();
-        if (is_callable($body)) {
-            $body = $this->captureCallbackOutput($body);
+        if (is_callable($this->body)) {
+            $body = $this->getBodyAsString();
         }
         if (is_string($body) || is_null($body)) {
             $stream = fopen('php://temp', 'r+');
-            fwrite($stream, $body);
+            fwrite($stream, (string)$body);
             rewind($stream);
             return $stream;
         }
@@ -65,10 +65,8 @@ abstract class Message implements MessageInterface {
      *
      * Note that because the underlying data may be based on a stream, this
      * method could only work correctly the first time.
-     *
-     * @return string
      */
-    function getBodyAsString() {
+    function getBodyAsString() : string {
 
         $body = $this->getBody();
         if (is_string($body)) {
@@ -78,13 +76,15 @@ abstract class Message implements MessageInterface {
             return '';
         }
         if (is_callable($body)) {
-            return $this->captureCallbackOutput($body);
+            ob_start();
+            $body();
+            return ob_get_clean();
         }
         $contentLength = $this->getHeader('Content-Length');
         if (null === $contentLength) {
             return stream_get_contents($body);
         } else {
-            return stream_get_contents($body, $contentLength);
+            return stream_get_contents($body, (int)$contentLength);
         }
 
     }
@@ -106,6 +106,7 @@ abstract class Message implements MessageInterface {
      * Replaces the body resource with a new stream, string or a callback writing the body to php://output.
      *
      * @param resource|string|callable $body
+     * @return void
      */
     function setBody($body) {
 
@@ -117,10 +118,8 @@ abstract class Message implements MessageInterface {
      * Returns all the HTTP headers as an array.
      *
      * Every header is returned as an array, with one or more values.
-     *
-     * @return array
      */
-    function getHeaders() {
+    function getHeaders() : array {
 
         $result = [];
         foreach ($this->headers as $headerInfo) {
@@ -132,11 +131,8 @@ abstract class Message implements MessageInterface {
 
     /**
      * Will return true or false, depending on if a HTTP header exists.
-     *
-     * @param string $name
-     * @return bool
      */
-    function hasHeader($name) {
+    function hasHeader(string $name) : bool {
 
         return isset($this->headers[strtolower($name)]);
 
@@ -155,10 +151,9 @@ abstract class Message implements MessageInterface {
      * `Set-Cookie` cannot be logically combined with a comma. In those cases
      * you *should* use getHeaderAsArray().
      *
-     * @param string $name
      * @return string|null
      */
-    function getHeader($name) {
+    function getHeader(string $name) {
 
         $name = strtolower($name);
 
@@ -177,10 +172,9 @@ abstract class Message implements MessageInterface {
      *
      * If the header did not exists, this method will return an empty array.
      *
-     * @param string $name
      * @return string[]
      */
-    function getHeaderAsArray($name) {
+    function getHeaderAsArray(string $name) : array {
 
         $name = strtolower($name);
 
@@ -199,11 +193,10 @@ abstract class Message implements MessageInterface {
      *
      * If the header already existed, it will be overwritten.
      *
-     * @param string $name
      * @param string|string[] $value
      * @return void
      */
-    function setHeader($name, $value) {
+    function setHeader(string $name, $value) {
 
         $this->headers[strtolower($name)] = [$name, (array)$value];
 
@@ -217,7 +210,6 @@ abstract class Message implements MessageInterface {
      *
      * Any header that already existed will be overwritten.
      *
-     * @param array $headers
      * @return void
      */
     function setHeaders(array $headers) {
@@ -235,11 +227,10 @@ abstract class Message implements MessageInterface {
      * another value. Individual values can be retrieved with
      * getHeadersAsArray.
      *
-     * @param string $name
-     * @param string $value
+     * @param scalar $value
      * @return void
      */
-    function addHeader($name, $value) {
+    function addHeader(string $name, $value) {
 
         $lName = strtolower($name);
         if (isset($this->headers[$lName])) {
@@ -261,7 +252,6 @@ abstract class Message implements MessageInterface {
      *
      * Any existing headers will not be overwritten.
      *
-     * @param array $headers
      * @return void
      */
     function addHeaders(array $headers) {
@@ -279,11 +269,8 @@ abstract class Message implements MessageInterface {
      * The specified header name must be treated as case-insensitive.
      * This method should return true if the header was successfully deleted,
      * and false if the header did not exist.
-     *
-     * @param string $name
-     * @return bool
      */
-    function removeHeader($name) {
+    function removeHeader(string $name) : bool {
 
         $name = strtolower($name);
         if (!isset($this->headers[$name])) {
@@ -299,10 +286,9 @@ abstract class Message implements MessageInterface {
      *
      * Should be 1.0 or 1.1.
      *
-     * @param string $version
      * @return void
      */
-    function setHttpVersion($version) {
+    function setHttpVersion(string $version) {
 
         $this->httpVersion = $version;
 
@@ -313,22 +299,10 @@ abstract class Message implements MessageInterface {
      *
      * @return string
      */
-    function getHttpVersion() {
+    function getHttpVersion() : string {
 
         return $this->httpVersion;
 
     }
 
-    /**
-     * Runs given callback and captures data sent to php://output stream.
-     *
-     * @param callable $callback
-     * @return string
-     */
-    private function captureCallbackOutput(callable $callback)
-    {
-        ob_start();
-        $callback();
-        return ob_get_clean();
-    }
 }

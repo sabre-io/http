@@ -1,4 +1,4 @@
-<?php
+<?php declare (strict_types=1);
 
 namespace Sabre\HTTP;
 
@@ -18,8 +18,6 @@ class ResponseDecorator implements ResponseInterface {
 
     /**
      * Constructor.
-     *
-     * @param ResponseInterface $inner
      */
     function __construct(ResponseInterface $inner) {
 
@@ -29,10 +27,8 @@ class ResponseDecorator implements ResponseInterface {
 
     /**
      * Returns the current HTTP status code.
-     *
-     * @return int
      */
-    function getStatus() {
+    function getStatus() : int {
 
         return $this->inner->getStatus();
 
@@ -43,10 +39,8 @@ class ResponseDecorator implements ResponseInterface {
      * Returns the human-readable status string.
      *
      * In the case of a 200, this may for example be 'OK'.
-     *
-     * @return string
      */
-    function getStatusText() {
+    function getStatusText() : string {
 
         return $this->inner->getStatusText();
 
@@ -76,7 +70,7 @@ class ResponseDecorator implements ResponseInterface {
      *
      * @return string
      */
-    function __toString() {
+    function __toString() : string {
 
         return $this->inner->__toString();
 

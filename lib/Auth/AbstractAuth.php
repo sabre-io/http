@@ -1,4 +1,4 @@
-<?php
+<?php declare (strict_types=1);
 
 namespace Sabre\HTTP\Auth;
 
@@ -39,11 +39,8 @@ abstract class AbstractAuth {
 
     /**
      * Creates the object
-     *
-     * @param string $realm
-     * @return void
      */
-    function __construct($realm = 'SabreTooth', RequestInterface $request, ResponseInterface $response) {
+    function __construct(string $realm = 'SabreTooth', RequestInterface $request, ResponseInterface $response) {
 
         $this->realm = $realm;
         $this->request = $request;
@@ -61,10 +58,8 @@ abstract class AbstractAuth {
 
     /**
      * Returns the HTTP realm
-     *
-     * @return string
      */
-    function getRealm() {
+    function getRealm() : string {
 
         return $this->realm;
 

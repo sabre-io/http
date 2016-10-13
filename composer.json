@@ -11,7 +11,7 @@
         "sabre/uri"    : "^2.0"
     },
     "require-dev" : {
-        "phpunit/phpunit" : "*",
+        "phpunit/phpunit" : ">=5.6.0",
         "sabre/cs" : "~1.0.0"
     },
     "suggest" : {

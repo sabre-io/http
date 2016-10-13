@@ -1,4 +1,4 @@
-<?php
+<?php declare (strict_types=1);
 
 namespace Sabre\HTTP;
 
@@ -66,8 +66,6 @@ class Client extends EventEmitter {
 
     /**
      * Initializes the client.
-     *
-     * @return void
      */
     function __construct() {
 
@@ -82,11 +80,8 @@ class Client extends EventEmitter {
 
     /**
      * Sends a request to a HTTP server, and returns a response.
-     *
-     * @param RequestInterface $request
-     * @return ResponseInterface
      */
-    function send(RequestInterface $request) {
+    function send(RequestInterface $request) : ResponseInterface {
 
         $this->emit('beforeRequest', [$request]);
 
@@ -173,9 +168,6 @@ class Client extends EventEmitter {
      * After calling sendAsync, you must therefore occasionally call the poll()
      * method, or wait().
      *
-     * @param RequestInterface $request
-     * @param callable $success
-     * @param callable $error
      * @return void
      */
     function sendAsync(RequestInterface $request, callable $success = null, callable $error = null) {
@@ -193,10 +185,8 @@ class Client extends EventEmitter {
      *
      * This method will return true if there are still requests waiting to
      * return, and false if all the work is done.
-     *
-     * @return bool
      */
-    function poll() {
+    function poll() : bool {
 
         // nothing to do?
         if (!$this->curlMultiMap) {
@@ -310,10 +300,9 @@ class Client extends EventEmitter {
      * This only works for the send() method. Throwing exceptions for
      * sendAsync() is not supported.
      *
-     * @param bool $throwExceptions
      * @return void
      */
-    function setThrowExceptions($throwExceptions) {
+    function setThrowExceptions(bool $throwExceptions) {
 
         $this->throwExceptions = $throwExceptions;
 
@@ -324,11 +313,10 @@ class Client extends EventEmitter {
      *
      * These settings will be included in every HTTP request.
      *
-     * @param int $name
      * @param mixed $value
      * @return void
      */
-    function addCurlSetting($name, $value) {
+    function addCurlSetting(int $name, $value) {
 
         $this->curlSettings[$name] = $value;
 
@@ -336,11 +324,8 @@ class Client extends EventEmitter {
 
     /**
      * This method is responsible for performing a single request.
-     *
-     * @param RequestInterface $request
-     * @return ResponseInterface
      */
-    protected function doRequest(RequestInterface $request) {
+    protected function doRequest(RequestInterface $request) : ResponseInterface {
 
         $settings = $this->createCurlSettingsArray($request);
 
@@ -390,11 +375,8 @@ class Client extends EventEmitter {
     /**
      * Turns a RequestInterface object into an array with settings that can be
      * fed to curl_setopt
-     *
-     * @param RequestInterface $request
-     * @return array
      */
-    protected function createCurlSettingsArray(RequestInterface $request) {
+    protected function createCurlSettingsArray(RequestInterface $request) : array {
 
         $settings = $this->curlSettings;
 
@@ -471,11 +453,9 @@ class Client extends EventEmitter {
      *   * http_code - HTTP status code, as an int. Only set if Only set if
      *                 status is STATUS_SUCCESS, or STATUS_HTTPERROR
      *
-     * @param string $response
      * @param resource $curlHandle
-     * @return Response
      */
-    protected function parseCurlResult($response, $curlHandle) {
+    protected function parseCurlResult(string $response, $curlHandle) : array {
 
         list(
             $curlInfo,
@@ -537,13 +517,8 @@ class Client extends EventEmitter {
      *
      * We keep this in a separate method, so we can call it without triggering
      * the beforeRequest event and don't do the poll().
-     *
-     * @param RequestInterface $request
-     * @param callable $success
-     * @param callable $error
-     * @param int $retryCount
      */
-    protected function sendAsyncInternal(RequestInterface $request, callable $success, callable $error, $retryCount = 0) {
+    protected function sendAsyncInternal(RequestInterface $request, callable $success, callable $error, int $retryCount = 0) {
 
         if (!$this->curlMultiHandle) {
             $this->curlMultiHandle = curl_multi_init();
@@ -571,9 +546,8 @@ class Client extends EventEmitter {
      * This method exists so it can easily be overridden and mocked.
      *
      * @param resource $curlHandle
-     * @return string
      */
-    protected function curlExec($curlHandle) {
+    protected function curlExec($curlHandle) : string {
 
         return curl_exec($curlHandle);
 
@@ -585,9 +559,8 @@ class Client extends EventEmitter {
      * This method exists so it can easily be overridden and mocked.
      *
      * @param resource $curlHandle
-     * @return array
      */
-    protected function curlStuff($curlHandle) {
+    protected function curlStuff($curlHandle) : array {
 
         return [
             curl_getinfo($curlHandle),

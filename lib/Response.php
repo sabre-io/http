@@ -1,4 +1,4 @@
-<?php
+<?php declare (strict_types=1);
 
 namespace Sabre\HTTP;
 
@@ -112,10 +112,8 @@ class Response extends Message implements ResponseInterface {
 
     /**
      * Returns the current HTTP status code.
-     *
-     * @return int
      */
-    function getStatus() {
+    function getStatus() : int {
 
         return $this->status;
 
@@ -125,10 +123,8 @@ class Response extends Message implements ResponseInterface {
      * Returns the human-readable status string.
      *
      * In the case of a 200, this may for example be 'OK'.
-     *
-     * @return string
      */
-    function getStatusText() {
+    function getStatusText() : string {
 
         return $this->statusText;
 
@@ -164,7 +160,7 @@ class Response extends Message implements ResponseInterface {
             throw new \InvalidArgumentException('The HTTP status code must be exactly 3 digits');
         }
 
-        $this->status = $statusCode;
+        $this->status = (int)$statusCode;
         $this->statusText = $statusText;
 
     }
@@ -173,10 +169,8 @@ class Response extends Message implements ResponseInterface {
      * Serializes the response object as a string.
      *
      * This is useful for debugging purposes.
-     *
-     * @return string
      */
-    function __toString() {
+    function __toString() : string {
 
         $str = 'HTTP/' . $this->httpVersion . ' ' . $this->getStatus() . ' ' . $this->getStatusText() . "\r\n";
         foreach ($this->getHeaders() as $key => $value) {

@@ -1,4 +1,4 @@
-<?php
+<?php declare (strict_types=1);
 
 namespace Sabre\HTTP;
 
@@ -33,10 +33,8 @@ class Sapi {
     /**
      * This static method will create a new Request object, based on the
      * current PHP request.
-     *
-     * @return Request
      */
-    static function getRequest() {
+    static function getRequest() : Request {
 
         $r = self::createFromServerArray($_SERVER);
         $r->setBody(fopen('php://input', 'r'));
@@ -50,7 +48,6 @@ class Sapi {
      *
      * This calls php's header() function and streams the body to php://output.
      *
-     * @param ResponseInterface $response
      * @return void
      */
     static function sendResponse(ResponseInterface $response) {
@@ -80,9 +77,9 @@ class Sapi {
         if ($contentLength !== null) {
             $output = fopen('php://output', 'wb');
             if (is_resource($body) && get_resource_type($body) == 'stream') {
-                stream_copy_to_stream($body, $output, $contentLength);
+                stream_copy_to_stream($body, $output, (int)$contentLength);
             } else {
-                fwrite($output, $body, $contentLength);
+                fwrite($output, $body, (int)$contentLength);
             }
         } else {
             file_put_contents('php://output', $body);
@@ -97,11 +94,8 @@ class Sapi {
     /**
      * This static method will create a new Request object, based on a PHP
      * $_SERVER array.
-     *
-     * @param array $serverArray
-     * @return Request
      */
-    static function createFromServerArray(array $serverArray) {
+    static function createFromServerArray(array $serverArray) : Request {
 
         $headers = [];
         $method = null;

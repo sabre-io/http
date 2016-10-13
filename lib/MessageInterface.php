@@ -1,4 +1,4 @@
-<?php
+<?php declare (strict_types=1);
 
 namespace Sabre\HTTP;
 
@@ -30,7 +30,7 @@ interface MessageInterface {
      *
      * @return string
      */
-    function getBodyAsString();
+    function getBodyAsString() : string;
 
     /**
      * Returns the message body, as it's internal representation.
@@ -53,18 +53,13 @@ interface MessageInterface {
      * Returns all the HTTP headers as an array.
      *
      * Every header is returned as an array, with one or more values.
-     *
-     * @return array
      */
-    function getHeaders();
+    function getHeaders() : array;
 
     /**
      * Will return true or false, depending on if a HTTP header exists.
-     *
-     * @param string $name
-     * @return bool
      */
-    function hasHeader($name);
+    function hasHeader(string $name) : bool;
 
     /**
      * Returns a specific HTTP header, based on it's name.
@@ -79,10 +74,9 @@ interface MessageInterface {
      * `Set-Cookie` cannot be logically combined with a comma. In those cases
      * you *should* use getHeaderAsArray().
      *
-     * @param string $name
      * @return string|null
      */
-    function getHeader($name);
+    function getHeader(string $name);
 
     /**
      * Returns a HTTP header as an array.
@@ -92,10 +86,9 @@ interface MessageInterface {
      *
      * If the header did not exists, this method will return an empty array.
      *
-     * @param string $name
      * @return string[]
      */
-    function getHeaderAsArray($name);
+    function getHeaderAsArray(string $name) : array;
 
     /**
      * Updates a HTTP header.
@@ -104,11 +97,10 @@ interface MessageInterface {
      *
      * If the header already existed, it will be overwritten.
      *
-     * @param string $name
      * @param string|string[] $value
      * @return void
      */
-    function setHeader($name, $value);
+    function setHeader(string $name, $value);
 
     /**
      * Sets a new set of HTTP headers.
@@ -118,7 +110,6 @@ interface MessageInterface {
      *
      * Any header that already existed will be overwritten.
      *
-     * @param array $headers
      * @return void
      */
     function setHeaders(array $headers);
@@ -130,18 +121,16 @@ interface MessageInterface {
      * another value. Individual values can be retrieved with
      * getHeadersAsArray.
      *
-     * @param string $name
-     * @param string $value
+     * @param scalar $value
      * @return void
      */
-    function addHeader($name, $value);
+    function addHeader(string $name, $value);
 
     /**
      * Adds a new set of HTTP headers.
      *
      * Any existing headers will not be overwritten.
      *
-     * @param array $headers
      * @return void
      */
     function addHeaders(array $headers);
@@ -152,27 +141,21 @@ interface MessageInterface {
      * The specified header name must be treated as case-insenstive.
      * This method should return true if the header was successfully deleted,
      * and false if the header did not exist.
-     *
-     * @param string $name
-     * @return bool
      */
-    function removeHeader($name);
+    function removeHeader(string $name) : bool;
 
     /**
      * Sets the HTTP version.
      *
      * Should be 1.0 or 1.1.
      *
-     * @param string $version
      * @return void
      */
-    function setHttpVersion($version);
+    function setHttpVersion(string $version);
 
     /**
      * Returns the HTTP version.
-     *
-     * @return string
      */
-    function getHttpVersion();
+    function getHttpVersion() : string;
 
 }

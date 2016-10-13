@@ -390,7 +390,7 @@ class ClientMock extends Client {
      * methods after subsequent use.
      * forces
      */
-    function createCurlSettingsArray(RequestInterface $request) : array  {
+    function createCurlSettingsArray(RequestInterface $request) : array {
 
         $settings = parent::createCurlSettingsArray($request);
         $settings = $settings + $this->persistedSettings;
@@ -401,7 +401,7 @@ class ClientMock extends Client {
     /**
      * Making this method public.
      */
-    function parseCurlResult(string $response, $curlHandle) : Response {
+    function parseCurlResult(string $response, $curlHandle) : array {
 
         return parent::parseCurlResult($response, $curlHandle);
 

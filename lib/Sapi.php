@@ -77,9 +77,9 @@ class Sapi {
         if ($contentLength !== null) {
             $output = fopen('php://output', 'wb');
             if (is_resource($body) && get_resource_type($body) == 'stream') {
-                stream_copy_to_stream($body, $output, $contentLength);
+                stream_copy_to_stream($body, $output, (int)$contentLength);
             } else {
-                fwrite($output, $body, $contentLength);
+                fwrite($output, $body, (int)$contentLength);
             }
         } else {
             file_put_contents('php://output', $body);

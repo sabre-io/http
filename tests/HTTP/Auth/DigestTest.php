@@ -40,7 +40,7 @@ class DigestTest extends \PHPUnit_Framework_TestCase {
         list($nonce, $opaque) = $this->getServerTokens();
 
         $username = 'admin';
-        $password = 12345;
+        $password = '12345';
         $nc = '00002';
         $cnonce = uniqid();
 

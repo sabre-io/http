@@ -160,7 +160,7 @@ class Response extends Message implements ResponseInterface {
             throw new \InvalidArgumentException('The HTTP status code must be exactly 3 digits');
         }
 
-        $this->status = $statusCode;
+        $this->status = (int)$statusCode;
         $this->statusText = $statusText;
 
     }

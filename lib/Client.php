@@ -455,7 +455,7 @@ class Client extends EventEmitter {
      *
      * @param resource $curlHandle
      */
-    protected function parseCurlResult(string $response, $curlHandle) : Response {
+    protected function parseCurlResult(string $response, $curlHandle) : array {
 
         list(
             $curlInfo,

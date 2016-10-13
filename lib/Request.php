@@ -2,7 +2,6 @@
 
 namespace Sabre\HTTP;
 
-use InvalidArgumentException;
 use Sabre\Uri;
 
 /**

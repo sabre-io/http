@@ -14,14 +14,14 @@ interface ResponseInterface extends MessageInterface {
     /**
      * Returns the current HTTP status code.
      */
-    function getStatus() : int ;
+    function getStatus() : int;
 
     /**
      * Returns the human-readable status string.
      *
      * In the case of a 200, this may for example be 'OK'.
      */
-    function getStatusText() : string ;
+    function getStatusText() : string;
 
     /**
      * Sets the HTTP status code.

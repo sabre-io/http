@@ -335,7 +335,7 @@ function parseMimeType(string $str) : array {
     // The first part is the mime-type.
     $mimeType = trim(array_shift($parts));
 
-    if ($mimeType==='*') $mimeType = '*/*';
+    if ($mimeType === '*') $mimeType = '*/*';
 
     $mimeType = explode('/', $mimeType);
     if (count($mimeType) !== 2) {

@@ -121,9 +121,10 @@ interface MessageInterface {
      * another value. Individual values can be retrieved with
      * getHeadersAsArray.
      *
+     * @param scalar $value
      * @return void
      */
-    function addHeader(string $name, string $value);
+    function addHeader(string $name, $value);
 
     /**
      * Adds a new set of HTTP headers.

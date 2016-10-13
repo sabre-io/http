@@ -44,10 +44,10 @@ class Sapi {
             // If we're running off the CLI, we're going to set some default
             // settings.
             $serverArr['REQUEST_URI'] = $_SERVER['REQUEST_URI'] ?? '/';
-            $serverARr['REQUEST_METHOD'] = $_SERVER['REQUEST_METHOD'] ?? 'CLI';
+            $serverArr['REQUEST_METHOD'] = $_SERVER['REQUEST_METHOD'] ?? 'CLI';
         }
 
-        $r = self::createFromServerArray($_SERVER);
+        $r = self::createFromServerArray($serverArr);
         $r->setBody(fopen('php://input', 'r'));
         $r->setPostData($_POST);
         return $r;

@@ -29,7 +29,7 @@ class DigestTest extends \PHPUnit_Framework_TestCase {
     function setUp() {
 
         $this->response = new Response();
-        $this->request = new Request();
+        $this->request = new Request('GET', '/');
         $this->auth = new Digest(self::REALM, $this->request, $this->response);
 
 

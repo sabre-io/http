@@ -200,7 +200,7 @@ class Request extends Message implements RequestInterface {
 
             // We're not interested in the query part (everything after the ?).
             list($uri) = explode('?', $uri);
-            return trim(URLUtil::decodePath(substr($uri, strlen($baseUri))), '/');
+            return trim(decodePath(substr($uri, strlen($baseUri))), '/');
 
         }
         // A special case, if the baseUri was accessed without a trailing

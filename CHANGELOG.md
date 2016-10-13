@@ -16,6 +16,8 @@ ChangeLog
   file.
 * #68: The `$method` and `$uri` arguments when constructing a Request object
   are now required.
+* When `Sapi::getRequest()` is called, we default to setting the HTTP Method
+  to `CLI`.
 
 
 4.2.1 (2016-01-06)

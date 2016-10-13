@@ -2,7 +2,7 @@
 
 namespace Sabre\HTTP\Auth;
 
-use Sabre\HTTP\Util;
+use Sabre\HTTP;
 
 /**
  * HTTP AWS Authentication handler
@@ -155,7 +155,7 @@ class AWS extends AbstractAuth {
      */
     protected function validateRFC2616Date(string $dateHeader) : bool {
 
-        $date = Util::parseHTTPDate($dateHeader);
+        $date = HTTP\parseDate($dateHeader);
 
         // Unknown format
         if (!$date) {

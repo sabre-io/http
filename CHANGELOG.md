@@ -9,6 +9,11 @@ ChangeLog
 * #65: It's now possible to supply request/response bodies using a callback
   functions. This allows very high-speed/low-memory responses to be created.
   (@petrkotek).
+* Strict typing is used every where this is applicable.
+* Removed `URLUtil` class. It was deprecated a long time ago, and most of
+  its functions moved to the `sabre/uri` package.
+* Removed `Util` class. Most of its functions moved to the `functions.php`
+  file.
 
 
 4.2.1 (2016-01-06)

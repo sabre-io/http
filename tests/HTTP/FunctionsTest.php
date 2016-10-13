@@ -117,5 +117,73 @@ class FunctionsTest extends \PHPUnit_Framework_TestCase {
         ];
 
     }
+    function testParseHTTPDate() {
+
+        $times = [
+            'Wed, 13 Oct 2010 10:26:00 GMT',
+            'Wednesday, 13-Oct-10 10:26:00 GMT',
+            'Wed Oct 13 10:26:00 2010',
+        ];
+
+        $expected = 1286965560;
+
+        foreach ($times as $time) {
+            $result = parseDate($time);
+            $this->assertEquals($expected, $result->format('U'));
+        }
+
+        $result = parseDate('Wed Oct  6 10:26:00 2010');
+        $this->assertEquals(1286360760, $result->format('U'));
+
+    }
+
+    function testParseHTTPDateFail() {
+
+        $times = [
+            //random string
+            'NOW',
+            // not-GMT timezone
+            'Wednesday, 13-Oct-10 10:26:00 UTC',
+            // No space before the 6
+            'Wed Oct 6 10:26:00 2010',
+            // Invalid day
+            'Wed Oct  0 10:26:00 2010',
+            'Wed Oct 32 10:26:00 2010',
+            'Wed, 0 Oct 2010 10:26:00 GMT',
+            'Wed, 32 Oct 2010 10:26:00 GMT',
+            'Wednesday, 32-Oct-10 10:26:00 GMT',
+            // Invalid hour
+            'Wed, 13 Oct 2010 24:26:00 GMT',
+            'Wednesday, 13-Oct-10 24:26:00 GMT',
+            'Wed Oct 13 24:26:00 2010',
+        ];
+
+        foreach ($times as $time) {
+            $this->assertFalse(parseDate($time), 'We used the string: ' . $time);
+        }
+
+    }
+
+    function testTimezones() {
+
+        $default = date_default_timezone_get();
+        date_default_timezone_set('Europe/Amsterdam');
+
+        $this->testParseHTTPDate();
+
+        date_default_timezone_set($default);
+
+    }
+
+    function testToHTTPDate() {
+
+        $dt = new \DateTime('2011-12-10 12:00:00 +0200');
+
+        $this->assertEquals(
+            'Sat, 10 Dec 2011 10:00:00 GMT',
+            toDate($dt)
+        );
+
+    }
 
 }

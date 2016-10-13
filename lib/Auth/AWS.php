@@ -4,7 +4,6 @@ namespace Sabre\HTTP\Auth;
 
 use Sabre\HTTP;
 
-
 /**
  * HTTP AWS Authentication handler
  *

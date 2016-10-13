@@ -38,11 +38,13 @@ class Sapi {
      */
     static function getRequest() : Request {
 
+        $serverArr = $_SERVER;
+
         if (php_sapi_name() === 'cli') {
             // If we're running off the CLI, we're going to set some default
             // settings.
-            $_SERVER['REQUEST_URI'] = $_SERVER['REQUEST_URI'] ?? '/';
-            $_SERVER['REQUEST_METHOI'] = $_SERVER['REQUEST_METHOD'] ?? 'CLI';
+            $serverArr['REQUEST_URI'] = $_SERVER['REQUEST_URI'] ?? '/';
+            $serverARr['REQUEST_METHOD'] = $_SERVER['REQUEST_METHOD'] ?? 'CLI';
         }
 
         $r = self::createFromServerArray($_SERVER);

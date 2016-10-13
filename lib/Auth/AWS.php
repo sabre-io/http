@@ -1,4 +1,4 @@
-<?php
+<?php declare (strict_types=1);
 
 namespace Sabre\HTTP\Auth;
 
@@ -48,17 +48,20 @@ class AWS extends AbstractAuth {
      * Gathers all information from the headers
      *
      * This method needs to be called prior to anything else.
-     *
-     * @return bool
      */
-    function init() {
+    function init() : bool {
 
         $authHeader = $this->request->getHeader('Authorization');
+
+        if (is_null($authHeader)) {
+            $this->errorCode = self::ERR_NOAWSHEADER;
+            return false;
+        }
         $authHeader = explode(' ', $authHeader);
 
         if ($authHeader[0] != 'AWS' || !isset($authHeader[1])) {
             $this->errorCode = self::ERR_NOAWSHEADER;
-             return false;
+            return false;
         }
 
         list($this->accessKey, $this->signature) = explode(':', $authHeader[1]);
@@ -69,10 +72,8 @@ class AWS extends AbstractAuth {
 
     /**
      * Returns the username for the request
-     *
-     * @return string
      */
-    function getAccessKey() {
+    function getAccessKey() : string {
 
         return $this->accessKey;
 
@@ -80,11 +81,8 @@ class AWS extends AbstractAuth {
 
     /**
      * Validates the signature based on the secretKey
-     *
-     * @param string $secretKey
-     * @return bool
      */
-    function validate($secretKey) {
+    function validate(string $secretKey) : bool {
 
         $contentMD5 = $this->request->getHeader('Content-MD5');
 
@@ -154,11 +152,8 @@ class AWS extends AbstractAuth {
      *
      * This function also makes sure the Date header is within 15 minutes of the operating
      * system date, to prevent replay attacks.
-     *
-     * @param string $dateHeader
-     * @return bool
      */
-    protected function validateRFC2616Date($dateHeader) {
+    protected function validateRFC2616Date(string $dateHeader) : bool {
 
         $date = Util::parseHTTPDate($dateHeader);
 
@@ -183,10 +178,8 @@ class AWS extends AbstractAuth {
 
     /**
      * Returns a list of AMZ headers
-     *
-     * @return string
      */
-    protected function getAmzHeaders() {
+    protected function getAmzHeaders() : string {
 
         $amzHeaders = [];
         $headers = $this->request->getHeaders();
@@ -208,12 +201,8 @@ class AWS extends AbstractAuth {
 
     /**
      * Generates an HMAC-SHA1 signature
-     *
-     * @param string $key
-     * @param string $message
-     * @return string
      */
-    private function hmacsha1($key, $message) {
+    private function hmacsha1(string $key, string $message) : string {
 
         if (function_exists('hash_hmac')) {
             return hash_hmac('sha1', $message, $key, true);

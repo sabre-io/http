@@ -1,4 +1,4 @@
-<?php
+<?php declare (strict_types=1);
 
 namespace Sabre\HTTP;
 
@@ -23,8 +23,6 @@ class ClientHttpException extends \Exception implements HttpException {
 
     /**
      * Constructor
-     *
-     * @param ResponseInterface $response
      */
     function __construct(ResponseInterface $response) {
 
@@ -35,10 +33,8 @@ class ClientHttpException extends \Exception implements HttpException {
 
     /**
      * The http status code for the error.
-     *
-     * @return int
      */
-    function getHttpStatus() {
+    function getHttpStatus() : int {
 
         return $this->response->getStatus();
 
@@ -46,10 +42,8 @@ class ClientHttpException extends \Exception implements HttpException {
 
     /**
      * Returns the full response object.
-     *
-     * @return ResponseInterface
      */
-    function getResponse() {
+    function getResponse() : ResponseInterface {
 
         return $this->response;
 

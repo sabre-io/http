@@ -1,4 +1,4 @@
-<?php
+<?php declare (strict_types=1);
 
 namespace Sabre\HTTP;
 
@@ -152,15 +152,6 @@ Authorization: Basic REDACTED\r
 foo
 HI;
         $this->assertEquals($expected, (string)$request);
-
-    }
-
-    /**
-     * @expectedException \InvalidArgumentException
-     */
-    function testConstructorWithArray() {
-
-        $request = new Request([]);
 
     }
 

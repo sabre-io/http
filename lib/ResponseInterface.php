@@ -1,4 +1,4 @@
-<?php
+<?php declare (strict_types=1);
 
 namespace Sabre\HTTP;
 
@@ -13,19 +13,15 @@ interface ResponseInterface extends MessageInterface {
 
     /**
      * Returns the current HTTP status code.
-     *
-     * @return int
      */
-    function getStatus();
+    function getStatus() : int ;
 
     /**
      * Returns the human-readable status string.
      *
      * In the case of a 200, this may for example be 'OK'.
-     *
-     * @return string
      */
-    function getStatusText();
+    function getStatusText() : string ;
 
     /**
      * Sets the HTTP status code.

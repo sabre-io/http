@@ -1,8 +1,9 @@
-<?php
+<?php declare (strict_types=1);
 
 namespace Sabre\HTTP;
 
 use DateTime;
+use InvalidArgumentException;
 
 /**
  * A collection of useful helpers for parsing or generating various HTTP
@@ -29,7 +30,7 @@ use DateTime;
  * @param string $dateString
  * @return bool|DateTime
  */
-function parseDate($dateString) {
+function parseDate(string $dateString) {
 
     // Only the format is checked, valid ranges are checked by strtotime below
     $month = '(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)';
@@ -74,7 +75,7 @@ function parseDate($dateString) {
  * @param DateTime $dateTime
  * @return string
  */
-function toDate(DateTime $dateTime) {
+function toDate(DateTime $dateTime) : string {
 
     // We need to clone it, as we don't want to affect the existing
     // DateTime.
@@ -219,7 +220,7 @@ function negotiateContentType($acceptHeaderValue, array $availableOptions) {
  * @param string|string[] $input
  * @return array
  */
-function parsePrefer($input) {
+function parsePrefer($input) : array {
 
     $token = '[!#$%&\'*+\-.^_`~A-Za-z0-9]+';
 
@@ -296,9 +297,8 @@ REGEX;
  *
  * @param string|string[] $values
  * @param string|string[] $values2
- * @return string[]
  */
-function getHeaderValues($values, $values2 = null) {
+function getHeaderValues($values, $values2 = null) : array {
 
     $values = (array)$values;
     if ($values2) {
@@ -324,7 +324,7 @@ function getHeaderValues($values, $values2 = null) {
  * @param string $str
  * @return array
  */
-function parseMimeType($str) {
+function parseMimeType(string $str) : array {
 
     $parameters = [];
     // If no q= parameter appears, then quality = 1.
@@ -333,12 +333,15 @@ function parseMimeType($str) {
     $parts = explode(';', $str);
 
     // The first part is the mime-type.
-    $mimeType = array_shift($parts);
+    $mimeType = trim(array_shift($parts));
 
-    $mimeType = explode('/', trim($mimeType));
+    if ($mimeType==='*') $mimeType = '*/*';
+
+    $mimeType = explode('/', $mimeType);
     if (count($mimeType) !== 2) {
         // Illegal value
-        return null;
+        var_dump($mimeType);die();
+        throw new InvalidArgumentException('Not a valid mime-type: ' . $str);
     }
     list($type, $subType) = $mimeType;
 
@@ -379,11 +382,8 @@ function parseMimeType($str) {
  * Encodes the path of a url.
  *
  * slashes (/) are treated as path-separators.
- *
- * @param string $path
- * @return string
  */
-function encodePath($path) {
+function encodePath(string $path) : string {
 
     return preg_replace_callback('/([^A-Za-z0-9_\-\.~\(\)\/:@])/', function($match) {
 
@@ -397,11 +397,8 @@ function encodePath($path) {
  * Encodes a 1 segment of a path
  *
  * Slashes are considered part of the name, and are encoded as %2f
- *
- * @param string $pathSegment
- * @return string
  */
-function encodePathSegment($pathSegment) {
+function encodePathSegment(string $pathSegment) : string {
 
     return preg_replace_callback('/([^A-Za-z0-9_\-\.~\(\):@])/', function($match) {
 
@@ -412,11 +409,8 @@ function encodePathSegment($pathSegment) {
 
 /**
  * Decodes a url-encoded path
- *
- * @param string $path
- * @return string
  */
-function decodePath($path) {
+function decodePath(string $path) : string {
 
     return decodePathSegment($path);
 
@@ -424,11 +418,8 @@ function decodePath($path) {
 
 /**
  * Decodes a url-encoded path segment
- *
- * @param string $path
- * @return string
  */
-function decodePathSegment($path) {
+function decodePathSegment(string $path) : string {
 
     $path = rawurldecode($path);
     $encoding = mb_detect_encoding($path, ['UTF-8', 'ISO-8859-1']);

@@ -1,4 +1,4 @@
-<?php
+<?php declare (strict_types=1);
 
 namespace Sabre\HTTP;
 
@@ -43,10 +43,8 @@ trait MessageDecoratorTrait {
      *
      * Note that because the underlying data may be based on a stream, this
      * method could only work correctly the first time.
-     *
-     * @return string
      */
-    function getBodyAsString() {
+    function getBodyAsString() : string {
 
         return $this->inner->getBodyAsString();
 
@@ -68,7 +66,7 @@ trait MessageDecoratorTrait {
     /**
      * Updates the body resource with a new stream.
      *
-     * @param resource $body
+     * @param resource|string|callable $body
      * @return void
      */
     function setBody($body) {
@@ -81,10 +79,8 @@ trait MessageDecoratorTrait {
      * Returns all the HTTP headers as an array.
      *
      * Every header is returned as an array, with one or more values.
-     *
-     * @return array
      */
-    function getHeaders() {
+    function getHeaders() : array {
 
         return $this->inner->getHeaders();
 
@@ -92,11 +88,8 @@ trait MessageDecoratorTrait {
 
     /**
      * Will return true or false, depending on if a HTTP header exists.
-     *
-     * @param string $name
-     * @return bool
      */
-    function hasHeader($name) {
+    function hasHeader(string $name) : bool {
 
         return $this->inner->hasHeader($name);
 
@@ -115,10 +108,9 @@ trait MessageDecoratorTrait {
      * `Set-Cookie` cannot be logically combined with a comma. In those cases
      * you *should* use getHeaderAsArray().
      *
-     * @param string $name
      * @return string|null
      */
-    function getHeader($name) {
+    function getHeader(string $name) {
 
         return $this->inner->getHeader($name);
 
@@ -131,11 +123,8 @@ trait MessageDecoratorTrait {
      * item will appear in the array.
      *
      * If the header did not exists, this method will return an empty array.
-     *
-     * @param string $name
-     * @return string[]
      */
-    function getHeaderAsArray($name) {
+    function getHeaderAsArray(string $name) : array {
 
         return $this->inner->getHeaderAsArray($name);
 
@@ -148,11 +137,10 @@ trait MessageDecoratorTrait {
      *
      * If the header already existed, it will be overwritten.
      *
-     * @param string $name
      * @param string|string[] $value
      * @return void
      */
-    function setHeader($name, $value) {
+    function setHeader(string $name, $value) {
 
         $this->inner->setHeader($name, $value);
 
@@ -166,7 +154,6 @@ trait MessageDecoratorTrait {
      *
      * Any header that already existed will be overwritten.
      *
-     * @param array $headers
      * @return void
      */
     function setHeaders(array $headers) {
@@ -182,11 +169,9 @@ trait MessageDecoratorTrait {
      * another value. Individual values can be retrieved with
      * getHeadersAsArray.
      *
-     * @param string $name
-     * @param string $value
      * @return void
      */
-    function addHeader($name, $value) {
+    function addHeader(string $name, string $value) {
 
         $this->inner->addHeader($name, $value);
 
@@ -197,7 +182,6 @@ trait MessageDecoratorTrait {
      *
      * Any existing headers will not be overwritten.
      *
-     * @param array $headers
      * @return void
      */
     function addHeaders(array $headers) {
@@ -214,10 +198,9 @@ trait MessageDecoratorTrait {
      * This method should return true if the header was successfully deleted,
      * and false if the header did not exist.
      *
-     * @param string $name
      * @return bool
      */
-    function removeHeader($name) {
+    function removeHeader(string $name) : bool {
 
         return $this->inner->removeHeader($name);
 
@@ -228,10 +211,9 @@ trait MessageDecoratorTrait {
      *
      * Should be 1.0 or 1.1.
      *
-     * @param string $version
      * @return void
      */
-    function setHttpVersion($version) {
+    function setHttpVersion(string $version) {
 
         $this->inner->setHttpVersion($version);
 
@@ -239,10 +221,8 @@ trait MessageDecoratorTrait {
 
     /**
      * Returns the HTTP version.
-     *
-     * @return string
      */
-    function getHttpVersion() {
+    function getHttpVersion() : string {
 
         return $this->inner->getHttpVersion();
 

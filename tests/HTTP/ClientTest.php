@@ -1,4 +1,4 @@
-<?php
+<?php declare (strict_types=1);
 
 namespace Sabre\HTTP;
 
@@ -390,7 +390,7 @@ class ClientMock extends Client {
      * methods after subsequent use.
      * forces
      */
-    function createCurlSettingsArray(RequestInterface $request) {
+    function createCurlSettingsArray(RequestInterface $request) : array  {
 
         $settings = parent::createCurlSettingsArray($request);
         $settings = $settings + $this->persistedSettings;
@@ -401,7 +401,7 @@ class ClientMock extends Client {
     /**
      * Making this method public.
      */
-    function parseCurlResult($response, $curlHandle) {
+    function parseCurlResult(string $response, $curlHandle) : Response {
 
         return parent::parseCurlResult($response, $curlHandle);
 
@@ -409,11 +409,8 @@ class ClientMock extends Client {
 
     /**
      * This method is responsible for performing a single request.
-     *
-     * @param RequestInterface $request
-     * @return ResponseInterface
      */
-    function doRequest(RequestInterface $request) {
+    function doRequest(RequestInterface $request) : ResponseInterface {
 
         $response = null;
         $this->emit('doRequest', [$request, &$response]);
@@ -433,9 +430,8 @@ class ClientMock extends Client {
      * This method exists so it can easily be overridden and mocked.
      *
      * @param resource $curlHandle
-     * @return array
      */
-    protected function curlStuff($curlHandle) {
+    protected function curlStuff($curlHandle) : array {
 
         $return = null;
         $this->emit('curlStuff', [&$return]);
@@ -455,9 +451,8 @@ class ClientMock extends Client {
      * This method exists so it can easily be overridden and mocked.
      *
      * @param resource $curlHandle
-     * @return string
      */
-    protected function curlExec($curlHandle) {
+    protected function curlExec($curlHandle) : string {
 
         $return = null;
         $this->emit('curlExec', [&$return]);

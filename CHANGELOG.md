@@ -18,6 +18,8 @@ ChangeLog
   are now required.
 * When `Sapi::getRequest()` is called, we default to setting the HTTP Method
   to `CLI`.
+* The HTTP response is now initialized with HTTP code `500` instead of `null`,
+  so if it's not changed, it will be emitted as 500.
 
 
 4.2.1 (2016-01-06)

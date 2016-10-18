@@ -111,9 +111,12 @@ class Digest extends AbstractAuth {
     }
 
     /**
-     * Returns the username for the request
+     * Returns the username for the request.
+     * Returns null if there were none.
+     *
+     * @return string|null
      */
-    function getUsername() : string {
+    function getUsername() {
 
         return $this->digestParts['username'];
 

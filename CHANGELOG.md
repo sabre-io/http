@@ -20,6 +20,8 @@ ChangeLog
   to `CLI`.
 * The HTTP response is now initialized with HTTP code `500` instead of `null`,
   so if it's not changed, it will be emitted as 500.
+* #69: Sending `charset="UTF-8"` on Basic authentiation challenges per
+  [rfc7617][rfc7617].
 
 
 4.2.1 (2016-01-06)
@@ -268,4 +270,5 @@ Before 2.0.0, this package was built-into SabreDAV, where it first appeared in
 January 2009.
 
 [psr-http]: https://github.com/php-fig/fig-standards/blob/master/proposed/http-message.md
-[rfc-7240]: http://tools.ietf.org/html/rfc7240
+[rfc7240]: http://tools.ietf.org/html/rfc7240
+[rfc7617]: https://tools.ietf.org/html/rfc7617

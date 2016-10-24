@@ -5,7 +5,7 @@ ChangeLog
 -------------------------
 
 * Now requires PHP 7.0.
-* Depends on sabre/event 4 and sabre/uri 2.
+* Depends on sabre/event 5 and sabre/uri 2.
 * #65: It's now possible to supply request/response bodies using a callback
   functions. This allows very high-speed/low-memory responses to be created.
   (@petrkotek).

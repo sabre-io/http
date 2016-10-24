@@ -61,7 +61,7 @@ class BasicTest extends \PHPUnit_Framework_TestCase {
 
         $basic->requireLogin();
 
-        $this->assertEquals('Basic realm="Dagger"', $response->getHeader('WWW-Authenticate'));
+        $this->assertEquals('Basic realm="Dagger", charset="UTF-8"', $response->getHeader('WWW-Authenticate'));
         $this->assertEquals(401, $response->getStatus());
 
     }

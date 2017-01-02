@@ -75,12 +75,11 @@ abstract class Message implements MessageInterface {
             return '';
         }
         $contentLength = $this->getHeader('Content-Length');
-        if (null === $contentLength) {
-            return stream_get_contents($body);
-        } else {
+        if (is_int($contentLength) || ctype_digit($contentLength)) {
             return stream_get_contents($body, $contentLength);
+        } else {
+            return stream_get_contents($body);
         }
-
     }
 
     /**

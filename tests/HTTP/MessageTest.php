@@ -70,6 +70,28 @@ class MessageTest extends \PHPUnit_Framework_TestCase {
 
     }
 
+    /**
+     * Some clients include a content-length header, but the header is empty.
+     * This is definitely broken behavior, but we should support it.
+     */
+    function testEmptyContentLengthHeader() {
+
+        $body = fopen('php://memory', 'r+');
+        fwrite($body, 'abcdefg');
+        fseek($body, 2);
+
+        $message = new MessageMock();
+        $message->setBody($body);
+        $message->setHeader('Content-Length', '');
+
+        $this->assertEquals(
+            'cdefg',
+            $message->getBodyAsString()
+        );
+
+    }
+
+
     function testGetEmptyBodyStream() {
 
         $message = new MessageMock();

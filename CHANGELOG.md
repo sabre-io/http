@@ -24,6 +24,12 @@ ChangeLog
   [rfc7617][rfc7617].
 
 
+4.2.2 (2017-01-02)
+------------------
+
+* #72: Handling clients that send invalid `Content-Length` headers.
+
+
 4.2.1 (2016-01-06)
 ------------------
 

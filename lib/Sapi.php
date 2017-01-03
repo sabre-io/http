@@ -86,6 +86,7 @@ class Sapi {
 
         $contentLength = $response->getHeader('Content-Length');
         if ($contentLength !== null) {
+            $contentLength = intval($contentLength);
             $output = fopen('php://output', 'wb');
             if (is_resource($body) && get_resource_type($body) == 'stream') {
                 stream_copy_to_stream($body, $output, (int)$contentLength);

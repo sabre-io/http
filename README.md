@@ -1,4 +1,4 @@
-sabre/http
+sabre/http [![Dependency Status](https://www.versioneye.com/php/sabre:http/2.0.1/badge.png)](https://www.versioneye.com/php/sabre:http/2.0.1)
 ==========
 
 This library provides a toolkit to make working with the HTTP protocol easier.

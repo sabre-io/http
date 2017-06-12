@@ -94,7 +94,7 @@ class Sapi {
                 } else {
                     // workaround for 32 Bit systems to avoid stream_copy_to_stream
                     while (!feof($body)) {
-                        fwrite($output,fread($body,8192));    
+                        fwrite($output, fread($body, 8192));    
                     }   
                 }
             } else {

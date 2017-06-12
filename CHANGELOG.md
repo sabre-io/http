@@ -24,6 +24,12 @@ ChangeLog
   [rfc7617][rfc7617].
 
 
+4.2.3 (2017-06-12)
+------------------
+
+* #74, #77: Work around 4GB file size limit at 32 Bit systems
+
+
 4.2.2 (2017-01-02)
 ------------------
 

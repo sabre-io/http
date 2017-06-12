@@ -88,7 +88,7 @@ class Sapi {
         if ($contentLength !== null) {
             $output = fopen('php://output', 'wb');
             if (is_resource($body) && get_resource_type($body) == 'stream') {
-                if (PHP_INT_SIZE != 4){
+                if (PHP_INT_SIZE !== 4){
                     // use the dedicated function on 64 Bit systems
                     stream_copy_to_stream($body, $output, $contentLength);  
                 } else {

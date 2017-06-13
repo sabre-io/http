@@ -2,7 +2,9 @@
 
 namespace Sabre\HTTP;
 
-class RequestDecoratorTest extends \PHPUnit_Framework_TestCase {
+use PHPUnit\Framework\TestCase;
+
+class RequestDecoratorTest extends TestCase {
 
     protected $inner;
     protected $outer;

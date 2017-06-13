@@ -2,10 +2,11 @@
 
 namespace Sabre\HTTP\Auth;
 
+use PHPUnit\Framework\TestCase;
 use Sabre\HTTP\Request;
 use Sabre\HTTP\Response;
 
-class BearerTest extends \PHPUnit_Framework_TestCase {
+class BearerTest extends TestCase {
 
     function testGetToken() {
 

@@ -2,10 +2,11 @@
 
 namespace Sabre\HTTP\Auth;
 
+use PHPUnit\Framework\TestCase;
 use Sabre\HTTP\Request;
 use Sabre\HTTP\Response;
 
-class DigestTest extends \PHPUnit_Framework_TestCase {
+class DigestTest extends TestCase {
 
     /**
      * @var Sabre\HTTP\Response

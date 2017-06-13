@@ -2,7 +2,9 @@
 
 namespace Sabre\HTTP;
 
-class RequestTest extends \PHPUnit_Framework_TestCase {
+use PHPUnit\Framework\TestCase;
+
+class RequestTest extends TestCase {
 
     function testConstruct() {
 

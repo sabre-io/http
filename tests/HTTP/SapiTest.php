@@ -140,6 +140,17 @@ class SapiTest extends \PHPUnit_Framework_TestCase {
     }
 
     /**
+     * Tests whether http2 is recognized.
+     */
+    function testRecognizeHttp2() {
+        $request = Sapi::createFromServerArray([
+            'SERVER_PROTOCOL'             => 'HTTP/2.0'
+        ]);
+
+        $this->assertEquals('2.0', $request->getHttpVersion());
+    }
+
+    /**
      * @runInSeparateProcess
      * @depends testSend
      */

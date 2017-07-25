@@ -133,6 +133,8 @@ class Sapi {
                 case 'SERVER_PROTOCOL' :
                     if ($value === 'HTTP/1.0') {
                         $httpVersion = '1.0';
+                    } else if ($value === 'HTTP/2.0') {
+                        $httpVersion = '2.0';
                     }
                     break;
                 case 'REQUEST_METHOD' :

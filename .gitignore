@@ -13,3 +13,8 @@ bin/sabre-cs-fixer
 
 # Vim
 .*.swp
+
+# Binaries
+bin/php-cs-fixer*
+bin/phpunit*
+bin/sabre-cs-fixer*

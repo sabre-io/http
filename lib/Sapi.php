@@ -90,12 +90,12 @@ class Sapi {
             if (is_resource($body) && get_resource_type($body) == 'stream') {
                 if (PHP_INT_SIZE !== 4){
                     // use the dedicated function on 64 Bit systems
-                    stream_copy_to_stream($body, $output, $contentLength);  
+                    stream_copy_to_stream($body, $output, $contentLength);
                 } else {
                     // workaround for 32 Bit systems to avoid stream_copy_to_stream
                     while (!feof($body)) {
-                        fwrite($output, fread($body, 8192));    
-                    }   
+                        fwrite($output, fread($body, 8192));
+                    }
                 }
             } else {
                 fwrite($output, $body, (int)$contentLength);
@@ -133,7 +133,7 @@ class Sapi {
                 case 'SERVER_PROTOCOL' :
                     if ($value === 'HTTP/1.0') {
                         $httpVersion = '1.0';
-                    } else if ($value === 'HTTP/2.0') {
+                    } elseif ($value === 'HTTP/2.0') {
                         $httpVersion = '2.0';
                     }
                     break;

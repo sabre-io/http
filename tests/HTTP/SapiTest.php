@@ -144,7 +144,8 @@ class SapiTest extends \PHPUnit_Framework_TestCase {
      */
     function testRecognizeHttp2() {
         $request = Sapi::createFromServerArray([
-            'SERVER_PROTOCOL' => 'HTTP/2.0'
+            'SERVER_PROTOCOL' => 'HTTP/2.0',
+            'REQUEST_URI'     => 'bla'
         ]);
 
         $this->assertEquals('2.0', $request->getHttpVersion());

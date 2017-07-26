@@ -22,6 +22,7 @@ ChangeLog
   so if it's not changed, it will be emitted as 500.
 * #69: Sending `charset="UTF-8"` on Basic authentiation challenges per
   [rfc7617][rfc7617].
+* #84: Added support for `SERVER_PROTOCOL HTTP/2.0` (@jens1o)
 
 
 4.2.3 (2017-06-12)

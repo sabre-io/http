@@ -147,7 +147,7 @@ interface MessageInterface {
     /**
      * Sets the HTTP version.
      *
-     * Should be 1.0 or 1.1.
+     * Should be 1.0, 1.1 or 2.0.
      *
      * @return void
      */

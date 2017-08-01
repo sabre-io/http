@@ -2,7 +2,9 @@
 
 namespace Sabre\HTTP;
 
-class SapiTest extends \PHPUnit_Framework_TestCase {
+use PHPUnit\Framework\TestCase;
+
+class SapiTest extends TestCase {
 
     function testConstructFromServerArray() {
 

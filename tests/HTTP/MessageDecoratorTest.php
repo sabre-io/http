@@ -2,7 +2,9 @@
 
 namespace Sabre\HTTP;
 
-class MessageDecoratorTest extends \PHPUnit_Framework_TestCase {
+use PHPUnit\Framework\TestCase;
+
+class MessageDecoratorTest extends TestCase {
 
     protected $inner;
     protected $outer;

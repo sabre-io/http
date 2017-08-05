@@ -5,7 +5,7 @@ namespace Sabre\HTTP\Auth;
 use Sabre\HTTP\Request;
 use Sabre\HTTP\Response;
 
-class AWSTest extends \PHPUnit_Framework_TestCase {
+class AWSTest extends \PHPUnit\Framework\TestCase {
 
     /**
      * @var Sabre\HTTP\Response

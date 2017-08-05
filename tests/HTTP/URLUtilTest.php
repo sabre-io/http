@@ -2,7 +2,7 @@
 
 namespace Sabre\HTTP;
 
-class URLUtilTest extends \PHPUnit_Framework_TestCase{
+class URLUtilTest extends \PHPUnit\Framework\TestCase{
 
     function testEncodePath() {
 

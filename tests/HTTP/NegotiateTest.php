@@ -2,7 +2,7 @@
 
 namespace Sabre\HTTP;
 
-class NegotiateTest extends \PHPUnit_Framework_TestCase {
+class NegotiateTest extends \PHPUnit\Framework\TestCase {
 
     /**
      * @dataProvider negotiateData

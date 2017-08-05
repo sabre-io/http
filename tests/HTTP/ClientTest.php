@@ -2,7 +2,7 @@
 
 namespace Sabre\HTTP;
 
-class ClientTest extends \PHPUnit_Framework_TestCase {
+class ClientTest extends \PHPUnit\Framework\TestCase {
 
     function testCreateCurlSettingsArrayGET() {
 

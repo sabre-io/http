@@ -2,7 +2,7 @@
 
 namespace Sabre\HTTP;
 
-class FunctionsTest extends \PHPUnit_Framework_TestCase {
+class FunctionsTest extends \PHPUnit\Framework\TestCase {
 
     /**
      * @dataProvider getHeaderValuesData

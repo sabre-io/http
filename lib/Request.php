@@ -183,10 +183,11 @@ class Request extends Message implements RequestInterface {
         $uri = Uri\normalize($uri);
         $baseUri = Uri\normalize($this->getBaseUrl());
 
+        // We're not interested in the query part (everything after the ?).
+        list($uri) = explode('?', $uri);
+
         if (strpos($uri, $baseUri) === 0) {
 
-            // We're not interested in the query part (everything after the ?).
-            list($uri) = explode('?', $uri);
             return trim(decodePath(substr($uri, strlen($baseUri))), '/');
 
         }

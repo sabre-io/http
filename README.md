@@ -1,7 +1,7 @@
 sabre/http
 ==========
 
-This library provides a toolkit to make working with the HTTP protocol easier.
+This library provides a toolkit to make working with the [HTTP protocol](https://tools.ietf.org/html/rfc2616) easier.
 
 Most PHP scripts run within a HTTP request but accessing information about the
 HTTP request is cumbersome at least.

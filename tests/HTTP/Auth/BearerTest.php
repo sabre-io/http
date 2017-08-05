@@ -5,7 +5,7 @@ namespace Sabre\HTTP\Auth;
 use Sabre\HTTP\Request;
 use Sabre\HTTP\Response;
 
-class BearerTest extends \PHPUnit_Framework_TestCase {
+class BearerTest extends \PHPUnit\Framework\TestCase {
 
     function testGetToken() {
 

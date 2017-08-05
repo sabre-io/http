@@ -2,7 +2,7 @@
 
 namespace Sabre\HTTP;
 
-class MessageDecoratorTest extends \PHPUnit_Framework_TestCase {
+class MessageDecoratorTest extends \PHPUnit\Framework\TestCase {
 
     protected $inner;
     protected $outer;

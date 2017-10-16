@@ -125,12 +125,10 @@ class RequestTest extends \PHPUnit\Framework\TestCase {
         $request = new Request('PUT', '/foo/bar', ['Content-Type' => 'text/xml']);
         $request->setBody('foo');
 
-        $expected = <<<HI
-PUT /foo/bar HTTP/1.1\r
-Content-Type: text/xml\r
-\r
-foo
-HI;
+        $expected = "PUT /foo/bar HTTP/1.1\r\n"
+                  . "Content-Type: text/xml\r\n"
+                  . "\r\n"
+                  . "foo";
         $this->assertEquals($expected, (string)$request);
 
     }
@@ -140,13 +138,11 @@ HI;
         $request = new Request('PUT', '/foo/bar', ['Content-Type' => 'text/xml', 'Authorization' => 'Basic foobar']);
         $request->setBody('foo');
 
-        $expected = <<<HI
-PUT /foo/bar HTTP/1.1\r
-Content-Type: text/xml\r
-Authorization: Basic REDACTED\r
-\r
-foo
-HI;
+        $expected = "PUT /foo/bar HTTP/1.1\r\n"
+                  . "Content-Type: text/xml\r\n"
+                  . "Authorization: Basic REDACTED\r\n"
+                  . "\r\n"
+                  . "foo";
         $this->assertEquals($expected, (string)$request);
 
     }

@@ -35,12 +35,10 @@ class ResponseTest extends \PHPUnit\Framework\TestCase {
         $response = new Response(200, ['Content-Type' => 'text/xml']);
         $response->setBody('foo');
 
-        $expected = <<<HI
-HTTP/1.1 200 OK\r
-Content-Type: text/xml\r
-\r
-foo
-HI;
+        $expected = "HTTP/1.1 200 OK\r\n"
+                  . "Content-Type: text/xml\r\n"
+                  . "\r\n"
+                  . "foo";
         $this->assertEquals($expected, (string)$response);
 
     }

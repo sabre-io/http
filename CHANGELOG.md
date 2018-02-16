@@ -1,11 +1,12 @@
 ChangeLog
 =========
 
-5.0.0-alpha1 (????-??-??)
+5.0.0-alpha1 (2018-02-16)
 -------------------------
 
 * Now requires PHP 7.0.
 * Depends on sabre/event 5 and sabre/uri 2.
+* hhvm is no longer supported starting this release.
 * #65: It's now possible to supply request/response bodies using a callback
   functions. This allows very high-speed/low-memory responses to be created.
   (@petrkotek).
@@ -20,7 +21,7 @@ ChangeLog
   to `CLI`.
 * The HTTP response is now initialized with HTTP code `500` instead of `null`,
   so if it's not changed, it will be emitted as 500.
-* #69: Sending `charset="UTF-8"` on Basic authentiation challenges per
+* #69: Sending `charset="UTF-8"` on Basic authentication challenges per
   [rfc7617][rfc7617].
 * #84: Added support for `SERVER_PROTOCOL HTTP/2.0` (@jens1o)
 

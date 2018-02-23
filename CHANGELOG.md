@@ -1,7 +1,7 @@
 ChangeLog
 =========
 
-4.2.4 (????-??-??)
+4.2.4 (2018-02-23)
 ------------------
 
 * #69: Sending `charset="UTF-8"` on Basic authentication challenges per

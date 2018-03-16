@@ -42,6 +42,14 @@ class AWSTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(AWS::ERR_NOAWSHEADER, $this->auth->errorCode);
     }
 
+    public function testInvalidAuthorizationHeader()
+    {
+        $this->request->setMethod('GET');
+        $this->request->setHeader('Authorization', 'Invalid Auth Header');
+
+        $this->assertFalse($this->auth->init(), 'The Invalid AWS authorization header');
+    }
+
     public function testIncorrectContentMD5()
     {
         $accessKey = 'accessKey';

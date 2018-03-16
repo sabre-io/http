@@ -30,6 +30,34 @@ class SapiTest extends \PHPUnit\Framework\TestCase {
 
     }
 
+    function testConstructFromServerArrayOnNullUrl() {
+
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('The _SERVER array must have a REQUEST_URI key');
+
+        $request = Sapi::createFromServerArray([
+            'REQUEST_METHOD'  => 'GET',
+            'HTTP_USER_AGENT' => 'Evert',
+            'CONTENT_TYPE'    => 'text/xml',
+            'CONTENT_LENGTH'  => '400',
+            'SERVER_PROTOCOL' => 'HTTP/1.0',
+        ]);        
+    }
+
+    function testConstructFromServerArrayOnNullMethod() {
+
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('The _SERVER array must have a REQUEST_METHOD key');
+
+        $request = Sapi::createFromServerArray([
+            'REQUEST_URI'  => '/foo',
+            'HTTP_USER_AGENT' => 'Evert',
+            'CONTENT_TYPE'    => 'text/xml',
+            'CONTENT_LENGTH'  => '400',
+            'SERVER_PROTOCOL' => 'HTTP/1.0',
+        ]);        
+    }
+
     function testConstructPHPAuth() {
 
         $request = Sapi::createFromServerArray([

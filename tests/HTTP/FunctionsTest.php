@@ -5,6 +5,30 @@ namespace Sabre\HTTP;
 class FunctionsTest extends \PHPUnit\Framework\TestCase {
 
     /**
+     * @dataProvider getHeaderValuesDataOnValues2
+     */
+    function testGetHeaderValuesOnValues2($result, $values1, $values2) {
+
+        $this->assertEquals($result, getHeaderValues($values1, $values2));
+    }
+
+    function getHeaderValuesDataOnValues2() {
+
+        return [
+            [
+                ["a", "b"],
+                ["a"],
+                ["b"]
+            ],
+            [
+                ["a", "b", "c", "d", "e"],
+                ["a", "b", "c"],
+                ["d", "e"]
+            ]
+        ];
+    }
+
+    /**
      * @dataProvider getHeaderValuesData
      */
     function testGetHeaderValues($input, $output) {
@@ -184,6 +208,14 @@ class FunctionsTest extends \PHPUnit\Framework\TestCase {
             toDate($dt)
         );
 
+    }
+
+    function testParseMimeTypeOnInvalidMimeType() {
+
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Not a valid mime-type: invalid_mime_type');
+
+        parseMimeType('invalid_mime_type');
     }
 
 }

@@ -340,7 +340,6 @@ function parseMimeType(string $str) : array {
     $mimeType = explode('/', $mimeType);
     if (count($mimeType) !== 2) {
         // Illegal value
-        var_dump($mimeType);die();
         throw new InvalidArgumentException('Not a valid mime-type: ' . $str);
     }
     list($type, $subType) = $mimeType;

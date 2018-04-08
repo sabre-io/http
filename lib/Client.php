@@ -331,6 +331,8 @@ class Client extends EventEmitter {
 
         if (!$this->curlHandle) {
             $this->curlHandle = curl_init();
+        } else {
+            curl_reset($this->curlHandle);
         }
 
         curl_setopt_array($this->curlHandle, $settings);
@@ -384,13 +386,9 @@ class Client extends EventEmitter {
             case 'HEAD' :
                 $settings[CURLOPT_NOBODY] = true;
                 $settings[CURLOPT_CUSTOMREQUEST] = 'HEAD';
-                $settings[CURLOPT_POSTFIELDS] = '';
-                $settings[CURLOPT_PUT] = false;
                 break;
             case 'GET' :
                 $settings[CURLOPT_CUSTOMREQUEST] = 'GET';
-                $settings[CURLOPT_POSTFIELDS] = '';
-                $settings[CURLOPT_PUT] = false;
                 break;
             default :
                 $body = $request->getBody();

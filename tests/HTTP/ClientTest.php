@@ -19,8 +19,6 @@ class ClientTest extends \PHPUnit\Framework\TestCase {
                 CURLOPT_NOBODY         => false,
                 CURLOPT_URL            => 'http://example.org/',
                 CURLOPT_CUSTOMREQUEST  => 'GET',
-                CURLOPT_POSTFIELDS     => '',
-                CURLOPT_PUT            => false,
                 CURLOPT_USERAGENT      => 'sabre-http/' . Version::VERSION . ' (http://sabre.io/)',
             ];
 
@@ -49,8 +47,6 @@ class ClientTest extends \PHPUnit\Framework\TestCase {
                 CURLOPT_CUSTOMREQUEST  => 'HEAD',
                 CURLOPT_HTTPHEADER     => ['X-Foo: bar'],
                 CURLOPT_URL            => 'http://example.org/',
-                CURLOPT_POSTFIELDS     => '',
-                CURLOPT_PUT            => false,
                 CURLOPT_USERAGENT      => 'sabre-http/' . Version::VERSION . ' (http://sabre.io/)',
             ];
 
@@ -85,8 +81,6 @@ class ClientTest extends \PHPUnit\Framework\TestCase {
                 CURLOPT_HTTPHEADER     => ['X-Foo: bar'],
                 CURLOPT_NOBODY         => false,
                 CURLOPT_URL            => 'http://example.org/',
-                CURLOPT_POSTFIELDS     => '',
-                CURLOPT_PUT            => false,
                 CURLOPT_USERAGENT      => 'sabre-http/' . Version::VERSION . ' (http://sabre.io/)',
             ];
 
@@ -157,6 +151,30 @@ class ClientTest extends \PHPUnit\Framework\TestCase {
 
         $this->assertEquals($settings, $client->createCurlSettingsArray($request));
 
+    }
+
+    function testIssue89MultiplePutInfileGivesWarning()
+    {
+        $client = new ClientMock();
+        $tmpFile = tmpfile();
+        $request = new Request('POST', 'http://example.org/', ['X-Foo' => 'bar'], 'body');
+
+        $settings = $client->createCurlSettingsArray($request);
+        $this->assertArrayNotHasKey(CURLOPT_PUT, $settings);
+        $this->assertArrayNotHasKey(CURLOPT_INFILE, $settings);
+
+
+        $request = new Request('POST', 'http://example.org/', ['X-Foo' => 'bar'], $tmpFile);
+
+        $settings = $client->createCurlSettingsArray($request);
+        $this->assertEquals(true, $settings[CURLOPT_PUT]);
+        $this->assertEquals($tmpFile, $settings[CURLOPT_INFILE]);
+
+        $request = new Request('POST', 'http://example.org/', ['X-Foo' => 'bar'], 'body');
+
+        $settings = $client->createCurlSettingsArray($request);
+        $this->assertArrayNotHasKey(CURLOPT_PUT, $settings);
+        $this->assertArrayNotHasKey(CURLOPT_INFILE, $settings);
     }
 
     function testSend() {
@@ -382,20 +400,10 @@ class ClientMock extends Client {
 
     /**
      * Making this method public.
-     *
-     * We are also going to persist all settings this method generates. While
-     * the underlying object doesn't behave exactly the same, it helps us
-     * simulate what curl does internally, and helps us identify problems with
-     * settings that are set by _some_ methods and not correctly reset by other
-     * methods after subsequent use.
-     * forces
      */
     function createCurlSettingsArray(RequestInterface $request) : array {
 
-        $settings = parent::createCurlSettingsArray($request);
-        $settings = $settings + $this->persistedSettings;
-        $this->persistedSettings = $settings;
-        return $settings;
+        return parent::createCurlSettingsArray($request);
 
     }
     /**

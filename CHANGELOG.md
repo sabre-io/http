@@ -2,9 +2,10 @@ ChangeLog
 =========
 
 
-5.0.0-alpha2 (????-??-??)
+5.0.0 (2017-06-04)
 -------------------------
-
+* #99: Previous CURL opts are not persisted anymore (@christiaan)
+* Final release
 
 5.0.0-alpha1 (2018-02-16)
 -------------------------

@@ -10,8 +10,9 @@ ChangeLog
 5.0.0-alpha1 (2018-02-16)
 -------------------------
 
-* Now requires PHP 7.0.
-* Depends on sabre/event 5 and sabre/uri 2.
+* Now requires PHP 7.0+.
+* Supports sabre/event 4.x and 5.x
+* Depends on sabre/uri 2.
 * hhvm is no longer supported starting this release.
 * #65: It's now possible to supply request/response bodies using a callback
   functions. This allows very high-speed/low-memory responses to be created.

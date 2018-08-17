@@ -8,7 +8,7 @@
         "php"          : ">=7.0",
         "ext-mbstring" : "*",
         "ext-ctype"    : "*",
-        "sabre/event"  : ">=4.0 <6.0",
+        "sabre/event"  : ">=4.0 <5.0",
         "sabre/uri"    : "^2.0"
     },
     "require-dev" : {

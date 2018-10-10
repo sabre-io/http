@@ -1,9 +1,11 @@
-<?php declare (strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Sabre\HTTP;
 
 /**
- * Request Decorator
+ * Request Decorator.
  *
  * This helper class allows you to easily create decorators for the Request
  * object.
@@ -12,86 +14,72 @@ namespace Sabre\HTTP;
  * @author Evert Pot (http://evertpot.com/)
  * @license http://sabre.io/license/ Modified BSD License
  */
-class RequestDecorator implements RequestInterface {
-
+class RequestDecorator implements RequestInterface
+{
     use MessageDecoratorTrait;
 
     /**
      * Constructor.
      */
-    function __construct(RequestInterface $inner) {
-
+    public function __construct(RequestInterface $inner)
+    {
         $this->inner = $inner;
-
     }
 
     /**
-     * Returns the current HTTP method
+     * Returns the current HTTP method.
      */
-    function getMethod() : String {
-
+    public function getMethod(): String
+    {
         return $this->inner->getMethod();
-
     }
 
     /**
-     * Sets the HTTP method
-     *
-     * @return void
+     * Sets the HTTP method.
      */
-    function setMethod(string $method) {
-
+    public function setMethod(string $method)
+    {
         $this->inner->setMethod($method);
-
     }
 
     /**
      * Returns the request url.
      */
-    function getUrl() : string {
-
+    public function getUrl(): string
+    {
         return $this->inner->getUrl();
-
     }
 
     /**
      * Sets the request url.
-     *
-     * @return void
      */
-    function setUrl(string $url) {
-
+    public function setUrl(string $url)
+    {
         $this->inner->setUrl($url);
-
     }
 
     /**
      * Returns the absolute url.
      */
-    function getAbsoluteUrl() : string {
-
+    public function getAbsoluteUrl(): string
+    {
         return $this->inner->getAbsoluteUrl();
-
     }
 
     /**
      * Sets the absolute url.
-     *
-     * @return void
      */
-    function setAbsoluteUrl(string $url) {
-
+    public function setAbsoluteUrl(string $url)
+    {
         $this->inner->setAbsoluteUrl($url);
-
     }
 
     /**
      * Returns the current base url.
      */
-    function getBaseUrl() : string {
-
+    public function getBaseUrl(): string
+    {
         return $this->inner->getBaseUrl();
-
     }
 
     /**
@@ -100,13 +88,10 @@ class RequestDecorator implements RequestInterface {
      * This url is used for relative path calculations.
      *
      * The base url should default to /
-     *
-     * @return void
      */
-    function setBaseUrl(string $url) {
-
+    public function setBaseUrl(string $url)
+    {
         $this->inner->setBaseUrl($url);
-
     }
 
     /**
@@ -124,10 +109,9 @@ class RequestDecorator implements RequestInterface {
      *
      * If the path is outside of the base url, a LogicException will be thrown.
      */
-    function getPath() : string {
-
+    public function getPath(): string
+    {
         return $this->inner->getPath();
-
     }
 
     /**
@@ -135,10 +119,9 @@ class RequestDecorator implements RequestInterface {
      *
      * This is equivalent to PHP's $_GET superglobal.
      */
-    function getQueryParameters() : array {
-
+    public function getQueryParameters(): array
+    {
         return $this->inner->getQueryParameters();
-
     }
 
     /**
@@ -146,10 +129,9 @@ class RequestDecorator implements RequestInterface {
      *
      * This is equivalent to PHP's $_POST superglobal.
      */
-    function getPostData() : array {
-
+    public function getPostData(): array
+    {
         return $this->inner->getPostData();
-
     }
 
     /**
@@ -159,15 +141,11 @@ class RequestDecorator implements RequestInterface {
      *
      * This would not have been needed, if POST data was accessible as
      * php://input, but unfortunately we need to special case it.
-     *
-     * @return void
      */
-    function setPostData(array $postData) {
-
+    public function setPostData(array $postData)
+    {
         $this->inner->setPostData($postData);
-
     }
-
 
     /**
      * Returns an item from the _SERVER array.
@@ -176,21 +154,17 @@ class RequestDecorator implements RequestInterface {
      *
      * @return string|null
      */
-    function getRawServerValue(string $valueName) {
-
+    public function getRawServerValue(string $valueName)
+    {
         return $this->inner->getRawServerValue($valueName);
-
     }
 
     /**
      * Sets the _SERVER array.
-     *
-     * @return void
      */
-    function setRawServerData(array $data) {
-
+    public function setRawServerData(array $data)
+    {
         $this->inner->setRawServerData($data);
-
     }
 
     /**
@@ -198,9 +172,8 @@ class RequestDecorator implements RequestInterface {
      *
      * This is useful for debugging purposes.
      */
-    function __toString() : string {
-
+    public function __toString(): string
+    {
         return $this->inner->__toString();
-
     }
 }

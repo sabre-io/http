@@ -1,4 +1,6 @@
-<?php declare (strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Sabre\HTTP;
 
@@ -9,14 +11,14 @@ namespace Sabre\HTTP;
  * @author Evert Pot (http://evertpot.com/)
  * @license http://sabre.io/license/ Modified BSD License
  */
-class Response extends Message implements ResponseInterface {
-
+class Response extends Message implements ResponseInterface
+{
     /**
      * This is the list of currently registered HTTP status codes.
      *
      * @var array
      */
-    static $statusCodes = [
+    public static $statusCodes = [
         100 => 'Continue',
         101 => 'Switching Protocols',
         102 => 'Processing',
@@ -81,42 +83,45 @@ class Response extends Message implements ResponseInterface {
     ];
 
     /**
-     * HTTP status code
+     * HTTP status code.
      *
      * @var int
      */
     protected $status;
 
     /**
-     * HTTP status text
+     * HTTP status text.
      *
      * @var string
      */
     protected $statusText;
 
     /**
-     * Creates the response object
+     * Creates the response object.
      *
      * @param string|int $status
-     * @param array $headers
-     * @param resource $body
+     * @param array      $headers
+     * @param resource   $body
      */
-    function __construct($status = 500, array $headers = null, $body = null) {
-
-        if (!is_null($status)) $this->setStatus($status);
-        if (!is_null($headers)) $this->setHeaders($headers);
-        if (!is_null($body)) $this->setBody($body);
-
+    public function __construct($status = 500, array $headers = null, $body = null)
+    {
+        if (!is_null($status)) {
+            $this->setStatus($status);
+        }
+        if (!is_null($headers)) {
+            $this->setHeaders($headers);
+        }
+        if (!is_null($body)) {
+            $this->setBody($body);
+        }
     }
-
 
     /**
      * Returns the current HTTP status code.
      */
-    function getStatus() : int {
-
+    public function getStatus(): int
+    {
         return $this->status;
-
     }
 
     /**
@@ -124,10 +129,9 @@ class Response extends Message implements ResponseInterface {
      *
      * In the case of a 200, this may for example be 'OK'.
      */
-    function getStatusText() : string {
-
+    public function getStatusText(): string
+    {
         return $this->statusText;
-
     }
 
     /**
@@ -140,16 +144,14 @@ class Response extends Message implements ResponseInterface {
      * added.
      *
      * @param string|int $status
+     *
      * @throws \InvalidArgumentException
-     * @return void
      */
-    function setStatus($status) {
-
+    public function setStatus($status)
+    {
         if (ctype_digit($status) || is_int($status)) {
-
             $statusCode = $status;
             $statusText = isset(self::$statusCodes[$status]) ? self::$statusCodes[$status] : 'Unknown';
-
         } else {
             list(
                 $statusCode,
@@ -160,9 +162,8 @@ class Response extends Message implements ResponseInterface {
             throw new \InvalidArgumentException('The HTTP status code must be exactly 3 digits');
         }
 
-        $this->status = (int)$statusCode;
+        $this->status = (int) $statusCode;
         $this->statusText = $statusText;
-
     }
 
     /**
@@ -170,18 +171,17 @@ class Response extends Message implements ResponseInterface {
      *
      * This is useful for debugging purposes.
      */
-    function __toString() : string {
-
-        $str = 'HTTP/' . $this->httpVersion . ' ' . $this->getStatus() . ' ' . $this->getStatusText() . "\r\n";
+    public function __toString(): string
+    {
+        $str = 'HTTP/'.$this->httpVersion.' '.$this->getStatus().' '.$this->getStatusText()."\r\n";
         foreach ($this->getHeaders() as $key => $value) {
             foreach ($value as $v) {
-                $str .= $key . ": " . $v . "\r\n";
+                $str .= $key.': '.$v."\r\n";
             }
         }
         $str .= "\r\n";
         $str .= $this->getBodyAsString();
+
         return $str;
-
     }
-
 }

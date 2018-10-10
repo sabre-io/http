@@ -1,4 +1,6 @@
-<?php declare (strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Sabre\HTTP;
 
@@ -13,8 +15,8 @@ namespace Sabre\HTTP;
  * @author Evert Pot (http://evertpot.com/)
  * @license http://sabre.io/license/ Modified BSD License
  */
-trait MessageDecoratorTrait {
-
+trait MessageDecoratorTrait
+{
     /**
      * The inner request object.
      *
@@ -32,10 +34,9 @@ trait MessageDecoratorTrait {
      *
      * @return resource
      */
-    function getBodyAsStream() {
-
+    public function getBodyAsStream()
+    {
         return $this->inner->getBodyAsStream();
-
     }
 
     /**
@@ -44,10 +45,9 @@ trait MessageDecoratorTrait {
      * Note that because the underlying data may be based on a stream, this
      * method could only work correctly the first time.
      */
-    function getBodyAsString() : string {
-
+    public function getBodyAsString(): string
+    {
         return $this->inner->getBodyAsString();
-
     }
 
     /**
@@ -57,22 +57,19 @@ trait MessageDecoratorTrait {
      *
      * @return resource|string
      */
-    function getBody() {
-
+    public function getBody()
+    {
         return $this->inner->getBody();
-
     }
 
     /**
      * Updates the body resource with a new stream.
      *
      * @param resource|string|callable $body
-     * @return void
      */
-    function setBody($body) {
-
+    public function setBody($body)
+    {
         $this->inner->setBody($body);
-
     }
 
     /**
@@ -80,19 +77,17 @@ trait MessageDecoratorTrait {
      *
      * Every header is returned as an array, with one or more values.
      */
-    function getHeaders() : array {
-
+    public function getHeaders(): array
+    {
         return $this->inner->getHeaders();
-
     }
 
     /**
      * Will return true or false, depending on if a HTTP header exists.
      */
-    function hasHeader(string $name) : bool {
-
+    public function hasHeader(string $name): bool
+    {
         return $this->inner->hasHeader($name);
-
     }
 
     /**
@@ -110,10 +105,9 @@ trait MessageDecoratorTrait {
      *
      * @return string|null
      */
-    function getHeader(string $name) {
-
+    public function getHeader(string $name)
+    {
         return $this->inner->getHeader($name);
-
     }
 
     /**
@@ -124,10 +118,9 @@ trait MessageDecoratorTrait {
      *
      * If the header did not exists, this method will return an empty array.
      */
-    function getHeaderAsArray(string $name) : array {
-
+    public function getHeaderAsArray(string $name): array
+    {
         return $this->inner->getHeaderAsArray($name);
-
     }
 
     /**
@@ -138,12 +131,10 @@ trait MessageDecoratorTrait {
      * If the header already existed, it will be overwritten.
      *
      * @param string|string[] $value
-     * @return void
      */
-    function setHeader(string $name, $value) {
-
+    public function setHeader(string $name, $value)
+    {
         $this->inner->setHeader($name, $value);
-
     }
 
     /**
@@ -153,13 +144,10 @@ trait MessageDecoratorTrait {
      * should be specified as either a string or an array.
      *
      * Any header that already existed will be overwritten.
-     *
-     * @return void
      */
-    function setHeaders(array $headers) {
-
+    public function setHeaders(array $headers)
+    {
         $this->inner->setHeaders($headers);
-
     }
 
     /**
@@ -170,27 +158,21 @@ trait MessageDecoratorTrait {
      * getHeadersAsArray.
      *
      * @param scalar $value
-     * @return void
      */
-    function addHeader(string $name, $value) {
-
+    public function addHeader(string $name, $value)
+    {
         $this->inner->addHeader($name, $value);
-
     }
 
     /**
      * Adds a new set of HTTP headers.
      *
      * Any existing headers will not be overwritten.
-     *
-     * @return void
      */
-    function addHeaders(array $headers) {
-
+    public function addHeaders(array $headers)
+    {
         $this->inner->addHeaders($headers);
-
     }
-
 
     /**
      * Removes a HTTP header.
@@ -201,32 +183,26 @@ trait MessageDecoratorTrait {
      *
      * @return bool
      */
-    function removeHeader(string $name) : bool {
-
+    public function removeHeader(string $name): bool
+    {
         return $this->inner->removeHeader($name);
-
     }
 
     /**
      * Sets the HTTP version.
      *
      * Should be 1.0, 1.1 or 2.0.
-     *
-     * @return void
      */
-    function setHttpVersion(string $version) {
-
+    public function setHttpVersion(string $version)
+    {
         $this->inner->setHttpVersion($version);
-
     }
 
     /**
      * Returns the HTTP version.
      */
-    function getHttpVersion() : string {
-
+    public function getHttpVersion(): string
+    {
         return $this->inner->getHttpVersion();
-
     }
-
 }

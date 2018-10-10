@@ -1,4 +1,6 @@
-<?php declare (strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Sabre\HTTP\Auth;
 
@@ -15,8 +17,8 @@ namespace Sabre\HTTP\Auth;
  * @author Evert Pot (http://evertpot.com/)
  * @license http://sabre.io/license/ Modified BSD License
  */
-class Basic extends AbstractAuth {
-
+class Basic extends AbstractAuth
+{
     /**
      * This method returns a numeric array with a username and password as the
      * only elements.
@@ -25,15 +27,15 @@ class Basic extends AbstractAuth {
      *
      * @return null|array
      */
-    function getCredentials() {
-
+    public function getCredentials()
+    {
         $auth = $this->request->getHeader('Authorization');
 
         if (!$auth) {
             return null;
         }
 
-        if (strtolower(substr($auth, 0, 6)) !== 'basic ') {
+        if ('basic ' !== strtolower(substr($auth, 0, 6))) {
             return null;
         }
 
@@ -44,20 +46,15 @@ class Basic extends AbstractAuth {
         }
 
         return $credentials;
-
     }
 
     /**
      * This method sends the needed HTTP header and statuscode (401) to force
      * the user to login.
-     *
-     * @return void
      */
-    function requireLogin() {
-
-        $this->response->addHeader('WWW-Authenticate', 'Basic realm="' . $this->realm . '", charset="UTF-8"');
+    public function requireLogin()
+    {
+        $this->response->addHeader('WWW-Authenticate', 'Basic realm="'.$this->realm.'", charset="UTF-8"');
         $this->response->setStatus(401);
-
     }
-
 }

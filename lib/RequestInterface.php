@@ -1,4 +1,6 @@
-<?php declare (strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Sabre\HTTP;
 
@@ -9,48 +11,42 @@ namespace Sabre\HTTP;
  * @author Evert Pot (http://evertpot.com/)
  * @license http://sabre.io/license/ Modified BSD License
  */
-interface RequestInterface extends MessageInterface {
+interface RequestInterface extends MessageInterface
+{
+    /**
+     * Returns the current HTTP method.
+     */
+    public function getMethod(): string;
 
     /**
-     * Returns the current HTTP method
+     * Sets the HTTP method.
      */
-    function getMethod() : string;
-
-    /**
-     * Sets the HTTP method
-     *
-     * @return void
-     */
-    function setMethod(string $method);
+    public function setMethod(string $method);
 
     /**
      * Returns the request url.
      */
-    function getUrl() : string;
+    public function getUrl(): string;
 
     /**
      * Sets the request url.
-     *
-     * @return void
      */
-    function setUrl(string $url);
+    public function setUrl(string $url);
 
     /**
      * Returns the absolute url.
      */
-    function getAbsoluteUrl() : string;
+    public function getAbsoluteUrl(): string;
 
     /**
      * Sets the absolute url.
-     *
-     * @return void
      */
-    function setAbsoluteUrl(string $url);
+    public function setAbsoluteUrl(string $url);
 
     /**
      * Returns the current base url.
      */
-    function getBaseUrl() : string;
+    public function getBaseUrl(): string;
 
     /**
      * Sets a base url.
@@ -58,10 +54,8 @@ interface RequestInterface extends MessageInterface {
      * This url is used for relative path calculations.
      *
      * The base url should default to /
-     *
-     * @return void
      */
-    function setBaseUrl(string $url);
+    public function setBaseUrl(string $url);
 
     /**
      * Returns the relative path.
@@ -78,21 +72,21 @@ interface RequestInterface extends MessageInterface {
      *
      * If the path is outside of the base url, a LogicException will be thrown.
      */
-    function getPath() : string;
+    public function getPath(): string;
 
     /**
      * Returns the list of query parameters.
      *
      * This is equivalent to PHP's $_GET superglobal.
      */
-    function getQueryParameters() : array;
+    public function getQueryParameters(): array;
 
     /**
      * Returns the POST data.
      *
      * This is equivalent to PHP's $_POST superglobal.
      */
-    function getPostData() : array;
+    public function getPostData(): array;
 
     /**
      * Sets the post data.
@@ -101,10 +95,8 @@ interface RequestInterface extends MessageInterface {
      *
      * This would not have been needed, if POST data was accessible as
      * php://input, but unfortunately we need to special case it.
-     *
-     * @return void
      */
-    function setPostData(array $postData);
+    public function setPostData(array $postData);
 
     /**
      * Returns an item from the _SERVER array.
@@ -113,14 +105,10 @@ interface RequestInterface extends MessageInterface {
      *
      * @return string|null
      */
-    function getRawServerValue(string $valueName);
+    public function getRawServerValue(string $valueName);
 
     /**
      * Sets the _SERVER array.
-     *
-     * @return void
      */
-    function setRawServerData(array $data);
-
-
+    public function setRawServerData(array $data);
 }

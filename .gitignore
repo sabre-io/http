@@ -13,3 +13,6 @@ bin/sabre-cs-fixer*
 
 # Vim
 .*.swp
+
+# development stuff
+.php_cs.cache

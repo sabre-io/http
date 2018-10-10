@@ -1,4 +1,6 @@
-<?php declare (strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Sabre\HTTP;
 
@@ -10,8 +12,8 @@ namespace Sabre\HTTP;
  * @author Evert Pot (http://evertpot.com/)
  * @license http://sabre.io/license/ Modified BSD License
  */
-interface MessageInterface {
-
+interface MessageInterface
+{
     /**
      * Returns the body as a readable stream resource.
      *
@@ -20,7 +22,7 @@ interface MessageInterface {
      *
      * @return resource
      */
-    function getBodyAsStream();
+    public function getBodyAsStream();
 
     /**
      * Returns the body as a string.
@@ -30,7 +32,7 @@ interface MessageInterface {
      *
      * @return string
      */
-    function getBodyAsString() : string;
+    public function getBodyAsString(): string;
 
     /**
      * Returns the message body, as it's internal representation.
@@ -39,27 +41,26 @@ interface MessageInterface {
      *
      * @return resource|string|callable
      */
-    function getBody();
+    public function getBody();
 
     /**
      * Updates the body resource with a new stream.
      *
      * @param resource|string|callable $body
-     * @return void
      */
-    function setBody($body);
+    public function setBody($body);
 
     /**
      * Returns all the HTTP headers as an array.
      *
      * Every header is returned as an array, with one or more values.
      */
-    function getHeaders() : array;
+    public function getHeaders(): array;
 
     /**
      * Will return true or false, depending on if a HTTP header exists.
      */
-    function hasHeader(string $name) : bool;
+    public function hasHeader(string $name): bool;
 
     /**
      * Returns a specific HTTP header, based on it's name.
@@ -76,7 +77,7 @@ interface MessageInterface {
      *
      * @return string|null
      */
-    function getHeader(string $name);
+    public function getHeader(string $name);
 
     /**
      * Returns a HTTP header as an array.
@@ -88,7 +89,7 @@ interface MessageInterface {
      *
      * @return string[]
      */
-    function getHeaderAsArray(string $name) : array;
+    public function getHeaderAsArray(string $name): array;
 
     /**
      * Updates a HTTP header.
@@ -98,9 +99,8 @@ interface MessageInterface {
      * If the header already existed, it will be overwritten.
      *
      * @param string|string[] $value
-     * @return void
      */
-    function setHeader(string $name, $value);
+    public function setHeader(string $name, $value);
 
     /**
      * Sets a new set of HTTP headers.
@@ -109,10 +109,8 @@ interface MessageInterface {
      * should be specified as either a string or an array.
      *
      * Any header that already existed will be overwritten.
-     *
-     * @return void
      */
-    function setHeaders(array $headers);
+    public function setHeaders(array $headers);
 
     /**
      * Adds a HTTP header.
@@ -122,18 +120,15 @@ interface MessageInterface {
      * getHeadersAsArray.
      *
      * @param scalar $value
-     * @return void
      */
-    function addHeader(string $name, $value);
+    public function addHeader(string $name, $value);
 
     /**
      * Adds a new set of HTTP headers.
      *
      * Any existing headers will not be overwritten.
-     *
-     * @return void
      */
-    function addHeaders(array $headers);
+    public function addHeaders(array $headers);
 
     /**
      * Removes a HTTP header.
@@ -142,20 +137,17 @@ interface MessageInterface {
      * This method should return true if the header was successfully deleted,
      * and false if the header did not exist.
      */
-    function removeHeader(string $name) : bool;
+    public function removeHeader(string $name): bool;
 
     /**
      * Sets the HTTP version.
      *
      * Should be 1.0, 1.1 or 2.0.
-     *
-     * @return void
      */
-    function setHttpVersion(string $version);
+    public function setHttpVersion(string $version);
 
     /**
      * Returns the HTTP version.
      */
-    function getHttpVersion() : string;
-
+    public function getHttpVersion(): string;
 }

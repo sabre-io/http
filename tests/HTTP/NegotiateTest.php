@@ -1,23 +1,24 @@
-<?php declare (strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Sabre\HTTP;
 
-class NegotiateTest extends \PHPUnit\Framework\TestCase {
-
+class NegotiateTest extends \PHPUnit\Framework\TestCase
+{
     /**
      * @dataProvider negotiateData
      */
-    function testNegotiate($acceptHeader, $available, $expected) {
-
+    public function testNegotiate($acceptHeader, $available, $expected)
+    {
         $this->assertEquals(
             $expected,
             negotiateContentType($acceptHeader, $available)
         );
-
     }
 
-    function negotiateData() {
-
+    public function negotiateData()
+    {
         return [
             [ // simple
                 'application/xml',
@@ -75,7 +76,6 @@ class NegotiateTest extends \PHPUnit\Framework\TestCase {
                     'application/vcard+json',
                 ],
                 'text/vcard; version=4.0',
-
             ],
             [ // rfc7231 example 1
                 'audio/*; q=0.2, audio/basic',
@@ -105,7 +105,7 @@ class NegotiateTest extends \PHPUnit\Framework\TestCase {
                 'text/vcard;version=3.0, text/vcard',
                 [
                     'text/vcard',
-                    'text/vcard; version=3.0'
+                    'text/vcard; version=3.0',
                 ],
                 'text/vcard; version=3.0',
             ],
@@ -121,7 +121,7 @@ class NegotiateTest extends \PHPUnit\Framework\TestCase {
                 'text/vcard; charset=utf-8; version=3.0, text/vcard',
                 [
                     'text/vcard',
-                    'text/vcard; version=3.0'
+                    'text/vcard; version=3.0',
                 ],
                 'text/vcard; version=3.0',
             ],
@@ -130,8 +130,6 @@ class NegotiateTest extends \PHPUnit\Framework\TestCase {
                 ['application/xml', 'application/json', 'image/png'],
                 'application/xml',
             ],
-
         ];
-
     }
 }

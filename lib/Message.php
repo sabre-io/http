@@ -1,4 +1,6 @@
-<?php declare (strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Sabre\HTTP;
 
@@ -11,10 +13,10 @@ namespace Sabre\HTTP;
  * @author Evert Pot (http://evertpot.com/)
  * @license http://sabre.io/license/ Modified BSD License
  */
-abstract class Message implements MessageInterface {
-
+abstract class Message implements MessageInterface
+{
     /**
-     * Request body
+     * Request body.
      *
      * This should be a stream resource, string or a callback writing the body to php://output
      *
@@ -23,14 +25,14 @@ abstract class Message implements MessageInterface {
     protected $body;
 
     /**
-     * Contains the list of HTTP headers
+     * Contains the list of HTTP headers.
      *
      * @var array
      */
     protected $headers = [];
 
     /**
-     * HTTP message version (1.0, 1.1 or 2.0)
+     * HTTP message version (1.0, 1.1 or 2.0).
      *
      * @var string
      */
@@ -44,20 +46,21 @@ abstract class Message implements MessageInterface {
      *
      * @return resource
      */
-    function getBodyAsStream() {
-
+    public function getBodyAsStream()
+    {
         $body = $this->getBody();
         if (is_callable($this->body)) {
             $body = $this->getBodyAsString();
         }
         if (is_string($body) || is_null($body)) {
             $stream = fopen('php://temp', 'r+');
-            fwrite($stream, (string)$body);
+            fwrite($stream, (string) $body);
             rewind($stream);
+
             return $stream;
         }
-        return $body;
 
+        return $body;
     }
 
     /**
@@ -66,8 +69,8 @@ abstract class Message implements MessageInterface {
      * Note that because the underlying data may be based on a stream, this
      * method could only work correctly the first time.
      */
-    function getBodyAsString() : string {
-
+    public function getBodyAsString(): string
+    {
         $body = $this->getBody();
         if (is_string($body)) {
             return $body;
@@ -78,11 +81,12 @@ abstract class Message implements MessageInterface {
         if (is_callable($body)) {
             ob_start();
             $body();
+
             return ob_get_clean();
         }
         $contentLength = $this->getHeader('Content-Length');
         if (is_int($contentLength) || ctype_digit($contentLength)) {
-            return stream_get_contents($body, (int)$contentLength);
+            return stream_get_contents($body, (int) $contentLength);
         } else {
             return stream_get_contents($body);
         }
@@ -95,22 +99,19 @@ abstract class Message implements MessageInterface {
      *
      * @return resource|string|callable
      */
-    function getBody() {
-
+    public function getBody()
+    {
         return $this->body;
-
     }
 
     /**
      * Replaces the body resource with a new stream, string or a callback writing the body to php://output.
      *
      * @param resource|string|callable $body
-     * @return void
      */
-    function setBody($body) {
-
+    public function setBody($body)
+    {
         $this->body = $body;
-
     }
 
     /**
@@ -118,23 +119,22 @@ abstract class Message implements MessageInterface {
      *
      * Every header is returned as an array, with one or more values.
      */
-    function getHeaders() : array {
-
+    public function getHeaders(): array
+    {
         $result = [];
         foreach ($this->headers as $headerInfo) {
             $result[$headerInfo[0]] = $headerInfo[1];
         }
-        return $result;
 
+        return $result;
     }
 
     /**
      * Will return true or false, depending on if a HTTP header exists.
      */
-    function hasHeader(string $name) : bool {
-
+    public function hasHeader(string $name): bool
+    {
         return isset($this->headers[strtolower($name)]);
-
     }
 
     /**
@@ -152,15 +152,15 @@ abstract class Message implements MessageInterface {
      *
      * @return string|null
      */
-    function getHeader(string $name) {
-
+    public function getHeader(string $name)
+    {
         $name = strtolower($name);
 
         if (isset($this->headers[$name])) {
             return implode(',', $this->headers[$name][1]);
         }
-        return null;
 
+        return null;
     }
 
     /**
@@ -173,8 +173,8 @@ abstract class Message implements MessageInterface {
      *
      * @return string[]
      */
-    function getHeaderAsArray(string $name) : array {
-
+    public function getHeaderAsArray(string $name): array
+    {
         $name = strtolower($name);
 
         if (isset($this->headers[$name])) {
@@ -182,7 +182,6 @@ abstract class Message implements MessageInterface {
         }
 
         return [];
-
     }
 
     /**
@@ -193,12 +192,10 @@ abstract class Message implements MessageInterface {
      * If the header already existed, it will be overwritten.
      *
      * @param string|string[] $value
-     * @return void
      */
-    function setHeader(string $name, $value) {
-
-        $this->headers[strtolower($name)] = [$name, (array)$value];
-
+    public function setHeader(string $name, $value)
+    {
+        $this->headers[strtolower($name)] = [$name, (array) $value];
     }
 
     /**
@@ -208,15 +205,12 @@ abstract class Message implements MessageInterface {
      * should be specified as either a string or an array.
      *
      * Any header that already existed will be overwritten.
-     *
-     * @return void
      */
-    function setHeaders(array $headers) {
-
+    public function setHeaders(array $headers)
+    {
         foreach ($headers as $name => $value) {
             $this->setHeader($name, $value);
         }
-
     }
 
     /**
@@ -227,40 +221,34 @@ abstract class Message implements MessageInterface {
      * getHeadersAsArray.
      *
      * @param scalar $value
-     * @return void
      */
-    function addHeader(string $name, $value) {
-
+    public function addHeader(string $name, $value)
+    {
         $lName = strtolower($name);
         if (isset($this->headers[$lName])) {
             $this->headers[$lName][1] = array_merge(
                 $this->headers[$lName][1],
-                (array)$value
+                (array) $value
             );
         } else {
             $this->headers[$lName] = [
                 $name,
-                (array)$value
+                (array) $value,
             ];
         }
-
     }
 
     /**
      * Adds a new set of HTTP headers.
      *
      * Any existing headers will not be overwritten.
-     *
-     * @return void
      */
-    function addHeaders(array $headers) {
-
+    public function addHeaders(array $headers)
+    {
         foreach ($headers as $name => $value) {
             $this->addHeader($name, $value);
         }
-
     }
-
 
     /**
      * Removes a HTTP header.
@@ -269,28 +257,25 @@ abstract class Message implements MessageInterface {
      * This method should return true if the header was successfully deleted,
      * and false if the header did not exist.
      */
-    function removeHeader(string $name) : bool {
-
+    public function removeHeader(string $name): bool
+    {
         $name = strtolower($name);
         if (!isset($this->headers[$name])) {
             return false;
         }
         unset($this->headers[$name]);
-        return true;
 
+        return true;
     }
 
     /**
      * Sets the HTTP version.
      *
      * Should be 1.0, 1.1 or 2.0.
-     *
-     * @return void
      */
-    function setHttpVersion(string $version) {
-
+    public function setHttpVersion(string $version)
+    {
         $this->httpVersion = $version;
-
     }
 
     /**
@@ -298,10 +283,8 @@ abstract class Message implements MessageInterface {
      *
      * @return string
      */
-    function getHttpVersion() : string {
-
+    public function getHttpVersion(): string
+    {
         return $this->httpVersion;
-
     }
-
 }

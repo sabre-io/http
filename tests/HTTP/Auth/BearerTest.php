@@ -1,16 +1,18 @@
-<?php declare (strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Sabre\HTTP\Auth;
 
 use Sabre\HTTP\Request;
 use Sabre\HTTP\Response;
 
-class BearerTest extends \PHPUnit\Framework\TestCase {
-
-    function testGetToken() {
-
+class BearerTest extends \PHPUnit\Framework\TestCase
+{
+    public function testGetToken()
+    {
         $request = new Request('GET', '/', [
-            'Authorization' => 'Bearer 12345'
+            'Authorization' => 'Bearer 12345',
         ]);
 
         $bearer = new Bearer('Dagger', $request, new Response());
@@ -19,31 +21,28 @@ class BearerTest extends \PHPUnit\Framework\TestCase {
             '12345',
             $bearer->getToken()
         );
-
     }
 
-    function testGetCredentialsNoheader() {
-
+    public function testGetCredentialsNoheader()
+    {
         $request = new Request('GET', '/', []);
         $bearer = new Bearer('Dagger', $request, new Response());
 
         $this->assertNull($bearer->getToken());
-
     }
 
-    function testGetCredentialsNotBearer() {
-
+    public function testGetCredentialsNotBearer()
+    {
         $request = new Request('GET', '/', [
-            'Authorization' => 'QBearer 12345'
+            'Authorization' => 'QBearer 12345',
         ]);
         $bearer = new Bearer('Dagger', $request, new Response());
 
         $this->assertNull($bearer->getToken());
-
     }
 
-    function testRequireLogin() {
-
+    public function testRequireLogin()
+    {
         $response = new Response();
         $request = new Request('GET', '/');
         $bearer = new Bearer('Dagger', $request, $response);
@@ -52,7 +51,5 @@ class BearerTest extends \PHPUnit\Framework\TestCase {
 
         $this->assertEquals('Bearer realm="Dagger"', $response->getHeader('WWW-Authenticate'));
         $this->assertEquals(401, $response->getStatus());
-
     }
-
 }

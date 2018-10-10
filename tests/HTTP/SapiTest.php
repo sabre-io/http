@@ -1,25 +1,27 @@
-<?php declare (strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Sabre\HTTP;
 
-class SapiTest extends \PHPUnit\Framework\TestCase {
-
-    function testConstructFromServerArray() {
-
+class SapiTest extends \PHPUnit\Framework\TestCase
+{
+    public function testConstructFromServerArray()
+    {
         $request = Sapi::createFromServerArray([
-            'REQUEST_URI'     => '/foo',
-            'REQUEST_METHOD'  => 'GET',
+            'REQUEST_URI' => '/foo',
+            'REQUEST_METHOD' => 'GET',
             'HTTP_USER_AGENT' => 'Evert',
-            'CONTENT_TYPE'    => 'text/xml',
-            'CONTENT_LENGTH'  => '400',
+            'CONTENT_TYPE' => 'text/xml',
+            'CONTENT_LENGTH' => '400',
             'SERVER_PROTOCOL' => 'HTTP/1.0',
         ]);
 
         $this->assertEquals('GET', $request->getMethod());
         $this->assertEquals('/foo', $request->getUrl());
         $this->assertEquals([
-            'User-Agent'     => ['Evert'],
-            'Content-Type'   => ['text/xml'],
+            'User-Agent' => ['Evert'],
+            'Content-Type' => ['text/xml'],
             'Content-Length' => ['400'],
         ], $request->getHeaders());
 
@@ -27,31 +29,29 @@ class SapiTest extends \PHPUnit\Framework\TestCase {
 
         $this->assertEquals('400', $request->getRawServerValue('CONTENT_LENGTH'));
         $this->assertNull($request->getRawServerValue('FOO'));
-
     }
 
-    function testConstructPHPAuth() {
-
+    public function testConstructPHPAuth()
+    {
         $request = Sapi::createFromServerArray([
-            'REQUEST_URI'    => '/foo',
+            'REQUEST_URI' => '/foo',
             'REQUEST_METHOD' => 'GET',
-            'PHP_AUTH_USER'  => 'user',
-            'PHP_AUTH_PW'    => 'pass',
+            'PHP_AUTH_USER' => 'user',
+            'PHP_AUTH_PW' => 'pass',
         ]);
 
         $this->assertEquals('GET', $request->getMethod());
         $this->assertEquals('/foo', $request->getUrl());
         $this->assertEquals([
-            'Authorization' => ['Basic ' . base64_encode('user:pass')],
+            'Authorization' => ['Basic '.base64_encode('user:pass')],
         ], $request->getHeaders());
-
     }
 
-    function testConstructPHPAuthDigest() {
-
+    public function testConstructPHPAuthDigest()
+    {
         $request = Sapi::createFromServerArray([
-            'REQUEST_URI'     => '/foo',
-            'REQUEST_METHOD'  => 'GET',
+            'REQUEST_URI' => '/foo',
+            'REQUEST_METHOD' => 'GET',
             'PHP_AUTH_DIGEST' => 'blabla',
         ]);
 
@@ -60,14 +60,13 @@ class SapiTest extends \PHPUnit\Framework\TestCase {
         $this->assertEquals([
             'Authorization' => ['Digest blabla'],
         ], $request->getHeaders());
-
     }
 
-    function testConstructRedirectAuth() {
-
+    public function testConstructRedirectAuth()
+    {
         $request = Sapi::createFromServerArray([
-            'REQUEST_URI'                 => '/foo',
-            'REQUEST_METHOD'              => 'GET',
+            'REQUEST_URI' => '/foo',
+            'REQUEST_METHOD' => 'GET',
             'REDIRECT_HTTP_AUTHORIZATION' => 'Basic bla',
         ]);
 
@@ -76,7 +75,6 @@ class SapiTest extends \PHPUnit\Framework\TestCase {
         $this->assertEquals([
             'Authorization' => ['Basic bla'],
         ], $request->getHeaders());
-
     }
 
     /**
@@ -85,8 +83,8 @@ class SapiTest extends \PHPUnit\Framework\TestCase {
      * Unfortunately we have no way of testing if the HTTP response code got
      * changed.
      */
-    function testSend() {
-
+    public function testSend()
+    {
         if (!function_exists('xdebug_get_headers')) {
             $this->markTestSkipped('XDebug needs to be installed for this test to run');
         }
@@ -107,22 +105,21 @@ class SapiTest extends \PHPUnit\Framework\TestCase {
 
         $this->assertEquals(
             [
-                "Content-Type: text/xml;charset=UTF-8",
-                "Content-Type: application/xml",
+                'Content-Type: text/xml;charset=UTF-8',
+                'Content-Type: application/xml',
             ],
             $headers
         );
 
         $this->assertEquals('foo', $result);
-
     }
 
     /**
      * @runInSeparateProcess
      * @depends testSend
      */
-    function testSendLimitedByContentLengthString() {
-
+    public function testSendLimitedByContentLengthString()
+    {
         $response = new Response(200);
 
         $response->addHeader('Content-Length', 19);
@@ -136,17 +133,17 @@ class SapiTest extends \PHPUnit\Framework\TestCase {
         header_remove();
 
         $this->assertEquals('Send this sentence.', $result);
-
     }
 
     /**
      * Tests whether http2 is recognized.
      */
-    function testRecognizeHttp2() {
+    public function testRecognizeHttp2()
+    {
         $request = Sapi::createFromServerArray([
             'SERVER_PROTOCOL' => 'HTTP/2.0',
-            'REQUEST_URI'     => 'bla',
-            'REQUEST_METHOD'  => 'GET'
+            'REQUEST_URI' => 'bla',
+            'REQUEST_METHOD' => 'GET',
         ]);
 
         $this->assertEquals('2.0', $request->getHttpVersion());
@@ -156,8 +153,8 @@ class SapiTest extends \PHPUnit\Framework\TestCase {
      * @runInSeparateProcess
      * @depends testSend
      */
-    function testSendLimitedByContentLengthStream() {
-
+    public function testSendLimitedByContentLengthStream()
+    {
         $response = new Response(200, ['Content-Length' => 19]);
 
         $body = fopen('php://memory', 'w');
@@ -174,15 +171,15 @@ class SapiTest extends \PHPUnit\Framework\TestCase {
         header_remove();
 
         $this->assertEquals('Send this sentence.', $result);
-
     }
 
     /**
      * @runInSeparateProcess
      * @depends testSend
      */
-    function testSendWorksWithCallbackAsBody() {
-        $response = new Response(200, [], function() {
+    public function testSendWorksWithCallbackAsBody()
+    {
+        $response = new Response(200, [], function () {
             $fd = fopen('php://output', 'r+');
             fwrite($fd, 'foo');
             fclose($fd);
@@ -195,7 +192,5 @@ class SapiTest extends \PHPUnit\Framework\TestCase {
         $result = ob_get_clean();
 
         $this->assertEquals('foo', $result);
-
     }
-
 }

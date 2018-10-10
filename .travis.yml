@@ -27,8 +27,6 @@ before_script:
 
 script:
   - ./bin/phpunit --configuration tests/phpunit.xml $WITH_COVERAGE
-  - rm -f ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/xdebug.ini
-  - ./bin/sabre-cs-fixer fix . --dry-run --diff
 
 after_success:
   - bash <(curl -s https://codecov.io/bash)

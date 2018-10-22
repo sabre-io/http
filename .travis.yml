@@ -6,20 +6,29 @@ php:
   - 7.2
   - 7.3
 
-matrix:
-  fast_finish: true
-
 env:
+  global:
+    - RUN_PHPSTAN="FALSE"
   matrix:
     - PREFER_LOWEST="" WITH_COVERAGE="--coverage-clover=coverage.xml"
     - PREFER_LOWEST="--prefer-lowest" $WITH_COVERAGE=""
 
+matrix:
+  include:
+    - name: 'PHPStan'
+      php: 7.2
+      env: RUN_PHPSTAN="TRUE"
+  fast_finish: true
+
+install:
+  - if [ $RUN_PHPSTAN == "TRUE"  ]; then wget https://github.com/phpstan/phpstan/releases/download/0.10.3/phpstan.phar; fi
+
 before_script:
-#    - composer self-update
-    - composer update --prefer-source $PREFER_LOWEST
+  - composer update --prefer-source $PREFER_LOWEST
 
 script:
-  - ./bin/phpunit --configuration tests/phpunit.xml $WITH_COVERAGE
+  - if [ $RUN_PHPSTAN == "FALSE"  ]; then ./bin/phpunit --configuration tests/phpunit.xml $WITH_COVERAGE; fi
+  - if [ $RUN_PHPSTAN == "TRUE"  ]; then php phpstan.phar analyse -c phpstan.neon lib; fi
 
 after_success:
   - bash <(curl -s https://codecov.io/bash)

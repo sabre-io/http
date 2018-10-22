@@ -186,6 +186,7 @@ class Client extends EventEmitter
             );
         } while (CURLM_CALL_MULTI_PERFORM === $r);
 
+        $messagesInQueue = 0;
         do {
             messageQueue:
 

@@ -105,13 +105,13 @@ class Response extends Message implements ResponseInterface
      */
     public function __construct($status = 500, array $headers = null, $body = null)
     {
-        if (!is_null($status)) {
+        if ($status !== null) {
             $this->setStatus($status);
         }
-        if (!is_null($headers)) {
+        if ($headers !== null) {
             $this->setHeaders($headers);
         }
-        if (!is_null($body)) {
+        if ($body !== null) {
             $this->setBody($body);
         }
     }

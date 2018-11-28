@@ -42,7 +42,7 @@ class Sapi
     {
         $serverArr = $_SERVER;
 
-        if ('cli' === php_sapi_name()) {
+        if ('cli' === PHP_SAPI) {
             // If we're running off the CLI, we're going to set some default
             // settings.
             $serverArr['REQUEST_URI'] = $_SERVER['REQUEST_URI'] ?? '/';
@@ -75,7 +75,7 @@ class Sapi
         }
 
         $body = $response->getBody();
-        if ($body === null) {
+        if (null === $body) {
             return;
         }
 
@@ -199,11 +199,11 @@ class Sapi
             }
         }
 
-        if ($url === null) {
+        if (null === $url) {
             throw new InvalidArgumentException('The _SERVER array must have a REQUEST_URI key');
         }
 
-        if ($method === null) {
+        if (null === $method) {
             throw new InvalidArgumentException('The _SERVER array must have a REQUEST_METHOD key');
         }
         $r = new Request($method, $url, $headers);

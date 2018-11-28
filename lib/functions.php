@@ -138,7 +138,7 @@ function negotiateContentType($acceptHeaderValue, array $availableOptions)
 
     foreach ($proposals as $proposal) {
         // Ignoring broken values.
-        if ($proposal === null) {
+        if (null === $proposal) {
             continue;
         }
 

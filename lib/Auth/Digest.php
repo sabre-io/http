@@ -123,7 +123,7 @@ class Digest extends AbstractAuth
     {
         $A2 = $this->request->getMethod().':'.$this->digestParts['uri'];
 
-        if ('auth-int' == $this->digestParts['qop']) {
+        if ('auth-int' === $this->digestParts['qop']) {
             // Making sure we support this qop value
             if (!($this->qop & self::QOP_AUTHINT)) {
                 return false;
@@ -132,18 +132,15 @@ class Digest extends AbstractAuth
             $body = $this->request->getBody($asString = true);
             $this->request->setBody($body);
             $A2 .= ':'.md5($body);
-        } else {
-            // We need to make sure we support this qop value
-            if (!($this->qop & self::QOP_AUTH)) {
-                return false;
-            }
+        } elseif (!($this->qop & self::QOP_AUTH)) {
+            return false;
         }
 
         $A2 = md5($A2);
 
         $validResponse = md5("{$this->A1}:{$this->digestParts['nonce']}:{$this->digestParts['nc']}:{$this->digestParts['cnonce']}:{$this->digestParts['qop']}:{$A2}");
 
-        return $this->digestParts['response'] == $validResponse;
+        return $this->digestParts['response'] === $validResponse;
     }
 
     /**
@@ -200,7 +197,7 @@ class Digest extends AbstractAuth
         preg_match_all('@(\w+)=(?:(?:")([^"]+)"|([^\s,$]+))@', $digest, $matches, PREG_SET_ORDER);
 
         foreach ($matches as $m) {
-            $data[$m[1]] = $m[2] ? $m[2] : $m[3];
+            $data[$m[1]] = $m[2] ?: $m[3];
             unset($needed_parts[$m[1]]);
         }
 

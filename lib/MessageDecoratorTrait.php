@@ -157,7 +157,7 @@ trait MessageDecoratorTrait
      * another value. Individual values can be retrieved with
      * getHeadersAsArray.
      *
-     * @param scalar $value
+     * @param string|string[] $value
      */
     public function addHeader(string $name, $value)
     {

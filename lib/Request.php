@@ -229,9 +229,7 @@ class Request extends Message implements RequestInterface
      */
     public function getRawServerValue(string $valueName)
     {
-        if (isset($this->rawServerData[$valueName])) {
-            return $this->rawServerData[$valueName];
-        }
+        return $this->rawServerData[$valueName] ?? null;
     }
 
     /**

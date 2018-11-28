@@ -16,3 +16,4 @@ bin/sabre-cs-fixer*
 
 # development stuff
 .php_cs.cache
+.idea

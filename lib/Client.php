@@ -196,7 +196,7 @@ class Client extends EventEmitter
             );
 
             if ($status && CURLMSG_DONE === $status['msg']) {
-                $resourceId = intval($status['handle']);
+                $resourceId = (int)$status['handle'];
                 list(
                     $request,
                     $successCallback,
@@ -461,7 +461,7 @@ class Client extends EventEmitter
 
         $response->setBody($responseBody);
 
-        $httpCode = intval($response->getStatus());
+        $httpCode = (int)$response->getStatus();
 
         return [
             'status' => $httpCode >= 400 ? self::STATUS_HTTPERROR : self::STATUS_SUCCESS,
@@ -487,7 +487,7 @@ class Client extends EventEmitter
             $this->createCurlSettingsArray($request)
         );
         curl_multi_add_handle($this->curlMultiHandle, $curl);
-        $this->curlMultiMap[intval($curl)] = [
+        $this->curlMultiMap[(int)$curl] = [
             $request,
             $success,
             $error,

@@ -55,7 +55,7 @@ class AWS extends AbstractAuth
     {
         $authHeader = $this->request->getHeader('Authorization');
 
-        if (is_null($authHeader)) {
+        if ($authHeader === null) {
             $this->errorCode = self::ERR_NOAWSHEADER;
 
             return false;

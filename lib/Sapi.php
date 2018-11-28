@@ -75,7 +75,7 @@ class Sapi
         }
 
         $body = $response->getBody();
-        if (is_null($body)) {
+        if ($body === null) {
             return;
         }
 
@@ -199,11 +199,11 @@ class Sapi
             }
         }
 
-        if (is_null($url)) {
+        if ($url === null) {
             throw new InvalidArgumentException('The _SERVER array must have a REQUEST_URI key');
         }
 
-        if (is_null($method)) {
+        if ($method === null) {
             throw new InvalidArgumentException('The _SERVER array must have a REQUEST_METHOD key');
         }
         $r = new Request($method, $url, $headers);

@@ -52,7 +52,7 @@ abstract class Message implements MessageInterface
         if (is_callable($this->body)) {
             $body = $this->getBodyAsString();
         }
-        if (is_string($body) || is_null($body)) {
+        if (is_string($body) || $body === null) {
             $stream = fopen('php://temp', 'r+');
             fwrite($stream, (string) $body);
             rewind($stream);
@@ -75,7 +75,7 @@ abstract class Message implements MessageInterface
         if (is_string($body)) {
             return $body;
         }
-        if (is_null($body)) {
+        if ($body === null) {
             return '';
         }
         if (is_callable($body)) {
@@ -220,7 +220,7 @@ abstract class Message implements MessageInterface
      * another value. Individual values can be retrieved with
      * getHeadersAsArray.
      *
-     * @param scalar $value
+     * @param string|string[] $value
      */
     public function addHeader(string $name, $value)
     {

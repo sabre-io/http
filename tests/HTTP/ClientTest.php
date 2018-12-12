@@ -200,6 +200,24 @@ class ClientTest extends \PHPUnit\Framework\TestCase
     /**
      * @group ci
      */
+    public function testSendToGetLargeContent()
+    {
+        $url = $this->getAbsoluteUrl('/large.php');
+        if (!$url) {
+            $this->markTestSkipped('Set an environment value BASEURL to continue');
+        }
+
+        $request = new Request('GET', $url);
+        $client = new Client();
+        $response = $client->send($request);
+
+        $this->assertEquals(200, $response->getStatus());
+        $this->assertGreaterThan(memory_get_peak_usage(), 40 * pow(1024, 2));
+    }
+
+    /**
+     * @group ci
+     */
     public function testSendAsync()
     {
         $url = $this->getAbsoluteUrl('/foo');
@@ -369,37 +387,6 @@ class ClientTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals('Foo', $result['response']->getBodyAsString());
     }
 
-    /**
-     * @runInSeparateProcess
-     */
-    public function testParseCurlLargeResult()
-    {
-        ini_set('memory_limit', '70M');
-
-        $header = "HTTP/1.1 200 OK\r\nHeader1: Val1\r\n\r\n";
-
-        $client = new ClientMock();
-        $client->on('curlStuff', function (&$return) use ($header) {
-            $return = [
-                [
-                    'header_size' => strlen($header),
-                    'http_code' => 200,
-                ],
-                0,
-                '',
-            ];
-        });
-
-        $body = str_repeat('x', 30 * pow(1024, 2));
-        $response = $header . $body;
-        $result = $client->parseCurlResult($response, 'foobar');
-
-        $this->assertEquals(Client::STATUS_SUCCESS, $result['status']);
-        $this->assertEquals(200, $result['http_code']);
-        $this->assertEquals(200, $result['response']->getStatus());
-        $this->assertEquals(31457280, strlen($result['response']->getBodyAsString()));
-    }
-
     public function testParseCurlError()
     {
         $client = new ClientMock();
@@ -470,6 +457,14 @@ class ClientTest extends \PHPUnit\Framework\TestCase
 class ClientMock extends Client
 {
     protected $persistedSettings = [];
+
+    /**
+     * Making this method public.
+     */
+    public function receiveCurlHeader($curlHandle, $headerLine)
+    {
+        return parent::receiveCurlHeader($curlHandle, $headerLine);
+    }
 
     /**
      * Making this method public.

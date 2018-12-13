@@ -15,4 +15,8 @@
        <directory suffix=".php">../lib/</directory>
     </whitelist>
   </filter>
+
+  <php>
+    <env name="BASEURL" value="http://localhost"/>
+  </php>
 </phpunit>

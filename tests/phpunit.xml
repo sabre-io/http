@@ -1,10 +1,14 @@
 <phpunit
   colors="true"
+  beStrictAboutCoversAnnotation="true"
+  beStrictAboutOutputDuringTests="true"
+  beStrictAboutTestsThatDoNotTestAnything="true"
+  beStrictAboutTodoAnnotatedTests="true"
   bootstrap="bootstrap.php"
   convertErrorsToExceptions="true"
   convertNoticesToExceptions="true"
   convertWarningsToExceptions="true"
-  strict="true"
+  enforceTimeLimit="true"
   >
   <testsuite name="Sabre_HTTP">
       <directory>HTTP/</directory>

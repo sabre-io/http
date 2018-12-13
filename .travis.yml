@@ -25,6 +25,8 @@ install:
 
 before_script:
   - composer update --prefer-source $PREFER_LOWEST
+  - PHP_BIN=$(phpenv which php)
+  - sudo $PHP_BIN -S localhost:80 -t $TRAVIS_BUILD_DIR/tests/www 2>/dev/null &
 
 script:
   - if [ $RUN_PHPSTAN == "FALSE"  ]; then ./bin/phpunit --configuration tests/phpunit.xml $WITH_COVERAGE; fi

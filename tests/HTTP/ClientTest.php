@@ -185,6 +185,79 @@ class ClientTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(200, $response->getStatus());
     }
 
+    protected function getAbsoluteUrl($path)
+    {
+        $baseUrl = getenv('BASEURL');
+        if ($baseUrl) {
+            $path = ltrim($path, '/');
+
+            return "$baseUrl/$path";
+        }
+
+        return false;
+    }
+
+    /**
+     * @group ci
+     */
+    public function testSendAsync()
+    {
+        $url = $this->getAbsoluteUrl('/foo');
+        if (!$url) {
+            $this->markTestSkipped('Set an environment value BASEURL to continue');
+        }
+
+        $client = new Client();
+
+        $request = new Request('GET', $url);
+        $client->sendAsync($request, function (ResponseInterface $response) {
+            $this->assertEquals("foo\n", $response->getBody());
+            $this->assertEquals(200, $response->getStatus());
+            $this->assertEquals(4, $response->getHeader('Content-Length'));
+        }, function ($error) use ($request) {
+            $url = $request->getUrl();
+            $this->fail("Failed to GET $url");
+        });
+
+        $client->wait();
+    }
+
+    /**
+     * @group ci
+     */
+    public function testSendAsynConsecutively()
+    {
+        $url = $this->getAbsoluteUrl('/foo');
+        if (!$url) {
+            $this->markTestSkipped('Set an environment value BASEURL to continue');
+        }
+
+        $client = new Client();
+
+        $request = new Request('GET', $url);
+        $client->sendAsync($request, function (ResponseInterface $response) {
+            $this->assertEquals("foo\n", $response->getBody());
+            $this->assertEquals(200, $response->getStatus());
+            $this->assertEquals(4, $response->getHeader('Content-Length'));
+        }, function ($error) use ($request) {
+            $url = $request->getUrl();
+            $this->fail("Failed to get $url");
+        });
+
+        $url = $this->getAbsoluteUrl('/bar.php');
+        $request = new Request('GET', $url);
+        $client->sendAsync($request, function (ResponseInterface $response) {
+            $this->assertEquals("bar\n", $response->getBody());
+            $this->assertEquals(200, $response->getStatus());
+            $this->assertEquals('Bar', $response->getHeader('X-Test'));
+        }, function ($error) use ($request) {
+            $url = $request->getUrl();
+            $this->fail("Failed to get $url");
+        });
+
+        $client->wait();
+    }
+
     public function testSendClientError()
     {
         $client = new ClientMock();

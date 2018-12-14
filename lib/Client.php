@@ -588,7 +588,12 @@ class Client extends EventEmitter
     {
         $this->headerLinesMap[(int) $curlHandle] = [];
 
-        return curl_exec($curlHandle);
+        $result = curl_exec($curlHandle);
+        if (false === $result) {
+            $result = '';
+        }
+
+        return $result;
     }
 
     /**

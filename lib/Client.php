@@ -68,24 +68,24 @@ class Client extends EventEmitter
 
     protected $headerLinesMap = [];
 
-    protected $beInherited;
-
     /**
      * Initializes the client.
      */
     public function __construct()
     {
-        $this->beInherited = __CLASS__ !== get_class($this);
+        // See https://github.com/sabre-io/http/pull/115#discussion_r241292068
+        // Preserve compatibility for sub-classes that implements their own method `parseCurlResult`
+        $separatedHeaders = __CLASS__ === get_class($this);
 
         $this->curlSettings = [
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_NOBODY => false,
             CURLOPT_USERAGENT => 'sabre-http/'.Version::VERSION.' (http://sabre.io/)',
         ];
-        if ($this->beInherited) {
-            $this->curlSettings[CURLOPT_HEADER] = true;
-        } else {
+        if ($separatedHeaders) {
             $this->curlSettings[CURLOPT_HEADERFUNCTION] = [$this, 'receiveCurlHeader'];
+        } else {
+            $this->curlSettings[CURLOPT_HEADER] = true;
         }
     }
 
@@ -417,9 +417,10 @@ class Client extends EventEmitter
 
     private function parseResponse(string $response, $curlHandle): array
     {
-        if ($this->beInherited) {
-            $response = $this->parseCurlResult($response, $curlHandle);
-        } else {
+        $settings = $this->curlSettings;
+        $separatedHeaders = isset($settings[CURLOPT_HEADERFUNCTION]) && (bool) $settings[CURLOPT_HEADERFUNCTION];
+
+        if ($separatedHeaders) {
             $resourceId = (int) $curlHandle;
             if (isset($this->headerLinesMap[$resourceId])) {
                 $headers = $this->headerLinesMap[$resourceId];
@@ -427,6 +428,8 @@ class Client extends EventEmitter
                 $headers = [];
             }
             $response = $this->parseCurlResponse($headers, $response, $curlHandle);
+        } else {
+            $response = $this->parseCurlResult($response, $curlHandle);
         }
 
         return $response;

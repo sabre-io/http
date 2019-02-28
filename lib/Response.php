@@ -105,13 +105,13 @@ class Response extends Message implements ResponseInterface
      */
     public function __construct($status = 500, array $headers = null, $body = null)
     {
-        if (!is_null($status)) {
+        if (null !== $status) {
             $this->setStatus($status);
         }
-        if (!is_null($headers)) {
+        if (null !== $headers) {
             $this->setHeaders($headers);
         }
-        if (!is_null($body)) {
+        if (null !== $body) {
             $this->setBody($body);
         }
     }
@@ -151,18 +151,19 @@ class Response extends Message implements ResponseInterface
     {
         if (ctype_digit($status) || is_int($status)) {
             $statusCode = $status;
-            $statusText = isset(self::$statusCodes[$status]) ? self::$statusCodes[$status] : 'Unknown';
+            $statusText = self::$statusCodes[$status] ?? 'Unknown';
         } else {
             list(
                 $statusCode,
                 $statusText
             ) = explode(' ', $status, 2);
+            $statusCode = (int) $statusCode;
         }
         if ($statusCode < 100 || $statusCode > 999) {
             throw new \InvalidArgumentException('The HTTP status code must be exactly 3 digits');
         }
 
-        $this->status = (int) $statusCode;
+        $this->status = $statusCode;
         $this->statusText = $statusText;
     }
 

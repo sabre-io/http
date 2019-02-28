@@ -55,14 +55,14 @@ class AWS extends AbstractAuth
     {
         $authHeader = $this->request->getHeader('Authorization');
 
-        if (is_null($authHeader)) {
+        if (null === $authHeader) {
             $this->errorCode = self::ERR_NOAWSHEADER;
 
             return false;
         }
         $authHeader = explode(' ', $authHeader);
 
-        if ('AWS' != $authHeader[0] || !isset($authHeader[1])) {
+        if ('AWS' !== $authHeader[0] || !isset($authHeader[1])) {
             $this->errorCode = self::ERR_NOAWSHEADER;
 
             return false;
@@ -93,7 +93,7 @@ class AWS extends AbstractAuth
             $body = $this->request->getBody();
             $this->request->setBody($body);
 
-            if ($contentMD5 != base64_encode(md5((string) $body, true))) {
+            if ($contentMD5 !== base64_encode(md5((string) $body, true))) {
                 // content-md5 header did not match md5 signature of body
                 $this->errorCode = self::ERR_MD5CHECKSUMWRONG;
 
@@ -122,7 +122,7 @@ class AWS extends AbstractAuth
             )
         );
 
-        if ($this->signature != $signature) {
+        if ($this->signature !== $signature) {
             $this->errorCode = self::ERR_INVALIDSIGNATURE;
 
             return false;

@@ -96,14 +96,14 @@ class Client extends EventEmitter
             try {
                 $response = $this->doRequest($request);
 
-                $code = (int) $response->getStatus();
+                $code = $response->getStatus();
 
                 // We are doing in-PHP redirects, because curl's
                 // FOLLOW_LOCATION throws errors when PHP is configured with
                 // open_basedir.
                 //
                 // https://github.com/fruux/sabre-http/issues/12
-                if (in_array($code, [301, 302, 307, 308]) && $redirects < $this->maxRedirects) {
+                if ($redirects < $this->maxRedirects && in_array($code, [301, 302, 307, 308])) {
                     $oldLocation = $request->getUrl();
 
                     // Creating a new instance of the request object.
@@ -196,7 +196,7 @@ class Client extends EventEmitter
             );
 
             if ($status && CURLMSG_DONE === $status['msg']) {
-                $resourceId = intval($status['handle']);
+                $resourceId = (int) $status['handle'];
                 list(
                     $request,
                     $successCallback,
@@ -454,14 +454,14 @@ class Client extends EventEmitter
 
         foreach ($headerBlob as $header) {
             $parts = explode(':', $header, 2);
-            if (2 == count($parts)) {
+            if (2 === count($parts)) {
                 $response->addHeader(trim($parts[0]), trim($parts[1]));
             }
         }
 
         $response->setBody($responseBody);
 
-        $httpCode = intval($response->getStatus());
+        $httpCode = $response->getStatus();
 
         return [
             'status' => $httpCode >= 400 ? self::STATUS_HTTPERROR : self::STATUS_SUCCESS,
@@ -487,7 +487,7 @@ class Client extends EventEmitter
             $this->createCurlSettingsArray($request)
         );
         curl_multi_add_handle($this->curlMultiHandle, $curl);
-        $this->curlMultiMap[intval($curl)] = [
+        $this->curlMultiMap[(int) $curl] = [
             $request,
             $success,
             $error,

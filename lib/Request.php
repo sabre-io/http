@@ -88,11 +88,11 @@ class Request extends Message implements RequestInterface
         $url = $this->getUrl();
         if (false === ($index = strpos($url, '?'))) {
             return [];
-        } else {
-            parse_str(substr($url, $index + 1), $queryParams);
-
-            return $queryParams;
         }
+
+        parse_str(substr($url, $index + 1), $queryParams);
+
+        return $queryParams;
     }
 
     protected $absoluteUrl;
@@ -174,11 +174,12 @@ class Request extends Message implements RequestInterface
 
             return trim(decodePath(substr($uri, strlen($baseUri))), '/');
         }
-        // A special case, if the baseUri was accessed without a trailing
-        // slash, we'll accept it as well.
-        elseif ($uri.'/' === $baseUri) {
+
+        if ($uri.'/' === $baseUri) {
             return '';
         }
+        // A special case, if the baseUri was accessed without a trailing
+        // slash, we'll accept it as well.
 
         throw new \LogicException('Requested uri ('.$this->getUrl().') is out of base uri ('.$this->getBaseUrl().')');
     }
@@ -229,9 +230,7 @@ class Request extends Message implements RequestInterface
      */
     public function getRawServerValue(string $valueName)
     {
-        if (isset($this->rawServerData[$valueName])) {
-            return $this->rawServerData[$valueName];
-        }
+        return $this->rawServerData[$valueName] ?? null;
     }
 
     /**
@@ -249,7 +248,7 @@ class Request extends Message implements RequestInterface
      */
     public function __toString(): string
     {
-        $out = $this->getMethod().' '.$this->getUrl().' HTTP/'.$this->getHTTPVersion()."\r\n";
+        $out = $this->getMethod().' '.$this->getUrl().' HTTP/'.$this->getHttpVersion()."\r\n";
 
         foreach ($this->getHeaders() as $key => $value) {
             foreach ($value as $v) {

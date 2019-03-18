@@ -21,7 +21,7 @@ matrix:
   fast_finish: true
 
 install:
-  - if [ $RUN_PHPSTAN == "TRUE"  ]; then wget https://github.com/phpstan/phpstan/releases/download/0.10.3/phpstan.phar; fi
+  - if [ $RUN_PHPSTAN == "TRUE"  ]; then composer require --dev phpstan/phpstan; fi
 
 before_script:
   - composer update --prefer-source $PREFER_LOWEST
@@ -30,7 +30,7 @@ before_script:
 
 script:
   - if [ $RUN_PHPSTAN == "FALSE"  ]; then ./bin/phpunit --configuration tests/phpunit.xml $WITH_COVERAGE; fi
-  - if [ $RUN_PHPSTAN == "TRUE"  ]; then php phpstan.phar analyse -c phpstan.neon lib; fi
+  - if [ $RUN_PHPSTAN == "TRUE"  ]; then php ./bin/phpstan analyse -c phpstan.neon lib; fi
 
 after_success:
   - bash <(curl -s https://codecov.io/bash)

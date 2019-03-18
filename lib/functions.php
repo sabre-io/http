@@ -302,6 +302,8 @@ function getHeaderValues($values, $values2 = null): array
     if ($values2) {
         $values = array_merge($values, (array) $values2);
     }
+    
+    $result = array();
     foreach ($values as $l1) {
         foreach (explode(',', $l1) as $l2) {
             $result[] = trim($l2);

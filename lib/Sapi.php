@@ -89,9 +89,28 @@ class Sapi
         if (null !== $contentLength) {
             $output = fopen('php://output', 'wb');
             if (is_resource($body) && 'stream' == get_resource_type($body)) {
-                if (PHP_INT_SIZE !== 4) {
+                if (PHP_INT_SIZE > 4) {
                     // use the dedicated function on 64 Bit systems
-                    stream_copy_to_stream($body, $output, (int) $contentLength);
+                    // a workaround to make PHP more possible to use mmap based copy, see https://github.com/sabre-io/http/pull/119
+                    $left = (int) $contentLength;
+                    // copy with 4MiB chunks
+                    $chunk_size = 4 * 1024 * 1024;
+                    stream_set_chunk_size($output, $chunk_size);
+                    // If this is a partial response, flush the beginning bytes until the first position that is a multiple of the page size.
+                    $contentRange = $response->getHeader('Content-Range');
+                    // Matching "Content-Range: bytes 1234-5678/7890"
+                    if ($contentRange !== null && preg_match('/^bytes\s([0-9]*)-([0-9]*)\//i', $contentRange, $matches) && $matches[1] !== '') {
+                        // 4kB should be the default page size on most architectures
+                        $pageSize = 4096;
+                        $offset = (int) $matches[1];
+                        $delta = ($offset % $pageSize) > 0 ? ($pageSize - $offset % $pageSize) : 0;
+                        if ($delta > 0) {
+                            $left -= stream_copy_to_stream($body, $output, $delta);
+                        }
+                    }
+                    while ($left > 0) {
+                        $left -= stream_copy_to_stream($body, $output, min($left, $chunk_size));
+                    }
                 } else {
                     // workaround for 32 Bit systems to avoid stream_copy_to_stream
                     while (!feof($body)) {

@@ -177,6 +177,35 @@ class SapiTest extends \PHPUnit\Framework\TestCase
      * @runInSeparateProcess
      * @depends testSend
      */
+    public function testSendContentRangeStream()
+    {
+        $partial = str_repeat('Send this.', 1000);
+        $body = fopen('php://memory', 'w');
+        fwrite($body, 'Ignore this. ');
+        fwrite($body, $partial);
+        fwrite($body, ' Ignore this too.');
+        rewind($body);
+        fread($body, 13);
+        $response = new Response(200, [
+            'Content-Length' => strlen($partial),
+            'Content-Range' => sprintf('bytes %d-%d/%d', 13, 13 + strlen($partial) - 1, 13 + strlen($partial) + 17),
+        ]);
+        $response->setBody($body);
+
+        ob_start();
+
+        Sapi::sendResponse($response);
+
+        $result = ob_get_clean();
+        header_remove();
+
+        $this->assertEquals($partial, $result);
+    }
+
+    /**
+     * @runInSeparateProcess
+     * @depends testSend
+     */
     public function testSendWorksWithCallbackAsBody()
     {
         $response = new Response(200, [], function () {

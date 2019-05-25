@@ -24,7 +24,7 @@ class Bearer extends AbstractAuth
      *
      * If no token was found, this method returns null.
      *
-     * @return null|string
+     * @return string|null
      */
     public function getToken()
     {

@@ -7,7 +7,7 @@ ChangeLog
 * #121: fix "Trying to access array offset on value of type bool" in 7.4 (@remicollet) 
 * #115: Reduce memory footprint when parsing HTTP result (@Gasol)
 * #114: Misc code improvements (@mrcnpdlk)
-* #111, #118: Added phpstan analysis (@DeepDiver1975)
+* #111, #118: Added phpstan analysis (@DeepDiver1975, @staabm)
 * #107: Tested with php 7.3 (@DeepDiver1975)
  
 

@@ -1,6 +1,11 @@
 ChangeLog
 =========
 
+5.0.2 (2019-09-12)
+-------------------------
+
+* #125: Fix Strict Error if Response Body Empty (@WorksDev, @phil-davis) 
+
 5.0.1 (2019-09-11)
 -------------------------
 

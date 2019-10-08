@@ -21,6 +21,10 @@ matrix:
       env: RUN_PHPSTAN="TRUE"
   fast_finish: true
 
+cache:
+    directories:
+        - $HOME/.composer/cache
+
 install:
   - if [ $RUN_PHPSTAN == "TRUE"  ]; then composer require --dev phpstan/phpstan; fi
 

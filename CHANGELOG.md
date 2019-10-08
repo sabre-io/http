@@ -1,6 +1,11 @@
 ChangeLog
 =========
 
+5.0.3 (2019-10-08)
+-------------------------
+
+* #119: Significantly improve file download speed by enabling mmap based stream_copy_to_stream (@vfreex) 
+
 5.0.2 (2019-09-12)
 -------------------------
 

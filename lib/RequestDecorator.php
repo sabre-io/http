@@ -29,7 +29,7 @@ class RequestDecorator implements RequestInterface
     /**
      * Returns the current HTTP method.
      */
-    public function getMethod(): String
+    public function getMethod(): string
     {
         return $this->inner->getMethod();
     }

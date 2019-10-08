@@ -113,7 +113,7 @@ class Digest extends AbstractAuth
      */
     public function getUsername()
     {
-        return $this->digestParts['username'];
+        return $this->digestParts['username'] ?? null;
     }
 
     /**
@@ -121,6 +121,10 @@ class Digest extends AbstractAuth
      */
     protected function validate(): bool
     {
+        if (!is_array($this->digestParts)) {
+            return false;
+        }
+
         $A2 = $this->request->getMethod().':'.$this->digestParts['uri'];
 
         if ('auth-int' === $this->digestParts['qop']) {

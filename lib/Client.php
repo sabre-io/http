@@ -529,7 +529,7 @@ class Client extends EventEmitter
         // In the case of 204 No Content, strlen($response) == $curlInfo['header_size].
         // This will cause substr($response, $curlInfo['header_size']) return FALSE instead of NULL
         // An exception will be thrown when calling getBodyAsString then
-        $responseBody = substr($response, $curlInfo['header_size']) ?: null;
+        $responseBody = substr($response, $curlInfo['header_size']) ?: '';
 
         unset($response);
 

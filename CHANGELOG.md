@@ -1,9 +1,24 @@
 ChangeLog
 =========
 
-
-5.0.0 (2017-06-04)
+5.0.2 (2019-09-12)
 -------------------------
+
+* #125: Fix Strict Error if Response Body Empty (@WorksDev, @phil-davis) 
+
+5.0.1 (2019-09-11)
+-------------------------
+
+* #121: fix "Trying to access array offset on value of type bool" in 7.4 (@remicollet) 
+* #115: Reduce memory footprint when parsing HTTP result (@Gasol)
+* #114: Misc code improvements (@mrcnpdlk)
+* #111, #118: Added phpstan analysis (@DeepDiver1975, @staabm)
+* #107: Tested with php 7.3 (@DeepDiver1975)
+ 
+
+5.0.0 (2018-06-04)
+-------------------------
+
 * #99: Previous CURL opts are not persisted anymore (@christiaan)
 * Final release
 

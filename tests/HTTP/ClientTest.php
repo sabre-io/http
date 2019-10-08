@@ -387,6 +387,30 @@ class ClientTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals('Foo', $result['response']->getBodyAsString());
     }
 
+    public function testParseCurlResultEmptyBody()
+    {
+        $client = new ClientMock();
+        $client->on('curlStuff', function (&$return) {
+            $return = [
+                [
+                    'header_size' => 33,
+                    'http_code' => 200,
+                ],
+                0,
+                '',
+            ];
+        });
+
+        $body = "HTTP/1.1 200 OK\r\nHeader1:Val1\r\n\r\n";
+        $result = $client->parseCurlResult($body, 'foobar');
+
+        $this->assertEquals(Client::STATUS_SUCCESS, $result['status']);
+        $this->assertEquals(200, $result['http_code']);
+        $this->assertEquals(200, $result['response']->getStatus());
+        $this->assertEquals(['Header1' => ['Val1']], $result['response']->getHeaders());
+        $this->assertEquals('', $result['response']->getBodyAsString());
+    }
+
     public function testParseCurlError()
     {
         $client = new ClientMock();

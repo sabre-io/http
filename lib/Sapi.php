@@ -105,7 +105,7 @@ class Sapi
                         $offset = (int) $matches[1];
                         $delta = ($offset % $pageSize) > 0 ? ($pageSize - $offset % $pageSize) : 0;
                         if ($delta > 0) {
-                            $left -= stream_copy_to_stream($body, $output, $delta);
+                            $left -= stream_copy_to_stream($body, $output, min($delta, $left));
                         }
                     }
                     while ($left > 0) {

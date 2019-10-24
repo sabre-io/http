@@ -99,7 +99,7 @@ class Sapi
                     // If this is a partial response, flush the beginning bytes until the first position that is a multiple of the page size.
                     $contentRange = $response->getHeader('Content-Range');
                     // Matching "Content-Range: bytes 1234-5678/7890"
-                    if (null !== $contentRange && preg_match('/^bytes\s([0-9]*)-([0-9]*)\//i', $contentRange, $matches) && '' !== $matches[1]) {
+                    if (null !== $contentRange && preg_match('/^bytes\s([0-9]+)-([0-9]+)\//i', $contentRange, $matches) && '' !== $matches[1]) {
                         // 4kB should be the default page size on most architectures
                         $pageSize = 4096;
                         $offset = (int) $matches[1];

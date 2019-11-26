@@ -105,11 +105,19 @@ class Sapi
                         $offset = (int) $matches[1];
                         $delta = ($offset % $pageSize) > 0 ? ($pageSize - $offset % $pageSize) : 0;
                         if ($delta > 0) {
-                            $left -= stream_copy_to_stream($body, $output, min($delta, $left));
+                            $written = stream_copy_to_stream($body, $output, min($delta, $left));
+                            if (false === $written) {
+                                throw new \RuntimeException('Error copying stream.');
+                            }
+                            $left -= $written;
                         }
                     }
                     while ($left > 0) {
-                        $left -= stream_copy_to_stream($body, $output, min($left, $chunk_size));
+                        $written = stream_copy_to_stream($body, $output, min($left, $chunk_size));
+                        if (false === $written) {
+                            throw new \RuntimeException('Error copying stream.');
+                        }
+                        $left -= $written;
                     }
                 } else {
                     // workaround for 32 Bit systems to avoid stream_copy_to_stream

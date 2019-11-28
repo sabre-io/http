@@ -109,7 +109,15 @@ class Sapi
                         }
                     }
                     while ($left > 0) {
-                        $left -= stream_copy_to_stream($body, $output, min($left, $chunk_size));
+                        $copied = stream_copy_to_stream($body, $output, min($left, $chunk_size));
+                        // stream_copy_to_stream($src, $dest, $maxLength) must return the number of bytes copied or false in case of failure
+                        // But when the $maxLength is greater than the total number of bytes remaining in the stream,
+                        // It returns the negative number of bytes copied
+                        // So break the loop in such cases.
+                        if ($copied <= 0) {
+                            break;
+                        }
+                        $left -= $copied;
                     }
                 } else {
                     // workaround for 32 Bit systems to avoid stream_copy_to_stream

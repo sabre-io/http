@@ -178,12 +178,15 @@ class SapiTest extends \PHPUnit\Framework\TestCase
      * @depends testSend
      * @dataProvider sendContentRangeStreamData
      */
-    public function testSendContentRangeStream($ignoreAtStart, $sendText, $multiplier, $ignoreAtEnd)
+    public function testSendContentRangeStream($ignoreAtStart, $sendText, $multiplier, $ignoreAtEnd, $contentLength)
     {
         $partial = str_repeat($sendText, $multiplier);
         $ignoreAtStartLength = strlen($ignoreAtStart);
         $ignoreAtEndLength = strlen($ignoreAtEnd);
         $body = fopen('php://memory', 'w');
+        if (!$contentLength) {
+            $contentLength = strlen($partial);
+        }
         fwrite($body, $ignoreAtStart);
         fwrite($body, $partial);
         if ($ignoreAtEndLength > 0) {
@@ -194,7 +197,7 @@ class SapiTest extends \PHPUnit\Framework\TestCase
             fread($body, $ignoreAtStartLength);
         }
         $response = new Response(200, [
-            'Content-Length' => strlen($partial),
+            'Content-Length' => $contentLength,
             'Content-Range' => sprintf('bytes %d-%d/%d', $ignoreAtStartLength, $ignoreAtStartLength + strlen($partial) - 1, $ignoreAtStartLength + strlen($partial) + $ignoreAtEndLength),
         ]);
         $response->setBody($body);
@@ -224,6 +227,15 @@ class SapiTest extends \PHPUnit\Framework\TestCase
             ['Ignore this. ', 'Send this.', 1000, ''],
             ['Ignore this. ', 'S', 4096, ''],
             ['Ig', 'S', 4094, ''],
+
+            // Provide contentLength greater than the bytes remaining in the stream.
+            ['Ignore this. ', 'Send this.', 10, '', 101],
+            ['Ignore this. ', 'Send this.', 1000, '', 10001],
+            ['Ignore this. ', 'S', 4096, '', 5000000],
+            ['I', 'S', 4094, '', 8095],
+            // Provide contentLength equal to the bytes remaining in the stream.
+            ['', 'Send this.', 10, '', 100],
+            ['Ignore this. ', 'Send this.', 1000, '', 10000],
         ];
     }
 

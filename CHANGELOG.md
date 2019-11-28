@@ -1,6 +1,12 @@
 ChangeLog
 =========
 
+5.0.5 (2019-11-28)
+-------------------------
+
+* #138: Fixed possible infinite loop (@dpakach, @vfreex, @phil-davis)
+* #136: Improvement regex content-range (@ho4ho)
+
 5.0.4 (2019-10-08)
 -------------------------
 

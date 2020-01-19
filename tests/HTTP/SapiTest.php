@@ -176,19 +176,29 @@ class SapiTest extends \PHPUnit\Framework\TestCase
     /**
      * @runInSeparateProcess
      * @depends testSend
+     * @dataProvider sendContentRangeStreamData
      */
-    public function testSendContentRangeStream()
+    public function testSendContentRangeStream($ignoreAtStart, $sendText, $multiplier, $ignoreAtEnd, $contentLength)
     {
-        $partial = str_repeat('Send this.', 1000);
+        $partial = str_repeat($sendText, $multiplier);
+        $ignoreAtStartLength = strlen($ignoreAtStart);
+        $ignoreAtEndLength = strlen($ignoreAtEnd);
         $body = fopen('php://memory', 'w');
-        fwrite($body, 'Ignore this. ');
+        if (!$contentLength) {
+            $contentLength = strlen($partial);
+        }
+        fwrite($body, $ignoreAtStart);
         fwrite($body, $partial);
-        fwrite($body, ' Ignore this too.');
+        if ($ignoreAtEndLength > 0) {
+            fwrite($body, $ignoreAtEnd);
+        }
         rewind($body);
-        fread($body, 13);
+        if ($ignoreAtStartLength > 0) {
+            fread($body, $ignoreAtStartLength);
+        }
         $response = new Response(200, [
-            'Content-Length' => strlen($partial),
-            'Content-Range' => sprintf('bytes %d-%d/%d', 13, 13 + strlen($partial) - 1, 13 + strlen($partial) + 17),
+            'Content-Length' => $contentLength,
+            'Content-Range' => sprintf('bytes %d-%d/%d', $ignoreAtStartLength, $ignoreAtStartLength + strlen($partial) - 1, $ignoreAtStartLength + strlen($partial) + $ignoreAtEndLength),
         ]);
         $response->setBody($body);
 
@@ -200,6 +210,33 @@ class SapiTest extends \PHPUnit\Framework\TestCase
         header_remove();
 
         $this->assertEquals($partial, $result);
+    }
+
+    public function sendContentRangeStreamData()
+    {
+        return [
+            ['Ignore this. ', 'Send this.', 10, ' Ignore this at end.'],
+            ['Ignore this. ', 'Send this.', 1000, ' Ignore this at end.'],
+            ['Ignore this. ', 'S', 4096, ' Ignore this at end.'],
+            ['I', 'S', 4094, 'E'],
+            ['', 'Send this.', 10, ' Ignore this at end.'],
+            ['', 'Send this.', 1000, ' Ignore this at end.'],
+            ['', 'S', 4096, ' Ignore this at end.'],
+            ['', 'S', 4094, 'En'],
+            ['Ignore this. ', 'Send this.', 10, ''],
+            ['Ignore this. ', 'Send this.', 1000, ''],
+            ['Ignore this. ', 'S', 4096, ''],
+            ['Ig', 'S', 4094, ''],
+
+            // Provide contentLength greater than the bytes remaining in the stream.
+            ['Ignore this. ', 'Send this.', 10, '', 101],
+            ['Ignore this. ', 'Send this.', 1000, '', 10001],
+            ['Ignore this. ', 'S', 4096, '', 5000000],
+            ['I', 'S', 4094, '', 8095],
+            // Provide contentLength equal to the bytes remaining in the stream.
+            ['', 'Send this.', 10, '', 100],
+            ['Ignore this. ', 'Send this.', 1000, '', 10000],
+        ];
     }
 
     /**

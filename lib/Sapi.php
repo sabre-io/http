@@ -99,17 +99,25 @@ class Sapi
                     // If this is a partial response, flush the beginning bytes until the first position that is a multiple of the page size.
                     $contentRange = $response->getHeader('Content-Range');
                     // Matching "Content-Range: bytes 1234-5678/7890"
-                    if (null !== $contentRange && preg_match('/^bytes\s([0-9]*)-([0-9]*)\//i', $contentRange, $matches) && '' !== $matches[1]) {
+                    if (null !== $contentRange && preg_match('/^bytes\s([0-9]+)-([0-9]+)\//i', $contentRange, $matches)) {
                         // 4kB should be the default page size on most architectures
                         $pageSize = 4096;
                         $offset = (int) $matches[1];
                         $delta = ($offset % $pageSize) > 0 ? ($pageSize - $offset % $pageSize) : 0;
                         if ($delta > 0) {
-                            $left -= stream_copy_to_stream($body, $output, $delta);
+                            $left -= stream_copy_to_stream($body, $output, min($delta, $left));
                         }
                     }
                     while ($left > 0) {
-                        $left -= stream_copy_to_stream($body, $output, min($left, $chunk_size));
+                        $copied = stream_copy_to_stream($body, $output, min($left, $chunk_size));
+                        // stream_copy_to_stream($src, $dest, $maxLength) must return the number of bytes copied or false in case of failure
+                        // But when the $maxLength is greater than the total number of bytes remaining in the stream,
+                        // It returns the negative number of bytes copied
+                        // So break the loop in such cases.
+                        if ($copied <= 0) {
+                            break;
+                        }
+                        $left -= $copied;
                     }
                 } else {
                     // workaround for 32 Bit systems to avoid stream_copy_to_stream

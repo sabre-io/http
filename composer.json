@@ -38,11 +38,6 @@
             "Sabre\\HTTP\\" : "lib/"
         }
     },
-    "autoload-dev" : {
-        "psr-4" : {
-            "Sabre\\HTTP\\" : "tests/HTTP"
-        }
-    },
     "config" : {
         "bin-dir" : "bin/"
     }

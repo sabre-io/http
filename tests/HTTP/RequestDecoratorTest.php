@@ -9,7 +9,7 @@ class RequestDecoratorTest extends \PHPUnit\Framework\TestCase
     protected $inner;
     protected $outer;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->inner = new Request('GET', '/');
         $this->outer = new RequestDecorator($this->inner);

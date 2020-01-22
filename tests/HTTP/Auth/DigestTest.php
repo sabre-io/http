@@ -28,7 +28,7 @@ class DigestTest extends \PHPUnit\Framework\TestCase
 
     const REALM = 'SabreDAV unittest';
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->response = new Response();
         $this->request = new Request('GET', '/');

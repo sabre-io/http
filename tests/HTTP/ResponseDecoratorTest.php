@@ -9,7 +9,7 @@ class ResponseDecoratorTest extends \PHPUnit\Framework\TestCase
     protected $inner;
     protected $outer;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->inner = new Response();
         $this->outer = new ResponseDecorator($this->inner);

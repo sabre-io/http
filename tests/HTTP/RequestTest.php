@@ -101,11 +101,9 @@ class RequestTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals('', $request->getPath());
     }
 
-    /**
-     * @expectedException \LogicException
-     */
     public function testGetPathOutsideBaseUrl()
     {
+        $this->expectException('LogicException');
         $request = new Request('GET', '/bar/');
         $request->setBaseUrl('/foo/');
 

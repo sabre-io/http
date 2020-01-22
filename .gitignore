@@ -5,6 +5,9 @@ composer.lock
 # Tests
 tests/cov/
 
+# phpunit cache
+.phpunit.result.cache
+
 # Composer binaries
 bin/phpunit*
 bin/phpcs*

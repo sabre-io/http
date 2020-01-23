@@ -13,7 +13,7 @@
         "sabre/uri"    : "^2.0"
     },
     "require-dev" : {
-        "phpunit/phpunit" : "^6.0 || ^7.0 || ^8.0"
+        "phpunit/phpunit" : "^7.0 || ^8.0"
     },
     "suggest" : {
         "ext-curl" : " to make http requests with the Client class"

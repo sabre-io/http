@@ -21,11 +21,9 @@ class ResponseTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals('Where\'s my money?', $response->getStatusText());
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     */
     public function testInvalidStatus()
     {
+        $this->expectException('InvalidArgumentException');
         $response = new Response(1000);
     }
 

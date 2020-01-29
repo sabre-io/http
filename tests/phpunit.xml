@@ -9,9 +9,11 @@
   convertNoticesToExceptions="true"
   convertWarningsToExceptions="true"
   >
-  <testsuite name="Sabre_HTTP">
+  <testsuites>
+    <testsuite name="Sabre_HTTP">
       <directory>HTTP/</directory>
-  </testsuite>
+    </testsuite>
+  </testsuites>
 
   <filter>
     <whitelist addUncoveredFilesFromWhitelist="true">

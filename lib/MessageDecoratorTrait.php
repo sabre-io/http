@@ -180,8 +180,6 @@ trait MessageDecoratorTrait
      * The specified header name must be treated as case-insensitive.
      * This method should return true if the header was successfully deleted,
      * and false if the header did not exist.
-     *
-     * @return bool
      */
     public function removeHeader(string $name): bool
     {

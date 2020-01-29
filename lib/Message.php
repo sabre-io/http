@@ -283,8 +283,6 @@ abstract class Message implements MessageInterface
 
     /**
      * Returns the HTTP version.
-     *
-     * @return string
      */
     public function getHttpVersion(): string
     {

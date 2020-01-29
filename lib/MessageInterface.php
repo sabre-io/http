@@ -29,8 +29,6 @@ interface MessageInterface
      *
      * Note that because the underlying data may be based on a stream, this
      * method could only work correctly the first time.
-     *
-     * @return string
      */
     public function getBodyAsString(): string;
 

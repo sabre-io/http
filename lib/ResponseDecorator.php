@@ -64,8 +64,6 @@ class ResponseDecorator implements ResponseInterface
      * Serializes the request object as a string.
      *
      * This is useful for debugging purposes.
-     *
-     * @return string
      */
     public function __toString(): string
     {

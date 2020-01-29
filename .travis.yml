@@ -24,7 +24,7 @@ cache:
         - $HOME/.composer/cache
 
 install:
-  - if [ $RUN_PHPSTAN == "TRUE"  ]; then composer require --dev phpstan/phpstan; fi
+  - if [ $RUN_PHPSTAN == "TRUE"  ]; then composer require --dev phpstan/phpstan:^0.12; fi
 
 before_script:
   - composer update --prefer-source $PREFER_LOWEST
@@ -32,6 +32,7 @@ before_script:
   - sudo $PHP_BIN -S localhost:80 -t $TRAVIS_BUILD_DIR/tests/www 2>/dev/null &
 
 script:
+  - if [ $RUN_PHPSTAN == "FALSE"  ]; then ./bin/php-cs-fixer fix --dry-run --diff; fi
   - if [ $RUN_PHPSTAN == "FALSE"  ]; then ./bin/phpunit --configuration tests/phpunit.xml $WITH_COVERAGE; fi
   - if [ $RUN_PHPSTAN == "TRUE"  ]; then php ./bin/phpstan analyse -c phpstan.neon lib; fi
 

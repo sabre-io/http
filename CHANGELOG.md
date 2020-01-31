@@ -1,6 +1,13 @@
 ChangeLog
 =========
 
+5.1.0 (2020-01-31)
+-------------------------
+
+* Added support for PHP 7.4, dropped support for PHP 7.0 (@phil-davis)
+* Updated testsuite for phpunit8, added phpstan coverage (@phil-davis)
+* Added autoload-dev for test classes (@C0pyR1ght)
+
 5.0.5 (2019-11-28)
 -------------------------
 

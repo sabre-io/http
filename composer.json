@@ -15,7 +15,7 @@
     "require-dev" : {
         "friendsofphp/php-cs-fixer": "~2.16.1",
         "phpstan/phpstan": "^0.12",
-        "phpunit/phpunit" : "^7.0 || ^8.0"
+        "phpunit/phpunit" : "^7.5 || ^8.5"
     },
     "suggest" : {
         "ext-curl" : " to make http requests with the Client class"

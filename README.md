@@ -6,7 +6,7 @@ This library provides a toolkit to make working with the [HTTP protocol](https:/
 Most PHP scripts run within a HTTP request but accessing information about the
 HTTP request is cumbersome at least.
 
-Trigger CI
+Trigger CI again
 
 There's bad practices, inconsistencies and confusion. This library is
 effectively a wrapper around the following PHP constructs:

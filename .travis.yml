@@ -15,6 +15,14 @@ env:
 
 matrix:
   include:
+    - name: 'Ubuntu20.04'
+      dist: focal
+      php: 7.4
+      env:
+        - RUN_PHPSTAN="FALSE"
+        - REPORT_COVERAGE="FALSE"
+        - WITH_COVERAGE=""
+        - PREFER_LOWEST=""
     - name: 'PHPStan'
       php: 7.4
       env:

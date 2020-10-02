@@ -42,7 +42,7 @@ abstract class AbstractAuth
     /**
      * Creates the object.
      */
-    public function __construct(string $realm = 'SabreTooth', RequestInterface $request, ResponseInterface $response)
+    public function __construct(string $realm, RequestInterface $request, ResponseInterface $response)
     {
         $this->realm = $realm;
         $this->request = $request;

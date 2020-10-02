@@ -212,7 +212,7 @@ class ClientTest extends \PHPUnit\Framework\TestCase
         $response = $client->send($request);
 
         $this->assertEquals(200, $response->getStatus());
-        $this->assertLessThan(30 * pow(1024, 2), memory_get_peak_usage());
+        $this->assertLessThan(42 * pow(1024, 2), memory_get_peak_usage());
     }
 
     /**

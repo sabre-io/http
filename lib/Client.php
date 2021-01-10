@@ -26,7 +26,7 @@ use Sabre\Uri;
  * request before it's done, such as adding authentication headers.
  *
  * The afterRequest event will be emitted after the request is completed
- * succesfully.
+ * successfully.
  *
  * If a HTTP error is returned (status code higher than 399) the error event is
  * triggered. It's possible using this event to retry the request, by setting
@@ -53,7 +53,7 @@ class Client extends EventEmitter
     protected $curlSettings = [];
 
     /**
-     * Wether or not exceptions should be thrown when a HTTP error is returned.
+     * Whether or not exceptions should be thrown when a HTTP error is returned.
      *
      * @var bool
      */
@@ -65,6 +65,14 @@ class Client extends EventEmitter
      * @var int
      */
     protected $maxRedirects = 5;
+
+    /**
+     * The maximum size of in-memory cache per request. If this value is exceeded, the cache is transferred to a
+     * temporary file.
+     *
+     * @var int
+     */
+    protected $maxMemorySize = 2 * 1024 * 1024;
 
     protected $headerLinesMap = [];
 
@@ -199,31 +207,19 @@ class Client extends EventEmitter
         }
 
         do {
-            $r = curl_multi_exec(
-                $this->curlMultiHandle,
-                $stillRunning
-            );
+            $r = curl_multi_exec($this->curlMultiHandle, $stillRunning);
         } while (CURLM_CALL_MULTI_PERFORM === $r);
 
         $messagesInQueue = 0;
         do {
-            messageQueue:
-
-            $status = curl_multi_info_read(
-                $this->curlMultiHandle,
-                $messagesInQueue
-            );
+            $status = curl_multi_info_read($this->curlMultiHandle, $messagesInQueue);
 
             if ($status && CURLMSG_DONE === $status['msg']) {
-                $resourceId = (int) $status['handle'];
-                list(
-                    $request,
-                    $successCallback,
-                    $errorCallback,
-                    $retryCount) = $this->curlMultiMap[$resourceId];
+                $curlHandle = $status['handle'];
+                $resourceId = (int) $curlHandle;
+                [$request, $successCallback, $errorCallback, $retryCount] = $this->curlMultiMap[$resourceId];
                 unset($this->curlMultiMap[$resourceId]);
 
-                $curlHandle = $status['handle'];
                 $curlResult = $this->parseCurlResource($curlHandle);
                 $retry = false;
 
@@ -234,7 +230,7 @@ class Client extends EventEmitter
                     if ($retry) {
                         ++$retryCount;
                         $this->sendAsyncInternal($request, $successCallback, $errorCallback, $retryCount);
-                        goto messageQueue;
+                        continue;
                     }
 
                     $curlResult['request'] = $request;
@@ -249,7 +245,7 @@ class Client extends EventEmitter
                     if ($retry) {
                         ++$retryCount;
                         $this->sendAsyncInternal($request, $successCallback, $errorCallback, $retryCount);
-                        goto messageQueue;
+                        continue;
                     }
 
                     $curlResult['request'] = $request;
@@ -336,7 +332,7 @@ class Client extends EventEmitter
      * By keeping this resource around for the lifetime of this object, things
      * like persistent connections are possible.
      *
-     * @var resource
+     * @var resource|\CurlHandle
      */
     private $curlHandle;
 
@@ -345,7 +341,7 @@ class Client extends EventEmitter
      *
      * The first time sendAsync is used, this will be created.
      *
-     * @var resource
+     * @var resource|\CurlMultiHandle
      */
     private $curlMultiHandle;
 
@@ -430,7 +426,7 @@ class Client extends EventEmitter
      *   * http_code - HTTP status code, as an int. Only set if Only set if
      *                 status is STATUS_SUCCESS, or STATUS_HTTPERROR
      *
-     * @param resource $curlHandle
+     * @param resource|\CurlHandle $curlHandle
      */
     protected function parseCurlResource($curlHandle): array
     {
@@ -465,7 +461,6 @@ class Client extends EventEmitter
         ];
     }
 
-
     /**
      * Parses the result of a curl call in a format that's a bit more
      * convenient to work with.
@@ -483,7 +478,7 @@ class Client extends EventEmitter
      *
      * @deprecated Use parseCurlResource instead
      *
-     * @param resource $curlHandle
+     * @param resource|\CurlHandle $curlHandle
      */
     protected function parseCurlResponse(array $headerLines, string $body, $curlHandle): array
     {
@@ -538,7 +533,7 @@ class Client extends EventEmitter
      *
      * @deprecated Use parseCurlResource instead
      *
-     * @param resource $curlHandle
+     * @param resource|\CurlHandle $curlHandle
      */
     protected function parseCurlResult(string $response, $curlHandle): array
     {
@@ -594,7 +589,6 @@ class Client extends EventEmitter
         curl_multi_add_handle($this->curlMultiHandle, $curl);
 
         $resourceId = (int) $curl;
-        $this->headerLinesMap[$resourceId] = [];
         $this->curlMultiMap[$resourceId] = [
             $request,
             $success,
@@ -604,19 +598,25 @@ class Client extends EventEmitter
     }
 
     /**
-     * @param resource $curlHandle
+     * @param resource|\CurlHandle $curlHandle
      */
-    private function prepareCurl(RequestInterface $request, $curlHandle): void
+    protected function prepareCurl(RequestInterface $request, $curlHandle): void
     {
         $handleId = (int) $curlHandle;
         $this->headerLinesMap[$handleId] = [];
-        $this->responseResourcesMap[$handleId] = \fopen('php://temp', 'rw+');
-
         $options = $this->createCurlSettingsArray($request);
+
+        if (array_key_exists(CURLOPT_NOBODY, $options) && !array_key_exists(CURLOPT_WRITEFUNCTION, $options)) {
+            $this->responseResourcesMap[$handleId] = \fopen(
+                    "php://temp/maxmemory:{$this->maxMemorySize}",
+                    'rw+b'
+                );
+            // $this->responseResourcesMap[$handleId] = tmpfile();
+            $options[CURLOPT_FILE] = $this->responseResourcesMap[$handleId];
+        }
 
         $options[CURLOPT_RETURNTRANSFER] = false;
         $options[CURLOPT_HEADER] = false;
-        $options[CURLOPT_FILE] = $this->responseResourcesMap[$handleId];
 
         $userHeaderFunction = $this->curlSettings[CURLOPT_HEADERFUNCTION] ?? null;
         $options[CURLOPT_HEADERFUNCTION] = function ($curlHandle, $str) use ($userHeaderFunction) {
@@ -625,16 +625,16 @@ class Client extends EventEmitter
                 $userHeaderFunction($curlHandle, $str);
             }
 
-            return $this->parseHeaders($curlHandle, $str);
+            return $this->parseHeadersBlock($curlHandle, $str);
         };
 
         curl_setopt_array($curlHandle, $options);
     }
 
     /**
-     * @param resource $curlHandle
+     * @param resource|\CurlHandle $curlHandle
      */
-    protected function parseHeaders($curlHandle, string $str): int
+    protected function parseHeadersBlock($curlHandle, string $str): int
     {
         // Header parsing
         $headerBlob = explode("\r\n\r\n", trim($str, "\r\n"));
@@ -654,7 +654,7 @@ class Client extends EventEmitter
      *
      * This method exists so it can easily be overridden and mocked.
      *
-     * @param resource $curlHandle
+     * @param resource|\CurlHandle $curlHandle
      * @param bool $returnString If true then returns response content string
      *
      * @return bool|string
@@ -675,7 +675,7 @@ class Client extends EventEmitter
         }
         return false === $result || !$streamExists
             ? ''
-            : fread($this->responseResourcesMap[$handleId], PHP_INT_MAX);
+            : stream_get_contents($this->responseResourcesMap[$handleId]);
     }
 
     /**
@@ -683,7 +683,7 @@ class Client extends EventEmitter
      *
      * This method exists so it can easily be overridden and mocked.
      *
-     * @param resource $curlHandle
+     * @param resource|\CurlHandle $curlHandle
      */
     protected function curlStuff($curlHandle): array
     {

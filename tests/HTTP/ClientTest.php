@@ -229,7 +229,7 @@ class ClientTest extends \PHPUnit\Framework\TestCase
 
         $request = new Request('GET', $url);
         $client->sendAsync($request, function (ResponseInterface $response) {
-            $this->assertEquals("foo\n", $response->getBody());
+            $this->assertEquals("foo\n", stream_get_contents($response->getBody()));
             $this->assertEquals(200, $response->getStatus());
             $this->assertEquals(4, $response->getHeader('Content-Length'));
         }, function ($error) use ($request) {
@@ -243,7 +243,7 @@ class ClientTest extends \PHPUnit\Framework\TestCase
     /**
      * @group ci
      */
-    public function testSendAsynConsecutively()
+    public function testSendAsyncConsecutively()
     {
         $url = $this->getAbsoluteUrl('/foo');
         if (!$url) {
@@ -254,7 +254,7 @@ class ClientTest extends \PHPUnit\Framework\TestCase
 
         $request = new Request('GET', $url);
         $client->sendAsync($request, function (ResponseInterface $response) {
-            $this->assertEquals("foo\n", $response->getBody());
+            $this->assertEquals("foo\n", stream_get_contents($response->getBody()));
             $this->assertEquals(200, $response->getStatus());
             $this->assertEquals(4, $response->getHeader('Content-Length'));
         }, function ($error) use ($request) {
@@ -265,7 +265,7 @@ class ClientTest extends \PHPUnit\Framework\TestCase
         $url = $this->getAbsoluteUrl('/bar.php');
         $request = new Request('GET', $url);
         $client->sendAsync($request, function (ResponseInterface $response) {
-            $this->assertEquals("bar\n", $response->getBody());
+            $this->assertEquals("bar\n", stream_get_contents($response->getBody()));
             $this->assertEquals(200, $response->getStatus());
             $this->assertEquals('Bar', $response->getHeader('X-Test'));
         }, function ($error) use ($request) {
@@ -459,7 +459,7 @@ class ClientTest extends \PHPUnit\Framework\TestCase
     {
         $client = new ClientMock();
         $request = new Request('GET', 'http://example.org/');
-        $client->on('curlPrepareAndExec', function (&$return, string &$headers, string &$body) {
+        $client->on('curlExec', function (&$return, string &$headers, string &$body) {
             $return = false;
         });
         $client->on('curlStuff', function (&$return) {
@@ -558,7 +558,7 @@ class ClientMock extends Client
         if (is_null($return)) {
             return parent::curlExec($curlHandle, $returnString);
         } else {
-            $this->parseHeaders($curlHandle, $headers);
+            $this->parseHeadersBlock($curlHandle, $headers);
             $stream = \fopen('php://memory', 'rw+');
             if (strlen($body) > 0) {
                 fwrite($stream, $body);

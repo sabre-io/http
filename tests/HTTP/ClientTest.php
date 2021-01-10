@@ -434,8 +434,10 @@ class ClientTest extends \PHPUnit\Framework\TestCase
     {
         $client = new ClientMock();
         $request = new Request('GET', 'http://example.org/');
-        $client->on('curlExec', function (&$return) {
-            $return = "HTTP/1.1 200 OK\r\nHeader1:Val1\r\n\r\nFoo";
+        $client->on('curlExec', function (&$return, string &$headers, string &$body) {
+            $return = true;
+            $body = 'Foo';
+            $headers = "HTTP/1.1 200 OK\r\nHeader1:Val1\r\n\r\n";
         });
         $client->on('curlStuff', function (&$return) {
             $return = [
@@ -457,8 +459,8 @@ class ClientTest extends \PHPUnit\Framework\TestCase
     {
         $client = new ClientMock();
         $request = new Request('GET', 'http://example.org/');
-        $client->on('curlExec', function (&$return) {
-            $return = '';
+        $client->on('curlPrepareAndExec', function (&$return, string &$headers, string &$body) {
+            $return = false;
         });
         $client->on('curlStuff', function (&$return) {
             $return = [
@@ -543,21 +545,26 @@ class ClientMock extends Client
     }
 
     /**
-     * Calls curl_exec.
-     *
-     * This method exists so it can easily be overridden and mocked.
-     *
      * @param resource $curlHandle
      */
-    protected function curlExec($curlHandle): string
+    protected function curlExec($curlHandle, bool $returnString = true)
     {
         $return = null;
-        $this->emit('curlExec', [&$return]);
+        $headers = '';
+        $body = '';
+        $this->emit('curlExec', [&$return, &$headers, &$body]);
 
         // If nothing modified $return, we're using the default behavior.
         if (is_null($return)) {
-            return parent::curlExec($curlHandle);
+            return parent::curlExec($curlHandle, $returnString);
         } else {
+            $this->parseHeaders($curlHandle, $headers);
+            $stream = \fopen('php://memory', 'rw+');
+            if (strlen($body) > 0) {
+                fwrite($stream, $body);
+                rewind($stream);
+            }
+            $this->responseResourcesMap[(int)$curlHandle] = $stream;
             return $return;
         }
     }

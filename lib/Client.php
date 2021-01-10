@@ -68,6 +68,8 @@ class Client extends EventEmitter
 
     protected $headerLinesMap = [];
 
+    protected $responseResourcesMap = [];
+
     /**
      * Initializes the client.
      */
@@ -222,7 +224,7 @@ class Client extends EventEmitter
                 unset($this->curlMultiMap[$resourceId]);
 
                 $curlHandle = $status['handle'];
-                $curlResult = $this->parseResponse(curl_multi_getcontent($curlHandle), $curlHandle);
+                $curlResult = $this->parseCurlResource($curlHandle);
                 $retry = false;
 
                 if (self::STATUS_CURLERROR === $curlResult['status']) {
@@ -312,17 +314,15 @@ class Client extends EventEmitter
      */
     protected function doRequest(RequestInterface $request): ResponseInterface
     {
-        $settings = $this->createCurlSettingsArray($request);
-
         if (!$this->curlHandle) {
             $this->curlHandle = curl_init();
         } else {
             curl_reset($this->curlHandle);
         }
 
-        curl_setopt_array($this->curlHandle, $settings);
-        $response = $this->curlExec($this->curlHandle);
-        $response = $this->parseResponse($response, $this->curlHandle);
+        $this->prepareCurl($request, $this->curlHandle);
+        $this->curlExec($this->curlHandle, false);
+        $response = $this->parseCurlResource($this->curlHandle);
         if (self::STATUS_CURLERROR === $response['status']) {
             throw new ClientException($response['curl_errmsg'], $response['curl_errno']);
         }
@@ -415,26 +415,6 @@ class Client extends EventEmitter
     const STATUS_CURLERROR = 1;
     const STATUS_HTTPERROR = 2;
 
-    private function parseResponse(string $response, $curlHandle): array
-    {
-        $settings = $this->curlSettings;
-        $separatedHeaders = isset($settings[CURLOPT_HEADERFUNCTION]) && (bool) $settings[CURLOPT_HEADERFUNCTION];
-
-        if ($separatedHeaders) {
-            $resourceId = (int) $curlHandle;
-            if (isset($this->headerLinesMap[$resourceId])) {
-                $headers = $this->headerLinesMap[$resourceId];
-            } else {
-                $headers = [];
-            }
-            $response = $this->parseCurlResponse($headers, $response, $curlHandle);
-        } else {
-            $response = $this->parseCurlResult($response, $curlHandle);
-        }
-
-        return $response;
-    }
-
     /**
      * Parses the result of a curl call in a format that's a bit more
      * convenient to work with.
@@ -452,13 +432,66 @@ class Client extends EventEmitter
      *
      * @param resource $curlHandle
      */
+    protected function parseCurlResource($curlHandle): array
+    {
+        [$curlInfo, $curlErrNo, $curlErrMsg] = $this->curlStuff($curlHandle);
+
+        if ($curlErrNo) {
+            return [
+                'status' => self::STATUS_CURLERROR,
+                'curl_errno' => $curlErrNo,
+                'curl_errmsg' => $curlErrMsg,
+            ];
+        }
+
+        $response = new Response();
+        $response->setStatus($curlInfo['http_code']);
+        $response->setBody($this->responseResourcesMap[(int) $curlHandle] ?? '');
+
+        $headerLines = $this->headerLinesMap[(int) $curlHandle] ?? [];
+        foreach ($headerLines as $header) {
+            $parts = explode(':', $header, 2);
+            if (2 === count($parts)) {
+                $response->addHeader(trim($parts[0]), trim($parts[1]));
+            }
+        }
+
+        $httpCode = $response->getStatus();
+
+        return [
+            'status' => $httpCode >= 400 ? self::STATUS_HTTPERROR : self::STATUS_SUCCESS,
+            'response' => $response,
+            'http_code' => $httpCode,
+        ];
+    }
+
+
+    /**
+     * Parses the result of a curl call in a format that's a bit more
+     * convenient to work with.
+     *
+     * The method returns an array with the following elements:
+     *   * status - one of the 3 STATUS constants.
+     *   * curl_errno - A curl error number. Only set if status is
+     *                  STATUS_CURLERROR.
+     *   * curl_errmsg - A current error message. Only set if status is
+     *                   STATUS_CURLERROR.
+     *   * response - Response object. Only set if status is STATUS_SUCCESS, or
+     *                STATUS_HTTPERROR.
+     *   * http_code - HTTP status code, as an int. Only set if Only set if
+     *                 status is STATUS_SUCCESS, or STATUS_HTTPERROR
+     *
+     * @deprecated Use parseCurlResource instead
+     *
+     * @param resource $curlHandle
+     */
     protected function parseCurlResponse(array $headerLines, string $body, $curlHandle): array
     {
         list(
             $curlInfo,
             $curlErrNo,
             $curlErrMsg
-        ) = $this->curlStuff($curlHandle);
+            ) = $this->curlStuff($curlHandle);
 
         if ($curlErrNo) {
             return [
@@ -503,7 +536,7 @@ class Client extends EventEmitter
      *   * http_code - HTTP status code, as an int. Only set if Only set if
      *                 status is STATUS_SUCCESS, or STATUS_HTTPERROR
      *
-     * @deprecated Use parseCurlResponse instead
+     * @deprecated Use parseCurlResource instead
      *
      * @param resource $curlHandle
      */
@@ -513,7 +546,7 @@ class Client extends EventEmitter
             $curlInfo,
             $curlErrNo,
             $curlErrMsg
-        ) = $this->curlStuff($curlHandle);
+            ) = $this->curlStuff($curlHandle);
 
         if ($curlErrNo) {
             return [
@@ -557,10 +590,7 @@ class Client extends EventEmitter
             $this->curlMultiHandle = curl_multi_init();
         }
         $curl = curl_init();
-        curl_setopt_array(
-            $curl,
-            $this->createCurlSettingsArray($request)
-        );
+        $this->prepareCurl($request, $curl);
         curl_multi_add_handle($this->curlMultiHandle, $curl);
 
         $resourceId = (int) $curl;
@@ -573,6 +603,50 @@ class Client extends EventEmitter
         ];
     }
 
+    /**
+     * @param resource $curlHandle
+     */
+    private function prepareCurl(RequestInterface $request, $curlHandle): void
+    {
+        $handleId = (int) $curlHandle;
+        $this->headerLinesMap[$handleId] = [];
+        $this->responseResourcesMap[$handleId] = \fopen('php://temp', 'rw+');
+
+        $options = $this->createCurlSettingsArray($request);
+
+        $options[CURLOPT_RETURNTRANSFER] = false;
+        $options[CURLOPT_HEADER] = false;
+        $options[CURLOPT_FILE] = $this->responseResourcesMap[$handleId];
+
+        $userHeaderFunction = $this->curlSettings[CURLOPT_HEADERFUNCTION] ?? null;
+        $options[CURLOPT_HEADERFUNCTION] = function ($curlHandle, $str) use ($userHeaderFunction) {
+            // Call user func
+            if ($userHeaderFunction !== null) {
+                $userHeaderFunction($curlHandle, $str);
+            }
+
+            return $this->parseHeaders($curlHandle, $str);
+        };
+
+        curl_setopt_array($curlHandle, $options);
+    }
+
+    /**
+     * @param resource $curlHandle
+     */
+    protected function parseHeaders($curlHandle, string $str): int
+    {
+        // Header parsing
+        $headerBlob = explode("\r\n\r\n", trim($str, "\r\n"));
+        // We only care about the last set of headers
+        $headerBlob = end($headerBlob);
+        $headerBlob = explode("\r\n", $headerBlob);
+        foreach ($headerBlob as $headerLine) {
+            $this->receiveCurlHeader($curlHandle, $headerLine);
+        }
+        return strlen($str);
+    }
+
     // @codeCoverageIgnoreStart
 
     /**
@@ -581,17 +655,27 @@ class Client extends EventEmitter
      * This method exists so it can easily be overridden and mocked.
      *
      * @param resource $curlHandle
+     * @param bool $returnString If true then returns response content string
+     *
+     * @return bool|string
      */
-    protected function curlExec($curlHandle): string
+    protected function curlExec($curlHandle, bool $returnString = true)
     {
-        $this->headerLinesMap[(int) $curlHandle] = [];
-
         $result = curl_exec($curlHandle);
-        if (false === $result) {
-            $result = '';
+
+        $handleId = (int) $curlHandle;
+
+        $streamExists = isset($this->responseResourcesMap[$handleId]);
+        if ($streamExists) {
+            rewind($this->responseResourcesMap[$handleId]);
         }
 
-        return $result;
+        if (!$returnString) {
+            return $result;
+        }
+        return false === $result || !$streamExists
+            ? ''
+            : fread($this->responseResourcesMap[$handleId], PHP_INT_MAX);
     }
 
     /**

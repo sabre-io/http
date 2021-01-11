@@ -554,7 +554,8 @@ class ClientMock extends Client
                 fwrite($stream, $body);
                 rewind($stream);
             }
-            $this->responseResourcesMap[(int)$curlHandle] = $stream;
+            $this->responseResourcesMap[(int) $curlHandle] = $stream;
+
             return $return;
         }
     }

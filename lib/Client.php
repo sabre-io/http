@@ -227,7 +227,7 @@ class Client extends EventEmitter
         do {
             $status = curl_multi_info_read($this->curlMultiHandle, $messagesInQueue);
 
-            if ($status !== false && CURLMSG_DONE === $status['msg']) {
+            if (false !== $status && CURLMSG_DONE === $status['msg']) {
                 $curlHandle = $status['handle'];
                 $handleId = (int) $curlHandle;
                 [$request, $successCallback, $errorCallback, $retryCount] = $this->curlMultiMap[$handleId];
@@ -478,11 +478,7 @@ class Client extends EventEmitter
      */
     protected function parseCurlResponse(array $headerLines, string $body, $curlHandle): array
     {
-        list(
-            $curlInfo,
-            $curlErrNo,
-            $curlErrMsg
-            ) = $this->curlStuff($curlHandle);
+        [$curlInfo, $curlErrNo, $curlErrMsg] = $this->curlStuff($curlHandle);
 
         if ($curlErrNo) {
             return [
@@ -533,11 +529,7 @@ class Client extends EventEmitter
      */
     protected function parseCurlResult(string $response, $curlHandle): array
     {
-        list(
-            $curlInfo,
-            $curlErrNo,
-            $curlErrMsg
-            ) = $this->curlStuff($curlHandle);
+        [$curlInfo, $curlErrNo, $curlErrMsg] = $this->curlStuff($curlHandle);
 
         if ($curlErrNo) {
             return [
@@ -620,6 +612,7 @@ class Client extends EventEmitter
             if (is_callable($userHeaderFunction)) {
                 $userHeaderFunction($curlHandle, $str);
             }
+
             return $this->receiveCurlHeader($curlHandle, $str);
         };
 
@@ -634,7 +627,7 @@ class Client extends EventEmitter
      * This method exists so it can easily be overridden and mocked.
      *
      * @param resource|\CurlHandle $curlHandle
-     * @param bool $returnString If true then returns response content string
+     * @param bool                 $returnString If true then returns response content string
      *
      * @return bool|string
      */
@@ -652,6 +645,7 @@ class Client extends EventEmitter
             return '';
         }
         rewind($this->responseResourcesMap[$handleId]);
+
         return stream_get_contents($this->responseResourcesMap[$handleId]);
     }
 

@@ -208,6 +208,25 @@ class ClientTest extends \PHPUnit\Framework\TestCase
     /**
      * @group ci
      */
+    public function testSendToGetVeryLargeContent()
+    {
+        $memoryLimit = max(64, ceil($this->getMemoryLimit() / 1024 / 1024));
+        $url = $this->getAbsoluteUrl("/anysize.php?size={$memoryLimit}");
+        if (!$url) {
+            $this->markTestSkipped('Set an environment value BASEURL to continue');
+        }
+
+        $request = new Request('GET', $url);
+        $client = new Client();
+        $response = $client->send($request);
+
+        $this->assertEquals(200, $response->getStatus());
+        $this->assertLessThan(60 * pow(1024, 2), memory_get_peak_usage());
+    }
+
+    /**
+     * @group ci
+     */
     public function testSendAsync()
     {
         $url = $this->getAbsoluteUrl('/foo');
@@ -424,7 +443,7 @@ class ClientTest extends \PHPUnit\Framework\TestCase
     {
         $client = new ClientMock();
         $request = new Request('GET', 'http://example.org/');
-        $client->on('curlExec', function (&$return, string &$headers, string &$body) {
+        $client->on('curlExecInternal', function (&$return, string &$headers, string &$body) {
             $return = true;
             $body = 'Foo';
             $headers = "HTTP/1.1 200 OK\r\nHeader1:Val1\r\n\r\n";
@@ -449,7 +468,7 @@ class ClientTest extends \PHPUnit\Framework\TestCase
     {
         $client = new ClientMock();
         $request = new Request('GET', 'http://example.org/');
-        $client->on('curlExec', function (&$return, string &$headers, string &$body) {
+        $client->on('curlExecInternal', function (&$return, string &$headers, string &$body) {
             $return = false;
         });
         $client->on('curlStuff', function (&$return) {
@@ -467,6 +486,28 @@ class ClientTest extends \PHPUnit\Framework\TestCase
             $this->assertEquals(1, $e->getCode());
             $this->assertEquals('Curl error', $e->getMessage());
         }
+    }
+
+    private function getMemoryLimit(): int
+    {
+        $val = trim(ini_get('memory_limit'));
+        $last = strtolower($val[strlen($val) - 1]);
+        $val = substr($val, 0, -1);
+        if (!is_numeric($val) || is_numeric($last)) {
+            return PHP_INT_MAX;
+        }
+        switch ($last) {
+            case 'g':
+                $val *= 1024;
+                // no break
+            case 'm':
+                $val *= 1024;
+                // no break
+            case 'k':
+                $val *= 1024;
+        }
+
+        return $val;
     }
 }
 
@@ -537,16 +578,16 @@ class ClientMock extends Client
     /**
      * @param resource $curlHandle
      */
-    protected function curlExec($curlHandle, bool $returnString = true)
+    protected function curlExecInternal($curlHandle): bool
     {
         $return = null;
         $headers = '';
         $body = '';
-        $this->emit('curlExec', [&$return, &$headers, &$body]);
+        $this->emit('curlExecInternal', [&$return, &$headers, &$body]);
 
         // If nothing modified $return, we're using the default behavior.
         if (is_null($return)) {
-            return parent::curlExec($curlHandle, $returnString);
+            return parent::curlExecInternal($curlHandle);
         } else {
             $this->parseHeadersBlock($curlHandle, $headers);
             $stream = \fopen('php://memory', 'rw+');

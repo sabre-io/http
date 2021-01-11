@@ -112,6 +112,13 @@ class Client extends EventEmitter
      */
     private $curlMultiMap = [];
 
+    /**
+     * Reserved for backward compatibility.
+     */
+    public function __construct()
+    {
+    }
+
     protected function receiveCurlHeader($curlHandle, $headerLine): int
     {
         $this->headerLinesMap[(int) $curlHandle][] = $headerLine;
@@ -339,7 +346,7 @@ class Client extends EventEmitter
         }
 
         $this->prepareCurl($request, $this->curlHandle);
-        $this->curlExec($this->curlHandle, false);
+        $this->curlExecInternal($this->curlHandle);
         $response = $this->parseCurlResource($this->curlHandle);
         if (self::STATUS_CURLERROR === $response['status']) {
             throw new ClientException($response['curl_errmsg'], $response['curl_errno']);
@@ -438,6 +445,8 @@ class Client extends EventEmitter
         if (isset($this->responseResourcesMap[$handleId])) {
             rewind($this->responseResourcesMap[$handleId]);
             $response->setBody($this->responseResourcesMap[$handleId]);
+        } else {
+            $response->setBody('');
         }
 
         $headerLines = $this->headerLinesMap[$handleId] ?? [];
@@ -627,19 +636,26 @@ class Client extends EventEmitter
      * This method exists so it can easily be overridden and mocked.
      *
      * @param resource|\CurlHandle $curlHandle
-     * @param bool                 $returnString If true then returns response content string
-     *
-     * @return bool|string
      */
-    protected function curlExec($curlHandle, bool $returnString = true)
+    protected function curlExecInternal($curlHandle): bool
     {
-        $result = curl_exec($curlHandle);
+        return curl_exec($curlHandle);
+    }
+
+    /**
+     * Calls curl_exec and returns content string with headers.
+     *
+     * This method exists so it can easily be overridden and mocked.
+     *
+     * @param resource|\CurlHandle $curlHandle
+     *
+     * @deprecated
+     */
+    protected function curlExec($curlHandle): string
+    {
+        $result = $this->curlExecInternal($curlHandle);
 
         $handleId = (int) $curlHandle;
-
-        if (!$returnString) {
-            return $result;
-        }
 
         if (!$result || !isset($this->responseResourcesMap[$handleId])) {
             return '';

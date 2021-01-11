@@ -45,12 +45,19 @@ use Sabre\Uri;
  */
 class Client extends EventEmitter
 {
+    const STATUS_SUCCESS = 0;
+    const STATUS_CURLERROR = 1;
+    const STATUS_HTTPERROR = 2;
+
     /**
      * List of curl settings.
      *
      * @var array
      */
-    protected $curlSettings = [];
+    protected $curlSettings = [
+        CURLOPT_NOBODY => false,
+        CURLOPT_USERAGENT => 'sabre-http/'.Version::VERSION.' (http://sabre.io/)',
+    ];
 
     /**
      * Whether or not exceptions should be thrown when a HTTP error is returned.
@@ -79,27 +86,33 @@ class Client extends EventEmitter
     protected $responseResourcesMap = [];
 
     /**
-     * Initializes the client.
+     * Cached curl handle.
+     *
+     * By keeping this resource around for the lifetime of this object, things
+     * like persistent connections are possible.
+     *
+     * @var resource|\CurlHandle
      */
-    public function __construct()
-    {
-        // See https://github.com/sabre-io/http/pull/115#discussion_r241292068
-        // Preserve compatibility for sub-classes that implements their own method `parseCurlResult`
-        $separatedHeaders = __CLASS__ === get_class($this);
+    private $curlHandle;
 
-        $this->curlSettings = [
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_NOBODY => false,
-            CURLOPT_USERAGENT => 'sabre-http/'.Version::VERSION.' (http://sabre.io/)',
-        ];
-        if ($separatedHeaders) {
-            $this->curlSettings[CURLOPT_HEADERFUNCTION] = [$this, 'receiveCurlHeader'];
-        } else {
-            $this->curlSettings[CURLOPT_HEADER] = true;
-        }
-    }
+    /**
+     * Handler for curl_multi requests.
+     *
+     * The first time sendAsync is used, this will be created.
+     *
+     * @var resource|\CurlMultiHandle
+     */
+    private $curlMultiHandle;
 
-    protected function receiveCurlHeader($curlHandle, $headerLine)
+    /**
+     * Has a list of curl handles, as well as their associated success and
+     * error callbacks.
+     *
+     * @var array
+     */
+    private $curlMultiMap = [];
+
+    protected function receiveCurlHeader($curlHandle, $headerLine): int
     {
         $this->headerLinesMap[(int) $curlHandle][] = $headerLine;
 
@@ -214,13 +227,22 @@ class Client extends EventEmitter
         do {
             $status = curl_multi_info_read($this->curlMultiHandle, $messagesInQueue);
 
-            if ($status && CURLMSG_DONE === $status['msg']) {
+            if ($status !== false && CURLMSG_DONE === $status['msg']) {
                 $curlHandle = $status['handle'];
-                $resourceId = (int) $curlHandle;
-                [$request, $successCallback, $errorCallback, $retryCount] = $this->curlMultiMap[$resourceId];
-                unset($this->curlMultiMap[$resourceId]);
+                $handleId = (int) $curlHandle;
+                [$request, $successCallback, $errorCallback, $retryCount] = $this->curlMultiMap[$handleId];
 
                 $curlResult = $this->parseCurlResource($curlHandle);
+
+                // Cleanup
+                curl_multi_remove_handle($this->curlMultiHandle, $curlHandle);
+                curl_close($curlHandle);
+                unset(
+                    $this->curlMultiMap[$handleId],
+                    $this->responseResourcesMap[$handleId],
+                    $this->headerLinesMap[$handleId]
+                );
+
                 $retry = false;
 
                 if (self::STATUS_CURLERROR === $curlResult['status']) {
@@ -327,33 +349,6 @@ class Client extends EventEmitter
     }
 
     /**
-     * Cached curl handle.
-     *
-     * By keeping this resource around for the lifetime of this object, things
-     * like persistent connections are possible.
-     *
-     * @var resource|\CurlHandle
-     */
-    private $curlHandle;
-
-    /**
-     * Handler for curl_multi requests.
-     *
-     * The first time sendAsync is used, this will be created.
-     *
-     * @var resource|\CurlMultiHandle
-     */
-    private $curlMultiHandle;
-
-    /**
-     * Has a list of curl handles, as well as their associated success and
-     * error callbacks.
-     *
-     * @var array
-     */
-    private $curlMultiMap = [];
-
-    /**
      * Turns a RequestInterface object into an array with settings that can be
      * fed to curl_setopt.
      */
@@ -407,10 +402,6 @@ class Client extends EventEmitter
         return $settings;
     }
 
-    const STATUS_SUCCESS = 0;
-    const STATUS_CURLERROR = 1;
-    const STATUS_HTTPERROR = 2;
-
     /**
      * Parses the result of a curl call in a format that's a bit more
      * convenient to work with.
@@ -439,12 +430,17 @@ class Client extends EventEmitter
                 'curl_errmsg' => $curlErrMsg,
             ];
         }
+        $handleId = (int) $curlHandle;
 
         $response = new Response();
         $response->setStatus($curlInfo['http_code']);
-        $response->setBody($this->responseResourcesMap[(int) $curlHandle] ?? '');
 
-        $headerLines = $this->headerLinesMap[(int) $curlHandle] ?? [];
+        if (isset($this->responseResourcesMap[$handleId])) {
+            rewind($this->responseResourcesMap[$handleId]);
+            $response->setBody($this->responseResourcesMap[$handleId]);
+        }
+
+        $headerLines = $this->headerLinesMap[$handleId] ?? [];
         foreach ($headerLines as $header) {
             $parts = explode(':', $header, 2);
             if (2 === count($parts)) {
@@ -606,45 +602,28 @@ class Client extends EventEmitter
         $this->headerLinesMap[$handleId] = [];
         $options = $this->createCurlSettingsArray($request);
 
-        if (array_key_exists(CURLOPT_NOBODY, $options) && !array_key_exists(CURLOPT_WRITEFUNCTION, $options)) {
-            $this->responseResourcesMap[$handleId] = \fopen(
-                    "php://temp/maxmemory:{$this->maxMemorySize}",
-                    'rw+b'
-                );
-            // $this->responseResourcesMap[$handleId] = tmpfile();
-            $options[CURLOPT_FILE] = $this->responseResourcesMap[$handleId];
-        }
-
         $options[CURLOPT_RETURNTRANSFER] = false;
         $options[CURLOPT_HEADER] = false;
+
+        if (!($options[CURLOPT_NOBODY] ?? false) && !array_key_exists(CURLOPT_WRITEFUNCTION, $options)) {
+            $options[CURLOPT_FILE] = $this->responseResourcesMap[$handleId] = $options[CURLOPT_FILE] ?? \fopen(
+                "php://temp/maxmemory:{$this->maxMemorySize}",
+                'rw+b'
+            );
+        } else {
+            $this->responseResourcesMap[$handleId] = null;
+        }
 
         $userHeaderFunction = $this->curlSettings[CURLOPT_HEADERFUNCTION] ?? null;
         $options[CURLOPT_HEADERFUNCTION] = function ($curlHandle, $str) use ($userHeaderFunction) {
             // Call user func
-            if ($userHeaderFunction !== null) {
+            if (is_callable($userHeaderFunction)) {
                 $userHeaderFunction($curlHandle, $str);
             }
-
-            return $this->parseHeadersBlock($curlHandle, $str);
+            return $this->receiveCurlHeader($curlHandle, $str);
         };
 
         curl_setopt_array($curlHandle, $options);
-    }
-
-    /**
-     * @param resource|\CurlHandle $curlHandle
-     */
-    protected function parseHeadersBlock($curlHandle, string $str): int
-    {
-        // Header parsing
-        $headerBlob = explode("\r\n\r\n", trim($str, "\r\n"));
-        // We only care about the last set of headers
-        $headerBlob = end($headerBlob);
-        $headerBlob = explode("\r\n", $headerBlob);
-        foreach ($headerBlob as $headerLine) {
-            $this->receiveCurlHeader($curlHandle, $headerLine);
-        }
-        return strlen($str);
     }
 
     // @codeCoverageIgnoreStart
@@ -665,17 +644,15 @@ class Client extends EventEmitter
 
         $handleId = (int) $curlHandle;
 
-        $streamExists = isset($this->responseResourcesMap[$handleId]);
-        if ($streamExists) {
-            rewind($this->responseResourcesMap[$handleId]);
-        }
-
         if (!$returnString) {
             return $result;
         }
-        return false === $result || !$streamExists
-            ? ''
-            : stream_get_contents($this->responseResourcesMap[$handleId]);
+
+        if (!$result || !isset($this->responseResourcesMap[$handleId])) {
+            return '';
+        }
+        rewind($this->responseResourcesMap[$handleId]);
+        return stream_get_contents($this->responseResourcesMap[$handleId]);
     }
 
     /**

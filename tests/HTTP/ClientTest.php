@@ -14,8 +14,6 @@ class ClientTest extends \PHPUnit\Framework\TestCase
         $request = new Request('GET', 'http://example.org/', ['X-Foo' => 'bar']);
 
         $settings = [
-                CURLOPT_RETURNTRANSFER => true,
-                CURLOPT_HEADER => true,
                 CURLOPT_POSTREDIR => 0,
                 CURLOPT_HTTPHEADER => ['X-Foo: bar'],
                 CURLOPT_NOBODY => false,
@@ -40,8 +38,6 @@ class ClientTest extends \PHPUnit\Framework\TestCase
         $request = new Request('HEAD', 'http://example.org/', ['X-Foo' => 'bar']);
 
         $settings = [
-                CURLOPT_RETURNTRANSFER => true,
-                CURLOPT_HEADER => true,
                 CURLOPT_NOBODY => true,
                 CURLOPT_CUSTOMREQUEST => 'HEAD',
                 CURLOPT_HTTPHEADER => ['X-Foo: bar'],
@@ -74,8 +70,6 @@ class ClientTest extends \PHPUnit\Framework\TestCase
 
         $settings = [
                 CURLOPT_CUSTOMREQUEST => 'GET',
-                CURLOPT_RETURNTRANSFER => true,
-                CURLOPT_HEADER => true,
                 CURLOPT_HTTPHEADER => ['X-Foo: bar'],
                 CURLOPT_NOBODY => false,
                 CURLOPT_URL => 'http://example.org/',
@@ -101,8 +95,6 @@ class ClientTest extends \PHPUnit\Framework\TestCase
         $request = new Request('PUT', 'http://example.org/', ['X-Foo' => 'bar'], $h);
 
         $settings = [
-                CURLOPT_RETURNTRANSFER => true,
-                CURLOPT_HEADER => true,
                 CURLOPT_PUT => true,
                 CURLOPT_INFILE => $h,
                 CURLOPT_NOBODY => false,
@@ -128,8 +120,6 @@ class ClientTest extends \PHPUnit\Framework\TestCase
         $request = new Request('PUT', 'http://example.org/', ['X-Foo' => 'bar'], 'boo');
 
         $settings = [
-                CURLOPT_RETURNTRANSFER => true,
-                CURLOPT_HEADER => true,
                 CURLOPT_NOBODY => false,
                 CURLOPT_POSTFIELDS => 'boo',
                 CURLOPT_CUSTOMREQUEST => 'PUT',
@@ -254,7 +244,7 @@ class ClientTest extends \PHPUnit\Framework\TestCase
 
         $request = new Request('GET', $url);
         $client->sendAsync($request, function (ResponseInterface $response) {
-            $this->assertEquals("foo\n", stream_get_contents($response->getBody()));
+            $this->assertEquals("foo\n", $response->getBodyAsString());
             $this->assertEquals(200, $response->getStatus());
             $this->assertEquals(4, $response->getHeader('Content-Length'));
         }, function ($error) use ($request) {
@@ -265,7 +255,7 @@ class ClientTest extends \PHPUnit\Framework\TestCase
         $url = $this->getAbsoluteUrl('/bar.php');
         $request = new Request('GET', $url);
         $client->sendAsync($request, function (ResponseInterface $response) {
-            $this->assertEquals("bar\n", stream_get_contents($response->getBody()));
+            $this->assertEquals("bar\n", $response->getBodyAsString());
             $this->assertEquals(200, $response->getStatus());
             $this->assertEquals('Bar', $response->getHeader('X-Test'));
         }, function ($error) use ($request) {
@@ -487,7 +477,7 @@ class ClientMock extends Client
     /**
      * Making this method public.
      */
-    public function receiveCurlHeader($curlHandle, $headerLine)
+    public function receiveCurlHeader($curlHandle, $headerLine): int
     {
         return parent::receiveCurlHeader($curlHandle, $headerLine);
     }
@@ -566,6 +556,14 @@ class ClientMock extends Client
             }
             $this->responseResourcesMap[(int)$curlHandle] = $stream;
             return $return;
+        }
+    }
+
+    protected function parseHeadersBlock($curlHandle, string $str): void
+    {
+        $headerBlob = explode("\r\n", trim($str, "\r\n"));
+        foreach ($headerBlob as $headerLine) {
+            $this->receiveCurlHeader($curlHandle, $headerLine);
         }
     }
 }

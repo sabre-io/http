@@ -208,6 +208,24 @@ class ClientTest extends \PHPUnit\Framework\TestCase
     /**
      * @group ci
      */
+    public function testSendHeadHeader()
+    {
+        $url = $this->getAbsoluteUrl('/large.php');
+        if (!$url) {
+            $this->markTestSkipped('Set an environment value BASEURL to continue');
+        }
+
+        $request = new Request('HEAD', $url);
+        $client = new Client();
+        $response = $client->send($request);
+
+        $this->assertEquals(200, $response->getStatus());
+        $this->assertEmpty($response->getBodyAsString());
+    }
+
+    /**
+     * @group ci
+     */
     public function testSendToGetVeryLargeContent()
     {
         $memoryLimit = max(64, ceil($this->getMemoryLimit() / 1024 / 1024));

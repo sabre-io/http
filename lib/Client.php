@@ -383,7 +383,9 @@ class Client extends EventEmitter
                     // reason.
                     $settings[CURLOPT_PUT] = true;
                     $settings[CURLOPT_INFILE] = $body;
-                    $settings[CURLOPT_INFILESIZE] = $bodyStat['size'];
+                    if ($bodyStat !== false && array_key_exists('size', $bodyStat)) {
+                        $settings[CURLOPT_INFILESIZE] = $bodyStat['size'];
+                    }
                 } else {
                     // For security we cast this to a string. If somehow an array could
                     // be passed here, it would be possible for an attacker to use @ to

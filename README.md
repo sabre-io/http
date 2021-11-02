@@ -1,6 +1,8 @@
 sabre/http
 ==========
 
+TriggerCI.
+
 This library provides a toolkit to make working with the [HTTP protocol](https://tools.ietf.org/html/rfc2616) easier.
 
 Most PHP scripts run within a HTTP request but accessing information about the

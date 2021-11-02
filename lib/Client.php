@@ -383,7 +383,7 @@ class Client extends EventEmitter
                     // reason.
                     $settings[CURLOPT_PUT] = true;
                     $settings[CURLOPT_INFILE] = $body;
-                    if ($bodyStat !== false && array_key_exists('size', $bodyStat)) {
+                    if (false !== $bodyStat && array_key_exists('size', $bodyStat)) {
                         $settings[CURLOPT_INFILESIZE] = $bodyStat['size'];
                     }
                 } else {

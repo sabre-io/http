@@ -89,8 +89,6 @@ class Sapi
         if (null !== $contentLength) {
             $output = fopen('php://output', 'wb');
             if (is_resource($body) && 'stream' == get_resource_type($body)) {
-                if (PHP_INT_SIZE > 4) {
-                    // use the dedicated function on 64 Bit systems
                     // a workaround to make PHP more possible to use mmap based copy, see https://github.com/sabre-io/http/pull/119
                     $left = (int) $contentLength;
                     // copy with 4MiB chunks
@@ -119,12 +117,6 @@ class Sapi
                         }
                         $left -= $copied;
                     }
-                } else {
-                    // workaround for 32 Bit systems to avoid stream_copy_to_stream
-                    while (!feof($body)) {
-                        fwrite($output, fread($body, 8192));
-                    }
-                }
             } else {
                 fwrite($output, $body, (int) $contentLength);
             }

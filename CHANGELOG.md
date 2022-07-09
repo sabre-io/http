@@ -1,6 +1,11 @@
 ChangeLog
 =========
 
+5.1.5 (2022-07-09)
+------------------
+
+* #184 Remove 4GB file size workaround for 32bit OS / Stream Videos on IOS (@schoetju)
+
 5.1.4 (2022-06-24)
 ------------------
 

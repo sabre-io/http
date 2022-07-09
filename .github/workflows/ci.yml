@@ -17,7 +17,6 @@ jobs:
         code-analysis: ['no']
         include:
           - php-versions: '7.1'
-            coverage: 'none'
             code-analysis: 'yes'
     steps:
       - name: Checkout

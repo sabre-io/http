@@ -137,7 +137,7 @@ class Response extends Message implements ResponseInterface
     /**
      * Sets the HTTP status code.
      *
-     * This can be either the full HTTP status code with human readable string,
+     * This can be either the full HTTP status code with human-readable string,
      * for example: "403 I can't let you do that, Dave".
      *
      * Or just the code, in which case the appropriate default message will be

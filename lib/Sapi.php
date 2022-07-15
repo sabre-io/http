@@ -26,7 +26,7 @@ use InvalidArgumentException;
  * * php://output
  *
  * You can choose to either call all these methods statically, but you can also
- * instantiate this as an object to allow for polymorhpism.
+ * instantiate this as an object to allow for polymorphism.
  *
  * @copyright Copyright (C) fruux GmbH (https://fruux.com/)
  * @author Evert Pot (http://evertpot.com/)
@@ -207,7 +207,7 @@ class Sapi
                         // Normalizing it to be prettier
                         $header = strtolower(substr($key, 5));
 
-                        // Transforming dashes into spaces, and uppercasing
+                        // Transforming dashes into spaces, and upper-casing
                         // every first letter.
                         $header = ucwords(str_replace('_', ' ', $header));
 

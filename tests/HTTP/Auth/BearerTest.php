@@ -23,7 +23,7 @@ class BearerTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    public function testGetCredentialsNoheader()
+    public function testGetCredentialsNoHeader()
     {
         $request = new Request('GET', '/', []);
         $bearer = new Bearer('Dagger', $request, new Response());

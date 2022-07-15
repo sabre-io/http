@@ -133,7 +133,7 @@ class Digest extends AbstractAuth
                 return false;
             }
             // We need to add an md5 of the entire request body to the A2 part of the hash
-            $body = $this->request->getBody($asString = true);
+            $body = $this->request->getBody();
             $this->request->setBody($body);
             $A2 .= ':'.md5($body);
         } elseif (!($this->qop & self::QOP_AUTH)) {
@@ -174,7 +174,7 @@ class Digest extends AbstractAuth
     /**
      * This method returns the full digest string.
      *
-     * It should be compatibile with mod_php format and other webservers.
+     * It should be compatible with mod_php format and other webservers.
      *
      * If the header could not be found, null will be returned
      *

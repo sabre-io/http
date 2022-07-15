@@ -1,6 +1,13 @@
 ChangeLog
 =========
 
+5.1.6 (2022-07-15)
+------------------
+
+* #187 Allow testSendToGetLargeContent peak memory usage to be specified externally (@phil-davis)
+* #188 Fix various small typos and grammar (@phil-davis)
+* #189 Fix typo in text of status code 203 'Non-Authoritative Information' (@phil-davis)
+
 5.1.5 (2022-07-09)
 ------------------
 

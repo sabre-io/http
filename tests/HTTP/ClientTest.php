@@ -14,8 +14,6 @@ class ClientTest extends \PHPUnit\Framework\TestCase
         $request = new Request('GET', 'http://example.org/', ['X-Foo' => 'bar']);
 
         $settings = [
-                CURLOPT_RETURNTRANSFER => true,
-                CURLOPT_HEADER => true,
                 CURLOPT_POSTREDIR => 0,
                 CURLOPT_HTTPHEADER => ['X-Foo: bar'],
                 CURLOPT_NOBODY => false,
@@ -40,8 +38,6 @@ class ClientTest extends \PHPUnit\Framework\TestCase
         $request = new Request('HEAD', 'http://example.org/', ['X-Foo' => 'bar']);
 
         $settings = [
-                CURLOPT_RETURNTRANSFER => true,
-                CURLOPT_HEADER => true,
                 CURLOPT_NOBODY => true,
                 CURLOPT_CUSTOMREQUEST => 'HEAD',
                 CURLOPT_HTTPHEADER => ['X-Foo: bar'],
@@ -74,8 +70,6 @@ class ClientTest extends \PHPUnit\Framework\TestCase
 
         $settings = [
                 CURLOPT_CUSTOMREQUEST => 'GET',
-                CURLOPT_RETURNTRANSFER => true,
-                CURLOPT_HEADER => true,
                 CURLOPT_HTTPHEADER => ['X-Foo: bar'],
                 CURLOPT_NOBODY => false,
                 CURLOPT_URL => 'http://example.org/',
@@ -102,8 +96,6 @@ class ClientTest extends \PHPUnit\Framework\TestCase
         $request = new Request('PUT', 'http://example.org/', ['X-Foo' => 'bar'], $h);
 
         $settings = [
-                CURLOPT_RETURNTRANSFER => true,
-                CURLOPT_HEADER => true,
                 CURLOPT_PUT => true,
                 CURLOPT_INFILE => $h,
                 CURLOPT_INFILESIZE => strlen($fileContent),
@@ -130,8 +122,6 @@ class ClientTest extends \PHPUnit\Framework\TestCase
         $request = new Request('PUT', 'http://example.org/', ['X-Foo' => 'bar'], 'boo');
 
         $settings = [
-                CURLOPT_RETURNTRANSFER => true,
-                CURLOPT_HEADER => true,
                 CURLOPT_NOBODY => false,
                 CURLOPT_POSTFIELDS => 'boo',
                 CURLOPT_CUSTOMREQUEST => 'PUT',
@@ -220,6 +210,43 @@ class ClientTest extends \PHPUnit\Framework\TestCase
     /**
      * @group ci
      */
+    public function testSendHeadHeader()
+    {
+        $url = $this->getAbsoluteUrl('/large.php');
+        if (!$url) {
+            $this->markTestSkipped('Set an environment value BASEURL to continue');
+        }
+
+        $request = new Request('HEAD', $url);
+        $client = new Client();
+        $response = $client->send($request);
+
+        $this->assertEquals(200, $response->getStatus());
+        $this->assertEmpty($response->getBodyAsString());
+    }
+
+    /**
+     * @group ci
+     */
+    public function testSendToGetVeryLargeContent()
+    {
+        $memoryLimit = max(64, ceil($this->getMemoryLimit() / 1024 / 1024));
+        $url = $this->getAbsoluteUrl("/anysize.php?size={$memoryLimit}");
+        if (!$url) {
+            $this->markTestSkipped('Set an environment value BASEURL to continue');
+        }
+
+        $request = new Request('GET', $url);
+        $client = new Client();
+        $response = $client->send($request);
+
+        $this->assertEquals(200, $response->getStatus());
+        $this->assertLessThan(60 * pow(1024, 2), memory_get_peak_usage());
+    }
+
+    /**
+     * @group ci
+     */
     public function testSendAsync()
     {
         $url = $this->getAbsoluteUrl('/foo');
@@ -231,7 +258,7 @@ class ClientTest extends \PHPUnit\Framework\TestCase
 
         $request = new Request('GET', $url);
         $client->sendAsync($request, function (ResponseInterface $response) {
-            $this->assertEquals("foo\n", $response->getBody());
+            $this->assertEquals("foo\n", stream_get_contents($response->getBody()));
             $this->assertEquals(200, $response->getStatus());
             $this->assertEquals(4, $response->getHeader('Content-Length'));
         }, function ($error) use ($request) {
@@ -245,7 +272,7 @@ class ClientTest extends \PHPUnit\Framework\TestCase
     /**
      * @group ci
      */
-    public function testSendAsynConsecutively()
+    public function testSendAsyncConsecutively()
     {
         $url = $this->getAbsoluteUrl('/foo');
         if (!$url) {
@@ -256,7 +283,7 @@ class ClientTest extends \PHPUnit\Framework\TestCase
 
         $request = new Request('GET', $url);
         $client->sendAsync($request, function (ResponseInterface $response) {
-            $this->assertEquals("foo\n", $response->getBody());
+            $this->assertEquals("foo\n", $response->getBodyAsString());
             $this->assertEquals(200, $response->getStatus());
             $this->assertEquals(4, $response->getHeader('Content-Length'));
         }, function ($error) use ($request) {
@@ -267,7 +294,7 @@ class ClientTest extends \PHPUnit\Framework\TestCase
         $url = $this->getAbsoluteUrl('/bar.php');
         $request = new Request('GET', $url);
         $client->sendAsync($request, function (ResponseInterface $response) {
-            $this->assertEquals("bar\n", $response->getBody());
+            $this->assertEquals("bar\n", $response->getBodyAsString());
             $this->assertEquals(200, $response->getStatus());
             $this->assertEquals('Bar', $response->getHeader('X-Test'));
         }, function ($error) use ($request) {
@@ -436,8 +463,10 @@ class ClientTest extends \PHPUnit\Framework\TestCase
     {
         $client = new ClientMock();
         $request = new Request('GET', 'http://example.org/');
-        $client->on('curlExec', function (&$return) {
-            $return = "HTTP/1.1 200 OK\r\nHeader1:Val1\r\n\r\nFoo";
+        $client->on('curlExecInternal', function (&$return, string &$headers, string &$body) {
+            $return = true;
+            $body = 'Foo';
+            $headers = "HTTP/1.1 200 OK\r\nHeader1:Val1\r\n\r\n";
         });
         $client->on('curlStuff', function (&$return) {
             $return = [
@@ -459,8 +488,8 @@ class ClientTest extends \PHPUnit\Framework\TestCase
     {
         $client = new ClientMock();
         $request = new Request('GET', 'http://example.org/');
-        $client->on('curlExec', function (&$return) {
-            $return = '';
+        $client->on('curlExecInternal', function (&$return, string &$headers, string &$body) {
+            $return = false;
         });
         $client->on('curlStuff', function (&$return) {
             $return = [
@@ -478,6 +507,28 @@ class ClientTest extends \PHPUnit\Framework\TestCase
             $this->assertEquals('Curl error', $e->getMessage());
         }
     }
+
+    private function getMemoryLimit(): int
+    {
+        $val = trim(ini_get('memory_limit'));
+        $last = strtolower($val[strlen($val) - 1]);
+        $val = substr($val, 0, -1);
+        if (!is_numeric($val) || is_numeric($last)) {
+            return PHP_INT_MAX;
+        }
+        switch ($last) {
+            case 'g':
+                $val *= 1024;
+                // no break
+            case 'm':
+                $val *= 1024;
+                // no break
+            case 'k':
+                $val *= 1024;
+        }
+
+        return $val;
+    }
 }
 
 class ClientMock extends Client
@@ -487,7 +538,7 @@ class ClientMock extends Client
     /**
      * Making this method public.
      */
-    public function receiveCurlHeader($curlHandle, $headerLine)
+    public function receiveCurlHeader($curlHandle, $headerLine): int
     {
         return parent::receiveCurlHeader($curlHandle, $headerLine);
     }
@@ -545,22 +596,36 @@ class ClientMock extends Client
     }
 
     /**
-     * Calls curl_exec.
-     *
-     * This method exists so it can easily be overridden and mocked.
-     *
      * @param resource $curlHandle
      */
-    protected function curlExec($curlHandle): string
+    protected function curlExecInternal($curlHandle): bool
     {
         $return = null;
-        $this->emit('curlExec', [&$return]);
+        $headers = '';
+        $body = '';
+        $this->emit('curlExecInternal', [&$return, &$headers, &$body]);
 
         // If nothing modified $return, we're using the default behavior.
         if (is_null($return)) {
-            return parent::curlExec($curlHandle);
+            return parent::curlExecInternal($curlHandle);
         } else {
+            $this->parseHeadersBlock($curlHandle, $headers);
+            $stream = \fopen('php://memory', 'rw+');
+            if (strlen($body) > 0) {
+                fwrite($stream, $body);
+                rewind($stream);
+            }
+            $this->responseResourcesMap[(int) $curlHandle] = $stream;
+
             return $return;
+        }
+    }
+
+    protected function parseHeadersBlock($curlHandle, string $str): void
+    {
+        $headerBlob = explode("\r\n", trim($str, "\r\n"));
+        foreach ($headerBlob as $headerLine) {
+            $this->receiveCurlHeader($curlHandle, $headerLine);
         }
     }
 }

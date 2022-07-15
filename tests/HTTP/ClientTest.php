@@ -209,12 +209,19 @@ class ClientTest extends \PHPUnit\Framework\TestCase
             $this->markTestSkipped('Set an environment value BASEURL to continue');
         }
 
+        // Allow the peak memory usage limit to be specified externally, if needed.
+        // When running this test in different environments it may be appropriate to set a different limit.
+        $maxPeakMemoryUsage = \getenv('SABRE_HTTP_TEST_GET_LARGE_CONTENT_MAX_PEAK_MEMORY_USAGE');
+        if (false === $maxPeakMemoryUsage) {
+            $maxPeakMemoryUsage = 60 * pow(1024, 2);
+        }
+
         $request = new Request('GET', $url);
         $client = new Client();
         $response = $client->send($request);
 
         $this->assertEquals(200, $response->getStatus());
-        $this->assertLessThan(60 * pow(1024, 2), memory_get_peak_usage());
+        $this->assertLessThan((int) $maxPeakMemoryUsage, memory_get_peak_usage());
     }
 
     /**

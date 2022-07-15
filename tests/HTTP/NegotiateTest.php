@@ -101,7 +101,7 @@ class NegotiateTest extends \PHPUnit\Framework\TestCase
                 ],
                 'audio/pcm',
             ],
-            [ // No whitepace after type, should pick the one that is the most specific.
+            [ // No whitespace after type, should pick the one that is the most specific.
                 'text/vcard;version=3.0, text/vcard',
                 [
                     'text/vcard',

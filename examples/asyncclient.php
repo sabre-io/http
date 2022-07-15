@@ -3,7 +3,7 @@
 /**
  * This example demonstrates the ability for clients to work asynchronously.
  *
- * By default up to 10 requests will be executed in paralel. HTTP connections
+ * By default up to 10 requests will be executed in parallel. HTTP connections
  * are re-used and DNS is cached, all thanks to the power of curl.
  *
  * @copyright Copyright (C) 2009-2015 fruux GmbH (https://fruux.com/).
@@ -27,7 +27,7 @@ foreach ($paths as $path) {
     }
 }
 
-// This is the request we're repeating a 1000 times.
+// This is the request we're repeating 1000 times.
 $request = new Request('GET', 'http://localhost/');
 $client = new Client();
 

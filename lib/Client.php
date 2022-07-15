@@ -26,7 +26,7 @@ use Sabre\Uri;
  * request before it's done, such as adding authentication headers.
  *
  * The afterRequest event will be emitted after the request is completed
- * succesfully.
+ * successfully.
  *
  * If a HTTP error is returned (status code higher than 399) the error event is
  * triggered. It's possible using this event to retry the request, by setting
@@ -53,7 +53,7 @@ class Client extends EventEmitter
     protected $curlSettings = [];
 
     /**
-     * Wether or not exceptions should be thrown when a HTTP error is returned.
+     * Whether exceptions should be thrown when a HTTP error is returned.
      *
      * @var bool
      */

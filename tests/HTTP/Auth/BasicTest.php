@@ -34,7 +34,7 @@ class BasicTest extends \PHPUnit\Framework\TestCase
         $this->assertNull($basic->getCredentials());
     }
 
-    public function testGetCredentialsNoheader()
+    public function testGetCredentialsNoHeader()
     {
         $request = new Request('GET', '/', []);
         $basic = new Basic('Dagger', $request, new Response());

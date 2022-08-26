@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Sabre\HTTP;
 
-use LogicException;
 use Sabre\Uri;
 
 /**
@@ -21,17 +20,13 @@ class Request extends Message implements RequestInterface
 {
     /**
      * HTTP Method.
-     *
-     * @var string
      */
-    protected $method;
+    protected string $method;
 
     /**
      * Request Url.
-     *
-     * @var string
      */
-    protected $url;
+    protected string $url;
 
     /**
      * Creates the request object.
@@ -57,7 +52,7 @@ class Request extends Message implements RequestInterface
     /**
      * Sets the HTTP method.
      */
-    public function setMethod(string $method)
+    public function setMethod(string $method): void
     {
         $this->method = $method;
     }
@@ -73,7 +68,7 @@ class Request extends Message implements RequestInterface
     /**
      * Sets the request url.
      */
-    public function setUrl(string $url)
+    public function setUrl(string $url): void
     {
         $this->url = $url;
     }
@@ -95,12 +90,12 @@ class Request extends Message implements RequestInterface
         return $queryParams;
     }
 
-    protected $absoluteUrl;
+    protected string $absoluteUrl;
 
     /**
      * Sets the absolute url.
      */
-    public function setAbsoluteUrl(string $url)
+    public function setAbsoluteUrl(string $url): void
     {
         $this->absoluteUrl = $url;
     }
@@ -122,17 +117,15 @@ class Request extends Message implements RequestInterface
 
     /**
      * Base url.
-     *
-     * @var string
      */
-    protected $baseUrl = '/';
+    protected string $baseUrl = '/';
 
     /**
      * Sets a base url.
      *
      * This url is used for relative path calculations.
      */
-    public function setBaseUrl(string $url)
+    public function setBaseUrl(string $url): void
     {
         $this->baseUrl = $url;
     }
@@ -186,10 +179,8 @@ class Request extends Message implements RequestInterface
 
     /**
      * Equivalent of PHP's $_POST.
-     *
-     * @var array
      */
-    protected $postData = [];
+    protected array $postData = [];
 
     /**
      * Sets the post data.
@@ -199,7 +190,7 @@ class Request extends Message implements RequestInterface
      * This would not have been needed, if POST data was accessible as
      * php://input, but unfortunately we need to special case it.
      */
-    public function setPostData(array $postData)
+    public function setPostData(array $postData): void
     {
         $this->postData = $postData;
     }
@@ -216,19 +207,15 @@ class Request extends Message implements RequestInterface
 
     /**
      * An array containing the raw _SERVER array.
-     *
-     * @var array
      */
-    protected $rawServerData;
+    protected array $rawServerData;
 
     /**
      * Returns an item from the _SERVER array.
      *
      * If the value does not exist in the array, null is returned.
-     *
-     * @return string|null
      */
-    public function getRawServerValue(string $valueName)
+    public function getRawServerValue(string $valueName): ?string
     {
         return $this->rawServerData[$valueName] ?? null;
     }
@@ -236,7 +223,7 @@ class Request extends Message implements RequestInterface
     /**
      * Sets the _SERVER array.
      */
-    public function setRawServerData(array $data)
+    public function setRawServerData(array $data): void
     {
         $this->rawServerData = $data;
     }

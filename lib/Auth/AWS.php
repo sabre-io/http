@@ -22,23 +22,19 @@ class AWS extends AbstractAuth
      *
      * @var string
      */
-    private $signature = null;
+    private ?string $signature = null;
 
     /**
      * The accesskey supplied by the HTTP client.
-     *
-     * @var string
      */
-    private $accessKey = null;
+    private ?string $accessKey = null;
 
     /**
      * An error code, if any.
      *
      * This value will be filled with one of the ERR_* constants
-     *
-     * @var int
      */
-    public $errorCode = 0;
+    public int $errorCode = 0;
 
     public const ERR_NOAWSHEADER = 1;
     public const ERR_MD5CHECKSUMWRONG = 2;
@@ -136,7 +132,7 @@ class AWS extends AbstractAuth
      *
      * This should be called when username and password are incorrect, or not supplied at all
      */
-    public function requireLogin()
+    public function requireLogin(): void
     {
         $this->response->addHeader('WWW-Authenticate', 'AWS');
         $this->response->setStatus(401);

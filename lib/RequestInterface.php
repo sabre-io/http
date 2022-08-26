@@ -21,7 +21,7 @@ interface RequestInterface extends MessageInterface
     /**
      * Sets the HTTP method.
      */
-    public function setMethod(string $method);
+    public function setMethod(string $method): void;
 
     /**
      * Returns the request url.
@@ -31,7 +31,7 @@ interface RequestInterface extends MessageInterface
     /**
      * Sets the request url.
      */
-    public function setUrl(string $url);
+    public function setUrl(string $url): void;
 
     /**
      * Returns the absolute url.
@@ -41,7 +41,7 @@ interface RequestInterface extends MessageInterface
     /**
      * Sets the absolute url.
      */
-    public function setAbsoluteUrl(string $url);
+    public function setAbsoluteUrl(string $url): void;
 
     /**
      * Returns the current base url.
@@ -55,7 +55,7 @@ interface RequestInterface extends MessageInterface
      *
      * The base url should default to /
      */
-    public function setBaseUrl(string $url);
+    public function setBaseUrl(string $url): void;
 
     /**
      * Returns the relative path.
@@ -96,19 +96,17 @@ interface RequestInterface extends MessageInterface
      * This would not have been needed, if POST data was accessible as
      * php://input, but unfortunately we need to special case it.
      */
-    public function setPostData(array $postData);
+    public function setPostData(array $postData): void;
 
     /**
      * Returns an item from the _SERVER array.
      *
      * If the value does not exist in the array, null is returned.
-     *
-     * @return string|null
      */
-    public function getRawServerValue(string $valueName);
+    public function getRawServerValue(string $valueName): ?string;
 
     /**
      * Sets the _SERVER array.
      */
-    public function setRawServerData(array $data);
+    public function setRawServerData(array $data): void;
 }

@@ -23,10 +23,8 @@ class Bearer extends AbstractAuth
      * This method returns a string with an access token.
      *
      * If no token was found, this method returns null.
-     *
-     * @return string|null
      */
-    public function getToken()
+    public function getToken(): ?string
     {
         $auth = $this->request->getHeader('Authorization');
 
@@ -45,7 +43,7 @@ class Bearer extends AbstractAuth
      * This method sends the needed HTTP header and status code (401) to force
      * authentication.
      */
-    public function requireLogin()
+    public function requireLogin(): void
     {
         $this->response->addHeader('WWW-Authenticate', 'Bearer realm="'.$this->realm.'"');
         $this->response->setStatus(401);

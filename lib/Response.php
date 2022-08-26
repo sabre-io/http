@@ -15,10 +15,8 @@ class Response extends Message implements ResponseInterface
 {
     /**
      * This is the list of currently registered HTTP status codes.
-     *
-     * @var array
      */
-    public static $statusCodes = [
+    public static array $statusCodes = [
         100 => 'Continue',
         101 => 'Switching Protocols',
         102 => 'Processing',
@@ -84,26 +82,21 @@ class Response extends Message implements ResponseInterface
 
     /**
      * HTTP status code.
-     *
-     * @var int
      */
-    protected $status;
+    protected int $status;
 
     /**
      * HTTP status text.
-     *
-     * @var string
      */
-    protected $statusText;
+    protected string $statusText;
 
     /**
      * Creates the response object.
      *
-     * @param string|int $status
-     * @param array      $headers
-     * @param resource   $body
+     * @param string|int                    $status
+     * @param resource|string|callable|null $body
      */
-    public function __construct($status = 500, array $headers = null, $body = null)
+    public function __construct($status = 500, ?array $headers = null, $body = null)
     {
         if (null !== $status) {
             $this->setStatus($status);
@@ -147,7 +140,7 @@ class Response extends Message implements ResponseInterface
      *
      * @throws \InvalidArgumentException
      */
-    public function setStatus($status)
+    public function setStatus($status): void
     {
         if (is_int($status) || ctype_digit($status)) {
             $statusCode = $status;

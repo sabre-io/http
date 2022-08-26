@@ -499,7 +499,7 @@ class ClientMock extends Client
     /**
      * Making this method public.
      */
-    public function receiveCurlHeader($curlHandle, $headerLine)
+    public function receiveCurlHeader($curlHandle, $headerLine): int
     {
         return parent::receiveCurlHeader($curlHandle, $headerLine);
     }

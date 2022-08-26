@@ -47,26 +47,20 @@ class Client extends EventEmitter
 {
     /**
      * List of curl settings.
-     *
-     * @var array
      */
-    protected $curlSettings = [];
+    protected array $curlSettings = [];
 
     /**
      * Whether exceptions should be thrown when a HTTP error is returned.
-     *
-     * @var bool
      */
-    protected $throwExceptions = false;
+    protected bool $throwExceptions = false;
 
     /**
      * The maximum number of times we'll follow a redirect.
-     *
-     * @var int
      */
-    protected $maxRedirects = 5;
+    protected int $maxRedirects = 5;
 
-    protected $headerLinesMap = [];
+    protected array $headerLinesMap = [];
 
     /**
      * Initializes the client.
@@ -89,7 +83,7 @@ class Client extends EventEmitter
         }
     }
 
-    protected function receiveCurlHeader($curlHandle, $headerLine)
+    protected function receiveCurlHeader($curlHandle, $headerLine): int
     {
         $this->headerLinesMap[(int) $curlHandle][] = $headerLine;
 
@@ -175,7 +169,7 @@ class Client extends EventEmitter
      * After calling sendAsync, you must therefore occasionally call the poll()
      * method, or wait().
      */
-    public function sendAsync(RequestInterface $request, callable $success = null, callable $error = null)
+    public function sendAsync(RequestInterface $request, callable $success = null, callable $error = null): void
     {
         $this->emit('beforeRequest', [$request]);
         $this->sendAsyncInternal($request, $success, $error);
@@ -272,7 +266,7 @@ class Client extends EventEmitter
      * Processes every HTTP request in the queue, and waits till they are all
      * completed.
      */
-    public function wait()
+    public function wait(): void
     {
         do {
             curl_multi_select($this->curlMultiHandle);
@@ -290,7 +284,7 @@ class Client extends EventEmitter
      * This only works for the send() method. Throwing exceptions for
      * sendAsync() is not supported.
      */
-    public function setThrowExceptions(bool $throwExceptions)
+    public function setThrowExceptions(bool $throwExceptions): void
     {
         $this->throwExceptions = $throwExceptions;
     }
@@ -302,7 +296,7 @@ class Client extends EventEmitter
      *
      * @param mixed $value
      */
-    public function addCurlSetting(int $name, $value)
+    public function addCurlSetting(int $name, $value): void
     {
         $this->curlSettings[$name] = $value;
     }
@@ -352,10 +346,8 @@ class Client extends EventEmitter
     /**
      * Has a list of curl handles, as well as their associated success and
      * error callbacks.
-     *
-     * @var array
      */
-    private $curlMultiMap = [];
+    private array $curlMultiMap = [];
 
     /**
      * Turns a RequestInterface object into an array with settings that can be
@@ -556,7 +548,7 @@ class Client extends EventEmitter
      * We keep this in a separate method, so we can call it without triggering
      * the beforeRequest event and don't do the poll().
      */
-    protected function sendAsyncInternal(RequestInterface $request, callable $success, callable $error, int $retryCount = 0)
+    protected function sendAsyncInternal(RequestInterface $request, callable $success, callable $error, int $retryCount = 0): void
     {
         if (!$this->curlMultiHandle) {
             $this->curlMultiHandle = curl_multi_init();

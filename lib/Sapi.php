@@ -61,7 +61,7 @@ class Sapi
      *
      * This calls php's header() function and streams the body to php://output.
      */
-    public static function sendResponse(ResponseInterface $response)
+    public static function sendResponse(ResponseInterface $response): void
     {
         header('HTTP/'.$response->getHttpVersion().' '.$response->getStatus().' '.$response->getStatusText());
         foreach ($response->getHeaders() as $key => $value) {

@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Sabre\HTTP;
 
 use DateTime;
-use InvalidArgumentException;
 
 /**
  * A collection of useful helpers for parsing or generating various HTTP
@@ -99,12 +98,8 @@ function toDate(DateTime $dateTime): string
  *
  * The method also accepts sending 'null' for the $acceptHeaderValue,
  * implying that no accept header was sent.
- *
- * @param string|null $acceptHeaderValue
- *
- * @return string|null
  */
-function negotiateContentType($acceptHeaderValue, array $availableOptions)
+function negotiateContentType(?string $acceptHeaderValue, array $availableOptions): ?string
 {
     if (!$acceptHeaderValue) {
         // Grabbing the first in the list.

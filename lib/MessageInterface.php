@@ -46,7 +46,7 @@ interface MessageInterface
      *
      * @param resource|string|callable $body
      */
-    public function setBody($body);
+    public function setBody($body): void;
 
     /**
      * Returns all the HTTP headers as an array.
@@ -72,10 +72,8 @@ interface MessageInterface
      * Note that this not make sense for all headers. Some, such as
      * `Set-Cookie` cannot be logically combined with a comma. In those cases
      * you *should* use getHeaderAsArray().
-     *
-     * @return string|null
      */
-    public function getHeader(string $name);
+    public function getHeader(string $name): ?string;
 
     /**
      * Returns a HTTP header as an array.
@@ -98,7 +96,7 @@ interface MessageInterface
      *
      * @param string|string[] $value
      */
-    public function setHeader(string $name, $value);
+    public function setHeader(string $name, $value): void;
 
     /**
      * Sets a new set of HTTP headers.
@@ -108,7 +106,7 @@ interface MessageInterface
      *
      * Any header that already existed will be overwritten.
      */
-    public function setHeaders(array $headers);
+    public function setHeaders(array $headers): void;
 
     /**
      * Adds a HTTP header.
@@ -119,14 +117,14 @@ interface MessageInterface
      *
      * @param string|string[] $value
      */
-    public function addHeader(string $name, $value);
+    public function addHeader(string $name, $value): void;
 
     /**
      * Adds a new set of HTTP headers.
      *
      * Any existing headers will not be overwritten.
      */
-    public function addHeaders(array $headers);
+    public function addHeaders(array $headers): void;
 
     /**
      * Removes a HTTP header.
@@ -142,7 +140,7 @@ interface MessageInterface
      *
      * Should be 1.0, 1.1 or 2.0.
      */
-    public function setHttpVersion(string $version);
+    public function setHttpVersion(string $version): void;
 
     /**
      * Returns the HTTP version.

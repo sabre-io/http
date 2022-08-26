@@ -1,26 +1,15 @@
-<phpunit
-  colors="true"
-  beStrictAboutCoversAnnotation="true"
-  beStrictAboutOutputDuringTests="true"
-  beStrictAboutTestsThatDoNotTestAnything="true"
-  beStrictAboutTodoAnnotatedTests="true"
-  bootstrap="bootstrap.php"
-  convertErrorsToExceptions="true"
-  convertNoticesToExceptions="true"
-  convertWarningsToExceptions="true"
-  >
+<?xml version="1.0"?>
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" colors="true" beStrictAboutCoversAnnotation="true" beStrictAboutOutputDuringTests="true" beStrictAboutTestsThatDoNotTestAnything="true" beStrictAboutTodoAnnotatedTests="true" bootstrap="bootstrap.php" convertErrorsToExceptions="true" convertNoticesToExceptions="true" convertWarningsToExceptions="true" xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/9.3/phpunit.xsd">
+  <coverage includeUncoveredFiles="true">
+    <include>
+      <directory suffix=".php">../lib/</directory>
+    </include>
+  </coverage>
   <testsuites>
     <testsuite name="Sabre_HTTP">
       <directory>HTTP/</directory>
     </testsuite>
   </testsuites>
-
-  <filter>
-    <whitelist addUncoveredFilesFromWhitelist="true">
-       <directory suffix=".php">../lib/</directory>
-    </whitelist>
-  </filter>
-
   <php>
     <env name="BASEURL" value="http://localhost:8000"/>
   </php>

@@ -156,7 +156,7 @@ class FunctionsTest extends \PHPUnit\Framework\TestCase
     public function testParseHTTPDateFail()
     {
         $times = [
-            //random string
+            // random string
             'NOW',
             // not-GMT timezone
             'Wednesday, 13-Oct-10 10:26:00 UTC',

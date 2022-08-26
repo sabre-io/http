@@ -9,7 +9,7 @@ use Sabre\HTTP\Response;
 
 class BasicTest extends \PHPUnit\Framework\TestCase
 {
-    public function testGetCredentials()
+    public function testGetCredentials(): void
     {
         $request = new Request('GET', '/', [
             'Authorization' => 'Basic '.base64_encode('user:pass:bla'),
@@ -23,7 +23,7 @@ class BasicTest extends \PHPUnit\Framework\TestCase
         ], $basic->getCredentials());
     }
 
-    public function testGetInvalidCredentialsColonMissing()
+    public function testGetInvalidCredentialsColonMissing(): void
     {
         $request = new Request('GET', '/', [
             'Authorization' => 'Basic '.base64_encode('userpass'),
@@ -34,7 +34,7 @@ class BasicTest extends \PHPUnit\Framework\TestCase
         $this->assertNull($basic->getCredentials());
     }
 
-    public function testGetCredentialsNoHeader()
+    public function testGetCredentialsNoHeader(): void
     {
         $request = new Request('GET', '/', []);
         $basic = new Basic('Dagger', $request, new Response());
@@ -42,7 +42,7 @@ class BasicTest extends \PHPUnit\Framework\TestCase
         $this->assertNull($basic->getCredentials());
     }
 
-    public function testGetCredentialsNotBasic()
+    public function testGetCredentialsNotBasic(): void
     {
         $request = new Request('GET', '/', [
             'Authorization' => 'QBasic '.base64_encode('user:pass:bla'),
@@ -52,7 +52,7 @@ class BasicTest extends \PHPUnit\Framework\TestCase
         $this->assertNull($basic->getCredentials());
     }
 
-    public function testRequireLogin()
+    public function testRequireLogin(): void
     {
         $response = new Response();
         $request = new Request('GET', '/');

@@ -6,7 +6,7 @@ namespace Sabre\HTTP;
 
 class URLUtilTest extends \PHPUnit\Framework\TestCase
 {
-    public function testEncodePath()
+    public function testEncodePath(): void
     {
         $str = '';
         for ($i = 0; $i < 128; ++$i) {
@@ -29,7 +29,7 @@ class URLUtilTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($str, decodePath($newStr));
     }
 
-    public function testEncodePathSegment()
+    public function testEncodePathSegment(): void
     {
         $str = '';
         for ($i = 0; $i < 128; ++$i) {
@@ -54,7 +54,7 @@ class URLUtilTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($str, decodePathSegment($newStr));
     }
 
-    public function testDecode()
+    public function testDecode(): void
     {
         $str = 'Hello%20Test+Test2.txt';
         $newStr = decodePath($str);
@@ -64,7 +64,7 @@ class URLUtilTest extends \PHPUnit\Framework\TestCase
     /**
      * @depends testDecode
      */
-    public function testDecodeUmlaut()
+    public function testDecodeUmlaut(): void
     {
         $str = 'Hello%C3%BC.txt';
         $newStr = decodePath($str);
@@ -74,7 +74,7 @@ class URLUtilTest extends \PHPUnit\Framework\TestCase
     /**
      * @depends testDecode
      */
-    public function testDecodeSlavicWords()
+    public function testDecodeSlavicWords(): void
     {
         $words = [
             'Ostroměr',
@@ -93,7 +93,7 @@ class URLUtilTest extends \PHPUnit\Framework\TestCase
     /**
      * @depends testDecodeUmlaut
      */
-    public function testDecodeUmlautLatin1()
+    public function testDecodeUmlautLatin1(): void
     {
         $str = 'Hello%FC.txt';
         $newStr = decodePath($str);
@@ -105,7 +105,7 @@ class URLUtilTest extends \PHPUnit\Framework\TestCase
      *
      * @depends testDecode
      */
-    public function testDecodeAccentsWindows7()
+    public function testDecodeAccentsWindows7(): void
     {
         $str = '/webdav/%C3%A0fo%C3%B3';
         $newStr = decodePath($str);

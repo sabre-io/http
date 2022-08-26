@@ -15,7 +15,7 @@ class ResponseDecoratorTest extends \PHPUnit\Framework\TestCase
         $this->outer = new ResponseDecorator($this->inner);
     }
 
-    public function testStatus()
+    public function testStatus(): void
     {
         $this->outer->setStatus(201);
         $this->assertEquals(201, $this->inner->getStatus());
@@ -24,7 +24,7 @@ class ResponseDecoratorTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals('Created', $this->outer->getStatusText());
     }
 
-    public function testToString()
+    public function testToString(): void
     {
         $this->inner->setStatus(201);
         $this->inner->setBody('foo');

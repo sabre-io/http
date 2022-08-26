@@ -9,22 +9,14 @@ use Sabre\HTTP\Response;
 
 class DigestTest extends \PHPUnit\Framework\TestCase
 {
-    /**
-     * @var Sabre\HTTP\Response
-     */
-    private $response;
+    private Response $response;
 
     /**
      * request.
-     *
-     * @var Sabre\HTTP\Request
      */
-    private $request;
+    private Request $request;
 
-    /**
-     * @var Sabre\HTTP\Auth\Digest
-     */
-    private $auth;
+    private Digest $auth;
 
     public const REALM = 'SabreDAV unittest';
 
@@ -35,7 +27,7 @@ class DigestTest extends \PHPUnit\Framework\TestCase
         $this->auth = new Digest(self::REALM, $this->request, $this->response);
     }
 
-    public function testDigest()
+    public function testDigest(): void
     {
         list($nonce, $opaque) = $this->getServerTokens();
 
@@ -64,7 +56,7 @@ class DigestTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue($this->auth->validatePassword($password), 'Authentication is deemed invalid through validatePassword');
     }
 
-    public function testInvalidDigest()
+    public function testInvalidDigest(): void
     {
         list($nonce, $opaque) = $this->getServerTokens();
 
@@ -90,7 +82,7 @@ class DigestTest extends \PHPUnit\Framework\TestCase
         $this->assertFalse($this->auth->validateA1(md5($username.':'.self::REALM.':'.($password.'randomness'))), 'Authentication is deemed invalid through validateA1');
     }
 
-    public function testInvalidDigest2()
+    public function testInvalidDigest2(): void
     {
         $this->request->setMethod('GET');
         $this->request->setHeader('Authorization', 'basic blablabla');
@@ -99,7 +91,7 @@ class DigestTest extends \PHPUnit\Framework\TestCase
         $this->assertFalse($this->auth->validateA1(md5('user:realm:password')));
     }
 
-    public function testDigestAuthInt()
+    public function testDigestAuthInt(): void
     {
         $this->auth->setQOP(Digest::QOP_AUTHINT);
         list($nonce, $opaque) = $this->getServerTokens(Digest::QOP_AUTHINT);
@@ -127,7 +119,7 @@ class DigestTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue($this->auth->validateA1(md5($username.':'.self::REALM.':'.$password)), 'Authentication is deemed invalid through validateA1');
     }
 
-    public function testDigestAuthBoth()
+    public function testDigestAuthBoth(): void
     {
         $this->auth->setQOP(Digest::QOP_AUTHINT | Digest::QOP_AUTH);
         list($nonce, $opaque) = $this->getServerTokens(Digest::QOP_AUTHINT | Digest::QOP_AUTH);
@@ -155,7 +147,7 @@ class DigestTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue($this->auth->validateA1(md5($username.':'.self::REALM.':'.$password)), 'Authentication is deemed invalid through validateA1');
     }
 
-    private function getServerTokens($qop = Digest::QOP_AUTH)
+    private function getServerTokens(int $qop = Digest::QOP_AUTH): array
     {
         $this->auth->requireLogin();
 

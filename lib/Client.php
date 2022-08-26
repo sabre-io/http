@@ -83,7 +83,7 @@ class Client extends EventEmitter
         }
     }
 
-    protected function receiveCurlHeader($curlHandle, $headerLine): int
+    protected function receiveCurlHeader($curlHandle, string $headerLine): int
     {
         $this->headerLinesMap[(int) $curlHandle][] = $headerLine;
 

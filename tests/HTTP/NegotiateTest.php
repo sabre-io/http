@@ -9,7 +9,7 @@ class NegotiateTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider negotiateData
      */
-    public function testNegotiate($acceptHeader, $available, $expected)
+    public function testNegotiate(?string $acceptHeader, array $available, ?string $expected): void
     {
         $this->assertEquals(
             $expected,
@@ -17,7 +17,7 @@ class NegotiateTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    public function negotiateData()
+    public function negotiateData(): array
     {
         return [
             [ // simple

@@ -90,7 +90,7 @@ class Request extends Message implements RequestInterface
         return $queryParams;
     }
 
-    protected string $absoluteUrl;
+    protected ?string $absoluteUrl = null;
 
     /**
      * Sets the absolute url.

@@ -20,24 +20,18 @@ abstract class AbstractAuth
 {
     /**
      * Authentication realm.
-     *
-     * @var string
      */
-    protected $realm;
+    protected string $realm;
 
     /**
      * Request object.
-     *
-     * @var RequestInterface
      */
-    protected $request;
+    protected RequestInterface $request;
 
     /**
      * Response object.
-     *
-     * @var ResponseInterface
      */
-    protected $response;
+    protected ResponseInterface $response;
 
     /**
      * Creates the object.
@@ -53,7 +47,7 @@ abstract class AbstractAuth
      * This method sends the needed HTTP header and status code (401) to force
      * the user to login.
      */
-    abstract public function requireLogin();
+    abstract public function requireLogin(): void;
 
     /**
      * Returns the HTTP realm.

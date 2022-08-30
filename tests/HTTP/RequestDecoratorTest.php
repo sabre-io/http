@@ -6,8 +6,8 @@ namespace Sabre\HTTP;
 
 class RequestDecoratorTest extends \PHPUnit\Framework\TestCase
 {
-    protected $inner;
-    protected $outer;
+    protected Request $inner;
+    protected RequestDecorator $outer;
 
     public function setUp(): void
     {
@@ -15,35 +15,35 @@ class RequestDecoratorTest extends \PHPUnit\Framework\TestCase
         $this->outer = new RequestDecorator($this->inner);
     }
 
-    public function testMethod()
+    public function testMethod(): void
     {
         $this->outer->setMethod('FOO');
         $this->assertEquals('FOO', $this->inner->getMethod());
         $this->assertEquals('FOO', $this->outer->getMethod());
     }
 
-    public function testUrl()
+    public function testUrl(): void
     {
         $this->outer->setUrl('/foo');
         $this->assertEquals('/foo', $this->inner->getUrl());
         $this->assertEquals('/foo', $this->outer->getUrl());
     }
 
-    public function testAbsoluteUrl()
+    public function testAbsoluteUrl(): void
     {
         $this->outer->setAbsoluteUrl('http://example.org/foo');
         $this->assertEquals('http://example.org/foo', $this->inner->getAbsoluteUrl());
         $this->assertEquals('http://example.org/foo', $this->outer->getAbsoluteUrl());
     }
 
-    public function testBaseUrl()
+    public function testBaseUrl(): void
     {
         $this->outer->setBaseUrl('/foo');
         $this->assertEquals('/foo', $this->inner->getBaseUrl());
         $this->assertEquals('/foo', $this->outer->getBaseUrl());
     }
 
-    public function testPath()
+    public function testPath(): void
     {
         $this->outer->setBaseUrl('/foo');
         $this->outer->setUrl('/foo/bar');
@@ -51,7 +51,7 @@ class RequestDecoratorTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals('bar', $this->outer->getPath());
     }
 
-    public function testQueryParams()
+    public function testQueryParams(): void
     {
         $this->outer->setUrl('/foo?a=b&c=d&e');
         $expected = [
@@ -64,7 +64,7 @@ class RequestDecoratorTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $this->outer->getQueryParameters());
     }
 
-    public function testPostData()
+    public function testPostData(): void
     {
         $postData = [
             'a' => 'b',
@@ -77,7 +77,7 @@ class RequestDecoratorTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($postData, $this->outer->getPostData());
     }
 
-    public function testServerData()
+    public function testServerData(): void
     {
         $serverData = [
             'HTTPS' => 'On',
@@ -91,7 +91,7 @@ class RequestDecoratorTest extends \PHPUnit\Framework\TestCase
         $this->assertNull($this->outer->getRawServerValue('FOO'));
     }
 
-    public function testToString()
+    public function testToString(): void
     {
         $this->inner->setMethod('POST');
         $this->inner->setUrl('/foo/bar/');

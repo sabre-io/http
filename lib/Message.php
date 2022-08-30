@@ -20,23 +20,21 @@ abstract class Message implements MessageInterface
      *
      * This should be a stream resource, string or a callback writing the body to php://output
      *
-     * @var resource|string|callable
+     * @var resource|string|callable|null
      */
-    protected $body;
+    protected $body = null;
 
     /**
      * Contains the list of HTTP headers.
      *
-     * @var array
+     * @var array<string, mixed>
      */
-    protected $headers = [];
+    protected array $headers = [];
 
     /**
      * HTTP message version (1.0, 1.1 or 2.0).
-     *
-     * @var string
      */
-    protected $httpVersion = '1.1';
+    protected string $httpVersion = '1.1';
 
     /**
      * Returns the body as a readable stream resource.
@@ -85,7 +83,7 @@ abstract class Message implements MessageInterface
             return ob_get_clean();
         }
         /**
-         * @var string|int|null
+         * @var string|int|null $contentLength
          */
         $contentLength = $this->getHeader('Content-Length');
         if (null !== $contentLength && (is_int($contentLength) || ctype_digit($contentLength))) {
@@ -100,7 +98,7 @@ abstract class Message implements MessageInterface
      *
      * This could be either a string, a stream or a callback writing the body to php://output.
      *
-     * @return resource|string|callable
+     * @return resource|string|callable|null
      */
     public function getBody()
     {
@@ -112,7 +110,7 @@ abstract class Message implements MessageInterface
      *
      * @param resource|string|callable $body
      */
-    public function setBody($body)
+    public function setBody($body): void
     {
         $this->body = $body;
     }
@@ -121,6 +119,8 @@ abstract class Message implements MessageInterface
      * Returns all the HTTP headers as an array.
      *
      * Every header is returned as an array, with one or more values.
+     *
+     * @return array<string, mixed>
      */
     public function getHeaders(): array
     {
@@ -152,10 +152,8 @@ abstract class Message implements MessageInterface
      * Note that this not make sense for all headers. Some, such as
      * `Set-Cookie` cannot be logically combined with a comma. In those cases
      * you *should* use getHeaderAsArray().
-     *
-     * @return string|null
      */
-    public function getHeader(string $name)
+    public function getHeader(string $name): ?string
     {
         $name = strtolower($name);
 
@@ -196,7 +194,7 @@ abstract class Message implements MessageInterface
      *
      * @param string|string[] $value
      */
-    public function setHeader(string $name, $value)
+    public function setHeader(string $name, $value): void
     {
         $this->headers[strtolower($name)] = [$name, (array) $value];
     }
@@ -208,8 +206,10 @@ abstract class Message implements MessageInterface
      * should be specified as either a string or an array.
      *
      * Any header that already existed will be overwritten.
+     *
+     * @param array<string, mixed> $headers
      */
-    public function setHeaders(array $headers)
+    public function setHeaders(array $headers): void
     {
         foreach ($headers as $name => $value) {
             $this->setHeader($name, $value);
@@ -223,9 +223,9 @@ abstract class Message implements MessageInterface
      * another value. Individual values can be retrieved with
      * getHeadersAsArray.
      *
-     * @param string|string[] $value
+     * @param mixed|mixed[] $value
      */
-    public function addHeader(string $name, $value)
+    public function addHeader(string $name, $value): void
     {
         $lName = strtolower($name);
         if (isset($this->headers[$lName])) {
@@ -245,8 +245,10 @@ abstract class Message implements MessageInterface
      * Adds a new set of HTTP headers.
      *
      * Any existing headers will not be overwritten.
+     *
+     * @param array<string, mixed> $headers
      */
-    public function addHeaders(array $headers)
+    public function addHeaders(array $headers): void
     {
         foreach ($headers as $name => $value) {
             $this->addHeader($name, $value);
@@ -276,7 +278,7 @@ abstract class Message implements MessageInterface
      *
      * Should be 1.0, 1.1 or 2.0.
      */
-    public function setHttpVersion(string $version)
+    public function setHttpVersion(string $version): void
     {
         $this->httpVersion = $version;
     }

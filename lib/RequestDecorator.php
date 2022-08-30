@@ -17,6 +17,12 @@ namespace Sabre\HTTP;
 class RequestDecorator implements RequestInterface
 {
     use MessageDecoratorTrait;
+    /**
+     * The inner request object.
+     *
+     * All method calls will be forwarded here.
+     */
+    protected RequestInterface $inner;
 
     /**
      * Constructor.
@@ -37,7 +43,7 @@ class RequestDecorator implements RequestInterface
     /**
      * Sets the HTTP method.
      */
-    public function setMethod(string $method)
+    public function setMethod(string $method): void
     {
         $this->inner->setMethod($method);
     }
@@ -53,7 +59,7 @@ class RequestDecorator implements RequestInterface
     /**
      * Sets the request url.
      */
-    public function setUrl(string $url)
+    public function setUrl(string $url): void
     {
         $this->inner->setUrl($url);
     }
@@ -69,7 +75,7 @@ class RequestDecorator implements RequestInterface
     /**
      * Sets the absolute url.
      */
-    public function setAbsoluteUrl(string $url)
+    public function setAbsoluteUrl(string $url): void
     {
         $this->inner->setAbsoluteUrl($url);
     }
@@ -89,7 +95,7 @@ class RequestDecorator implements RequestInterface
      *
      * The base url should default to /
      */
-    public function setBaseUrl(string $url)
+    public function setBaseUrl(string $url): void
     {
         $this->inner->setBaseUrl($url);
     }
@@ -118,6 +124,8 @@ class RequestDecorator implements RequestInterface
      * Returns the list of query parameters.
      *
      * This is equivalent to PHP's $_GET superglobal.
+     *
+     * @return array<string, string>
      */
     public function getQueryParameters(): array
     {
@@ -128,6 +136,8 @@ class RequestDecorator implements RequestInterface
      * Returns the POST data.
      *
      * This is equivalent to PHP's $_POST superglobal.
+     *
+     * @return array<string, string>
      */
     public function getPostData(): array
     {
@@ -141,8 +151,10 @@ class RequestDecorator implements RequestInterface
      *
      * This would not have been needed, if POST data was accessible as
      * php://input, but unfortunately we need to special case it.
+     *
+     * @param array<string, mixed> $postData
      */
-    public function setPostData(array $postData)
+    public function setPostData(array $postData): void
     {
         $this->inner->setPostData($postData);
     }
@@ -151,18 +163,18 @@ class RequestDecorator implements RequestInterface
      * Returns an item from the _SERVER array.
      *
      * If the value does not exist in the array, null is returned.
-     *
-     * @return string|null
      */
-    public function getRawServerValue(string $valueName)
+    public function getRawServerValue(string $valueName): ?string
     {
         return $this->inner->getRawServerValue($valueName);
     }
 
     /**
      * Sets the _SERVER array.
+     *
+     * @param array<string, string> $data
      */
-    public function setRawServerData(array $data)
+    public function setRawServerData(array $data): void
     {
         $this->inner->setRawServerData($data);
     }

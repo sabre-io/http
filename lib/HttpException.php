@@ -24,8 +24,6 @@ interface HttpException
      *
      * This may either be just the number, or a number and a human-readable
      * message, separated by a space.
-     *
-     * @return string|null
      */
-    public function getHttpStatus();
+    public function getHttpStatus(): ?string;
 }

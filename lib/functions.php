@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Sabre\HTTP;
 
 use DateTime;
-use InvalidArgumentException;
 
 /**
  * A collection of useful helpers for parsing or generating various HTTP
@@ -100,11 +99,9 @@ function toDate(DateTime $dateTime): string
  * The method also accepts sending 'null' for the $acceptHeaderValue,
  * implying that no accept header was sent.
  *
- * @param string|null $acceptHeaderValue
- *
- * @return string|null
+ * @param array<mixed, mixed> $availableOptions
  */
-function negotiateContentType($acceptHeaderValue, array $availableOptions)
+function negotiateContentType(?string $acceptHeaderValue, array $availableOptions): ?string
 {
     if (!$acceptHeaderValue) {
         // Grabbing the first in the list.
@@ -211,6 +208,8 @@ function negotiateContentType($acceptHeaderValue, array $availableOptions)
  * uses them.
  *
  * @param string|string[] $input
+ *
+ * @return array<string, mixed>
  */
 function parsePrefer($input): array
 {
@@ -286,6 +285,8 @@ REGEX;
  *
  * @param string|string[] $values
  * @param string|string[] $values2
+ *
+ * @return string[]
  */
 function getHeaderValues($values, $values2 = null): array
 {
@@ -311,6 +312,8 @@ function getHeaderValues($values, $values2 = null): array
  * 2. subtype
  * 3. quality
  * 4. parameters
+ *
+ * @return array<string, mixed>
  */
 function parseMimeType(string $str): array
 {
@@ -330,9 +333,7 @@ function parseMimeType(string $str): array
     $mimeType = explode('/', $mimeType);
     if (2 !== count($mimeType)) {
         // Illegal value
-        var_dump($mimeType);
-        exit();
-        // throw new InvalidArgumentException('Not a valid mime-type: '.$str);
+        throw new \InvalidArgumentException('Not a valid mime-type: '.$str);
     }
     list($type, $subType) = $mimeType;
 

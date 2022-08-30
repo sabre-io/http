@@ -6,13 +6,13 @@ namespace Sabre\HTTP;
 
 class MessageTest extends \PHPUnit\Framework\TestCase
 {
-    public function testConstruct()
+    public function testConstruct(): void
     {
         $message = new MessageMock();
         $this->assertInstanceOf('Sabre\HTTP\Message', $message);
     }
 
-    public function testStreamBody()
+    public function testStreamBody(): void
     {
         $body = 'foo';
         $h = fopen('php://memory', 'r+');
@@ -29,7 +29,7 @@ class MessageTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($body, stream_get_contents($message->getBody()));
     }
 
-    public function testStringBody()
+    public function testStringBody(): void
     {
         $body = 'foo';
 
@@ -41,7 +41,7 @@ class MessageTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($body, $message->getBody());
     }
 
-    public function testCallbackBodyAsString()
+    public function testCallbackBodyAsString(): void
     {
         $body = $this->createCallback('foo');
 
@@ -53,7 +53,7 @@ class MessageTest extends \PHPUnit\Framework\TestCase
         $this->assertSame('foo', $string);
     }
 
-    public function testCallbackBodyAsStream()
+    public function testCallbackBodyAsStream(): void
     {
         $body = $this->createCallback('foo');
 
@@ -65,7 +65,7 @@ class MessageTest extends \PHPUnit\Framework\TestCase
         $this->assertSame('foo', stream_get_contents($stream));
     }
 
-    public function testGetBodyWhenCallback()
+    public function testGetBodyWhenCallback(): void
     {
         $callback = $this->createCallback('foo');
 
@@ -86,7 +86,7 @@ class MessageTest extends \PHPUnit\Framework\TestCase
      * seek the stream to a certain point, set the content-length and let the
      * request object do the rest.
      */
-    public function testLongStreamToStringBody()
+    public function testLongStreamToStringBody(): void
     {
         $body = fopen('php://memory', 'r+');
         fwrite($body, 'abcdefg');
@@ -106,7 +106,7 @@ class MessageTest extends \PHPUnit\Framework\TestCase
      * Some clients include a content-length header, but the header is empty.
      * This is definitely broken behavior, but we should support it.
      */
-    public function testEmptyContentLengthHeader()
+    public function testEmptyContentLengthHeader(): void
     {
         $body = fopen('php://memory', 'r+');
         fwrite($body, 'abcdefg');
@@ -122,7 +122,7 @@ class MessageTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    public function testGetEmptyBodyStream()
+    public function testGetEmptyBodyStream(): void
     {
         $message = new MessageMock();
         $body = $message->getBodyAsStream();
@@ -130,7 +130,7 @@ class MessageTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals('', stream_get_contents($body));
     }
 
-    public function testGetEmptyBodyString()
+    public function testGetEmptyBodyString(): void
     {
         $message = new MessageMock();
         $body = $message->getBodyAsString();
@@ -138,7 +138,7 @@ class MessageTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals('', $body);
     }
 
-    public function testHeaders()
+    public function testHeaders(): void
     {
         $message = new MessageMock();
         $message->setHeader('X-Foo', 'bar');
@@ -156,7 +156,7 @@ class MessageTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    public function testSetHeaders()
+    public function testSetHeaders(): void
     {
         $message = new MessageMock();
 
@@ -181,7 +181,7 @@ class MessageTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $message->getHeaders());
     }
 
-    public function testAddHeaders()
+    public function testAddHeaders(): void
     {
         $message = new MessageMock();
 
@@ -206,7 +206,7 @@ class MessageTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $message->getHeaders());
     }
 
-    public function testSendBody()
+    public function testSendBody(): void
     {
         $message = new MessageMock();
 
@@ -225,7 +225,7 @@ class MessageTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals('bar', stream_get_contents($body));
     }
 
-    public function testMultipleHeaders()
+    public function testMultipleHeaders(): void
     {
         $message = new MessageMock();
         $message->setHeader('a', '1');
@@ -254,7 +254,7 @@ class MessageTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    public function testHasHeaders()
+    public function testHasHeaders(): void
     {
         $message = new MessageMock();
 
@@ -278,4 +278,8 @@ class MessageTest extends \PHPUnit\Framework\TestCase
 
 class MessageMock extends Message
 {
+    public function __toString(): string
+    {
+        return 'mock text';
+    }
 }

@@ -6,8 +6,8 @@ namespace Sabre\HTTP;
 
 class MessageDecoratorTest extends \PHPUnit\Framework\TestCase
 {
-    protected $inner;
-    protected $outer;
+    protected Request $inner;
+    protected RequestDecorator $outer;
 
     public function setUp(): void
     {
@@ -15,7 +15,7 @@ class MessageDecoratorTest extends \PHPUnit\Framework\TestCase
         $this->outer = new RequestDecorator($this->inner);
     }
 
-    public function testBody()
+    public function testBody(): void
     {
         $this->outer->setBody('foo');
         $this->assertEquals('foo', stream_get_contents($this->inner->getBodyAsStream()));
@@ -26,7 +26,7 @@ class MessageDecoratorTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals('foo', $this->outer->getBody());
     }
 
-    public function testHeaders()
+    public function testHeaders(): void
     {
         $this->outer->setHeaders([
             'a' => 'b',
@@ -50,7 +50,7 @@ class MessageDecoratorTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(['a' => ['b'], 'c' => ['d'], 'e' => ['f']], $this->outer->getHeaders());
     }
 
-    public function testHeader()
+    public function testHeader(): void
     {
         $this->assertFalse($this->outer->hasHeader('a'));
         $this->assertFalse($this->inner->hasHeader('a'));
@@ -81,7 +81,7 @@ class MessageDecoratorTest extends \PHPUnit\Framework\TestCase
         $this->assertFalse($this->outer->removeHeader('i-dont-exist'));
     }
 
-    public function testHttpVersion()
+    public function testHttpVersion(): void
     {
         $this->outer->setHttpVersion('1.0');
 

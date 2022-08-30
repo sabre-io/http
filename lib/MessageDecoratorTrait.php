@@ -18,15 +18,6 @@ namespace Sabre\HTTP;
 trait MessageDecoratorTrait
 {
     /**
-     * The inner request object.
-     *
-     * All method calls will be forwarded here.
-     *
-     * @var MessageInterface
-     */
-    protected $inner;
-
-    /**
      * Returns the body as a readable stream resource.
      *
      * Note that the stream may not be rewindable, and therefore may only be
@@ -67,7 +58,7 @@ trait MessageDecoratorTrait
      *
      * @param resource|string|callable $body
      */
-    public function setBody($body)
+    public function setBody($body): void
     {
         $this->inner->setBody($body);
     }
@@ -76,6 +67,8 @@ trait MessageDecoratorTrait
      * Returns all the HTTP headers as an array.
      *
      * Every header is returned as an array, with one or more values.
+     *
+     * @return array<string, mixed>
      */
     public function getHeaders(): array
     {
@@ -102,10 +95,8 @@ trait MessageDecoratorTrait
      * Note that this not make sense for all headers. Some, such as
      * `Set-Cookie` cannot be logically combined with a comma. In those cases
      * you *should* use getHeaderAsArray().
-     *
-     * @return string|null
      */
-    public function getHeader(string $name)
+    public function getHeader(string $name): ?string
     {
         return $this->inner->getHeader($name);
     }
@@ -132,7 +123,7 @@ trait MessageDecoratorTrait
      *
      * @param string|string[] $value
      */
-    public function setHeader(string $name, $value)
+    public function setHeader(string $name, $value): void
     {
         $this->inner->setHeader($name, $value);
     }
@@ -144,8 +135,10 @@ trait MessageDecoratorTrait
      * should be specified as either a string or an array.
      *
      * Any header that already existed will be overwritten.
+     *
+     * @param array<string, mixed> $headers
      */
-    public function setHeaders(array $headers)
+    public function setHeaders(array $headers): void
     {
         $this->inner->setHeaders($headers);
     }
@@ -159,7 +152,7 @@ trait MessageDecoratorTrait
      *
      * @param string|string[] $value
      */
-    public function addHeader(string $name, $value)
+    public function addHeader(string $name, $value): void
     {
         $this->inner->addHeader($name, $value);
     }
@@ -168,8 +161,10 @@ trait MessageDecoratorTrait
      * Adds a new set of HTTP headers.
      *
      * Any existing headers will not be overwritten.
+     *
+     * @param array<string, mixed> $headers
      */
-    public function addHeaders(array $headers)
+    public function addHeaders(array $headers): void
     {
         $this->inner->addHeaders($headers);
     }
@@ -191,7 +186,7 @@ trait MessageDecoratorTrait
      *
      * Should be 1.0, 1.1 or 2.0.
      */
-    public function setHttpVersion(string $version)
+    public function setHttpVersion(string $version): void
     {
         $this->inner->setHttpVersion($version);
     }

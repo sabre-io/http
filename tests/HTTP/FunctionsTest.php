@@ -8,13 +8,20 @@ class FunctionsTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @dataProvider getHeaderValuesDataOnValues2
+     *
+     * @param array<int, string> $result
+     * @param array<int, string> $values1
+     * @param array<int, string> $values2
      */
-    public function testGetHeaderValuesOnValues2($result, $values1, $values2)
+    public function testGetHeaderValuesOnValues2(array $result, array $values1, array $values2): void
     {
         $this->assertEquals($result, getHeaderValues($values1, $values2));
     }
 
-    public function getHeaderValuesDataOnValues2()
+    /**
+     * @return array<int, array<int, array<int, string>>>
+     */
+    public function getHeaderValuesDataOnValues2(): array
     {
         return [
             [
@@ -32,8 +39,11 @@ class FunctionsTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @dataProvider getHeaderValuesData
+     *
+     * @param string            $input
+     * @param array<int, mixed> $output
      */
-    public function testGetHeaderValues($input, $output)
+    public function testGetHeaderValues($input, array $output): void
     {
         $this->assertEquals(
             $output,
@@ -41,7 +51,10 @@ class FunctionsTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    public function getHeaderValuesData()
+    /**
+     * @return array<int, mixed>
+     */
+    public function getHeaderValuesData(): array
     {
         return [
             [
@@ -69,8 +82,11 @@ class FunctionsTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @dataProvider preferData
+     *
+     * @param string            $input
+     * @param array<int, mixed> $output
      */
-    public function testPrefer($input, $output)
+    public function testPrefer($input, array $output): void
     {
         $this->assertEquals(
             $output,
@@ -78,7 +94,10 @@ class FunctionsTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    public function preferData()
+    /**
+     * @return array<int, mixed>
+     */
+    public function preferData(): array
     {
         return [
             [
@@ -134,7 +153,7 @@ class FunctionsTest extends \PHPUnit\Framework\TestCase
         ];
     }
 
-    public function testParseHTTPDate()
+    public function testParseHTTPDate(): void
     {
         $times = [
             'Wed, 13 Oct 2010 10:26:00 GMT',
@@ -153,10 +172,10 @@ class FunctionsTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(1286360760, $result->format('U'));
     }
 
-    public function testParseHTTPDateFail()
+    public function testParseHTTPDateFail(): void
     {
         $times = [
-            //random string
+            // random string
             'NOW',
             // not-GMT timezone
             'Wednesday, 13-Oct-10 10:26:00 UTC',
@@ -179,7 +198,7 @@ class FunctionsTest extends \PHPUnit\Framework\TestCase
         }
     }
 
-    public function testTimezones()
+    public function testTimezones(): void
     {
         $default = date_default_timezone_get();
         date_default_timezone_set('Europe/Amsterdam');
@@ -189,7 +208,7 @@ class FunctionsTest extends \PHPUnit\Framework\TestCase
         date_default_timezone_set($default);
     }
 
-    public function testToHTTPDate()
+    public function testToHTTPDate(): void
     {
         $dt = new \DateTime('2011-12-10 12:00:00 +0200');
 
@@ -199,7 +218,7 @@ class FunctionsTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    public function testParseMimeTypeOnInvalidMimeType()
+    public function testParseMimeTypeOnInvalidMimeType(): void
     {
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('Not a valid mime-type: invalid_mime_type');

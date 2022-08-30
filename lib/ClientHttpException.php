@@ -18,10 +18,8 @@ class ClientHttpException extends \Exception implements HttpException
 {
     /**
      * Response object.
-     *
-     * @var ResponseInterface
      */
-    protected $response;
+    protected ResponseInterface $response;
 
     /**
      * Constructor.
@@ -35,9 +33,9 @@ class ClientHttpException extends \Exception implements HttpException
     /**
      * The http status code for the error.
      */
-    public function getHttpStatus(): int
+    public function getHttpStatus(): string
     {
-        return $this->response->getStatus();
+        return (string) $this->response->getStatus();
     }
 
     /**

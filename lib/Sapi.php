@@ -61,7 +61,7 @@ class Sapi
      *
      * This calls php's header() function and streams the body to php://output.
      */
-    public static function sendResponse(ResponseInterface $response)
+    public static function sendResponse(ResponseInterface $response): void
     {
         header('HTTP/'.$response->getHttpVersion().' '.$response->getStatus().' '.$response->getStatusText());
         foreach ($response->getHeaders() as $key => $value) {
@@ -134,6 +134,8 @@ class Sapi
      * $_SERVER array.
      *
      * REQUEST_URI and REQUEST_METHOD are required.
+     *
+     * @param array<string, string> $serverArray
      */
     public static function createFromServerArray(array $serverArray): Request
     {
@@ -162,7 +164,7 @@ class Sapi
                     $url = $value;
                     break;
 
-                // These sometimes show up without a HTTP_ prefix
+                    // These sometimes show up without a HTTP_ prefix
                 case 'CONTENT_TYPE':
                     $headers['Content-Type'] = $value;
                     break;
@@ -170,21 +172,21 @@ class Sapi
                     $headers['Content-Length'] = $value;
                     break;
 
-                // mod_php on apache will put credentials in these variables.
-                // (fast)cgi does not usually do this, however.
+                    // mod_php on apache will put credentials in these variables.
+                    // (fast)cgi does not usually do this, however.
                 case 'PHP_AUTH_USER':
                     if (isset($serverArray['PHP_AUTH_PW'])) {
                         $headers['Authorization'] = 'Basic '.base64_encode($value.':'.$serverArray['PHP_AUTH_PW']);
                     }
                     break;
 
-                // Similarly, mod_php may also screw around with digest auth.
+                    // Similarly, mod_php may also screw around with digest auth.
                 case 'PHP_AUTH_DIGEST':
                     $headers['Authorization'] = 'Digest '.$value;
                     break;
 
-                // Apache may prefix the HTTP_AUTHORIZATION header with
-                // REDIRECT_, if mod_rewrite was used.
+                    // Apache may prefix the HTTP_AUTHORIZATION header with
+                    // REDIRECT_, if mod_rewrite was used.
                 case 'REDIRECT_HTTP_AUTHORIZATION':
                     $headers['Authorization'] = $value;
                     break;

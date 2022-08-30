@@ -6,7 +6,7 @@ namespace Sabre\HTTP;
 
 class ClientTest extends \PHPUnit\Framework\TestCase
 {
-    public function testCreateCurlSettingsArrayGET()
+    public function testCreateCurlSettingsArrayGET(): void
     {
         $client = new ClientMock();
         $client->addCurlSetting(CURLOPT_POSTREDIR, 0);
@@ -34,7 +34,7 @@ class ClientTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($settings, $client->createCurlSettingsArray($request));
     }
 
-    public function testCreateCurlSettingsArrayHEAD()
+    public function testCreateCurlSettingsArrayHEAD(): void
     {
         $client = new ClientMock();
         $request = new Request('HEAD', 'http://example.org/', ['X-Foo' => 'bar']);
@@ -59,7 +59,7 @@ class ClientTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($settings, $client->createCurlSettingsArray($request));
     }
 
-    public function testCreateCurlSettingsArrayGETAfterHEAD()
+    public function testCreateCurlSettingsArrayGETAfterHEAD(): void
     {
         $client = new ClientMock();
         $request = new Request('HEAD', 'http://example.org/', ['X-Foo' => 'bar']);
@@ -92,7 +92,7 @@ class ClientTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($settings, $client->createCurlSettingsArray($request));
     }
 
-    public function testCreateCurlSettingsArrayPUTStream()
+    public function testCreateCurlSettingsArrayPUTStream(): void
     {
         $client = new ClientMock();
 
@@ -124,7 +124,7 @@ class ClientTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($settings, $client->createCurlSettingsArray($request));
     }
 
-    public function testCreateCurlSettingsArrayPUTString()
+    public function testCreateCurlSettingsArrayPUTString(): void
     {
         $client = new ClientMock();
         $request = new Request('PUT', 'http://example.org/', ['X-Foo' => 'bar'], 'boo');
@@ -150,7 +150,7 @@ class ClientTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($settings, $client->createCurlSettingsArray($request));
     }
 
-    public function testIssue89MultiplePutInfileGivesWarning()
+    public function testIssue89MultiplePutInfileGivesWarning(): void
     {
         $client = new ClientMock();
         $tmpFile = tmpfile();
@@ -173,7 +173,7 @@ class ClientTest extends \PHPUnit\Framework\TestCase
         $this->assertArrayNotHasKey(CURLOPT_INFILE, $settings);
     }
 
-    public function testSend()
+    public function testSend(): void
     {
         $client = new ClientMock();
         $request = new Request('GET', 'http://example.org/');
@@ -187,7 +187,10 @@ class ClientTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(200, $response->getStatus());
     }
 
-    protected function getAbsoluteUrl($path)
+    /**
+     * @return false|string
+     */
+    protected function getAbsoluteUrl(string $path)
     {
         $baseUrl = getenv('BASEURL');
         if ($baseUrl) {
@@ -202,7 +205,7 @@ class ClientTest extends \PHPUnit\Framework\TestCase
     /**
      * @group ci
      */
-    public function testSendToGetLargeContent()
+    public function testSendToGetLargeContent(): void
     {
         $url = $this->getAbsoluteUrl('/large.php');
         if (!$url) {
@@ -232,7 +235,7 @@ class ClientTest extends \PHPUnit\Framework\TestCase
     /**
      * @group ci
      */
-    public function testSendAsync()
+    public function testSendAsync(): void
     {
         $url = $this->getAbsoluteUrl('/foo');
         if (!$url) {
@@ -257,7 +260,7 @@ class ClientTest extends \PHPUnit\Framework\TestCase
     /**
      * @group ci
      */
-    public function testSendAsynConsecutively()
+    public function testSendAsynConsecutively(): void
     {
         $url = $this->getAbsoluteUrl('/foo');
         if (!$url) {
@@ -290,7 +293,7 @@ class ClientTest extends \PHPUnit\Framework\TestCase
         $client->wait();
     }
 
-    public function testSendClientError()
+    public function testSendClientError(): void
     {
         $client = new ClientMock();
         $request = new Request('GET', 'http://example.org/');
@@ -311,7 +314,7 @@ class ClientTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue($called);
     }
 
-    public function testSendHttpError()
+    public function testSendHttpError(): void
     {
         $client = new ClientMock();
         $request = new Request('GET', 'http://example.org/');
@@ -331,7 +334,7 @@ class ClientTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(2, $called);
     }
 
-    public function testSendRetry()
+    public function testSendRetry(): void
     {
         $client = new ClientMock();
         $request = new Request('GET', 'http://example.org/');
@@ -358,7 +361,7 @@ class ClientTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(200, $response->getStatus());
     }
 
-    public function testHttpErrorException()
+    public function testHttpErrorException(): void
     {
         $client = new ClientMock();
         $client->setThrowExceptions(true);
@@ -377,7 +380,7 @@ class ClientTest extends \PHPUnit\Framework\TestCase
         }
     }
 
-    public function testParseCurlResult()
+    public function testParseCurlResult(): void
     {
         $client = new ClientMock();
         $client->on('curlStuff', function (&$return) {
@@ -392,6 +395,7 @@ class ClientTest extends \PHPUnit\Framework\TestCase
         });
 
         $body = "HTTP/1.1 200 OK\r\nHeader1:Val1\r\n\r\nFoo";
+        /** @phpstan-ignore-next-line */
         $result = $client->parseCurlResult($body, 'foobar');
 
         $this->assertEquals(Client::STATUS_SUCCESS, $result['status']);
@@ -401,7 +405,7 @@ class ClientTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals('Foo', $result['response']->getBodyAsString());
     }
 
-    public function testParseCurlResultEmptyBody()
+    public function testParseCurlResultEmptyBody(): void
     {
         $client = new ClientMock();
         $client->on('curlStuff', function (&$return) {
@@ -416,6 +420,7 @@ class ClientTest extends \PHPUnit\Framework\TestCase
         });
 
         $body = "HTTP/1.1 200 OK\r\nHeader1:Val1\r\n\r\n";
+        /** @phpstan-ignore-next-line */
         $result = $client->parseCurlResult($body, 'foobar');
 
         $this->assertEquals(Client::STATUS_SUCCESS, $result['status']);
@@ -425,7 +430,7 @@ class ClientTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals('', $result['response']->getBodyAsString());
     }
 
-    public function testParseCurlError()
+    public function testParseCurlError(): void
     {
         $client = new ClientMock();
         $client->on('curlStuff', function (&$return) {
@@ -437,6 +442,7 @@ class ClientTest extends \PHPUnit\Framework\TestCase
         });
 
         $body = "HTTP/1.1 200 OK\r\nHeader1:Val1\r\n\r\nFoo";
+        /** @phpstan-ignore-next-line */
         $result = $client->parseCurlResult($body, 'foobar');
 
         $this->assertEquals(Client::STATUS_CURLERROR, $result['status']);
@@ -444,7 +450,7 @@ class ClientTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals('Curl error', $result['curl_errmsg']);
     }
 
-    public function testDoRequest()
+    public function testDoRequest(): void
     {
         $client = new ClientMock();
         $request = new Request('GET', 'http://example.org/');
@@ -467,7 +473,7 @@ class ClientTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals('Foo', $response->getBodyAsString());
     }
 
-    public function testDoRequestCurlError()
+    public function testDoRequestCurlError(): void
     {
         $client = new ClientMock();
         $request = new Request('GET', 'http://example.org/');
@@ -494,12 +500,10 @@ class ClientTest extends \PHPUnit\Framework\TestCase
 
 class ClientMock extends Client
 {
-    protected $persistedSettings = [];
-
     /**
      * Making this method public.
      */
-    public function receiveCurlHeader($curlHandle, $headerLine)
+    public function receiveCurlHeader($curlHandle, string $headerLine): int
     {
         return parent::receiveCurlHeader($curlHandle, $headerLine);
     }
@@ -531,7 +535,7 @@ class ClientMock extends Client
         // If nothing modified $response, we're using the default behavior.
         if (is_null($response)) {
             return parent::doRequest($request);
-        } else {
+        } else { /* @phpstan-ignore-line phpstan thinks Else branch is unreachable */
             return $response;
         }
     }
@@ -551,7 +555,7 @@ class ClientMock extends Client
         // If nothing modified $return, we're using the default behavior.
         if (is_null($return)) {
             return parent::curlStuff($curlHandle);
-        } else {
+        } else { /* @phpstan-ignore-line phpstan thinks Else branch is unreachable */
             return $return;
         }
     }
@@ -571,7 +575,7 @@ class ClientMock extends Client
         // If nothing modified $return, we're using the default behavior.
         if (is_null($return)) {
             return parent::curlExec($curlHandle);
-        } else {
+        } else { /* @phpstan-ignore-line phpstan thinks Else branch is unreachable */
             return $return;
         }
     }

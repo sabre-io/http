@@ -6,7 +6,7 @@ namespace Sabre\HTTP;
 
 class SapiTest extends \PHPUnit\Framework\TestCase
 {
-    public function testConstructFromServerArray()
+    public function testConstructFromServerArray(): void
     {
         $request = Sapi::createFromServerArray([
             'REQUEST_URI' => '/foo',
@@ -31,7 +31,7 @@ class SapiTest extends \PHPUnit\Framework\TestCase
         $this->assertNull($request->getRawServerValue('FOO'));
     }
 
-    public function testConstructFromServerArrayOnNullUrl()
+    public function testConstructFromServerArrayOnNullUrl(): void
     {
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('The _SERVER array must have a REQUEST_URI key');
@@ -45,7 +45,7 @@ class SapiTest extends \PHPUnit\Framework\TestCase
         ]);
     }
 
-    public function testConstructFromServerArrayOnNullMethod()
+    public function testConstructFromServerArrayOnNullMethod(): void
     {
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('The _SERVER array must have a REQUEST_METHOD key');
@@ -59,7 +59,7 @@ class SapiTest extends \PHPUnit\Framework\TestCase
         ]);
     }
 
-    public function testConstructPHPAuth()
+    public function testConstructPHPAuth(): void
     {
         $request = Sapi::createFromServerArray([
             'REQUEST_URI' => '/foo',
@@ -75,7 +75,7 @@ class SapiTest extends \PHPUnit\Framework\TestCase
         ], $request->getHeaders());
     }
 
-    public function testConstructPHPAuthDigest()
+    public function testConstructPHPAuthDigest(): void
     {
         $request = Sapi::createFromServerArray([
             'REQUEST_URI' => '/foo',
@@ -90,7 +90,7 @@ class SapiTest extends \PHPUnit\Framework\TestCase
         ], $request->getHeaders());
     }
 
-    public function testConstructRedirectAuth()
+    public function testConstructRedirectAuth(): void
     {
         $request = Sapi::createFromServerArray([
             'REQUEST_URI' => '/foo',
@@ -111,7 +111,7 @@ class SapiTest extends \PHPUnit\Framework\TestCase
      * Unfortunately we have no way of testing if the HTTP response code got
      * changed.
      */
-    public function testSend()
+    public function testSend(): void
     {
         if (!function_exists('xdebug_get_headers')) {
             $this->markTestSkipped('XDebug needs to be installed for this test to run');
@@ -146,7 +146,7 @@ class SapiTest extends \PHPUnit\Framework\TestCase
      * @runInSeparateProcess
      * @depends testSend
      */
-    public function testSendLimitedByContentLengthString()
+    public function testSendLimitedByContentLengthString(): void
     {
         $response = new Response(200);
 
@@ -166,7 +166,7 @@ class SapiTest extends \PHPUnit\Framework\TestCase
     /**
      * Tests whether http2 is recognized.
      */
-    public function testRecognizeHttp2()
+    public function testRecognizeHttp2(): void
     {
         $request = Sapi::createFromServerArray([
             'SERVER_PROTOCOL' => 'HTTP/2.0',
@@ -181,7 +181,7 @@ class SapiTest extends \PHPUnit\Framework\TestCase
      * @runInSeparateProcess
      * @depends testSend
      */
-    public function testSendLimitedByContentLengthStream()
+    public function testSendLimitedByContentLengthStream(): void
     {
         $response = new Response(200, ['Content-Length' => 19]);
 
@@ -206,7 +206,12 @@ class SapiTest extends \PHPUnit\Framework\TestCase
      * @depends testSend
      * @dataProvider sendContentRangeStreamData
      */
-    public function testSendContentRangeStream($ignoreAtStart, $sendText, $multiplier, $ignoreAtEnd, $contentLength)
+    public function testSendContentRangeStream(
+        string $ignoreAtStart,
+        string $sendText,
+        int $multiplier,
+        string $ignoreAtEnd,
+        ?int $contentLength): void
     {
         $partial = str_repeat($sendText, $multiplier);
         $ignoreAtStartLength = strlen($ignoreAtStart);
@@ -240,7 +245,10 @@ class SapiTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($partial, $result);
     }
 
-    public function sendContentRangeStreamData()
+    /**
+     * @return array<int, array<int, mixed>>
+     */
+    public function sendContentRangeStreamData(): array
     {
         return [
             ['Ignore this. ', 'Send this.', 10, ' Ignore this at end.'],
@@ -271,7 +279,7 @@ class SapiTest extends \PHPUnit\Framework\TestCase
      * @runInSeparateProcess
      * @depends testSend
      */
-    public function testSendWorksWithCallbackAsBody()
+    public function testSendWorksWithCallbackAsBody(): void
     {
         $response = new Response(200, [], function () {
             $fd = fopen('php://output', 'r+');

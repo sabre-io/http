@@ -34,14 +34,17 @@ class Digest extends AbstractAuth
     /**
      * These constants are used in setQOP();.
      */
-    const QOP_AUTH = 1;
-    const QOP_AUTHINT = 2;
+    public const QOP_AUTH = 1;
+    public const QOP_AUTHINT = 2;
 
-    protected $nonce;
-    protected $opaque;
+    protected string $nonce;
+    protected string $opaque;
+    /**
+     * @var array<string, string>|bool
+     */
     protected $digestParts;
-    protected $A1;
-    protected $qop = self::QOP_AUTH;
+    protected string $A1;
+    protected int $qop = self::QOP_AUTH;
 
     /**
      * Initializes the object.
@@ -58,7 +61,7 @@ class Digest extends AbstractAuth
      *
      * This method needs to be called prior to anything else.
      */
-    public function init()
+    public function init(): void
     {
         $digest = $this->getDigest();
         $this->digestParts = $this->parseDigest((string) $digest);
@@ -77,7 +80,7 @@ class Digest extends AbstractAuth
      * supported by most HTTP clients. QOP_AUTHINT also requires the entire
      * request body to be md5'ed, which can put strains on CPU and memory.
      */
-    public function setQOP(int $qop)
+    public function setQOP(int $qop): void
     {
         $this->qop = $qop;
     }
@@ -108,10 +111,8 @@ class Digest extends AbstractAuth
     /**
      * Returns the username for the request.
      * Returns null if there were none.
-     *
-     * @return string|null
      */
-    public function getUsername()
+    public function getUsername(): ?string
     {
         return $this->digestParts['username'] ?? null;
     }
@@ -152,7 +153,7 @@ class Digest extends AbstractAuth
      *
      * This should be called when username and password are incorrect, or not supplied at all
      */
-    public function requireLogin()
+    public function requireLogin(): void
     {
         $qop = '';
         switch ($this->qop) {
@@ -177,10 +178,8 @@ class Digest extends AbstractAuth
      * It should be compatible with mod_php format and other webservers.
      *
      * If the header could not be found, null will be returned
-     *
-     * @return mixed
      */
-    public function getDigest()
+    public function getDigest(): ?string
     {
         return $this->request->getHeader('Authorization');
     }
@@ -190,7 +189,7 @@ class Digest extends AbstractAuth
      *
      * This method returns false if an incomplete digest was supplied
      *
-     * @return bool|array
+     * @return bool|array<string, int>
      */
     protected function parseDigest(string $digest)
     {

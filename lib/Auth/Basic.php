@@ -25,9 +25,9 @@ class Basic extends AbstractAuth
      *
      * If no credentials were found, this method returns null.
      *
-     * @return array|null
+     * @return array<int, string>|null
      */
-    public function getCredentials()
+    public function getCredentials(): ?array
     {
         $auth = $this->request->getHeader('Authorization');
 
@@ -52,7 +52,7 @@ class Basic extends AbstractAuth
      * This method sends the needed HTTP header and status code (401) to force
      * the user to login.
      */
-    public function requireLogin()
+    public function requireLogin(): void
     {
         $this->response->addHeader('WWW-Authenticate', 'Basic realm="'.$this->realm.'", charset="UTF-8"');
         $this->response->setStatus(401);

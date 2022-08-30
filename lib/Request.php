@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Sabre\HTTP;
 
-use LogicException;
 use Sabre\Uri;
 
 /**
@@ -21,22 +20,19 @@ class Request extends Message implements RequestInterface
 {
     /**
      * HTTP Method.
-     *
-     * @var string
      */
-    protected $method;
+    protected string $method;
 
     /**
      * Request Url.
-     *
-     * @var string
      */
-    protected $url;
+    protected string $url;
 
     /**
      * Creates the request object.
      *
-     * @param resource|callable|string $body
+     * @param array<string, string>         $headers
+     * @param resource|callable|string|null $body
      */
     public function __construct(string $method, string $url, array $headers = [], $body = null)
     {
@@ -57,7 +53,7 @@ class Request extends Message implements RequestInterface
     /**
      * Sets the HTTP method.
      */
-    public function setMethod(string $method)
+    public function setMethod(string $method): void
     {
         $this->method = $method;
     }
@@ -73,7 +69,7 @@ class Request extends Message implements RequestInterface
     /**
      * Sets the request url.
      */
-    public function setUrl(string $url)
+    public function setUrl(string $url): void
     {
         $this->url = $url;
     }
@@ -82,6 +78,8 @@ class Request extends Message implements RequestInterface
      * Returns the list of query parameters.
      *
      * This is equivalent to PHP's $_GET superglobal.
+     *
+     * @return array<string, string>
      */
     public function getQueryParameters(): array
     {
@@ -95,12 +93,12 @@ class Request extends Message implements RequestInterface
         return $queryParams;
     }
 
-    protected $absoluteUrl;
+    protected ?string $absoluteUrl = null;
 
     /**
      * Sets the absolute url.
      */
-    public function setAbsoluteUrl(string $url)
+    public function setAbsoluteUrl(string $url): void
     {
         $this->absoluteUrl = $url;
     }
@@ -122,17 +120,15 @@ class Request extends Message implements RequestInterface
 
     /**
      * Base url.
-     *
-     * @var string
      */
-    protected $baseUrl = '/';
+    protected string $baseUrl = '/';
 
     /**
      * Sets a base url.
      *
      * This url is used for relative path calculations.
      */
-    public function setBaseUrl(string $url)
+    public function setBaseUrl(string $url): void
     {
         $this->baseUrl = $url;
     }
@@ -187,9 +183,9 @@ class Request extends Message implements RequestInterface
     /**
      * Equivalent of PHP's $_POST.
      *
-     * @var array
+     * @var array<string, string>
      */
-    protected $postData = [];
+    protected array $postData = [];
 
     /**
      * Sets the post data.
@@ -198,8 +194,10 @@ class Request extends Message implements RequestInterface
      *
      * This would not have been needed, if POST data was accessible as
      * php://input, but unfortunately we need to special case it.
+     *
+     * @param array<string, string> $postData
      */
-    public function setPostData(array $postData)
+    public function setPostData(array $postData): void
     {
         $this->postData = $postData;
     }
@@ -208,6 +206,8 @@ class Request extends Message implements RequestInterface
      * Returns the POST data.
      *
      * This is equivalent to PHP's $_POST superglobal.
+     *
+     * @return array<string, string>
      */
     public function getPostData(): array
     {
@@ -217,26 +217,26 @@ class Request extends Message implements RequestInterface
     /**
      * An array containing the raw _SERVER array.
      *
-     * @var array
+     * @var array<string, string>
      */
-    protected $rawServerData;
+    protected array $rawServerData;
 
     /**
      * Returns an item from the _SERVER array.
      *
      * If the value does not exist in the array, null is returned.
-     *
-     * @return string|null
      */
-    public function getRawServerValue(string $valueName)
+    public function getRawServerValue(string $valueName): ?string
     {
         return $this->rawServerData[$valueName] ?? null;
     }
 
     /**
      * Sets the _SERVER array.
+     *
+     * @param array<string, string> $data
      */
-    public function setRawServerData(array $data)
+    public function setRawServerData(array $data): void
     {
         $this->rawServerData = $data;
     }

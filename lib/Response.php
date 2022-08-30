@@ -84,6 +84,8 @@ class Response extends Message implements ResponseInterface
 
     /**
      * HTTP status code.
+     *
+     * @var int<100, 999>
      */
     protected int $status;
 

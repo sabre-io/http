@@ -1,3 +1,20 @@
 parameters:
   level: 6
   phpVersion: 70430 # PHP 7.4.30
+  ignoreErrors:
+  -
+    message: "#^Negated boolean expression is always true.$#"
+    count: 1
+    path: lib/Client.php
+  -
+    message: "#^If condition is always false.$#"
+    count: 3
+    path: lib/Client.php
+  -
+    message: "#^Left side of || is always false.$#"
+    count: 1
+    path: lib/Client.php
+  -
+    message: "#^Strict comparison using === between null and array<string, mixed> will always evaluate to false.$#"
+    count: 1
+    path: lib/functions.php

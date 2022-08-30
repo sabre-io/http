@@ -78,6 +78,8 @@ interface RequestInterface extends MessageInterface
      * Returns the list of query parameters.
      *
      * This is equivalent to PHP's $_GET superglobal.
+     *
+     * @return array<string, string>
      */
     public function getQueryParameters(): array;
 
@@ -85,6 +87,8 @@ interface RequestInterface extends MessageInterface
      * Returns the POST data.
      *
      * This is equivalent to PHP's $_POST superglobal.
+     *
+     * @return array<string, string>
      */
     public function getPostData(): array;
 
@@ -95,6 +99,8 @@ interface RequestInterface extends MessageInterface
      *
      * This would not have been needed, if POST data was accessible as
      * php://input, but unfortunately we need to special case it.
+     *
+     * @param array<string, string> $postData
      */
     public function setPostData(array $postData): void;
 
@@ -107,6 +113,8 @@ interface RequestInterface extends MessageInterface
 
     /**
      * Sets the _SERVER array.
+     *
+     * @param array<string, string> $data
      */
     public function setRawServerData(array $data): void;
 }

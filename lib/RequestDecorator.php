@@ -17,6 +17,12 @@ namespace Sabre\HTTP;
 class RequestDecorator implements RequestInterface
 {
     use MessageDecoratorTrait;
+    /**
+     * The inner request object.
+     *
+     * All method calls will be forwarded here.
+     */
+    protected RequestInterface $inner;
 
     /**
      * Constructor.
@@ -118,6 +124,8 @@ class RequestDecorator implements RequestInterface
      * Returns the list of query parameters.
      *
      * This is equivalent to PHP's $_GET superglobal.
+     *
+     * @return array<string, string>
      */
     public function getQueryParameters(): array
     {
@@ -128,6 +136,8 @@ class RequestDecorator implements RequestInterface
      * Returns the POST data.
      *
      * This is equivalent to PHP's $_POST superglobal.
+     *
+     * @return array<string, string>
      */
     public function getPostData(): array
     {
@@ -141,6 +151,8 @@ class RequestDecorator implements RequestInterface
      *
      * This would not have been needed, if POST data was accessible as
      * php://input, but unfortunately we need to special case it.
+     *
+     * @param array<string, mixed> $postData
      */
     public function setPostData(array $postData): void
     {
@@ -159,6 +171,8 @@ class RequestDecorator implements RequestInterface
 
     /**
      * Sets the _SERVER array.
+     *
+     * @param array<string, string> $data
      */
     public function setRawServerData(array $data): void
     {

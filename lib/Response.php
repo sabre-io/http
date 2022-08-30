@@ -15,6 +15,8 @@ class Response extends Message implements ResponseInterface
 {
     /**
      * This is the list of currently registered HTTP status codes.
+     *
+     * @var string[]
      */
     public static array $statusCodes = [
         100 => 'Continue',
@@ -94,6 +96,7 @@ class Response extends Message implements ResponseInterface
      * Creates the response object.
      *
      * @param string|int                    $status
+     * @param array<string, mixed>|null     $headers
      * @param resource|string|callable|null $body
      */
     public function __construct($status = 500, ?array $headers = null, $body = null)

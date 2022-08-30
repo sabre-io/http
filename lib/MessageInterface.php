@@ -37,7 +37,7 @@ interface MessageInterface
      *
      * This could be either a string, a stream or a callback writing the body to php://output
      *
-     * @return resource|string|callable
+     * @return resource|string|callable|null
      */
     public function getBody();
 
@@ -52,6 +52,8 @@ interface MessageInterface
      * Returns all the HTTP headers as an array.
      *
      * Every header is returned as an array, with one or more values.
+     *
+     * @return array<string, mixed>
      */
     public function getHeaders(): array;
 
@@ -105,6 +107,8 @@ interface MessageInterface
      * should be specified as either a string or an array.
      *
      * Any header that already existed will be overwritten.
+     *
+     * @param array<string, mixed> $headers
      */
     public function setHeaders(array $headers): void;
 
@@ -123,6 +127,8 @@ interface MessageInterface
      * Adds a new set of HTTP headers.
      *
      * Any existing headers will not be overwritten.
+     *
+     * @param array<string, mixed> $headers
      */
     public function addHeaders(array $headers): void;
 
@@ -146,4 +152,9 @@ interface MessageInterface
      * Returns the HTTP version.
      */
     public function getHttpVersion(): string;
+
+    /**
+     * Returns the HTTP version.
+     */
+    public function __toString(): string;
 }

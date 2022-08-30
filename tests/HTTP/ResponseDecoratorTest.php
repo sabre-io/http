@@ -6,8 +6,8 @@ namespace Sabre\HTTP;
 
 class ResponseDecoratorTest extends \PHPUnit\Framework\TestCase
 {
-    protected $inner;
-    protected $outer;
+    protected Response $inner;
+    protected ResponseDecorator $outer;
 
     public function setUp(): void
     {

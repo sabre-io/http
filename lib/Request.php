@@ -31,7 +31,8 @@ class Request extends Message implements RequestInterface
     /**
      * Creates the request object.
      *
-     * @param resource|callable|string $body
+     * @param array<string, string>         $headers
+     * @param resource|callable|string|null $body
      */
     public function __construct(string $method, string $url, array $headers = [], $body = null)
     {
@@ -77,6 +78,8 @@ class Request extends Message implements RequestInterface
      * Returns the list of query parameters.
      *
      * This is equivalent to PHP's $_GET superglobal.
+     *
+     * @return array<string, string>
      */
     public function getQueryParameters(): array
     {
@@ -179,6 +182,8 @@ class Request extends Message implements RequestInterface
 
     /**
      * Equivalent of PHP's $_POST.
+     *
+     * @var array<string, string>
      */
     protected array $postData = [];
 
@@ -189,6 +194,8 @@ class Request extends Message implements RequestInterface
      *
      * This would not have been needed, if POST data was accessible as
      * php://input, but unfortunately we need to special case it.
+     *
+     * @param array<string, string> $postData
      */
     public function setPostData(array $postData): void
     {
@@ -199,6 +206,8 @@ class Request extends Message implements RequestInterface
      * Returns the POST data.
      *
      * This is equivalent to PHP's $_POST superglobal.
+     *
+     * @return array<string, string>
      */
     public function getPostData(): array
     {
@@ -207,6 +216,8 @@ class Request extends Message implements RequestInterface
 
     /**
      * An array containing the raw _SERVER array.
+     *
+     * @var array<string, string>
      */
     protected array $rawServerData;
 
@@ -222,6 +233,8 @@ class Request extends Message implements RequestInterface
 
     /**
      * Sets the _SERVER array.
+     *
+     * @param array<string, string> $data
      */
     public function setRawServerData(array $data): void
     {

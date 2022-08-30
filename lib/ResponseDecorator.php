@@ -17,6 +17,12 @@ namespace Sabre\HTTP;
 class ResponseDecorator implements ResponseInterface
 {
     use MessageDecoratorTrait;
+    /**
+     * The inner request object.
+     *
+     * All method calls will be forwarded here.
+     */
+    protected ResponseInterface $inner;
 
     /**
      * Constructor.

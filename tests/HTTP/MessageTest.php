@@ -278,4 +278,8 @@ class MessageTest extends \PHPUnit\Framework\TestCase
 
 class MessageMock extends Message
 {
+    public function __toString(): string
+    {
+        return 'mock text';
+    }
 }

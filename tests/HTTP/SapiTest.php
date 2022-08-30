@@ -245,6 +245,9 @@ class SapiTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($partial, $result);
     }
 
+    /**
+     * @return array<int, array<int, mixed>>
+     */
     public function sendContentRangeStreamData(): array
     {
         return [

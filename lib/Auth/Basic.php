@@ -24,6 +24,8 @@ class Basic extends AbstractAuth
      * only elements.
      *
      * If no credentials were found, this method returns null.
+     *
+     * @return array<int, string>|null
      */
     public function getCredentials(): ?array
     {

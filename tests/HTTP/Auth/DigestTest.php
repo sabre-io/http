@@ -147,6 +147,9 @@ class DigestTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue($this->auth->validateA1(md5($username.':'.self::REALM.':'.$password)), 'Authentication is deemed invalid through validateA1');
     }
 
+    /**
+     * @return array<int, mixed>
+     */
     private function getServerTokens(int $qop = Digest::QOP_AUTH): array
     {
         $this->auth->requireLogin();

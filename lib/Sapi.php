@@ -134,6 +134,8 @@ class Sapi
      * $_SERVER array.
      *
      * REQUEST_URI and REQUEST_METHOD are required.
+     *
+     * @param array<string, string> $serverArray
      */
     public static function createFromServerArray(array $serverArray): Request
     {

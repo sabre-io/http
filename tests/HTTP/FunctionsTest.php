@@ -8,12 +8,19 @@ class FunctionsTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @dataProvider getHeaderValuesDataOnValues2
+     *
+     * @param array<int, string> $result
+     * @param array<int, string> $values1
+     * @param array<int, string> $values2
      */
     public function testGetHeaderValuesOnValues2(array $result, array $values1, array $values2): void
     {
         $this->assertEquals($result, getHeaderValues($values1, $values2));
     }
 
+    /**
+     * @return array<int, array<int, array<int, string>>>
+     */
     public function getHeaderValuesDataOnValues2(): array
     {
         return [
@@ -32,6 +39,9 @@ class FunctionsTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @dataProvider getHeaderValuesData
+     *
+     * @param string            $input
+     * @param array<int, mixed> $output
      */
     public function testGetHeaderValues($input, array $output): void
     {
@@ -41,6 +51,9 @@ class FunctionsTest extends \PHPUnit\Framework\TestCase
         );
     }
 
+    /**
+     * @return array<int, mixed>
+     */
     public function getHeaderValuesData(): array
     {
         return [
@@ -69,6 +82,9 @@ class FunctionsTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @dataProvider preferData
+     *
+     * @param string            $input
+     * @param array<int, mixed> $output
      */
     public function testPrefer($input, array $output): void
     {
@@ -78,6 +94,9 @@ class FunctionsTest extends \PHPUnit\Framework\TestCase
         );
     }
 
+    /**
+     * @return array<int, mixed>
+     */
     public function preferData(): array
     {
         return [

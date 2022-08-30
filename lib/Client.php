@@ -47,6 +47,8 @@ class Client extends EventEmitter
 {
     /**
      * List of curl settings.
+     *
+     * @var array<int, mixed>
      */
     protected array $curlSettings = [];
 
@@ -60,6 +62,9 @@ class Client extends EventEmitter
      */
     protected int $maxRedirects = 5;
 
+    /**
+     * @var array<int, array<int, string>>
+     */
     protected array $headerLinesMap = [];
 
     /**
@@ -83,6 +88,9 @@ class Client extends EventEmitter
         }
     }
 
+    /**
+     * @param resource $curlHandle
+     */
     protected function receiveCurlHeader($curlHandle, string $headerLine): int
     {
         $this->headerLinesMap[(int) $curlHandle][] = $headerLine;
@@ -330,28 +338,32 @@ class Client extends EventEmitter
      * By keeping this resource around for the lifetime of this object, things
      * like persistent connections are possible.
      *
-     * @var resource
+     * @var resource|null
      */
-    private $curlHandle;
+    private $curlHandle = null;
 
     /**
      * Handler for curl_multi requests.
      *
      * The first time sendAsync is used, this will be created.
      *
-     * @var resource
+     * @var resource|null
      */
-    private $curlMultiHandle;
+    private $curlMultiHandle = null;
 
     /**
      * Has a list of curl handles, as well as their associated success and
      * error callbacks.
+     *
+     * @var array<int, mixed>
      */
     private array $curlMultiMap = [];
 
     /**
      * Turns a RequestInterface object into an array with settings that can be
      * fed to curl_setopt.
+     *
+     * @return array<int, mixed>
      */
     protected function createCurlSettingsArray(RequestInterface $request): array
     {
@@ -412,6 +424,11 @@ class Client extends EventEmitter
     public const STATUS_CURLERROR = 1;
     public const STATUS_HTTPERROR = 2;
 
+    /**
+     * @param resource $curlHandle
+     *
+     * @return mixed[]
+     */
     private function parseResponse(string $response, $curlHandle): array
     {
         $settings = $this->curlSettings;
@@ -447,7 +464,10 @@ class Client extends EventEmitter
      *   * http_code - HTTP status code, as an int. Only set if Only set if
      *                 status is STATUS_SUCCESS, or STATUS_HTTPERROR
      *
-     * @param resource $curlHandle
+     * @param array<int, string> $headerLines
+     * @param resource           $curlHandle
+     *
+     * @return array<string, mixed>
      */
     protected function parseCurlResponse(array $headerLines, string $body, $curlHandle): array
     {
@@ -503,6 +523,8 @@ class Client extends EventEmitter
      * @deprecated Use parseCurlResponse instead
      *
      * @param resource $curlHandle
+     *
+     * @return array<string, mixed>
      */
     protected function parseCurlResult(string $response, $curlHandle): array
     {
@@ -597,6 +619,8 @@ class Client extends EventEmitter
      * This method exists so it can easily be overridden and mocked.
      *
      * @param resource $curlHandle
+     *
+     * @return array<int, mixed>
      */
     protected function curlStuff($curlHandle): array
     {

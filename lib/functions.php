@@ -98,6 +98,8 @@ function toDate(DateTime $dateTime): string
  *
  * The method also accepts sending 'null' for the $acceptHeaderValue,
  * implying that no accept header was sent.
+ *
+ * @param array<mixed, mixed> $availableOptions
  */
 function negotiateContentType(?string $acceptHeaderValue, array $availableOptions): ?string
 {
@@ -206,6 +208,8 @@ function negotiateContentType(?string $acceptHeaderValue, array $availableOption
  * uses them.
  *
  * @param string|string[] $input
+ *
+ * @return array<string, mixed>
  */
 function parsePrefer($input): array
 {
@@ -281,6 +285,8 @@ REGEX;
  *
  * @param string|string[] $values
  * @param string|string[] $values2
+ *
+ * @return string[]
  */
 function getHeaderValues($values, $values2 = null): array
 {
@@ -306,6 +312,8 @@ function getHeaderValues($values, $values2 = null): array
  * 2. subtype
  * 3. quality
  * 4. parameters
+ *
+ * @return array<string, mixed>
  */
 function parseMimeType(string $str): array
 {

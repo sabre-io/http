@@ -20,12 +20,14 @@ abstract class Message implements MessageInterface
      *
      * This should be a stream resource, string or a callback writing the body to php://output
      *
-     * @var resource|string|callable
+     * @var resource|string|callable|null
      */
-    protected $body;
+    protected $body = null;
 
     /**
      * Contains the list of HTTP headers.
+     *
+     * @var array<string, mixed>
      */
     protected array $headers = [];
 
@@ -96,7 +98,7 @@ abstract class Message implements MessageInterface
      *
      * This could be either a string, a stream or a callback writing the body to php://output.
      *
-     * @return resource|string|callable
+     * @return resource|string|callable|null
      */
     public function getBody()
     {
@@ -117,6 +119,8 @@ abstract class Message implements MessageInterface
      * Returns all the HTTP headers as an array.
      *
      * Every header is returned as an array, with one or more values.
+     *
+     * @return array<string, mixed>
      */
     public function getHeaders(): array
     {
@@ -202,6 +206,8 @@ abstract class Message implements MessageInterface
      * should be specified as either a string or an array.
      *
      * Any header that already existed will be overwritten.
+     *
+     * @param array<string, mixed> $headers
      */
     public function setHeaders(array $headers): void
     {
@@ -217,7 +223,7 @@ abstract class Message implements MessageInterface
      * another value. Individual values can be retrieved with
      * getHeadersAsArray.
      *
-     * @param string|string[] $value
+     * @param mixed|mixed[] $value
      */
     public function addHeader(string $name, $value): void
     {
@@ -239,6 +245,8 @@ abstract class Message implements MessageInterface
      * Adds a new set of HTTP headers.
      *
      * Any existing headers will not be overwritten.
+     *
+     * @param array<string, mixed> $headers
      */
     public function addHeaders(array $headers): void
     {

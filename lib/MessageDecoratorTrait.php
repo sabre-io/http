@@ -18,13 +18,6 @@ namespace Sabre\HTTP;
 trait MessageDecoratorTrait
 {
     /**
-     * The inner request object.
-     *
-     * All method calls will be forwarded here.
-     */
-    protected MessageInterface $inner;
-
-    /**
      * Returns the body as a readable stream resource.
      *
      * Note that the stream may not be rewindable, and therefore may only be
@@ -74,6 +67,8 @@ trait MessageDecoratorTrait
      * Returns all the HTTP headers as an array.
      *
      * Every header is returned as an array, with one or more values.
+     *
+     * @return array<string, mixed>
      */
     public function getHeaders(): array
     {
@@ -140,6 +135,8 @@ trait MessageDecoratorTrait
      * should be specified as either a string or an array.
      *
      * Any header that already existed will be overwritten.
+     *
+     * @param array<string, mixed> $headers
      */
     public function setHeaders(array $headers): void
     {
@@ -164,6 +161,8 @@ trait MessageDecoratorTrait
      * Adds a new set of HTTP headers.
      *
      * Any existing headers will not be overwritten.
+     *
+     * @param array<string, mixed> $headers
      */
     public function addHeaders(array $headers): void
     {

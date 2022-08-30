@@ -187,6 +187,9 @@ class ClientTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(200, $response->getStatus());
     }
 
+    /**
+     * @return false|string
+     */
     protected function getAbsoluteUrl(string $path)
     {
         $baseUrl = getenv('BASEURL');
@@ -392,6 +395,7 @@ class ClientTest extends \PHPUnit\Framework\TestCase
         });
 
         $body = "HTTP/1.1 200 OK\r\nHeader1:Val1\r\n\r\nFoo";
+        /** @phpstan-ignore-next-line */
         $result = $client->parseCurlResult($body, 'foobar');
 
         $this->assertEquals(Client::STATUS_SUCCESS, $result['status']);
@@ -416,6 +420,7 @@ class ClientTest extends \PHPUnit\Framework\TestCase
         });
 
         $body = "HTTP/1.1 200 OK\r\nHeader1:Val1\r\n\r\n";
+        /** @phpstan-ignore-next-line */
         $result = $client->parseCurlResult($body, 'foobar');
 
         $this->assertEquals(Client::STATUS_SUCCESS, $result['status']);
@@ -437,6 +442,7 @@ class ClientTest extends \PHPUnit\Framework\TestCase
         });
 
         $body = "HTTP/1.1 200 OK\r\nHeader1:Val1\r\n\r\nFoo";
+        /** @phpstan-ignore-next-line */
         $result = $client->parseCurlResult($body, 'foobar');
 
         $this->assertEquals(Client::STATUS_CURLERROR, $result['status']);
@@ -494,8 +500,6 @@ class ClientTest extends \PHPUnit\Framework\TestCase
 
 class ClientMock extends Client
 {
-    protected array $persistedSettings = [];
-
     /**
      * Making this method public.
      */
@@ -531,7 +535,7 @@ class ClientMock extends Client
         // If nothing modified $response, we're using the default behavior.
         if (is_null($response)) {
             return parent::doRequest($request);
-        } else {
+        } else { /* @phpstan-ignore-line phpstan thinks Else branch is unreachable */
             return $response;
         }
     }
@@ -551,7 +555,7 @@ class ClientMock extends Client
         // If nothing modified $return, we're using the default behavior.
         if (is_null($return)) {
             return parent::curlStuff($curlHandle);
-        } else {
+        } else { /* @phpstan-ignore-line phpstan thinks Else branch is unreachable */
             return $return;
         }
     }
@@ -571,7 +575,7 @@ class ClientMock extends Client
         // If nothing modified $return, we're using the default behavior.
         if (is_null($return)) {
             return parent::curlExec($curlHandle);
-        } else {
+        } else { /* @phpstan-ignore-line phpstan thinks Else branch is unreachable */
             return $return;
         }
     }

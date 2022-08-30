@@ -8,6 +8,8 @@ class NegotiateTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @dataProvider negotiateData
+     *
+     * @param array<mixed, mixed> $available
      */
     public function testNegotiate(?string $acceptHeader, array $available, ?string $expected): void
     {
@@ -17,6 +19,9 @@ class NegotiateTest extends \PHPUnit\Framework\TestCase
         );
     }
 
+    /**
+     * @return array<int, array<int, mixed>>
+     */
     public function negotiateData(): array
     {
         return [

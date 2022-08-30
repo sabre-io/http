@@ -21,6 +21,14 @@ class ResponseTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals('Where\'s my money?', $response->getStatusText());
     }
 
+    public function testSetStatusWithoutText(): void
+    {
+        $response = new Response();
+        $response->setStatus('402');
+        $this->assertEquals(402, $response->getStatus());
+        $this->assertEquals('Payment Required', $response->getStatusText());
+    }
+
     public function testInvalidStatus(): void
     {
         $this->expectException('InvalidArgumentException');

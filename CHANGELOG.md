@@ -1,6 +1,14 @@
 ChangeLog
 =========
 
+6.0.0 (2022-08-31)
+------------------
+
+* #191 Create .gitattributes (@cedric-anne)
+* #176 Test enhancement (from original PR #98) (@peter279k)
+* #192 Set min PHP to 7.4 and add type declarations (@phil-davis)
+* #194 Adjust type declarations a little bit (@phil-davis)
+
 5.1.6 (2022-07-15)
 ------------------
 

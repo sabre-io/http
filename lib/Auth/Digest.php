@@ -40,7 +40,7 @@ class Digest extends AbstractAuth
     protected string $nonce;
     protected string $opaque;
     /**
-     * @var array<string, string>|bool
+     * @var array<int|string, string>|bool
      */
     protected $digestParts;
     protected string $A1;
@@ -189,7 +189,7 @@ class Digest extends AbstractAuth
      *
      * This method returns false if an incomplete digest was supplied
      *
-     * @return bool|array<string, int>
+     * @return false|array<int|string, mixed>
      */
     protected function parseDigest(string $digest)
     {

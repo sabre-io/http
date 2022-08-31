@@ -84,6 +84,8 @@ class Response extends Message implements ResponseInterface
 
     /**
      * HTTP status code.
+     *
+     * @var int<100, 999>
      */
     protected int $status;
 
@@ -153,8 +155,8 @@ class Response extends Message implements ResponseInterface
                 $statusCode,
                 $statusText
             ) = explode(' ', $status, 2);
-            $statusCode = (int) $statusCode;
         }
+        $statusCode = (int) $statusCode;
         if ($statusCode < 100 || $statusCode > 999) {
             throw new \InvalidArgumentException('The HTTP status code must be exactly 3 digits');
         }

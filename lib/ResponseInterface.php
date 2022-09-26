@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Sabre\HTTP;
 
 /**
- * This interface represents a HTTP response.
+ * This interface represents an HTTP response.
  *
  * @copyright Copyright (C) fruux GmbH (https://fruux.com/)
  * @author Evert Pot (http://evertpot.com/)

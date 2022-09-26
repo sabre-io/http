@@ -3,7 +3,7 @@ sabre/http
 
 This library provides a toolkit to make working with the [HTTP protocol](https://tools.ietf.org/html/rfc2616) easier.
 
-Most PHP scripts run within a HTTP request but accessing information about the
+Most PHP scripts run within an HTTP request but accessing information about the
 HTTP request is cumbersome at least.
 
 There's bad practices, inconsistencies and confusion. This library is
@@ -57,7 +57,7 @@ This library came to existence in 2009, as a part of the [`sabre/dav`][2]
 project, which uses it heavily.
 
 It got split off into a separate library to make it easier to manage
-releases and hopefully giving it use outside of the scope of just `sabre/dav`.
+releases and hopefully giving it use outside the scope of just `sabre/dav`.
 
 Although completely independently developed, this library has a LOT of
 overlap with [Symfony's `HttpFoundation`][3].
@@ -221,7 +221,7 @@ $client->on('afterRequest', function($request, $response) {
 
 $client->on('error', function($request, $response, &$retry, $retryCount) {
 
-    // The error event is triggered for every response with a HTTP code higher
+    // The error event is triggered for every response with an HTTP code higher
     // than 399.
 
 });
@@ -527,7 +527,7 @@ function getHeaders();
 function getHeader($name);
 
 /**
- * Updates a HTTP header.
+ * Updates an HTTP header.
  *
  * The case-sensitivity of the name value must be retained as-is.
  *
@@ -559,7 +559,7 @@ function setHeaders(array $headers);
 function addHeaders(array $headers);
 
 /**
- * Removes a HTTP header.
+ * Removes an HTTP header.
  *
  * The specified header name must be treated as case-insensitive.
  * This method should return true if the header was successfully deleted,
@@ -672,7 +672,7 @@ function getHeaders();
 function getHeader($name);
 
 /**
- * Updates a HTTP header.
+ * Updates an HTTP header.
  *
  * The case-sensitivity of the name value must be retained as-is.
  *
@@ -704,7 +704,7 @@ function setHeaders(array $headers);
 function addHeaders(array $headers);
 
 /**
- * Removes a HTTP header.
+ * Removes an HTTP header.
  *
  * The specified header name must be treated as case-insensitive.
  * This method should return true if the header was successfully deleted,

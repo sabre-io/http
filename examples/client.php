@@ -1,7 +1,7 @@
 <?php
 
 /**
- * This example shows how to make a HTTP request with the Request and Response
+ * This example shows how to make an HTTP request with the Request and Response
  * objects.
  *
  * @copyright Copyright (C) 2009-2015 fruux GmbH (https://fruux.com/).

@@ -543,7 +543,7 @@ class ClientMock extends Client
     /**
      * Returns a bunch of information about a curl request.
      *
-     * This method exists so it can easily be overridden and mocked.
+     * This method exists so that it can easily be overridden and mocked.
      *
      * @param resource $curlHandle
      */
@@ -563,7 +563,7 @@ class ClientMock extends Client
     /**
      * Calls curl_exec.
      *
-     * This method exists so it can easily be overridden and mocked.
+     * This method exists so that it can easily be overridden and mocked.
      *
      * @param resource $curlHandle
      */

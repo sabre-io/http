@@ -110,10 +110,10 @@ class RequestDecorator implements RequestInterface
      * If the full path is equal to the base url, this method will return an
      * empty string.
      *
-     * This method will also urldecode the path, and if the url was encoded as
+     * This method will also URL-decode the path, and if the url was encoded as
      * ISO-8859-1, it will convert it to UTF-8.
      *
-     * If the path is outside of the base url, a LogicException will be thrown.
+     * If the path is outside the base url, a LogicException will be thrown.
      */
     public function getPath(): string
     {

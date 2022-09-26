@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace Sabre\HTTP;
 
 /**
- * This exception represents a HTTP error coming from the Client.
+ * This exception represents an HTTP error coming from the Client.
  *
- * By default the Client will not emit these, this has to be explicitly enabled
+ * By default, the Client will not emit these, this has to be explicitly enabled
  * with the setThrowExceptions method.
  *
  * @copyright Copyright (C) fruux GmbH (https://fruux.com/)

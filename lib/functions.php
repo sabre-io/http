@@ -16,7 +16,7 @@ use DateTime;
  */
 
 /**
- * Parses a HTTP date-string.
+ * Parses an HTTP date-string.
  *
  * This method returns false if the date is invalid.
  *
@@ -97,7 +97,7 @@ function toDate(DateTime $dateTime): string
  * you can choose to emit 406 Not Acceptable.
  *
  * The method also accepts sending 'null' for the $acceptHeaderValue,
- * implying that no accept header was sent.
+ * implying that no accept-header was sent.
  *
  * @param array<mixed, mixed> $availableOptions
  */
@@ -272,7 +272,7 @@ REGEX;
 /**
  * This method splits up headers into all their individual values.
  *
- * A HTTP header may have more than one header, such as this:
+ * An HTTP header may have more than one header, such as this:
  *   Cache-Control: private, no-store
  *
  * Header values are always split with a comma.
@@ -368,7 +368,7 @@ function parseMimeType(string $str): array
 }
 
 /**
- * Encodes the path of a url.
+ * Encodes the path of a URL.
  *
  * slashes (/) are treated as path-separators.
  */
@@ -392,7 +392,7 @@ function encodePathSegment(string $pathSegment): string
 }
 
 /**
- * Decodes a url-encoded path.
+ * Decodes a URL-encoded path.
  */
 function decodePath(string $path): string
 {

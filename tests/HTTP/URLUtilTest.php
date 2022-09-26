@@ -38,8 +38,8 @@ class URLUtilTest extends \PHPUnit\Framework\TestCase
 
         $newStr = encodePathSegment($str);
 
-        // Note: almost exactly the same as the last test, with the
-        // exception of the encoding of / (ascii code 2f)
+        // Note: almost exactly the same as the last test, except for
+        // the encoding of / (ascii code 2f)
         $this->assertEquals(
             '%00%01%02%03%04%05%06%07%08%09%0a%0b%0c%0d%0e%0f'.
             '%10%11%12%13%14%15%16%17%18%19%1a%1b%1c%1d%1e%1f'.

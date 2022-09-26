@@ -133,7 +133,7 @@ class Digest extends AbstractAuth
             if (!($this->qop & self::QOP_AUTHINT)) {
                 return false;
             }
-            // We need to add an md5 of the entire request body to the A2 part of the hash
+            // We need to add an MD5 of the entire request body to the A2 part of the hash
             $body = $this->request->getBody();
             $this->request->setBody($body);
             $A2 .= ':'.md5($body);

@@ -28,7 +28,7 @@ use Sabre\Uri;
  * The afterRequest event will be emitted after the request is completed
  * successfully.
  *
- * If a HTTP error is returned (status code higher than 399) the error event is
+ * If an HTTP error is returned (status code higher than 399) the error event is
  * triggered. It's possible using this event to retry the request, by setting
  * retry to true.
  *
@@ -53,7 +53,7 @@ class Client extends EventEmitter
     protected array $curlSettings = [];
 
     /**
-     * Whether exceptions should be thrown when a HTTP error is returned.
+     * Whether exceptions should be thrown when an HTTP error is returned.
      */
     protected bool $throwExceptions = false;
 
@@ -73,7 +73,7 @@ class Client extends EventEmitter
     public function __construct()
     {
         // See https://github.com/sabre-io/http/pull/115#discussion_r241292068
-        // Preserve compatibility for sub-classes that implements their own method `parseCurlResult`
+        // Preserve compatibility for sub-classes that implement their own method `parseCurlResult`
         $separatedHeaders = __CLASS__ === get_class($this);
 
         $this->curlSettings = [
@@ -99,7 +99,7 @@ class Client extends EventEmitter
     }
 
     /**
-     * Sends a request to a HTTP server, and returns a response.
+     * Sends a request to an HTTP server, and returns a response.
      */
     public function send(RequestInterface $request): ResponseInterface
     {
@@ -138,7 +138,7 @@ class Client extends EventEmitter
                     ++$redirects;
                 }
 
-                // This was a HTTP error
+                // This was an HTTP error
                 if ($code >= 400) {
                     $this->emit('error', [$request, $response, &$retry, $retryCount]);
                     $this->emit('error:'.$code, [$request, $response, &$retry, $retryCount]);
@@ -169,7 +169,7 @@ class Client extends EventEmitter
     }
 
     /**
-     * Sends a HTTP request asynchronously.
+     * Sends an HTTP request asynchronously.
      *
      * Due to the nature of PHP, you must from time to time poll to see if any
      * new responses came in.
@@ -391,7 +391,7 @@ class Client extends EventEmitter
                         $settings[CURLOPT_INFILESIZE] = $bodyStat['size'];
                     }
                 } else {
-                    // For security we cast this to a string. If somehow an array could
+                    // For security, we cast this to a string. If somehow an array could
                     // be passed here, it would be possible for an attacker to use @ to
                     // post local files.
                     $settings[CURLOPT_POSTFIELDS] = (string) $body;
@@ -461,7 +461,7 @@ class Client extends EventEmitter
      *                   STATUS_CURLERROR.
      *   * response - Response object. Only set if status is STATUS_SUCCESS, or
      *                STATUS_HTTPERROR.
-     *   * http_code - HTTP status code, as an int. Only set if Only set if
+     *   * http_code - HTTP status code, as an int. Only set if
      *                 status is STATUS_SUCCESS, or STATUS_HTTPERROR
      *
      * @param array<int, string> $headerLines
@@ -517,7 +517,7 @@ class Client extends EventEmitter
      *                   STATUS_CURLERROR.
      *   * response - Response object. Only set if status is STATUS_SUCCESS, or
      *                STATUS_HTTPERROR.
-     *   * http_code - HTTP status code, as an int. Only set if Only set if
+     *   * http_code - HTTP status code, as an int. Only set if
      *                 status is STATUS_SUCCESS, or STATUS_HTTPERROR
      *
      * @deprecated Use parseCurlResponse instead
@@ -597,7 +597,7 @@ class Client extends EventEmitter
     /**
      * Calls curl_exec.
      *
-     * This method exists so it can easily be overridden and mocked.
+     * This method exists so that it can easily be overridden and mocked.
      *
      * @param resource $curlHandle
      */
@@ -616,7 +616,7 @@ class Client extends EventEmitter
     /**
      * Returns a bunch of information about a curl request.
      *
-     * This method exists so it can easily be overridden and mocked.
+     * This method exists so that it can easily be overridden and mocked.
      *
      * @param resource $curlHandle
      *

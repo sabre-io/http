@@ -58,7 +58,7 @@ interface MessageInterface
     public function getHeaders(): array;
 
     /**
-     * Will return true or false, depending on if a HTTP header exists.
+     * Will return true or false, depending on if an HTTP header exists.
      */
     public function hasHeader(string $name): bool;
 
@@ -68,7 +68,7 @@ interface MessageInterface
      * The name must be treated as case-insensitive.
      * If the header does not exist, this method must return null.
      *
-     * If a header appeared more than once in a HTTP request, this method will
+     * If a header appeared more than once in an HTTP request, this method will
      * concatenate all the values with a comma.
      *
      * Note that this not make sense for all headers. Some, such as
@@ -78,7 +78,7 @@ interface MessageInterface
     public function getHeader(string $name): ?string;
 
     /**
-     * Returns a HTTP header as an array.
+     * Returns an HTTP header as an array.
      *
      * For every time the HTTP header appeared in the request or response, an
      * item will appear in the array.
@@ -90,7 +90,7 @@ interface MessageInterface
     public function getHeaderAsArray(string $name): array;
 
     /**
-     * Updates a HTTP header.
+     * Updates an HTTP header.
      *
      * The case-sensitivity of the name value must be retained as-is.
      *
@@ -113,7 +113,7 @@ interface MessageInterface
     public function setHeaders(array $headers): void;
 
     /**
-     * Adds a HTTP header.
+     * Adds an HTTP header.
      *
      * This method will not overwrite any existing HTTP header, but instead add
      * another value. Individual values can be retrieved with
@@ -133,7 +133,7 @@ interface MessageInterface
     public function addHeaders(array $headers): void;
 
     /**
-     * Removes a HTTP header.
+     * Removes an HTTP header.
      *
      * The specified header name must be treated as case-insensitive.
      * This method should return true if the header was successfully deleted,

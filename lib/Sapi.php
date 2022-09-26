@@ -57,7 +57,7 @@ class Sapi
     }
 
     /**
-     * Sends the HTTP response back to a HTTP client.
+     * Sends the HTTP response back to an HTTP client.
      *
      * This calls php's header() function and streams the body to php://output.
      */
@@ -164,7 +164,7 @@ class Sapi
                     $url = $value;
                     break;
 
-                    // These sometimes show up without a HTTP_ prefix
+                    // These sometimes show up without an HTTP_ prefix
                 case 'CONTENT_TYPE':
                     $headers['Content-Type'] = $value;
                     break;
@@ -204,7 +204,7 @@ class Sapi
 
                 default:
                     if ('HTTP_' === substr($key, 0, 5)) {
-                        // It's a HTTP header
+                        // It's an HTTP header
 
                         // Normalizing it to be prettier
                         $header = strtolower(substr($key, 5));

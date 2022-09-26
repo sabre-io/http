@@ -7,7 +7,7 @@ namespace Sabre\HTTP\Auth;
 /**
  * HTTP Basic authentication utility.
  *
- * This class helps you setup basic auth. The process is fairly simple:
+ * This class helps you set up basic auth. The process is fairly simple:
  *
  * 1. Instantiate the class.
  * 2. Call getCredentials (this will return null or a user/pass pair)

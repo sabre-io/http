@@ -133,7 +133,7 @@ abstract class Message implements MessageInterface
     }
 
     /**
-     * Will return true or false, depending on if a HTTP header exists.
+     * Will return true or false, depending on if an HTTP header exists.
      */
     public function hasHeader(string $name): bool
     {
@@ -146,7 +146,7 @@ abstract class Message implements MessageInterface
      * The name must be treated as case-insensitive.
      * If the header does not exist, this method must return null.
      *
-     * If a header appeared more than once in a HTTP request, this method will
+     * If a header appeared more than once in an HTTP request, this method will
      * concatenate all the values with a comma.
      *
      * Note that this not make sense for all headers. Some, such as
@@ -165,7 +165,7 @@ abstract class Message implements MessageInterface
     }
 
     /**
-     * Returns a HTTP header as an array.
+     * Returns an HTTP header as an array.
      *
      * For every time the HTTP header appeared in the request or response, an
      * item will appear in the array.
@@ -186,7 +186,7 @@ abstract class Message implements MessageInterface
     }
 
     /**
-     * Updates a HTTP header.
+     * Updates an HTTP header.
      *
      * The case-sensitivity of the name value must be retained as-is.
      *
@@ -217,7 +217,7 @@ abstract class Message implements MessageInterface
     }
 
     /**
-     * Adds a HTTP header.
+     * Adds an HTTP header.
      *
      * This method will not overwrite any existing HTTP header, but instead add
      * another value. Individual values can be retrieved with
@@ -256,7 +256,7 @@ abstract class Message implements MessageInterface
     }
 
     /**
-     * Removes a HTTP header.
+     * Removes an HTTP header.
      *
      * The specified header name must be treated as case-insensitive.
      * This method should return true if the header was successfully deleted,

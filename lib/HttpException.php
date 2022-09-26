@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Sabre\HTTP;
 
 /**
- * An exception representing a HTTP error.
+ * An exception representing an HTTP error.
  *
  * This can be used as a generic exception in your application, if you'd like
  * to map HTTP errors to exceptions.

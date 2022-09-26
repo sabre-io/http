@@ -7,7 +7,7 @@ namespace Sabre\HTTP\Auth;
 /**
  * HTTP Bearer authentication utility.
  *
- * This class helps you setup bearer auth. The process is fairly simple:
+ * This class helps you set up bearer auth. The process is fairly simple:
  *
  * 1. Instantiate the class.
  * 2. Call getToken (this will return null or a token as string)

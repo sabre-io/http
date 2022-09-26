@@ -292,7 +292,7 @@ ChangeLog
 
 * Added: Asynchronous HTTP client. See examples/asyncclient.php.
 * Fixed: Issue #4: Don't escape colon (:) when it's not needed.
-* Fixed: Fixed a bug in the content negotation script.
+* Fixed: Fixed a bug in the content negotiation script.
 * Fixed: Fallback for when CURLOPT_POSTREDIR is not defined (mainly for hhvm).
 * Added: The Request and Response object now have a `__toString()` method that
   serializes the objects into a standard HTTP message. This is mainly for

@@ -29,8 +29,8 @@ class AWSTest extends \PHPUnit\Framework\TestCase
         $this->request->setMethod('GET');
         $result = $this->auth->init();
 
-        $this->assertFalse($result, 'No AWS Authorization header was supplied, so we should have gotten false');
-        $this->assertEquals(AWS::ERR_NOAWSHEADER, $this->auth->errorCode);
+        self::assertFalse($result, 'No AWS Authorization header was supplied, so we should have gotten false');
+        self::assertEquals(AWS::ERR_NOAWSHEADER, $this->auth->errorCode);
     }
 
     public function testInvalidAuthorizationHeader(): void
@@ -38,7 +38,7 @@ class AWSTest extends \PHPUnit\Framework\TestCase
         $this->request->setMethod('GET');
         $this->request->setHeader('Authorization', 'Invalid Auth Header');
 
-        $this->assertFalse($this->auth->init(), 'The Invalid AWS authorization header');
+        self::assertFalse($this->auth->init(), 'The Invalid AWS authorization header');
     }
 
     public function testIncorrectContentMD5(): void
@@ -56,8 +56,8 @@ class AWSTest extends \PHPUnit\Framework\TestCase
         $this->auth->init();
         $result = $this->auth->validate($secretKey);
 
-        $this->assertFalse($result);
-        $this->assertEquals(AWS::ERR_MD5CHECKSUMWRONG, $this->auth->errorCode);
+        self::assertFalse($result);
+        self::assertEquals(AWS::ERR_MD5CHECKSUMWRONG, $this->auth->errorCode);
     }
 
     public function testNoDate(): void
@@ -78,8 +78,8 @@ class AWSTest extends \PHPUnit\Framework\TestCase
         $this->auth->init();
         $result = $this->auth->validate($secretKey);
 
-        $this->assertFalse($result);
-        $this->assertEquals(AWS::ERR_INVALIDDATEFORMAT, $this->auth->errorCode);
+        self::assertFalse($result);
+        self::assertEquals(AWS::ERR_INVALIDDATEFORMAT, $this->auth->errorCode);
     }
 
     public function testFutureDate(): void
@@ -105,8 +105,8 @@ class AWSTest extends \PHPUnit\Framework\TestCase
         $this->auth->init();
         $result = $this->auth->validate($secretKey);
 
-        $this->assertFalse($result);
-        $this->assertEquals(AWS::ERR_REQUESTTIMESKEWED, $this->auth->errorCode);
+        self::assertFalse($result);
+        self::assertEquals(AWS::ERR_REQUESTTIMESKEWED, $this->auth->errorCode);
     }
 
     public function testPastDate(): void
@@ -132,8 +132,8 @@ class AWSTest extends \PHPUnit\Framework\TestCase
         $this->auth->init();
         $result = $this->auth->validate($secretKey);
 
-        $this->assertFalse($result);
-        $this->assertEquals(AWS::ERR_REQUESTTIMESKEWED, $this->auth->errorCode);
+        self::assertFalse($result);
+        self::assertEquals(AWS::ERR_REQUESTTIMESKEWED, $this->auth->errorCode);
     }
 
     public function testIncorrectSignature(): void
@@ -160,8 +160,8 @@ class AWSTest extends \PHPUnit\Framework\TestCase
         $this->auth->init();
         $result = $this->auth->validate($secretKey);
 
-        $this->assertFalse($result);
-        $this->assertEquals(AWS::ERR_INVALIDSIGNATURE, $this->auth->errorCode);
+        self::assertFalse($result);
+        self::assertEquals(AWS::ERR_INVALIDSIGNATURE, $this->auth->errorCode);
     }
 
     public function testValidRequest(): void
@@ -192,15 +192,15 @@ class AWSTest extends \PHPUnit\Framework\TestCase
         $this->auth->init();
         $result = $this->auth->validate($secretKey);
 
-        $this->assertTrue($result, 'Signature did not validate, got errorcode '.$this->auth->errorCode);
-        $this->assertEquals($accessKey, $this->auth->getAccessKey());
+        self::assertTrue($result, 'Signature did not validate, got errorcode '.$this->auth->errorCode);
+        self::assertEquals($accessKey, $this->auth->getAccessKey());
     }
 
     public function test401(): void
     {
         $this->auth->requireLogin();
         $test = preg_match('/^AWS$/', $this->response->getHeader('WWW-Authenticate'), $matches);
-        $this->assertTrue(true == $test, 'The WWW-Authenticate response didn\'t match our pattern');
+        self::assertTrue(true == $test, 'The WWW-Authenticate response didn\'t match our pattern');
     }
 
     /**

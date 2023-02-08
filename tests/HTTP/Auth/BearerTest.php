@@ -17,7 +17,7 @@ class BearerTest extends \PHPUnit\Framework\TestCase
 
         $bearer = new Bearer('Dagger', $request, new Response());
 
-        $this->assertEquals(
+        self::assertEquals(
             '12345',
             $bearer->getToken()
         );
@@ -28,7 +28,7 @@ class BearerTest extends \PHPUnit\Framework\TestCase
         $request = new Request('GET', '/', []);
         $bearer = new Bearer('Dagger', $request, new Response());
 
-        $this->assertNull($bearer->getToken());
+        self::assertNull($bearer->getToken());
     }
 
     public function testGetCredentialsNotBearer(): void
@@ -38,7 +38,7 @@ class BearerTest extends \PHPUnit\Framework\TestCase
         ]);
         $bearer = new Bearer('Dagger', $request, new Response());
 
-        $this->assertNull($bearer->getToken());
+        self::assertNull($bearer->getToken());
     }
 
     public function testRequireLogin(): void
@@ -49,7 +49,7 @@ class BearerTest extends \PHPUnit\Framework\TestCase
 
         $bearer->requireLogin();
 
-        $this->assertEquals('Bearer realm="Dagger"', $response->getHeader('WWW-Authenticate'));
-        $this->assertEquals(401, $response->getStatus());
+        self::assertEquals('Bearer realm="Dagger"', $response->getHeader('WWW-Authenticate'));
+        self::assertEquals(401, $response->getStatus());
     }
 }

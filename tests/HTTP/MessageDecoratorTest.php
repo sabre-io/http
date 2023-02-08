@@ -18,12 +18,12 @@ class MessageDecoratorTest extends \PHPUnit\Framework\TestCase
     public function testBody(): void
     {
         $this->outer->setBody('foo');
-        $this->assertEquals('foo', stream_get_contents($this->inner->getBodyAsStream()));
-        $this->assertEquals('foo', stream_get_contents($this->outer->getBodyAsStream()));
-        $this->assertEquals('foo', $this->inner->getBodyAsString());
-        $this->assertEquals('foo', $this->outer->getBodyAsString());
-        $this->assertEquals('foo', $this->inner->getBody());
-        $this->assertEquals('foo', $this->outer->getBody());
+        self::assertEquals('foo', stream_get_contents($this->inner->getBodyAsStream()));
+        self::assertEquals('foo', stream_get_contents($this->outer->getBodyAsStream()));
+        self::assertEquals('foo', $this->inner->getBodyAsString());
+        self::assertEquals('foo', $this->outer->getBodyAsString());
+        self::assertEquals('foo', $this->inner->getBody());
+        self::assertEquals('foo', $this->outer->getBody());
     }
 
     public function testHeaders(): void
@@ -32,60 +32,60 @@ class MessageDecoratorTest extends \PHPUnit\Framework\TestCase
             'a' => 'b',
             ]);
 
-        $this->assertEquals(['a' => ['b']], $this->inner->getHeaders());
-        $this->assertEquals(['a' => ['b']], $this->outer->getHeaders());
+        self::assertEquals(['a' => ['b']], $this->inner->getHeaders());
+        self::assertEquals(['a' => ['b']], $this->outer->getHeaders());
 
         $this->outer->setHeaders([
             'c' => 'd',
         ]);
 
-        $this->assertEquals(['a' => ['b'], 'c' => ['d']], $this->inner->getHeaders());
-        $this->assertEquals(['a' => ['b'], 'c' => ['d']], $this->outer->getHeaders());
+        self::assertEquals(['a' => ['b'], 'c' => ['d']], $this->inner->getHeaders());
+        self::assertEquals(['a' => ['b'], 'c' => ['d']], $this->outer->getHeaders());
 
         $this->outer->addHeaders([
             'e' => 'f',
             ]);
 
-        $this->assertEquals(['a' => ['b'], 'c' => ['d'], 'e' => ['f']], $this->inner->getHeaders());
-        $this->assertEquals(['a' => ['b'], 'c' => ['d'], 'e' => ['f']], $this->outer->getHeaders());
+        self::assertEquals(['a' => ['b'], 'c' => ['d'], 'e' => ['f']], $this->inner->getHeaders());
+        self::assertEquals(['a' => ['b'], 'c' => ['d'], 'e' => ['f']], $this->outer->getHeaders());
     }
 
     public function testHeader(): void
     {
-        $this->assertFalse($this->outer->hasHeader('a'));
-        $this->assertFalse($this->inner->hasHeader('a'));
+        self::assertFalse($this->outer->hasHeader('a'));
+        self::assertFalse($this->inner->hasHeader('a'));
         $this->outer->setHeader('a', 'c');
-        $this->assertTrue($this->outer->hasHeader('a'));
-        $this->assertTrue($this->inner->hasHeader('a'));
+        self::assertTrue($this->outer->hasHeader('a'));
+        self::assertTrue($this->inner->hasHeader('a'));
 
-        $this->assertEquals('c', $this->inner->getHeader('A'));
-        $this->assertEquals('c', $this->outer->getHeader('A'));
+        self::assertEquals('c', $this->inner->getHeader('A'));
+        self::assertEquals('c', $this->outer->getHeader('A'));
 
         $this->outer->addHeader('A', 'd');
 
-        $this->assertEquals(
+        self::assertEquals(
             ['c', 'd'],
             $this->inner->getHeaderAsArray('A')
         );
-        $this->assertEquals(
+        self::assertEquals(
             ['c', 'd'],
             $this->outer->getHeaderAsArray('A')
         );
 
         $success = $this->outer->removeHeader('a');
 
-        $this->assertTrue($success);
-        $this->assertNull($this->inner->getHeader('A'));
-        $this->assertNull($this->outer->getHeader('A'));
+        self::assertTrue($success);
+        self::assertNull($this->inner->getHeader('A'));
+        self::assertNull($this->outer->getHeader('A'));
 
-        $this->assertFalse($this->outer->removeHeader('i-dont-exist'));
+        self::assertFalse($this->outer->removeHeader('i-dont-exist'));
     }
 
     public function testHttpVersion(): void
     {
         $this->outer->setHttpVersion('1.0');
 
-        $this->assertEquals('1.0', $this->inner->getHttpVersion());
-        $this->assertEquals('1.0', $this->outer->getHttpVersion());
+        self::assertEquals('1.0', $this->inner->getHttpVersion());
+        self::assertEquals('1.0', $this->outer->getHttpVersion());
     }
 }

@@ -31,7 +31,7 @@ class ClientTest extends \PHPUnit\Framework\TestCase
             $settings[CURLOPT_REDIR_PROTOCOLS] = CURLPROTO_HTTP | CURLPROTO_HTTPS;
         }
 
-        $this->assertEquals($settings, $client->createCurlSettingsArray($request));
+        self::assertEquals($settings, $client->createCurlSettingsArray($request));
     }
 
     public function testCreateCurlSettingsArrayHEAD(): void
@@ -56,7 +56,7 @@ class ClientTest extends \PHPUnit\Framework\TestCase
             $settings[CURLOPT_REDIR_PROTOCOLS] = CURLPROTO_HTTP | CURLPROTO_HTTPS;
         }
 
-        $this->assertEquals($settings, $client->createCurlSettingsArray($request));
+        self::assertEquals($settings, $client->createCurlSettingsArray($request));
     }
 
     public function testCreateCurlSettingsArrayGETAfterHEAD(): void
@@ -89,7 +89,7 @@ class ClientTest extends \PHPUnit\Framework\TestCase
             $settings[CURLOPT_REDIR_PROTOCOLS] = CURLPROTO_HTTP | CURLPROTO_HTTPS;
         }
 
-        $this->assertEquals($settings, $client->createCurlSettingsArray($request));
+        self::assertEquals($settings, $client->createCurlSettingsArray($request));
     }
 
     public function testCreateCurlSettingsArrayPUTStream(): void
@@ -121,7 +121,7 @@ class ClientTest extends \PHPUnit\Framework\TestCase
             $settings[CURLOPT_REDIR_PROTOCOLS] = CURLPROTO_HTTP | CURLPROTO_HTTPS;
         }
 
-        $this->assertEquals($settings, $client->createCurlSettingsArray($request));
+        self::assertEquals($settings, $client->createCurlSettingsArray($request));
     }
 
     public function testCreateCurlSettingsArrayPUTString(): void
@@ -147,7 +147,7 @@ class ClientTest extends \PHPUnit\Framework\TestCase
             $settings[CURLOPT_REDIR_PROTOCOLS] = CURLPROTO_HTTP | CURLPROTO_HTTPS;
         }
 
-        $this->assertEquals($settings, $client->createCurlSettingsArray($request));
+        self::assertEquals($settings, $client->createCurlSettingsArray($request));
     }
 
     public function testIssue89MultiplePutInfileGivesWarning(): void
@@ -157,20 +157,20 @@ class ClientTest extends \PHPUnit\Framework\TestCase
         $request = new Request('POST', 'http://example.org/', ['X-Foo' => 'bar'], 'body');
 
         $settings = $client->createCurlSettingsArray($request);
-        $this->assertArrayNotHasKey(CURLOPT_PUT, $settings);
-        $this->assertArrayNotHasKey(CURLOPT_INFILE, $settings);
+        self::assertArrayNotHasKey(CURLOPT_PUT, $settings);
+        self::assertArrayNotHasKey(CURLOPT_INFILE, $settings);
 
         $request = new Request('POST', 'http://example.org/', ['X-Foo' => 'bar'], $tmpFile);
 
         $settings = $client->createCurlSettingsArray($request);
-        $this->assertEquals(true, $settings[CURLOPT_PUT]);
-        $this->assertEquals($tmpFile, $settings[CURLOPT_INFILE]);
+        self::assertEquals(true, $settings[CURLOPT_PUT]);
+        self::assertEquals($tmpFile, $settings[CURLOPT_INFILE]);
 
         $request = new Request('POST', 'http://example.org/', ['X-Foo' => 'bar'], 'body');
 
         $settings = $client->createCurlSettingsArray($request);
-        $this->assertArrayNotHasKey(CURLOPT_PUT, $settings);
-        $this->assertArrayNotHasKey(CURLOPT_INFILE, $settings);
+        self::assertArrayNotHasKey(CURLOPT_PUT, $settings);
+        self::assertArrayNotHasKey(CURLOPT_INFILE, $settings);
     }
 
     public function testSend(): void
@@ -184,7 +184,7 @@ class ClientTest extends \PHPUnit\Framework\TestCase
 
         $response = $client->send($request);
 
-        $this->assertEquals(200, $response->getStatus());
+        self::assertEquals(200, $response->getStatus());
     }
 
     /**
@@ -224,8 +224,8 @@ class ClientTest extends \PHPUnit\Framework\TestCase
         $client = new Client();
         $response = $client->send($request);
 
-        $this->assertEquals(200, $response->getStatus());
-        $this->assertLessThan(
+        self::assertEquals(200, $response->getStatus());
+        self::assertLessThan(
             (int) $maxPeakMemoryUsage,
             memory_get_peak_usage(),
             "Hint: you can adjust the max peak memory usage allowed for this test by defining env variable $maxPeakMemoryUsageEnvVariable to be the desired max bytes"
@@ -246,9 +246,9 @@ class ClientTest extends \PHPUnit\Framework\TestCase
 
         $request = new Request('GET', $url);
         $client->sendAsync($request, function (ResponseInterface $response) {
-            $this->assertEquals("foo\n", $response->getBody());
-            $this->assertEquals(200, $response->getStatus());
-            $this->assertEquals(4, $response->getHeader('Content-Length'));
+            self::assertEquals("foo\n", $response->getBody());
+            self::assertEquals(200, $response->getStatus());
+            self::assertEquals(4, $response->getHeader('Content-Length'));
         }, function ($error) use ($request) {
             $url = $request->getUrl();
             $this->fail("Failed to GET $url");
@@ -271,9 +271,9 @@ class ClientTest extends \PHPUnit\Framework\TestCase
 
         $request = new Request('GET', $url);
         $client->sendAsync($request, function (ResponseInterface $response) {
-            $this->assertEquals("foo\n", $response->getBody());
-            $this->assertEquals(200, $response->getStatus());
-            $this->assertEquals(4, $response->getHeader('Content-Length'));
+            self::assertEquals("foo\n", $response->getBody());
+            self::assertEquals(200, $response->getStatus());
+            self::assertEquals(4, $response->getHeader('Content-Length'));
         }, function ($error) use ($request) {
             $url = $request->getUrl();
             $this->fail("Failed to get $url");
@@ -282,9 +282,9 @@ class ClientTest extends \PHPUnit\Framework\TestCase
         $url = $this->getAbsoluteUrl('/bar.php');
         $request = new Request('GET', $url);
         $client->sendAsync($request, function (ResponseInterface $response) {
-            $this->assertEquals("bar\n", $response->getBody());
-            $this->assertEquals(200, $response->getStatus());
-            $this->assertEquals('Bar', $response->getHeader('X-Test'));
+            self::assertEquals("bar\n", $response->getBody());
+            self::assertEquals(200, $response->getStatus());
+            self::assertEquals('Bar', $response->getHeader('X-Test'));
         }, function ($error) use ($request) {
             $url = $request->getUrl();
             $this->fail("Failed to get $url");
@@ -311,7 +311,7 @@ class ClientTest extends \PHPUnit\Framework\TestCase
             $this->fail('send() should have thrown an exception');
         } catch (ClientException $e) {
         }
-        $this->assertTrue($called);
+        self::assertTrue($called);
     }
 
     public function testSendHttpError(): void
@@ -331,7 +331,7 @@ class ClientTest extends \PHPUnit\Framework\TestCase
         });
 
         $client->send($request);
-        $this->assertEquals(2, $called);
+        self::assertEquals(2, $called);
     }
 
     public function testSendRetry(): void
@@ -356,9 +356,9 @@ class ClientTest extends \PHPUnit\Framework\TestCase
         });
 
         $response = $client->send($request);
-        $this->assertEquals(3, $called);
-        $this->assertEquals(2, $errorCalled);
-        $this->assertEquals(200, $response->getStatus());
+        self::assertEquals(3, $called);
+        self::assertEquals(2, $errorCalled);
+        self::assertEquals(200, $response->getStatus());
     }
 
     public function testHttpErrorException(): void
@@ -375,8 +375,8 @@ class ClientTest extends \PHPUnit\Framework\TestCase
             $client->send($request);
             $this->fail('An exception should have been thrown');
         } catch (ClientHttpException $e) {
-            $this->assertEquals(404, $e->getHttpStatus());
-            $this->assertInstanceOf('Sabre\HTTP\Response', $e->getResponse());
+            self::assertEquals(404, $e->getHttpStatus());
+            self::assertInstanceOf('Sabre\HTTP\Response', $e->getResponse());
         }
     }
 
@@ -398,11 +398,11 @@ class ClientTest extends \PHPUnit\Framework\TestCase
         /** @phpstan-ignore-next-line */
         $result = $client->parseCurlResult($body, 'foobar');
 
-        $this->assertEquals(Client::STATUS_SUCCESS, $result['status']);
-        $this->assertEquals(200, $result['http_code']);
-        $this->assertEquals(200, $result['response']->getStatus());
-        $this->assertEquals(['Header1' => ['Val1']], $result['response']->getHeaders());
-        $this->assertEquals('Foo', $result['response']->getBodyAsString());
+        self::assertEquals(Client::STATUS_SUCCESS, $result['status']);
+        self::assertEquals(200, $result['http_code']);
+        self::assertEquals(200, $result['response']->getStatus());
+        self::assertEquals(['Header1' => ['Val1']], $result['response']->getHeaders());
+        self::assertEquals('Foo', $result['response']->getBodyAsString());
     }
 
     public function testParseCurlResultEmptyBody(): void
@@ -423,11 +423,11 @@ class ClientTest extends \PHPUnit\Framework\TestCase
         /** @phpstan-ignore-next-line */
         $result = $client->parseCurlResult($body, 'foobar');
 
-        $this->assertEquals(Client::STATUS_SUCCESS, $result['status']);
-        $this->assertEquals(200, $result['http_code']);
-        $this->assertEquals(200, $result['response']->getStatus());
-        $this->assertEquals(['Header1' => ['Val1']], $result['response']->getHeaders());
-        $this->assertEquals('', $result['response']->getBodyAsString());
+        self::assertEquals(Client::STATUS_SUCCESS, $result['status']);
+        self::assertEquals(200, $result['http_code']);
+        self::assertEquals(200, $result['response']->getStatus());
+        self::assertEquals(['Header1' => ['Val1']], $result['response']->getHeaders());
+        self::assertEquals('', $result['response']->getBodyAsString());
     }
 
     public function testParseCurlError(): void
@@ -445,9 +445,9 @@ class ClientTest extends \PHPUnit\Framework\TestCase
         /** @phpstan-ignore-next-line */
         $result = $client->parseCurlResult($body, 'foobar');
 
-        $this->assertEquals(Client::STATUS_CURLERROR, $result['status']);
-        $this->assertEquals(1, $result['curl_errno']);
-        $this->assertEquals('Curl error', $result['curl_errmsg']);
+        self::assertEquals(Client::STATUS_CURLERROR, $result['status']);
+        self::assertEquals(1, $result['curl_errno']);
+        self::assertEquals('Curl error', $result['curl_errmsg']);
     }
 
     public function testDoRequest(): void
@@ -468,9 +468,9 @@ class ClientTest extends \PHPUnit\Framework\TestCase
             ];
         });
         $response = $client->doRequest($request);
-        $this->assertEquals(200, $response->getStatus());
-        $this->assertEquals(['Header1' => ['Val1']], $response->getHeaders());
-        $this->assertEquals('Foo', $response->getBodyAsString());
+        self::assertEquals(200, $response->getStatus());
+        self::assertEquals(['Header1' => ['Val1']], $response->getHeaders());
+        self::assertEquals('Foo', $response->getBodyAsString());
     }
 
     public function testDoRequestCurlError(): void
@@ -492,8 +492,8 @@ class ClientTest extends \PHPUnit\Framework\TestCase
             $response = $client->doRequest($request);
             $this->fail('This should have thrown an exception');
         } catch (ClientException $e) {
-            $this->assertEquals(1, $e->getCode());
-            $this->assertEquals('Curl error', $e->getMessage());
+            self::assertEquals(1, $e->getCode());
+            self::assertEquals('Curl error', $e->getMessage());
         }
     }
 }

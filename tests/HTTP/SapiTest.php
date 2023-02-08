@@ -17,18 +17,18 @@ class SapiTest extends \PHPUnit\Framework\TestCase
             'SERVER_PROTOCOL' => 'HTTP/1.0',
         ]);
 
-        $this->assertEquals('GET', $request->getMethod());
-        $this->assertEquals('/foo', $request->getUrl());
-        $this->assertEquals([
+        self::assertEquals('GET', $request->getMethod());
+        self::assertEquals('/foo', $request->getUrl());
+        self::assertEquals([
             'User-Agent' => ['Evert'],
             'Content-Type' => ['text/xml'],
             'Content-Length' => ['400'],
         ], $request->getHeaders());
 
-        $this->assertEquals('1.0', $request->getHttpVersion());
+        self::assertEquals('1.0', $request->getHttpVersion());
 
-        $this->assertEquals('400', $request->getRawServerValue('CONTENT_LENGTH'));
-        $this->assertNull($request->getRawServerValue('FOO'));
+        self::assertEquals('400', $request->getRawServerValue('CONTENT_LENGTH'));
+        self::assertNull($request->getRawServerValue('FOO'));
     }
 
     public function testConstructFromServerArrayOnNullUrl(): void
@@ -68,9 +68,9 @@ class SapiTest extends \PHPUnit\Framework\TestCase
             'PHP_AUTH_PW' => 'pass',
         ]);
 
-        $this->assertEquals('GET', $request->getMethod());
-        $this->assertEquals('/foo', $request->getUrl());
-        $this->assertEquals([
+        self::assertEquals('GET', $request->getMethod());
+        self::assertEquals('/foo', $request->getUrl());
+        self::assertEquals([
             'Authorization' => ['Basic '.base64_encode('user:pass')],
         ], $request->getHeaders());
     }
@@ -83,9 +83,9 @@ class SapiTest extends \PHPUnit\Framework\TestCase
             'PHP_AUTH_DIGEST' => 'blabla',
         ]);
 
-        $this->assertEquals('GET', $request->getMethod());
-        $this->assertEquals('/foo', $request->getUrl());
-        $this->assertEquals([
+        self::assertEquals('GET', $request->getMethod());
+        self::assertEquals('/foo', $request->getUrl());
+        self::assertEquals([
             'Authorization' => ['Digest blabla'],
         ], $request->getHeaders());
     }
@@ -98,9 +98,9 @@ class SapiTest extends \PHPUnit\Framework\TestCase
             'REDIRECT_HTTP_AUTHORIZATION' => 'Basic bla',
         ]);
 
-        $this->assertEquals('GET', $request->getMethod());
-        $this->assertEquals('/foo', $request->getUrl());
-        $this->assertEquals([
+        self::assertEquals('GET', $request->getMethod());
+        self::assertEquals('/foo', $request->getUrl());
+        self::assertEquals([
             'Authorization' => ['Basic bla'],
         ], $request->getHeaders());
     }
@@ -131,7 +131,7 @@ class SapiTest extends \PHPUnit\Framework\TestCase
         $result = ob_get_clean();
         header_remove();
 
-        $this->assertEquals(
+        self::assertEquals(
             [
                 'Content-Type: text/xml;charset=UTF-8',
                 'Content-Type: application/xml',
@@ -139,7 +139,7 @@ class SapiTest extends \PHPUnit\Framework\TestCase
             $headers
         );
 
-        $this->assertEquals('foo', $result);
+        self::assertEquals('foo', $result);
     }
 
     /**
@@ -161,7 +161,7 @@ class SapiTest extends \PHPUnit\Framework\TestCase
         $result = ob_get_clean();
         header_remove();
 
-        $this->assertEquals('Send this sentence.', $result);
+        self::assertEquals('Send this sentence.', $result);
     }
 
     /**
@@ -175,7 +175,7 @@ class SapiTest extends \PHPUnit\Framework\TestCase
             'REQUEST_METHOD' => 'GET',
         ]);
 
-        $this->assertEquals('2.0', $request->getHttpVersion());
+        self::assertEquals('2.0', $request->getHttpVersion());
     }
 
     /**
@@ -200,7 +200,7 @@ class SapiTest extends \PHPUnit\Framework\TestCase
         $result = ob_get_clean();
         header_remove();
 
-        $this->assertEquals('Send this sentence.', $result);
+        self::assertEquals('Send this sentence.', $result);
     }
 
     /**
@@ -246,7 +246,7 @@ class SapiTest extends \PHPUnit\Framework\TestCase
         $result = ob_get_clean();
         header_remove();
 
-        $this->assertEquals($partial, $result);
+        self::assertEquals($partial, $result);
     }
 
     /**
@@ -298,6 +298,6 @@ class SapiTest extends \PHPUnit\Framework\TestCase
 
         $result = ob_get_clean();
 
-        $this->assertEquals('foo', $result);
+        self::assertEquals('foo', $result);
     }
 }

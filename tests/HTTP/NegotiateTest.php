@@ -13,7 +13,7 @@ class NegotiateTest extends \PHPUnit\Framework\TestCase
      */
     public function testNegotiate(?string $acceptHeader, array $available, ?string $expected): void
     {
-        $this->assertEquals(
+        self::assertEquals(
             $expected,
             negotiateContentType($acceptHeader, $available)
         );

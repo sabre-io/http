@@ -18,10 +18,10 @@ class ResponseDecoratorTest extends \PHPUnit\Framework\TestCase
     public function testStatus(): void
     {
         $this->outer->setStatus(201);
-        $this->assertEquals(201, $this->inner->getStatus());
-        $this->assertEquals(201, $this->outer->getStatus());
-        $this->assertEquals('Created', $this->inner->getStatusText());
-        $this->assertEquals('Created', $this->outer->getStatusText());
+        self::assertEquals(201, $this->inner->getStatus());
+        self::assertEquals(201, $this->outer->getStatus());
+        self::assertEquals('Created', $this->inner->getStatusText());
+        self::assertEquals('Created', $this->outer->getStatusText());
     }
 
     public function testToString(): void
@@ -30,6 +30,6 @@ class ResponseDecoratorTest extends \PHPUnit\Framework\TestCase
         $this->inner->setBody('foo');
         $this->inner->setHeader('foo', 'bar');
 
-        $this->assertEquals((string) $this->inner, (string) $this->outer);
+        self::assertEquals((string) $this->inner, (string) $this->outer);
     }
 }

@@ -9,24 +9,24 @@ class ResponseTest extends \PHPUnit\Framework\TestCase
     public function testConstruct(): void
     {
         $response = new Response(200, ['Content-Type' => 'text/xml']);
-        $this->assertEquals(200, $response->getStatus());
-        $this->assertEquals('OK', $response->getStatusText());
+        self::assertEquals(200, $response->getStatus());
+        self::assertEquals('OK', $response->getStatusText());
     }
 
     public function testSetStatus(): void
     {
         $response = new Response();
         $response->setStatus('402 Where\'s my money?');
-        $this->assertEquals(402, $response->getStatus());
-        $this->assertEquals('Where\'s my money?', $response->getStatusText());
+        self::assertEquals(402, $response->getStatus());
+        self::assertEquals('Where\'s my money?', $response->getStatusText());
     }
 
     public function testSetStatusWithoutText(): void
     {
         $response = new Response();
         $response->setStatus('402');
-        $this->assertEquals(402, $response->getStatus());
-        $this->assertEquals('Payment Required', $response->getStatusText());
+        self::assertEquals(402, $response->getStatus());
+        self::assertEquals('Payment Required', $response->getStatusText());
     }
 
     public function testInvalidStatus(): void
@@ -44,6 +44,6 @@ class ResponseTest extends \PHPUnit\Framework\TestCase
                   ."Content-Type: text/xml\r\n"
                   ."\r\n"
                   .'foo';
-        $this->assertEquals($expected, (string) $response);
+        self::assertEquals($expected, (string) $response);
     }
 }

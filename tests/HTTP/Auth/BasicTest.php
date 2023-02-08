@@ -17,7 +17,7 @@ class BasicTest extends \PHPUnit\Framework\TestCase
 
         $basic = new Basic('Dagger', $request, new Response());
 
-        $this->assertEquals([
+        self::assertEquals([
             'user',
             'pass:bla',
         ], $basic->getCredentials());
@@ -31,7 +31,7 @@ class BasicTest extends \PHPUnit\Framework\TestCase
 
         $basic = new Basic('Dagger', $request, new Response());
 
-        $this->assertNull($basic->getCredentials());
+        self::assertNull($basic->getCredentials());
     }
 
     public function testGetCredentialsNoHeader(): void
@@ -39,7 +39,7 @@ class BasicTest extends \PHPUnit\Framework\TestCase
         $request = new Request('GET', '/', []);
         $basic = new Basic('Dagger', $request, new Response());
 
-        $this->assertNull($basic->getCredentials());
+        self::assertNull($basic->getCredentials());
     }
 
     public function testGetCredentialsNotBasic(): void
@@ -49,7 +49,7 @@ class BasicTest extends \PHPUnit\Framework\TestCase
         ]);
         $basic = new Basic('Dagger', $request, new Response());
 
-        $this->assertNull($basic->getCredentials());
+        self::assertNull($basic->getCredentials());
     }
 
     public function testRequireLogin(): void
@@ -61,7 +61,7 @@ class BasicTest extends \PHPUnit\Framework\TestCase
 
         $basic->requireLogin();
 
-        $this->assertEquals('Basic realm="Dagger", charset="UTF-8"', $response->getHeader('WWW-Authenticate'));
-        $this->assertEquals(401, $response->getStatus());
+        self::assertEquals('Basic realm="Dagger", charset="UTF-8"', $response->getHeader('WWW-Authenticate'));
+        self::assertEquals(401, $response->getStatus());
     }
 }

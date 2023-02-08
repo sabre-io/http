@@ -11,9 +11,9 @@ class RequestTest extends \PHPUnit\Framework\TestCase
         $request = new Request('GET', '/foo', [
             'User-Agent' => 'Evert',
         ]);
-        $this->assertEquals('GET', $request->getMethod());
-        $this->assertEquals('/foo', $request->getUrl());
-        $this->assertEquals([
+        self::assertEquals('GET', $request->getMethod());
+        self::assertEquals('/foo', $request->getUrl());
+        self::assertEquals([
             'User-Agent' => ['Evert'],
         ], $request->getHeaders());
     }
@@ -21,7 +21,7 @@ class RequestTest extends \PHPUnit\Framework\TestCase
     public function testGetQueryParameters(): void
     {
         $request = new Request('GET', '/foo?a=b&c&d=e');
-        $this->assertEquals([
+        self::assertEquals([
             'a' => 'b',
             'c' => null,
             'd' => 'e',
@@ -31,7 +31,7 @@ class RequestTest extends \PHPUnit\Framework\TestCase
     public function testGetQueryParametersNoData(): void
     {
         $request = new Request('GET', '/foo');
-        $this->assertEquals([], $request->getQueryParameters());
+        self::assertEquals([], $request->getQueryParameters());
     }
 
     /**
@@ -43,7 +43,7 @@ class RequestTest extends \PHPUnit\Framework\TestCase
         $_SERVER['REQUEST_METHOD'] = 'PUT';
 
         $request = Sapi::getRequest();
-        $this->assertEquals('PUT', $request->getMethod());
+        self::assertEquals('PUT', $request->getMethod());
     }
 
     public function testGetAbsoluteUrl(): void
@@ -52,7 +52,7 @@ class RequestTest extends \PHPUnit\Framework\TestCase
             'Host' => 'sabredav.org',
         ]);
 
-        $this->assertEquals('http://sabredav.org/foo', $r->getAbsoluteUrl());
+        self::assertEquals('http://sabredav.org/foo', $r->getAbsoluteUrl());
 
         $s = [
             'HTTP_HOST' => 'sabredav.org',
@@ -63,7 +63,7 @@ class RequestTest extends \PHPUnit\Framework\TestCase
 
         $r = Sapi::createFromServerArray($s);
 
-        $this->assertEquals('https://sabredav.org/foo', $r->getAbsoluteUrl());
+        self::assertEquals('https://sabredav.org/foo', $r->getAbsoluteUrl());
     }
 
     public function testGetPostData(): void
@@ -73,7 +73,7 @@ class RequestTest extends \PHPUnit\Framework\TestCase
         ];
         $r = new Request('POST', '/');
         $r->setPostData($post);
-        $this->assertEquals($post, $r->getPostData());
+        self::assertEquals($post, $r->getPostData());
     }
 
     public function testGetPath(): void
@@ -82,7 +82,7 @@ class RequestTest extends \PHPUnit\Framework\TestCase
         $request->setBaseUrl('/foo');
         $request->setUrl('/foo/bar/');
 
-        $this->assertEquals('bar', $request->getPath());
+        self::assertEquals('bar', $request->getPath());
     }
 
     public function testGetPathStrippedQuery(): void
@@ -90,7 +90,7 @@ class RequestTest extends \PHPUnit\Framework\TestCase
         $request = new Request('GET', '/foo/bar?a=B');
         $request->setBaseUrl('/foo');
 
-        $this->assertEquals('bar', $request->getPath());
+        self::assertEquals('bar', $request->getPath());
     }
 
     public function testGetPathMissingSlash(): void
@@ -98,7 +98,7 @@ class RequestTest extends \PHPUnit\Framework\TestCase
         $request = new Request('GET', '/foo');
         $request->setBaseUrl('/foo/');
 
-        $this->assertEquals('', $request->getPath());
+        self::assertEquals('', $request->getPath());
     }
 
     public function testGetPathOutsideBaseUrl(): void
@@ -119,7 +119,7 @@ class RequestTest extends \PHPUnit\Framework\TestCase
                   ."Content-Type: text/xml\r\n"
                   ."\r\n"
                   .'foo';
-        $this->assertEquals($expected, (string) $request);
+        self::assertEquals($expected, (string) $request);
     }
 
     public function testToStringAuthorization(): void
@@ -132,6 +132,6 @@ class RequestTest extends \PHPUnit\Framework\TestCase
                   ."Authorization: Basic REDACTED\r\n"
                   ."\r\n"
                   .'foo';
-        $this->assertEquals($expected, (string) $request);
+        self::assertEquals($expected, (string) $request);
     }
 }

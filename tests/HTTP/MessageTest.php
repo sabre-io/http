@@ -9,7 +9,7 @@ class MessageTest extends \PHPUnit\Framework\TestCase
     public function testConstruct(): void
     {
         $message = new MessageMock();
-        $this->assertInstanceOf('Sabre\HTTP\Message', $message);
+        self::assertInstanceOf('Sabre\HTTP\Message', $message);
     }
 
     public function testStreamBody(): void
@@ -22,11 +22,11 @@ class MessageTest extends \PHPUnit\Framework\TestCase
         $message = new MessageMock();
         $message->setBody($h);
 
-        $this->assertEquals($body, $message->getBodyAsString());
+        self::assertEquals($body, $message->getBodyAsString());
         rewind($h);
-        $this->assertEquals($body, stream_get_contents($message->getBodyAsStream()));
+        self::assertEquals($body, stream_get_contents($message->getBodyAsStream()));
         rewind($h);
-        $this->assertEquals($body, stream_get_contents($message->getBody()));
+        self::assertEquals($body, stream_get_contents($message->getBody()));
     }
 
     public function testStringBody(): void
@@ -36,9 +36,9 @@ class MessageTest extends \PHPUnit\Framework\TestCase
         $message = new MessageMock();
         $message->setBody($body);
 
-        $this->assertEquals($body, $message->getBodyAsString());
-        $this->assertEquals($body, stream_get_contents($message->getBodyAsStream()));
-        $this->assertEquals($body, $message->getBody());
+        self::assertEquals($body, $message->getBodyAsString());
+        self::assertEquals($body, stream_get_contents($message->getBodyAsStream()));
+        self::assertEquals($body, $message->getBody());
     }
 
     public function testCallbackBodyAsString(): void
@@ -50,7 +50,7 @@ class MessageTest extends \PHPUnit\Framework\TestCase
 
         $string = $message->getBodyAsString();
 
-        $this->assertSame('foo', $string);
+        self::assertSame('foo', $string);
     }
 
     public function testCallbackBodyAsStream(): void
@@ -62,7 +62,7 @@ class MessageTest extends \PHPUnit\Framework\TestCase
 
         $stream = $message->getBodyAsStream();
 
-        $this->assertSame('foo', stream_get_contents($stream));
+        self::assertSame('foo', stream_get_contents($stream));
     }
 
     public function testGetBodyWhenCallback(): void
@@ -72,7 +72,7 @@ class MessageTest extends \PHPUnit\Framework\TestCase
         $message = new MessageMock();
         $message->setBody($callback);
 
-        $this->assertSame($callback, $message->getBody());
+        self::assertSame($callback, $message->getBody());
     }
 
     /**
@@ -96,7 +96,7 @@ class MessageTest extends \PHPUnit\Framework\TestCase
         $message->setBody($body);
         $message->setHeader('Content-Length', '4');
 
-        $this->assertEquals(
+        self::assertEquals(
             'cdef',
             $message->getBodyAsString()
         );
@@ -116,7 +116,7 @@ class MessageTest extends \PHPUnit\Framework\TestCase
         $message->setBody($body);
         $message->setHeader('Content-Length', '');
 
-        $this->assertEquals(
+        self::assertEquals(
             'cdefg',
             $message->getBodyAsString()
         );
@@ -127,7 +127,7 @@ class MessageTest extends \PHPUnit\Framework\TestCase
         $message = new MessageMock();
         $body = $message->getBodyAsStream();
 
-        $this->assertEquals('', stream_get_contents($body));
+        self::assertEquals('', stream_get_contents($body));
     }
 
     public function testGetEmptyBodyString(): void
@@ -135,7 +135,7 @@ class MessageTest extends \PHPUnit\Framework\TestCase
         $message = new MessageMock();
         $body = $message->getBodyAsString();
 
-        $this->assertEquals('', $body);
+        self::assertEquals('', $body);
     }
 
     public function testHeaders(): void
@@ -144,14 +144,14 @@ class MessageTest extends \PHPUnit\Framework\TestCase
         $message->setHeader('X-Foo', 'bar');
 
         // Testing caselessness
-        $this->assertEquals('bar', $message->getHeader('X-Foo'));
-        $this->assertEquals('bar', $message->getHeader('x-fOO'));
+        self::assertEquals('bar', $message->getHeader('X-Foo'));
+        self::assertEquals('bar', $message->getHeader('x-fOO'));
 
-        $this->assertTrue(
+        self::assertTrue(
             $message->removeHeader('X-FOO')
         );
-        $this->assertNull($message->getHeader('X-Foo'));
-        $this->assertFalse(
+        self::assertNull($message->getHeader('X-Foo'));
+        self::assertFalse(
             $message->removeHeader('X-FOO')
         );
     }
@@ -166,7 +166,7 @@ class MessageTest extends \PHPUnit\Framework\TestCase
         ];
 
         $message->setHeaders($headers);
-        $this->assertEquals($headers, $message->getHeaders());
+        self::assertEquals($headers, $message->getHeaders());
 
         $message->setHeaders([
             'X-Foo' => ['3', '4'],
@@ -178,7 +178,7 @@ class MessageTest extends \PHPUnit\Framework\TestCase
             'X-Bar' => ['5'],
         ];
 
-        $this->assertEquals($expected, $message->getHeaders());
+        self::assertEquals($expected, $message->getHeaders());
     }
 
     public function testAddHeaders(): void
@@ -191,7 +191,7 @@ class MessageTest extends \PHPUnit\Framework\TestCase
         ];
 
         $message->addHeaders($headers);
-        $this->assertEquals($headers, $message->getHeaders());
+        self::assertEquals($headers, $message->getHeaders());
 
         $message->addHeaders([
             'X-Foo' => ['3', '4'],
@@ -203,7 +203,7 @@ class MessageTest extends \PHPUnit\Framework\TestCase
             'X-Bar' => ['2', '5'],
         ];
 
-        $this->assertEquals($expected, $message->getHeaders());
+        self::assertEquals($expected, $message->getHeaders());
     }
 
     public function testSendBody(): void
@@ -222,7 +222,7 @@ class MessageTest extends \PHPUnit\Framework\TestCase
         $body = $message->getBody();
         rewind($body);
 
-        $this->assertEquals('bar', stream_get_contents($body));
+        self::assertEquals('bar', stream_get_contents($body));
     }
 
     public function testMultipleHeaders(): void
@@ -231,24 +231,24 @@ class MessageTest extends \PHPUnit\Framework\TestCase
         $message->setHeader('a', '1');
         $message->addHeader('A', '2');
 
-        $this->assertEquals(
+        self::assertEquals(
             '1,2',
             $message->getHeader('A')
         );
-        $this->assertEquals(
+        self::assertEquals(
             '1,2',
             $message->getHeader('a')
         );
 
-        $this->assertEquals(
+        self::assertEquals(
             ['1', '2'],
             $message->getHeaderAsArray('a')
         );
-        $this->assertEquals(
+        self::assertEquals(
             ['1', '2'],
             $message->getHeaderAsArray('A')
         );
-        $this->assertEquals(
+        self::assertEquals(
             [],
             $message->getHeaderAsArray('B')
         );
@@ -258,9 +258,9 @@ class MessageTest extends \PHPUnit\Framework\TestCase
     {
         $message = new MessageMock();
 
-        $this->assertFalse($message->hasHeader('X-Foo'));
+        self::assertFalse($message->hasHeader('X-Foo'));
         $message->setHeader('X-Foo', 'Bar');
-        $this->assertTrue($message->hasHeader('X-Foo'));
+        self::assertTrue($message->hasHeader('X-Foo'));
     }
 
     /**

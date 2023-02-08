@@ -15,7 +15,7 @@ class FunctionsTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetHeaderValuesOnValues2(array $result, array $values1, array $values2): void
     {
-        $this->assertEquals($result, getHeaderValues($values1, $values2));
+        self::assertEquals($result, getHeaderValues($values1, $values2));
     }
 
     /**
@@ -45,7 +45,7 @@ class FunctionsTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetHeaderValues($input, array $output): void
     {
-        $this->assertEquals(
+        self::assertEquals(
             $output,
             getHeaderValues($input)
         );
@@ -88,7 +88,7 @@ class FunctionsTest extends \PHPUnit\Framework\TestCase
      */
     public function testPrefer($input, array $output): void
     {
-        $this->assertEquals(
+        self::assertEquals(
             $output,
             parsePrefer($input)
         );
@@ -165,11 +165,11 @@ class FunctionsTest extends \PHPUnit\Framework\TestCase
 
         foreach ($times as $time) {
             $result = parseDate($time);
-            $this->assertEquals($expected, $result->format('U'));
+            self::assertEquals($expected, $result->format('U'));
         }
 
         $result = parseDate('Wed Oct  6 10:26:00 2010');
-        $this->assertEquals(1286360760, $result->format('U'));
+        self::assertEquals(1286360760, $result->format('U'));
     }
 
     public function testParseHTTPDateFail(): void
@@ -194,7 +194,7 @@ class FunctionsTest extends \PHPUnit\Framework\TestCase
         ];
 
         foreach ($times as $time) {
-            $this->assertFalse(parseDate($time), 'We used the string: '.$time);
+            self::assertFalse(parseDate($time), 'We used the string: '.$time);
         }
     }
 
@@ -212,7 +212,7 @@ class FunctionsTest extends \PHPUnit\Framework\TestCase
     {
         $dt = new \DateTime('2011-12-10 12:00:00 +0200');
 
-        $this->assertEquals(
+        self::assertEquals(
             'Sat, 10 Dec 2011 10:00:00 GMT',
             toDate($dt)
         );

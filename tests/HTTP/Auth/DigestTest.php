@@ -50,10 +50,10 @@ class DigestTest extends \PHPUnit\Framework\TestCase
 
         $this->auth->init();
 
-        $this->assertEquals($username, $this->auth->getUsername());
-        $this->assertEquals(self::REALM, $this->auth->getRealm());
-        $this->assertTrue($this->auth->validateA1(md5($username.':'.self::REALM.':'.$password)), 'Authentication is deemed invalid through validateA1');
-        $this->assertTrue($this->auth->validatePassword($password), 'Authentication is deemed invalid through validatePassword');
+        self::assertEquals($username, $this->auth->getUsername());
+        self::assertEquals(self::REALM, $this->auth->getRealm());
+        self::assertTrue($this->auth->validateA1(md5($username.':'.self::REALM.':'.$password)), 'Authentication is deemed invalid through validateA1');
+        self::assertTrue($this->auth->validatePassword($password), 'Authentication is deemed invalid through validatePassword');
     }
 
     public function testInvalidDigest(): void
@@ -79,7 +79,7 @@ class DigestTest extends \PHPUnit\Framework\TestCase
 
         $this->auth->init();
 
-        $this->assertFalse($this->auth->validateA1(md5($username.':'.self::REALM.':'.($password.'randomness'))), 'Authentication is deemed invalid through validateA1');
+        self::assertFalse($this->auth->validateA1(md5($username.':'.self::REALM.':'.($password.'randomness'))), 'Authentication is deemed invalid through validateA1');
     }
 
     public function testInvalidDigest2(): void
@@ -88,7 +88,7 @@ class DigestTest extends \PHPUnit\Framework\TestCase
         $this->request->setHeader('Authorization', 'basic blablabla');
 
         $this->auth->init();
-        $this->assertFalse($this->auth->validateA1(md5('user:realm:password')));
+        self::assertFalse($this->auth->validateA1(md5('user:realm:password')));
     }
 
     public function testDigestAuthInt(): void
@@ -116,7 +116,7 @@ class DigestTest extends \PHPUnit\Framework\TestCase
 
         $this->auth->init();
 
-        $this->assertTrue($this->auth->validateA1(md5($username.':'.self::REALM.':'.$password)), 'Authentication is deemed invalid through validateA1');
+        self::assertTrue($this->auth->validateA1(md5($username.':'.self::REALM.':'.$password)), 'Authentication is deemed invalid through validateA1');
     }
 
     public function testDigestAuthBoth(): void
@@ -144,7 +144,7 @@ class DigestTest extends \PHPUnit\Framework\TestCase
 
         $this->auth->init();
 
-        $this->assertTrue($this->auth->validateA1(md5($username.':'.self::REALM.':'.$password)), 'Authentication is deemed invalid through validateA1');
+        self::assertTrue($this->auth->validateA1(md5($username.':'.self::REALM.':'.$password)), 'Authentication is deemed invalid through validateA1');
     }
 
     /**
@@ -166,7 +166,7 @@ class DigestTest extends \PHPUnit\Framework\TestCase
         $test = preg_match('/Digest realm="'.self::REALM.'",qop="'.$qopstr.'",nonce="([0-9a-f]*)",opaque="([0-9a-f]*)"/',
             $this->response->getHeader('WWW-Authenticate'), $matches);
 
-        $this->assertTrue(true == $test, 'The WWW-Authenticate response didn\'t match our pattern. We received: '.$this->response->getHeader('WWW-Authenticate'));
+        self::assertTrue(true == $test, 'The WWW-Authenticate response didn\'t match our pattern. We received: '.$this->response->getHeader('WWW-Authenticate'));
 
         $nonce = $matches[1];
         $opaque = $matches[2];

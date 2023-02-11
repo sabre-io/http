@@ -122,7 +122,7 @@ class Client extends EventEmitter
                 // open_basedir.
                 //
                 // https://github.com/fruux/sabre-http/issues/12
-                if ($redirects < $this->maxRedirects && in_array($code, [301, 302, 307, 308])) {
+                if ($redirects < $this->maxRedirects && in_array($code, [301, 302, 307, 308], true)) {
                     $oldLocation = $request->getUrl();
 
                     // Creating a new instance of the request object.

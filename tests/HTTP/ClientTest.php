@@ -209,7 +209,7 @@ class ClientTest extends \PHPUnit\Framework\TestCase
     {
         $url = $this->getAbsoluteUrl('/large.php');
         if (!$url) {
-            $this->markTestSkipped('Set an environment value BASEURL to continue');
+            self::markTestSkipped('Set an environment value BASEURL to continue');
         }
 
         // Allow the peak memory usage limit to be specified externally, if needed.
@@ -239,7 +239,7 @@ class ClientTest extends \PHPUnit\Framework\TestCase
     {
         $url = $this->getAbsoluteUrl('/foo');
         if (!$url) {
-            $this->markTestSkipped('Set an environment value BASEURL to continue');
+            self::markTestSkipped('Set an environment value BASEURL to continue');
         }
 
         $client = new Client();
@@ -251,7 +251,7 @@ class ClientTest extends \PHPUnit\Framework\TestCase
             self::assertEquals(4, $response->getHeader('Content-Length'));
         }, function ($error) use ($request) {
             $url = $request->getUrl();
-            $this->fail("Failed to GET $url");
+            self::fail("Failed to GET $url");
         });
 
         $client->wait();
@@ -264,7 +264,7 @@ class ClientTest extends \PHPUnit\Framework\TestCase
     {
         $url = $this->getAbsoluteUrl('/foo');
         if (!$url) {
-            $this->markTestSkipped('Set an environment value BASEURL to continue');
+            self::markTestSkipped('Set an environment value BASEURL to continue');
         }
 
         $client = new Client();
@@ -276,7 +276,7 @@ class ClientTest extends \PHPUnit\Framework\TestCase
             self::assertEquals(4, $response->getHeader('Content-Length'));
         }, function ($error) use ($request) {
             $url = $request->getUrl();
-            $this->fail("Failed to get $url");
+            self::fail("Failed to get $url");
         });
 
         $url = $this->getAbsoluteUrl('/bar.php');
@@ -287,7 +287,7 @@ class ClientTest extends \PHPUnit\Framework\TestCase
             self::assertEquals('Bar', $response->getHeader('X-Test'));
         }, function ($error) use ($request) {
             $url = $request->getUrl();
-            $this->fail("Failed to get $url");
+            self::fail("Failed to get $url");
         });
 
         $client->wait();
@@ -308,7 +308,7 @@ class ClientTest extends \PHPUnit\Framework\TestCase
 
         try {
             $client->send($request);
-            $this->fail('send() should have thrown an exception');
+            self::fail('send() should have thrown an exception');
         } catch (ClientException $e) {
         }
         self::assertTrue($called);
@@ -373,7 +373,7 @@ class ClientTest extends \PHPUnit\Framework\TestCase
 
         try {
             $client->send($request);
-            $this->fail('An exception should have been thrown');
+            self::fail('An exception should have been thrown');
         } catch (ClientHttpException $e) {
             self::assertEquals(404, $e->getHttpStatus());
             self::assertInstanceOf('Sabre\HTTP\Response', $e->getResponse());
@@ -490,7 +490,7 @@ class ClientTest extends \PHPUnit\Framework\TestCase
 
         try {
             $response = $client->doRequest($request);
-            $this->fail('This should have thrown an exception');
+            self::fail('This should have thrown an exception');
         } catch (ClientException $e) {
             self::assertEquals(1, $e->getCode());
             self::assertEquals('Curl error', $e->getMessage());

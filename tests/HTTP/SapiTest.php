@@ -114,7 +114,7 @@ class SapiTest extends \PHPUnit\Framework\TestCase
     public function testSend(): void
     {
         if (!function_exists('xdebug_get_headers')) {
-            $this->markTestSkipped('XDebug needs to be installed for this test to run');
+            self::markTestSkipped('XDebug needs to be installed for this test to run');
         }
 
         $response = new Response(204, ['Content-Type' => 'text/xml;charset=UTF-8']);
@@ -221,7 +221,7 @@ class SapiTest extends \PHPUnit\Framework\TestCase
         $ignoreAtStartLength = strlen($ignoreAtStart);
         $ignoreAtEndLength = strlen($ignoreAtEnd);
         $body = fopen('php://memory', 'w');
-        if (!$contentLength) {
+        if (null === $contentLength) {
             $contentLength = strlen($partial);
         }
         fwrite($body, $ignoreAtStart);

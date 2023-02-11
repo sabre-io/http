@@ -90,7 +90,7 @@ class AWSTest extends \PHPUnit\Framework\TestCase
         $contentMD5 = base64_encode(md5($content, true));
 
         $date = new \DateTime('@'.(time() + (60 * 20)));
-        $date->setTimeZone(new \DateTimeZone('GMT'));
+        $date->setTimezone(new \DateTimeZone('GMT'));
         $date = $date->format('D, d M Y H:i:s \\G\\M\\T');
 
         $this->request->setMethod('POST');
@@ -117,7 +117,7 @@ class AWSTest extends \PHPUnit\Framework\TestCase
         $contentMD5 = base64_encode(md5($content, true));
 
         $date = new \DateTime('@'.(time() - (60 * 20)));
-        $date->setTimeZone(new \DateTimeZone('GMT'));
+        $date->setTimezone(new \DateTimeZone('GMT'));
         $date = $date->format('D, d M Y H:i:s \\G\\M\\T');
 
         $this->request->setMethod('POST');
@@ -145,7 +145,7 @@ class AWSTest extends \PHPUnit\Framework\TestCase
         $contentMD5 = base64_encode(md5($content, true));
 
         $date = new \DateTime('now');
-        $date->setTimeZone(new \DateTimeZone('GMT'));
+        $date->setTimezone(new \DateTimeZone('GMT'));
         $date = $date->format('D, d M Y H:i:s \\G\\M\\T');
 
         $this->request->setUrl('/');
@@ -172,7 +172,7 @@ class AWSTest extends \PHPUnit\Framework\TestCase
         $contentMD5 = base64_encode(md5($content, true));
 
         $date = new \DateTime('now');
-        $date->setTimeZone(new \DateTimeZone('GMT'));
+        $date->setTimezone(new \DateTimeZone('GMT'));
         $date = $date->format('D, d M Y H:i:s \\G\\M\\T');
 
         $sig = base64_encode($this->hmacsha1($secretKey,

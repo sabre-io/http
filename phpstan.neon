@@ -15,6 +15,10 @@ parameters:
     count: 2
     path: lib/Client.php
   -
+    message: "#^.* will always evaluate to true\\.$#"
+    count: 1
+    path: lib/Client.php
+  -
     message: "#^Casting to string something that's already string.$#"
     count: 1
     path: lib/Sapi.php

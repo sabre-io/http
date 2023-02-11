@@ -130,14 +130,14 @@ class Digest extends AbstractAuth
 
         if ('auth-int' === $this->digestParts['qop']) {
             // Making sure we support this qop value
-            if (!($this->qop & self::QOP_AUTHINT)) {
+            if (0 === ($this->qop & self::QOP_AUTHINT)) {
                 return false;
             }
             // We need to add an MD5 of the entire request body to the A2 part of the hash
             $body = $this->request->getBody();
             $this->request->setBody($body);
             $A2 .= ':'.md5($body);
-        } elseif (!($this->qop & self::QOP_AUTH)) {
+        } elseif (0 === ($this->qop & self::QOP_AUTH)) {
             return false;
         }
 
@@ -200,10 +200,10 @@ class Digest extends AbstractAuth
         preg_match_all('@(\w+)=(?:(?:")([^"]+)"|([^\s,$]+))@', $digest, $matches, PREG_SET_ORDER);
 
         foreach ($matches as $m) {
-            $data[$m[1]] = $m[2] ?: $m[3];
+            $data[$m[1]] = ('' !== $m[2]) ? $m[2] : $m[3];
             unset($needed_parts[$m[1]]);
         }
 
-        return $needed_parts ? false : $data;
+        return (count($needed_parts) > 0) ? false : $data;
     }
 }

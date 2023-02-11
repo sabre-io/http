@@ -194,7 +194,7 @@ class Client extends EventEmitter
     public function poll(): bool
     {
         // nothing to do?
-        if (!$this->curlMultiMap) {
+        if (0 === count($this->curlMultiMap)) {
             return false;
         }
 
@@ -239,7 +239,7 @@ class Client extends EventEmitter
 
                     $curlResult['request'] = $request;
 
-                    if ($errorCallback) {
+                    if (is_callable($errorCallback)) {
                         $errorCallback($curlResult);
                     }
                 } elseif (self::STATUS_HTTPERROR === $curlResult['status']) {
@@ -254,13 +254,13 @@ class Client extends EventEmitter
 
                     $curlResult['request'] = $request;
 
-                    if ($errorCallback) {
+                    if (is_callable($errorCallback)) {
                         $errorCallback($curlResult);
                     }
                 } else {
                     $this->emit('afterRequest', [$request, $curlResult['response']]);
 
-                    if ($successCallback) {
+                    if (is_callable($successCallback)) {
                         $successCallback($curlResult['response']);
                     }
                 }
@@ -314,7 +314,7 @@ class Client extends EventEmitter
     {
         $settings = $this->createCurlSettingsArray($request);
 
-        if (!$this->curlHandle) {
+        if (null === $this->curlHandle) {
             $this->curlHandle = curl_init();
         } else {
             curl_reset($this->curlHandle);
@@ -475,7 +475,7 @@ class Client extends EventEmitter
             $curlErrMsg
         ) = $this->curlStuff($curlHandle);
 
-        if ($curlErrNo) {
+        if (0 !== $curlErrNo) {
             return [
                 'status' => self::STATUS_CURLERROR,
                 'curl_errno' => $curlErrNo,
@@ -532,7 +532,7 @@ class Client extends EventEmitter
             $curlErrMsg
         ) = $this->curlStuff($curlHandle);
 
-        if ($curlErrNo) {
+        if (0 !== $curlErrNo) {
             return [
                 'status' => self::STATUS_CURLERROR,
                 'curl_errno' => $curlErrNo,
@@ -541,10 +541,13 @@ class Client extends EventEmitter
         }
 
         $headerBlob = substr($response, 0, $curlInfo['header_size']);
-        // In the case of 204 No Content, strlen($response) == $curlInfo['header_size].
+        // In the case of 204 No Content, strlen($response) == $curlInfo['header_size'].
         // This will cause substr($response, $curlInfo['header_size']) return FALSE instead of NULL
         // An exception will be thrown when calling getBodyAsString then
-        $responseBody = substr($response, $curlInfo['header_size']) ?: '';
+        $responseBody = substr($response, $curlInfo['header_size']);
+        if (false === $responseBody) {
+            $responseBody = '';
+        }
 
         unset($response);
 
@@ -570,7 +573,7 @@ class Client extends EventEmitter
      */
     protected function sendAsyncInternal(RequestInterface $request, callable $success, callable $error, int $retryCount = 0): void
     {
-        if (!$this->curlMultiHandle) {
+        if (null === $this->curlMultiHandle) {
             $this->curlMultiHandle = curl_multi_init();
         }
         $curl = curl_init();

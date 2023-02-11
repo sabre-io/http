@@ -31,7 +31,7 @@ class Basic extends AbstractAuth
     {
         $auth = $this->request->getHeader('Authorization');
 
-        if (!$auth) {
+        if (null === $auth) {
             return null;
         }
 

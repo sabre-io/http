@@ -103,7 +103,7 @@ function toDate(\DateTime $dateTime): string
  */
 function negotiateContentType(?string $acceptHeaderValue, array $availableOptions): ?string
 {
-    if (!$acceptHeaderValue) {
+    if ((null === $acceptHeaderValue) || ('' === $acceptHeaderValue)) {
         // Grabbing the first in the list.
         return reset($availableOptions);
     }
@@ -261,7 +261,7 @@ REGEX;
                 } else {
                     $value = true;
                 }
-                $output[strtolower($matches['name'])] = empty($value) ? true : $value;
+                $output[strtolower($matches['name'])] = ('' === $value) ? true : $value;
                 break;
         }
     }
@@ -291,7 +291,7 @@ REGEX;
 function getHeaderValues($values, $values2 = null): array
 {
     $values = (array) $values;
-    if ($values2) {
+    if (null !== $values2) {
         $values = array_merge($values, (array) $values2);
     }
 

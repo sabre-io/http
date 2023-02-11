@@ -84,7 +84,7 @@ class AWS extends AbstractAuth
     {
         $contentMD5 = $this->request->getHeader('Content-MD5');
 
-        if ($contentMD5) {
+        if (null !== $contentMD5) {
             // We need to validate the integrity of the request
             $body = $this->request->getBody();
             $this->request->setBody($body);
@@ -97,7 +97,9 @@ class AWS extends AbstractAuth
             }
         }
 
-        if (!$requestDate = $this->request->getHeader('x-amz-date')) {
+        $requestDate = $this->request->getHeader('x-amz-date');
+
+        if (null === $requestDate) {
             $requestDate = $this->request->getHeader('Date');
         }
 

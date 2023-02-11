@@ -108,7 +108,7 @@ class Request extends Message implements RequestInterface
      */
     public function getAbsoluteUrl(): string
     {
-        if (!$this->absoluteUrl) {
+        if ((null === $this->absoluteUrl) || ('' === $this->absoluteUrl)) {
             // Guessing we're a http endpoint.
             $this->absoluteUrl = 'http://'.
                 ($this->getHeader('Host') ?? 'localhost').

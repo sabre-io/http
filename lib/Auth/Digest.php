@@ -123,9 +123,12 @@ class Digest extends AbstractAuth {
      * @return string
      */
     function getUsername() {
-
-        return $this->digestParts['username'];
-
+        if(isset($this->digestParts['username'])){
+            return $this->digestParts['username'];
+        }
+        // i want to return null, but unsure of the compliations of changing the return type to string|null
+        // future versions of this method returns null.
+        return "";
     }
 
     /**

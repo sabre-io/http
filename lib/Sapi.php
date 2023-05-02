@@ -110,7 +110,7 @@ class Sapi
                     // But when the $maxLength is greater than the total number of bytes remaining in the stream,
                     // It returns the negative number of bytes copied
                     // So break the loop in such cases.
-                    if ($copied <= 0) {
+                    if ($copied <= 0 || connection_aborted() === 1) {
                         break;
                     }
                     $left -= $copied;

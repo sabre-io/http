@@ -113,6 +113,12 @@ class Sapi
                     if ($copied <= 0) {
                         break;
                     }
+                    // Abort on client disconnect.
+                    // With ignore_user_abort(true), the script is not aborted on client disconnect.
+                    // To avoid reading the entire stream and dismissing the data afterward, check between the chunks if the client is still there.
+                    if (1 === ignore_user_abort() && 1 === connection_aborted()) {
+                        break;
+                    }
                     $left -= $copied;
                 }
             } else {

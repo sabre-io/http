@@ -31,6 +31,34 @@ class SapiTest extends \PHPUnit\Framework\TestCase
         $this->assertNull($request->getRawServerValue('FOO'));
     }
 
+    public function testConstructFromServerArrayOnNullUrl()
+    {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('The _SERVER array must have a REQUEST_URI key');
+
+        $request = Sapi::createFromServerArray([
+            'REQUEST_METHOD' => 'GET',
+            'HTTP_USER_AGENT' => 'Evert',
+            'CONTENT_TYPE' => 'text/xml',
+            'CONTENT_LENGTH' => '400',
+            'SERVER_PROTOCOL' => 'HTTP/1.0',
+        ]);
+    }
+
+    public function testConstructFromServerArrayOnNullMethod()
+    {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('The _SERVER array must have a REQUEST_METHOD key');
+
+        $request = Sapi::createFromServerArray([
+            'REQUEST_URI' => '/foo',
+            'HTTP_USER_AGENT' => 'Evert',
+            'CONTENT_TYPE' => 'text/xml',
+            'CONTENT_LENGTH' => '400',
+            'SERVER_PROTOCOL' => 'HTTP/1.0',
+        ]);
+    }
+
     public function testConstructPHPAuth()
     {
         $request = Sapi::createFromServerArray([
@@ -258,5 +286,36 @@ class SapiTest extends \PHPUnit\Framework\TestCase
         $result = ob_get_clean();
 
         $this->assertEquals('foo', $result);
+    }
+
+    public function testSendConnectionAborted(): void
+    {
+        $baseUrl = getenv('BASEURL');
+        if (!$baseUrl) {
+            $this->markTestSkipped('Set an environment value BASEURL to continue');
+        }
+
+        $url = rtrim($baseUrl, '/').'/connection_aborted.php';
+        $chunk_size = 4 * 1024 * 1024;
+        $fetch_size = 6 * 1024 * 1024;
+
+        $stream = fopen($url, 'r');
+        $size = 0;
+
+        while ($size <= $fetch_size) {
+            $temp = fread($stream, 8192);
+            if (false === $temp) {
+                break;
+            }
+            $size += strlen($temp);
+        }
+
+        fclose($stream);
+
+        sleep(5);
+
+        $bytes_read = file_get_contents(sys_get_temp_dir().'/dummy_stream_read_counter');
+        $this->assertEquals($chunk_size * 2, $bytes_read);
+        $this->assertGreaterThanOrEqual($fetch_size, $bytes_read);
     }
 }

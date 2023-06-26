@@ -168,9 +168,9 @@ function negotiateContentType(?string $acceptHeaderValue, array $availableOption
 
             // Does this entry win?
             if (
-                ($proposal['quality'] > $lastQuality) ||
-                ($proposal['quality'] === $lastQuality && $specificity > $lastSpecificity) ||
-                ($proposal['quality'] === $lastQuality && $specificity === $lastSpecificity && $optionIndex < $lastOptionIndex)
+                ($proposal['quality'] > $lastQuality)
+                || ($proposal['quality'] === $lastQuality && $specificity > $lastSpecificity)
+                || ($proposal['quality'] === $lastQuality && $specificity === $lastSpecificity && $optionIndex < $lastOptionIndex)
             ) {
                 $lastQuality = $proposal['quality'];
                 $lastSpecificity = $specificity;

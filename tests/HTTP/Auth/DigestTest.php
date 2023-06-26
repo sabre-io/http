@@ -42,7 +42,7 @@ class DigestTest extends \PHPUnit\Framework\TestCase
             $nc.':'.
             $cnonce.':'.
             'auth:'.
-            md5('GET'.':'.'/')
+            md5('GET:/')
         );
 
         $this->request->setMethod('GET');
@@ -71,7 +71,7 @@ class DigestTest extends \PHPUnit\Framework\TestCase
             $nc.':'.
             $cnonce.':'.
             'auth:'.
-            md5('GET'.':'.'/')
+            md5('GET:/')
         );
 
         $this->request->setMethod('GET');
@@ -107,7 +107,7 @@ class DigestTest extends \PHPUnit\Framework\TestCase
             $nc.':'.
             $cnonce.':'.
             'auth-int:'.
-            md5('POST'.':'.'/'.':'.md5('body'))
+            md5('POST:/:'.md5('body'))
         );
 
         $this->request->setMethod('POST');
@@ -135,7 +135,7 @@ class DigestTest extends \PHPUnit\Framework\TestCase
             $nc.':'.
             $cnonce.':'.
             'auth-int:'.
-            md5('POST'.':'.'/'.':'.md5('body'))
+            md5('POST:/:'.md5('body'))
         );
 
         $this->request->setMethod('POST');

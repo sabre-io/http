@@ -12,7 +12,7 @@ parameters:
     path: lib/Client.php
   -
     message: "#^Left side of || is always false.$#"
-    count: 1
+    count: 2
     path: lib/Client.php
   -
     message: "#^Strict comparison using === between null and array<string, mixed> will always evaluate to false.$#"

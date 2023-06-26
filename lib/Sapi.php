@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Sabre\HTTP;
 
-use InvalidArgumentException;
-
 /**
  * PHP SAPI.
  *
@@ -228,11 +226,11 @@ class Sapi
         }
 
         if (null === $url) {
-            throw new InvalidArgumentException('The _SERVER array must have a REQUEST_URI key');
+            throw new \InvalidArgumentException('The _SERVER array must have a REQUEST_URI key');
         }
 
         if (null === $method) {
-            throw new InvalidArgumentException('The _SERVER array must have a REQUEST_METHOD key');
+            throw new \InvalidArgumentException('The _SERVER array must have a REQUEST_METHOD key');
         }
         $r = new Request($method, $url, $headers);
         $r->setHttpVersion($httpVersion);

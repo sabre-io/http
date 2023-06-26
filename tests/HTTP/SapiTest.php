@@ -300,4 +300,35 @@ class SapiTest extends \PHPUnit\Framework\TestCase
 
         self::assertEquals('foo', $result);
     }
+
+    public function testSendConnectionAborted(): void
+    {
+        $baseUrl = getenv('BASEURL');
+        if (!$baseUrl) {
+            $this->markTestSkipped('Set an environment value BASEURL to continue');
+        }
+
+        $url = rtrim($baseUrl, '/').'/connection_aborted.php';
+        $chunk_size = 4 * 1024 * 1024;
+        $fetch_size = 6 * 1024 * 1024;
+
+        $stream = fopen($url, 'r');
+        $size = 0;
+
+        while ($size <= $fetch_size) {
+            $temp = fread($stream, 8192);
+            if (false === $temp) {
+                break;
+            }
+            $size += strlen($temp);
+        }
+
+        fclose($stream);
+
+        sleep(5);
+
+        $bytes_read = file_get_contents(sys_get_temp_dir().'/dummy_stream_read_counter');
+        $this->assertEquals($chunk_size * 2, $bytes_read);
+        $this->assertGreaterThanOrEqual($fetch_size, $bytes_read);
+    }
 }

@@ -1,9 +1,18 @@
 ChangeLog
 =========
 
+7.0.1 (2023-06-26)
+------------------
+* #207 fix: handle client disconnect properly with ignore_user_abort true (@kesselb)
+
 7.0.0 (2022-09-26)
 ------------------
 * #198 Allow sabre/uri major version 3 ( @phil-davis )
+
+6.0.1 (2023-06-26)
+------------------
+
+* #207 fix: handle client disconnect properly with ignore_user_abort true (@kesselb)
 
 6.0.0 (2022-08-31)
 ------------------
@@ -12,6 +21,12 @@ ChangeLog
 * #176 Test enhancement (from original PR #98) (@peter279k)
 * #192 Set min PHP to 7.4 and add type declarations (@phil-davis)
 * #194 Adjust type declarations a little bit (@phil-davis)
+
+5.1.7 (2023-06-26)
+------------------
+
+* #98 and #176 Add more tests (@peter279k)
+* #207 fix: handle client disconnect properly with ignore_user_abort true (@kesselb)
 
 5.1.6 (2022-07-15)
 ------------------

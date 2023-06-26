@@ -17,7 +17,7 @@ class DummyStream
         return true;
     }
 
-    public function stream_read(int $count)
+    public function stream_read(int $count): string
     {
         $this->position += $count;
 

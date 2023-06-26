@@ -1,6 +1,10 @@
 ChangeLog
 =========
 
+7.0.1 (2023-06-26)
+------------------
+* #207 fix: handle client disconnect properly with ignore_user_abort true (@kesselb)
+
 7.0.0 (2022-09-26)
 ------------------
 * #198 Allow sabre/uri major version 3 ( @phil-davis )

@@ -1,6 +1,12 @@
 ChangeLog
 =========
 
+5.1.7 (2023-06-26)
+------------------
+
+* #98 and #176 Add more tests (@peter279k)
+* #207 fix: handle client disconnect properly with ignore_user_abort true (@kesselb)
+
 5.1.6 (2022-07-15)
 ------------------
 

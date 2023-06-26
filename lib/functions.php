@@ -28,7 +28,7 @@ use DateTime;
  * See:
  *   http://tools.ietf.org/html/rfc7231#section-7.1.1.1
  *
- * @return bool|DateTime
+ * @return bool|\DateTime
  */
 function parseDate(string $dateString)
 {
@@ -64,7 +64,7 @@ function parseDate(string $dateString)
     }
 
     try {
-        return new DateTime($dateString, new \DateTimeZone('UTC'));
+        return new \DateTime($dateString, new \DateTimeZone('UTC'));
     } catch (\Exception $e) {
         return false;
     }
@@ -73,7 +73,7 @@ function parseDate(string $dateString)
 /**
  * Transforms a DateTime object to a valid HTTP/1.1 Date header value.
  */
-function toDate(DateTime $dateTime): string
+function toDate(\DateTime $dateTime): string
 {
     // We need to clone it, as we don't want to affect the existing
     // DateTime.
@@ -168,9 +168,9 @@ function negotiateContentType(?string $acceptHeaderValue, array $availableOption
 
             // Does this entry win?
             if (
-                ($proposal['quality'] > $lastQuality) ||
-                ($proposal['quality'] === $lastQuality && $specificity > $lastSpecificity) ||
-                ($proposal['quality'] === $lastQuality && $specificity === $lastSpecificity && $optionIndex < $lastOptionIndex)
+                ($proposal['quality'] > $lastQuality)
+                || ($proposal['quality'] === $lastQuality && $specificity > $lastSpecificity)
+                || ($proposal['quality'] === $lastQuality && $specificity === $lastSpecificity && $optionIndex < $lastOptionIndex)
             ) {
                 $lastQuality = $proposal['quality'];
                 $lastSpecificity = $specificity;

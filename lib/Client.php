@@ -301,8 +301,6 @@ class Client extends EventEmitter
      * Adds a CURL setting.
      *
      * These settings will be included in every HTTP request.
-     *
-     * @param mixed $value
      */
     public function addCurlSetting(int $name, $value): void
     {
@@ -340,7 +338,7 @@ class Client extends EventEmitter
      *
      * @var resource|null
      */
-    private $curlHandle = null;
+    private $curlHandle;
 
     /**
      * Handler for curl_multi requests.
@@ -349,7 +347,7 @@ class Client extends EventEmitter
      *
      * @var resource|null
      */
-    private $curlMultiHandle = null;
+    private $curlMultiHandle;
 
     /**
      * Has a list of curl handles, as well as their associated success and

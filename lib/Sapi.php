@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Sabre\HTTP;
 
-use InvalidArgumentException;
-
 /**
  * PHP SAPI.
  *
@@ -115,6 +113,12 @@ class Sapi
                     if ($copied <= 0) {
                         break;
                     }
+                    // Abort on client disconnect.
+                    // With ignore_user_abort(true), the script is not aborted on client disconnect.
+                    // To avoid reading the entire stream and dismissing the data afterward, check between the chunks if the client is still there.
+                    if (1 === ignore_user_abort() && 1 === connection_aborted()) {
+                        break;
+                    }
                     $left -= $copied;
                 }
             } else {
@@ -222,11 +226,11 @@ class Sapi
         }
 
         if (null === $url) {
-            throw new InvalidArgumentException('The _SERVER array must have a REQUEST_URI key');
+            throw new \InvalidArgumentException('The _SERVER array must have a REQUEST_URI key');
         }
 
         if (null === $method) {
-            throw new InvalidArgumentException('The _SERVER array must have a REQUEST_METHOD key');
+            throw new \InvalidArgumentException('The _SERVER array must have a REQUEST_METHOD key');
         }
         $r = new Request($method, $url, $headers);
         $r->setHttpVersion($httpVersion);

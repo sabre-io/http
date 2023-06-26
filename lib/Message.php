@@ -22,7 +22,7 @@ abstract class Message implements MessageInterface
      *
      * @var resource|string|callable|null
      */
-    protected $body = null;
+    protected $body;
 
     /**
      * Contains the list of HTTP headers.

@@ -8,7 +8,7 @@ include '../bootstrap.php';
 
 class DummyStream
 {
-    private int $position;
+    private $position;
 
     public function stream_open(string $path, string $mode, int $options, ?string &$opened_path): bool
     {

@@ -27,12 +27,17 @@ The objects are extendable and easily mockable.
 
 Build status
 ------------
+![Build Status](https://github.com/sabre-io/http/actions/workflows/ci.yml/badge.svg)
 
-| branch | status                                                                                                        |
-|--------|---------------------------------------------------------------------------------------------------------------|
-| master | [![Build Status](https://travis-ci.org/sabre-io/http.svg?branch=master)](https://travis-ci.org/sabre-io/http) |
-| 4.2    | [![Build Status](https://travis-ci.org/sabre-io/http.svg?branch=4.2)](https://travis-ci.org/sabre-io/http)    |
-| 3.0    | [![Build Status](https://travis-ci.org/sabre-io/http.svg?branch=3.0)](https://travis-ci.org/sabre-io/http)    |
+| release | minimum PHP version |
+|---------|---------------------|
+| master  | PHP 7.4             |
+| 7.0     | PHP 7.4             |
+| 6.0     | PHP 7.4             |
+| 5.1     | PHP 7.1             |
+| 4.2     | PHP 5.4             |
+| 3.0     | PHP 5.4             |
+
 
 Installation
 ------------

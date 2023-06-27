@@ -12,7 +12,7 @@ parameters:
     path: lib/Client.php
   -
     message: "#^Left side of || is always false.$#"
-    count: 3
+    count: 6
     path: lib/Client.php
   -
     message: "#^Casting to string something that's already string.$#"

@@ -216,6 +216,13 @@ class Client extends EventEmitter
 
             if ($status && CURLMSG_DONE === $status['msg']) {
                 $resourceId = (int) $status['handle'];
+
+                /**
+                 * @var RequestInterface $request
+                 * @var callable         $successCallback
+                 * @var callable         $errorCallback
+                 * @var int              $retryCount
+                 */
                 list(
                     $request,
                     $successCallback,

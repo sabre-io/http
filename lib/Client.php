@@ -217,12 +217,6 @@ class Client extends EventEmitter
             if ($status && CURLMSG_DONE === $status['msg']) {
                 $resourceId = (int) $status['handle'];
 
-                /**
-                 * @var RequestInterface $request
-                 * @var callable         $successCallback
-                 * @var callable         $errorCallback
-                 * @var int              $retryCount
-                 */
                 list(
                     $request,
                     $successCallback,
@@ -360,7 +354,7 @@ class Client extends EventEmitter
      * Has a list of curl handles, as well as their associated success and
      * error callbacks.
      *
-     * @var array<int, mixed>
+     * @var array<int, array{0: RequestInterface, 1: callable, 2: callable, 3: int}>
      */
     private array $curlMultiMap = [];
 

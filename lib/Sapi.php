@@ -201,7 +201,7 @@ class Sapi
                     break;
 
                 case 'HTTPS':
-                    if (!empty($value) && 'off' !== $value) {
+                    if ('' !== $value && 'off' !== $value) {
                         $protocol = 'https';
                     }
                     break;

@@ -97,7 +97,7 @@ class Response extends Message implements ResponseInterface
     /**
      * Creates the response object.
      *
-     * @param string|int                    $status
+     * @param string|int|null               $status
      * @param array<string, mixed>|null     $headers
      * @param resource|string|callable|null $body
      */

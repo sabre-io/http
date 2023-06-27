@@ -122,7 +122,7 @@ class Client extends EventEmitter
                 // open_basedir.
                 //
                 // https://github.com/fruux/sabre-http/issues/12
-                if ($redirects < $this->maxRedirects && in_array($code, [301, 302, 307, 308])) {
+                if ($redirects < $this->maxRedirects && in_array($code, [301, 302, 307, 308], true)) {
                     $oldLocation = $request->getUrl();
 
                     // Creating a new instance of the request object.
@@ -194,7 +194,7 @@ class Client extends EventEmitter
     public function poll(): bool
     {
         // nothing to do?
-        if (!$this->curlMultiMap) {
+        if (0 === count($this->curlMultiMap)) {
             return false;
         }
 
@@ -216,6 +216,7 @@ class Client extends EventEmitter
 
             if ($status && CURLMSG_DONE === $status['msg']) {
                 $resourceId = (int) $status['handle'];
+
                 list(
                     $request,
                     $successCallback,
@@ -239,7 +240,7 @@ class Client extends EventEmitter
 
                     $curlResult['request'] = $request;
 
-                    if ($errorCallback) {
+                    if (is_callable($errorCallback)) {
                         $errorCallback($curlResult);
                     }
                 } elseif (self::STATUS_HTTPERROR === $curlResult['status']) {
@@ -254,13 +255,13 @@ class Client extends EventEmitter
 
                     $curlResult['request'] = $request;
 
-                    if ($errorCallback) {
+                    if (is_callable($errorCallback)) {
                         $errorCallback($curlResult);
                     }
                 } else {
                     $this->emit('afterRequest', [$request, $curlResult['response']]);
 
-                    if ($successCallback) {
+                    if (is_callable($successCallback)) {
                         $successCallback($curlResult['response']);
                     }
                 }
@@ -314,7 +315,7 @@ class Client extends EventEmitter
     {
         $settings = $this->createCurlSettingsArray($request);
 
-        if (!$this->curlHandle) {
+        if (null === $this->curlHandle) {
             $this->curlHandle = curl_init();
         } else {
             curl_reset($this->curlHandle);
@@ -353,7 +354,7 @@ class Client extends EventEmitter
      * Has a list of curl handles, as well as their associated success and
      * error callbacks.
      *
-     * @var array<int, mixed>
+     * @var array<int, array{0: RequestInterface, 1: callable, 2: callable, 3: int}>
      */
     private array $curlMultiMap = [];
 
@@ -475,7 +476,7 @@ class Client extends EventEmitter
             $curlErrMsg
         ) = $this->curlStuff($curlHandle);
 
-        if ($curlErrNo) {
+        if (0 !== $curlErrNo) {
             return [
                 'status' => self::STATUS_CURLERROR,
                 'curl_errno' => $curlErrNo,
@@ -532,7 +533,7 @@ class Client extends EventEmitter
             $curlErrMsg
         ) = $this->curlStuff($curlHandle);
 
-        if ($curlErrNo) {
+        if (0 !== $curlErrNo) {
             return [
                 'status' => self::STATUS_CURLERROR,
                 'curl_errno' => $curlErrNo,
@@ -541,10 +542,13 @@ class Client extends EventEmitter
         }
 
         $headerBlob = substr($response, 0, $curlInfo['header_size']);
-        // In the case of 204 No Content, strlen($response) == $curlInfo['header_size].
+        // In the case of 204 No Content, strlen($response) == $curlInfo['header_size'].
         // This will cause substr($response, $curlInfo['header_size']) return FALSE instead of NULL
         // An exception will be thrown when calling getBodyAsString then
-        $responseBody = substr($response, $curlInfo['header_size']) ?: '';
+        $responseBody = substr($response, $curlInfo['header_size']);
+        if (false === $responseBody) {
+            $responseBody = '';
+        }
 
         unset($response);
 
@@ -570,7 +574,7 @@ class Client extends EventEmitter
      */
     protected function sendAsyncInternal(RequestInterface $request, callable $success, callable $error, int $retryCount = 0): void
     {
-        if (!$this->curlMultiHandle) {
+        if (null === $this->curlMultiHandle) {
             $this->curlMultiHandle = curl_multi_init();
         }
         $curl = curl_init();

@@ -12,9 +12,17 @@ parameters:
     path: lib/Client.php
   -
     message: "#^Left side of || is always false.$#"
-    count: 2
+    count: 6
     path: lib/Client.php
+  -
+    message: "#^Casting to string something that's already string.$#"
+    count: 1
+    path: lib/Sapi.php
   -
     message: "#^Strict comparison using === between null and array<string, mixed> will always evaluate to false.$#"
     count: 1
     path: lib/functions.php
+  -
+    message: "#^.* will always evaluate to true\\.$#"
+    count: 4
+    path: tests/*

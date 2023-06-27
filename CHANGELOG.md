@@ -1,6 +1,10 @@
 ChangeLog
 =========
 
+7.0.2 (2023-06-27)
+------------------
+* #203 Add phpstan phpunit strict-rules (@phil-davis)
+
 7.0.1 (2023-06-26)
 ------------------
 * #207 fix: handle client disconnect properly with ignore_user_abort true (@kesselb)

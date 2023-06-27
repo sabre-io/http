@@ -24,4 +24,5 @@ parameters:
     path: lib/functions.php
   -
     message: "#^.* will always evaluate to true\\.$#"
+    count: 4
     path: tests/*

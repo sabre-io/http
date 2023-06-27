@@ -27,12 +27,17 @@ The objects are extendable and easily mockable.
 
 Build status
 ------------
+![Build Status](https://github.com/sabre-io/http/actions/workflows/ci.yml/badge.svg)
 
-| branch | status                                                                                                        |
-|--------|---------------------------------------------------------------------------------------------------------------|
-| master | [![Build Status](https://travis-ci.org/sabre-io/http.svg?branch=master)](https://travis-ci.org/sabre-io/http) |
-| 4.2    | [![Build Status](https://travis-ci.org/sabre-io/http.svg?branch=4.2)](https://travis-ci.org/sabre-io/http)    |
-| 3.0    | [![Build Status](https://travis-ci.org/sabre-io/http.svg?branch=3.0)](https://travis-ci.org/sabre-io/http)    |
+| release | minimum PHP version |
+|---------|---------------------|
+| master  | PHP 7.4             |
+| 7.0     | PHP 7.4             |
+| 6.0     | PHP 7.4             |
+| 5.1     | PHP 7.1             |
+| 4.2     | PHP 5.4             |
+| 3.0     | PHP 5.4             |
+
 
 Installation
 ------------
@@ -123,7 +128,7 @@ Decorators
 ----------
 
 It may be useful to extend the `Request` and `Response` objects in your
-application, if you for example would like them to carry a bit more
+application, if you, for example, would like them to carry a bit more
 information about the current request.
 
 For instance, you may want to add an `isLoggedIn` method to the Request
@@ -139,7 +144,7 @@ Simply extending Request and Response may pose some problems:
    `Response` instances in your library or application, you make it harder to
    work with other applications which also use `sabre/http`.
 
-In short: it would be bad design. Instead, it's recommended to use the
+In short, it would be bad design. Instead, it's recommended to use the
 [decorator pattern][6] to add new behavior where you need it. `sabre/http`
 provides helper classes to quickly do this.
 
@@ -172,7 +177,7 @@ all we need to do is:
 $request = new MyRequest($request);
 ```
 
-And that's it, we now have an `isLoggedIn` method, without having to mess
+And that's it; we now have an `isLoggedIn` method, without having to mess
 with the core instances.
 
 
@@ -200,14 +205,14 @@ $response = $client->send($request);
 echo $response->getBodyAsString();
 ```
 
-The client emits 3 event using [`sabre/event`][5]. `beforeRequest`,
+The client emits 3 events using [`sabre/event`][5]. `beforeRequest`,
 `afterRequest` and `error`.
 
 ```php
 $client = new HTTP\Client();
 $client->on('beforeRequest', function($request) {
 
-    // You could use beforeRequest to for example inject a few extra headers.
+    // You could use beforeRequest to, for example, inject a few extra headers
     // into the Request object.
 
 });
@@ -244,7 +249,7 @@ $client->on('error:401', function($request, $response, &$retry, $retryCount) {
 ### Asynchronous requests
 
 The `Client` also supports doing asynchronous requests. This is especially handy
-if you need to perform a number of requests, that are allowed to be executed
+if you need to perform a number of requests that are allowed to be executed
 in parallel.
 
 The underlying system for this is simply [cURL's multi request handler][8],
@@ -321,8 +326,8 @@ $response = $client->send($subRequest);
 Sapi::sendResponse($response);
 ```
 
-The Request and Response API's
-------------------------------
+The Request and Response APIs
+-----------------------------
 
 ### Request
 
@@ -444,8 +449,8 @@ function getPostData();
  *
  * This is equivalent to PHP's $_POST superglobal.
  *
- * This would not have been needed, if POST data was accessible as
- * php://input, but unfortunately we need to special case it.
+ * This would not have been needed if POST data was accessible as
+ * php://input, but unfortunately we need to special-case it.
  *
  * @param array $postData
  * @return void
@@ -603,7 +608,7 @@ function getStatus();
  * Sets the HTTP status code.
  *
  * This can be either the full HTTP status code with human-readable string,
- * for example: "403 I can't let you do that, Dave".
+ * for example, "403 I can't let you do that, Dave".
  *
  * Or just the code, in which case the appropriate default message will be
  * added.

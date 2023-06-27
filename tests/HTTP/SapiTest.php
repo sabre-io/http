@@ -305,7 +305,7 @@ class SapiTest extends \PHPUnit\Framework\TestCase
     {
         $baseUrl = getenv('BASEURL');
         if (!$baseUrl) {
-            $this->markTestSkipped('Set an environment value BASEURL to continue');
+            self::markTestSkipped('Set an environment value BASEURL to continue');
         }
 
         $url = rtrim($baseUrl, '/').'/connection_aborted.php';
@@ -328,7 +328,7 @@ class SapiTest extends \PHPUnit\Framework\TestCase
         sleep(5);
 
         $bytes_read = file_get_contents(sys_get_temp_dir().'/dummy_stream_read_counter');
-        $this->assertEquals($chunk_size * 2, $bytes_read);
-        $this->assertGreaterThanOrEqual($fetch_size, $bytes_read);
+        self::assertEquals($chunk_size * 2, $bytes_read);
+        self::assertGreaterThanOrEqual($fetch_size, $bytes_read);
     }
 }

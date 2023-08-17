@@ -1,6 +1,11 @@
 ChangeLog
 =========
 
+5.1.8 (2023-08-17)
+------------------
+
+* #215 Improve CURLOPT_HTTPHEADER Setting Assignment (@amrita-shrestha)
+
 5.1.7 (2023-06-26)
 ------------------
 

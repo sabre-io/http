@@ -201,6 +201,9 @@ class FunctionsTest extends \PHPUnit\Framework\TestCase
 
     public function testParseMimeTypeOnInvalidMimeType()
     {
+        if (false === \getenv('EXECUTE_INVALID_MIME_TYPE_TEST')) {
+            $this->markTestSkipped('Test skipped because parseMimeType with an invalid mime type will exit');
+        }
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('Not a valid mime-type: invalid_mime_type');
 

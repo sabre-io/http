@@ -1,6 +1,11 @@
 ChangeLog
 =========
 
+5.1.9 (2023-08-17)
+------------------
+
+* #223 skip testParseMimeTypeOnInvalidMimeType (@phil-davis)
+
 5.1.8 (2023-08-17)
 ------------------
 

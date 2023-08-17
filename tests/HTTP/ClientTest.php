@@ -34,6 +34,33 @@ class ClientTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($settings, $client->createCurlSettingsArray($request));
     }
 
+    public function testCreateCurlSettingsHTTPHeader(): void
+    {
+        $client = new ClientMock();
+        $header = [
+            'Authorization: Bearer 12345',
+        ];
+        $client->addCurlSetting(CURLOPT_POSTREDIR, 0);
+        $client->addCurlSetting(CURLOPT_HTTPHEADER, $header);
+
+        $request = new Request('GET', 'http://example.org/');
+
+        $settings = [
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_HEADER => true,
+            CURLOPT_POSTREDIR => 0,
+            CURLOPT_HTTPHEADER => ['Authorization: Bearer 12345'],
+            CURLOPT_NOBODY => false,
+            CURLOPT_URL => 'http://example.org/',
+            CURLOPT_CUSTOMREQUEST => 'GET',
+            CURLOPT_USERAGENT => 'sabre-http/'.Version::VERSION.' (http://sabre.io/)',
+            CURLOPT_PROTOCOLS => CURLPROTO_HTTP | CURLPROTO_HTTPS,
+            CURLOPT_REDIR_PROTOCOLS => CURLPROTO_HTTP | CURLPROTO_HTTPS,
+        ];
+
+        self::assertEquals($settings, $client->createCurlSettingsArray($request));
+    }
+
     public function testCreateCurlSettingsArrayHEAD(): void
     {
         $client = new ClientMock();

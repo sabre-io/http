@@ -404,8 +404,8 @@ class Client extends EventEmitter
                 $nHeaders[] = $key.': '.$value;
             }
         }
-        
-        if(!empty($nHeaders)){
+
+        if ([] !== $nHeaders) {
             $settings[CURLOPT_HTTPHEADER] = $nHeaders;
         }
         $settings[CURLOPT_URL] = $request->getUrl();

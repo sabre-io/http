@@ -404,7 +404,10 @@ class Client extends EventEmitter
                 $nHeaders[] = $key.': '.$value;
             }
         }
-        $settings[CURLOPT_HTTPHEADER] = $nHeaders;
+        
+        if(!empty($nHeaders)){
+            $settings[CURLOPT_HTTPHEADER] = $nHeaders;
+        }
         $settings[CURLOPT_URL] = $request->getUrl();
         // FIXME: CURLOPT_PROTOCOLS is currently unsupported by HHVM
         if (defined('CURLOPT_PROTOCOLS')) {

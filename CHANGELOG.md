@@ -1,6 +1,10 @@
 ChangeLog
 =========
 
+7.0.3 (2023-08-17)
+------------------
+* #215 Improve CURLOPT_HTTPHEADER Setting Assignment (@amrita-shrestha)
+
 7.0.2 (2023-06-27)
 ------------------
 * #203 Add phpstan phpunit strict-rules (@phil-davis)
@@ -12,6 +16,11 @@ ChangeLog
 7.0.0 (2022-09-26)
 ------------------
 * #198 Allow sabre/uri major version 3 ( @phil-davis )
+
+6.0.2 (2023-08-17)
+------------------
+
+* #215 Improve CURLOPT_HTTPHEADER Setting Assignment (@amrita-shrestha)
 
 6.0.1 (2023-06-26)
 ------------------
@@ -25,6 +34,11 @@ ChangeLog
 * #176 Test enhancement (from original PR #98) (@peter279k)
 * #192 Set min PHP to 7.4 and add type declarations (@phil-davis)
 * #194 Adjust type declarations a little bit (@phil-davis)
+
+5.1.8 (2023-08-17)
+------------------
+
+* #215 Improve CURLOPT_HTTPHEADER Setting Assignment (@amrita-shrestha)
 
 5.1.7 (2023-06-26)
 ------------------

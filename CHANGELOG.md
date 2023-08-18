@@ -1,6 +1,11 @@
 ChangeLog
 =========
 
+5.1.10 (2023-08-18)
+------------------
+
+* #225 Enhance tests/bootstrap.php to find autoloader in more environments (@phil-davis)
+
 5.1.9 (2023-08-17)
 ------------------
 

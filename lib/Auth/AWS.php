@@ -19,8 +19,6 @@ class AWS extends AbstractAuth
 {
     /**
      * The signature supplied by the HTTP client.
-     *
-     * @var string
      */
     private ?string $signature = null;
 

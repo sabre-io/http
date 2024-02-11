@@ -177,7 +177,7 @@ class Client extends EventEmitter
      * After calling sendAsync, you must therefore occasionally call the poll()
      * method, or wait().
      */
-    public function sendAsync(RequestInterface $request, callable $success = null, callable $error = null): void
+    public function sendAsync(RequestInterface $request, ?callable $success = null, ?callable $error = null): void
     {
         $this->emit('beforeRequest', [$request]);
         $this->sendAsyncInternal($request, $success, $error);

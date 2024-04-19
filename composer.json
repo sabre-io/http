@@ -13,7 +13,7 @@
         "sabre/uri"    : "^2.3"
     },
     "require-dev" : {
-        "friendsofphp/php-cs-fixer": "^3.38",
+        "friendsofphp/php-cs-fixer": "^3.54",
         "phpstan/phpstan": "^1.10",
         "phpunit/phpunit" : "^9.6"
     },
@@ -60,5 +60,10 @@
             "composer cs-fixer",
             "composer phpunit"
         ]
+    },
+    "config": {
+        "allow-plugins": {
+            "phpstan/extension-installer": true
+        }
     }
 }

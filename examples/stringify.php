@@ -30,7 +30,7 @@ $request = new Request('POST', '/foo');
 $request->setHeaders([
     'Host' => 'example.org',
     'Content-Type' => 'application/json',
-    ]);
+]);
 
 $request->setBody(json_encode(['foo' => 'bar']));
 
@@ -41,7 +41,7 @@ $response = new Response(424);
 $response->setHeaders([
     'Content-Type' => 'text/plain',
     'Connection' => 'close',
-    ]);
+]);
 
 $response->setBody('ABORT! ABORT!');
 

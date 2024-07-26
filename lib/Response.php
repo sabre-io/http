@@ -103,7 +103,7 @@ class Response extends Message implements ResponseInterface
      * @param array      $headers
      * @param resource   $body
      */
-    public function __construct($status = 500, array $headers = null, $body = null)
+    public function __construct($status = 500, ?array $headers = null, $body = null)
     {
         if (null !== $status) {
             $this->setStatus($status);

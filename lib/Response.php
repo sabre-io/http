@@ -100,7 +100,6 @@ class Response extends Message implements ResponseInterface
      * Creates the response object.
      *
      * @param string|int $status
-     * @param array      $headers
      * @param resource   $body
      */
     public function __construct($status = 500, ?array $headers = null, $body = null)

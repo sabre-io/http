@@ -22,14 +22,14 @@ class AWS extends AbstractAuth
      *
      * @var string
      */
-    private $signature = null;
+    private $signature;
 
     /**
      * The accesskey supplied by the HTTP client.
      *
      * @var string
      */
-    private $accessKey = null;
+    private $accessKey;
 
     /**
      * An error code, if any.
@@ -40,11 +40,11 @@ class AWS extends AbstractAuth
      */
     public $errorCode = 0;
 
-    const ERR_NOAWSHEADER = 1;
-    const ERR_MD5CHECKSUMWRONG = 2;
-    const ERR_INVALIDDATEFORMAT = 3;
-    const ERR_REQUESTTIMESKEWED = 4;
-    const ERR_INVALIDSIGNATURE = 5;
+    public const ERR_NOAWSHEADER = 1;
+    public const ERR_MD5CHECKSUMWRONG = 2;
+    public const ERR_INVALIDDATEFORMAT = 3;
+    public const ERR_REQUESTTIMESKEWED = 4;
+    public const ERR_INVALIDSIGNATURE = 5;
 
     /**
      * Gathers all information from the headers.
@@ -212,7 +212,7 @@ class AWS extends AbstractAuth
         }
         $key = str_pad($key, $blocksize, chr(0x00));
         $ipad = str_repeat(chr(0x36), $blocksize);
-        $opad = str_repeat(chr(0x5c), $blocksize);
+        $opad = str_repeat(chr(0x5C), $blocksize);
         $hmac = pack('H*', sha1(($key ^ $opad).pack('H*', sha1(($key ^ $ipad).$message))));
 
         return $hmac;

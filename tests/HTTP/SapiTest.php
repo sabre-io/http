@@ -144,6 +144,7 @@ class SapiTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @runInSeparateProcess
+     *
      * @depends testSend
      */
     public function testSendLimitedByContentLengthString()
@@ -179,6 +180,7 @@ class SapiTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @runInSeparateProcess
+     *
      * @depends testSend
      */
     public function testSendLimitedByContentLengthStream()
@@ -203,7 +205,9 @@ class SapiTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @runInSeparateProcess
+     *
      * @depends testSend
+     *
      * @dataProvider sendContentRangeStreamData
      */
     public function testSendContentRangeStream($ignoreAtStart, $sendText, $multiplier, $ignoreAtEnd, $contentLength)
@@ -269,6 +273,7 @@ class SapiTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @runInSeparateProcess
+     *
      * @depends testSend
      */
     public function testSendWorksWithCallbackAsBody()

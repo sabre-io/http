@@ -30,7 +30,7 @@ class MessageDecoratorTest extends \PHPUnit\Framework\TestCase
     {
         $this->outer->setHeaders([
             'a' => 'b',
-            ]);
+        ]);
 
         $this->assertEquals(['a' => ['b']], $this->inner->getHeaders());
         $this->assertEquals(['a' => ['b']], $this->outer->getHeaders());
@@ -44,7 +44,7 @@ class MessageDecoratorTest extends \PHPUnit\Framework\TestCase
 
         $this->outer->addHeaders([
             'e' => 'f',
-            ]);
+        ]);
 
         $this->assertEquals(['a' => ['b'], 'c' => ['d'], 'e' => ['f']], $this->inner->getHeaders());
         $this->assertEquals(['a' => ['b'], 'c' => ['d'], 'e' => ['f']], $this->outer->getHeaders());

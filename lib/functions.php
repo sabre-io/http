@@ -4,9 +4,6 @@ declare(strict_types=1);
 
 namespace Sabre\HTTP;
 
-use DateTime;
-use InvalidArgumentException;
-
 /**
  * A collection of useful helpers for parsing or generating various HTTP
  * headers.

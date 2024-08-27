@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Sabre\HTTP;
 
-use LogicException;
 use Sabre\Uri;
 
 /**

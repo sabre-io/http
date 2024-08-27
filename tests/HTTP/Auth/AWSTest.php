@@ -24,7 +24,7 @@ class AWSTest extends \PHPUnit\Framework\TestCase
      */
     private $auth;
 
-    const REALM = 'SabreDAV unittest';
+    public const REALM = 'SabreDAV unittest';
 
     public function setUp(): void
     {
@@ -228,7 +228,7 @@ class AWSTest extends \PHPUnit\Framework\TestCase
         }
         $key = str_pad($key, $blocksize, chr(0x00));
         $ipad = str_repeat(chr(0x36), $blocksize);
-        $opad = str_repeat(chr(0x5c), $blocksize);
+        $opad = str_repeat(chr(0x5C), $blocksize);
         $hmac = pack('H*', sha1(($key ^ $opad).pack('H*', sha1(($key ^ $ipad).$message))));
 
         return $hmac;

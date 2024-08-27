@@ -34,8 +34,8 @@ class Digest extends AbstractAuth
     /**
      * These constants are used in setQOP();.
      */
-    const QOP_AUTH = 1;
-    const QOP_AUTHINT = 2;
+    public const QOP_AUTH = 1;
+    public const QOP_AUTHINT = 2;
 
     protected $nonce;
     protected $opaque;
@@ -177,8 +177,6 @@ class Digest extends AbstractAuth
      * It should be compatible with mod_php format and other webservers.
      *
      * If the header could not be found, null will be returned
-     *
-     * @return mixed
      */
     public function getDigest()
     {

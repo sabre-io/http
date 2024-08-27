@@ -299,8 +299,6 @@ class Client extends EventEmitter
      * Adds a CURL setting.
      *
      * These settings will be included in every HTTP request.
-     *
-     * @param mixed $value
      */
     public function addCurlSetting(int $name, $value)
     {
@@ -419,9 +417,9 @@ class Client extends EventEmitter
         return $settings;
     }
 
-    const STATUS_SUCCESS = 0;
-    const STATUS_CURLERROR = 1;
-    const STATUS_HTTPERROR = 2;
+    public const STATUS_SUCCESS = 0;
+    public const STATUS_CURLERROR = 1;
+    public const STATUS_HTTPERROR = 2;
 
     private function parseResponse(string $response, $curlHandle): array
     {

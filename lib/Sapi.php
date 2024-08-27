@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Sabre\HTTP;
 
-use InvalidArgumentException;
-
 /**
  * PHP SAPI.
  *
@@ -168,7 +166,7 @@ class Sapi
                     $url = $value;
                     break;
 
-                // These sometimes show up without a HTTP_ prefix
+                    // These sometimes show up without a HTTP_ prefix
                 case 'CONTENT_TYPE':
                     $headers['Content-Type'] = $value;
                     break;
@@ -176,21 +174,21 @@ class Sapi
                     $headers['Content-Length'] = $value;
                     break;
 
-                // mod_php on apache will put credentials in these variables.
-                // (fast)cgi does not usually do this, however.
+                    // mod_php on apache will put credentials in these variables.
+                    // (fast)cgi does not usually do this, however.
                 case 'PHP_AUTH_USER':
                     if (isset($serverArray['PHP_AUTH_PW'])) {
                         $headers['Authorization'] = 'Basic '.base64_encode($value.':'.$serverArray['PHP_AUTH_PW']);
                     }
                     break;
 
-                // Similarly, mod_php may also screw around with digest auth.
+                    // Similarly, mod_php may also screw around with digest auth.
                 case 'PHP_AUTH_DIGEST':
                     $headers['Authorization'] = 'Digest '.$value;
                     break;
 
-                // Apache may prefix the HTTP_AUTHORIZATION header with
-                // REDIRECT_, if mod_rewrite was used.
+                    // Apache may prefix the HTTP_AUTHORIZATION header with
+                    // REDIRECT_, if mod_rewrite was used.
                 case 'REDIRECT_HTTP_AUTHORIZATION':
                     $headers['Authorization'] = $value;
                     break;
@@ -226,11 +224,11 @@ class Sapi
         }
 
         if (null === $url) {
-            throw new InvalidArgumentException('The _SERVER array must have a REQUEST_URI key');
+            throw new \InvalidArgumentException('The _SERVER array must have a REQUEST_URI key');
         }
 
         if (null === $method) {
-            throw new InvalidArgumentException('The _SERVER array must have a REQUEST_METHOD key');
+            throw new \InvalidArgumentException('The _SERVER array must have a REQUEST_METHOD key');
         }
         $r = new Request($method, $url, $headers);
         $r->setHttpVersion($httpVersion);

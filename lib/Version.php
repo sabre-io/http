@@ -16,5 +16,5 @@ class Version
     /**
      * Full version number.
      */
-    public const VERSION = '7.0.3';
+    public const VERSION = '7.0.4';
 }

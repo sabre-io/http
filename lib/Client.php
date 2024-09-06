@@ -474,7 +474,7 @@ class Client extends EventEmitter
         list(
             $curlInfo,
             $curlErrNo,
-            $curlErrMsg
+            $curlErrMsg,
         ) = $this->curlStuff($curlHandle);
 
         if (0 !== $curlErrNo) {
@@ -531,7 +531,7 @@ class Client extends EventEmitter
         list(
             $curlInfo,
             $curlErrNo,
-            $curlErrMsg
+            $curlErrMsg,
         ) = $this->curlStuff($curlHandle);
 
         if (0 !== $curlErrNo) {

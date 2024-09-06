@@ -13,8 +13,8 @@
         "sabre/uri"    : "^2.3"
     },
     "require-dev" : {
-        "friendsofphp/php-cs-fixer": "^3.54",
-        "phpstan/phpstan": "^1.10",
+        "friendsofphp/php-cs-fixer": "^3.64",
+        "phpstan/phpstan": "^1.12",
         "phpunit/phpunit" : "^9.6"
     },
     "suggest" : {
@@ -50,7 +50,7 @@
             "phpstan analyse lib tests"
         ],
         "cs-fixer": [
-            "php-cs-fixer fix"
+            "PHP_CS_FIXER_IGNORE_ENV=true php-cs-fixer fix"
         ],
         "phpunit": [
             "phpunit --configuration tests/phpunit.xml"

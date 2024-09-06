@@ -153,7 +153,7 @@ class Response extends Message implements ResponseInterface
         } else {
             list(
                 $statusCode,
-                $statusText
+                $statusText,
             ) = explode(' ', $status, 2);
         }
         $statusCode = (int) $statusCode;

@@ -1,6 +1,16 @@
 ChangeLog
 =========
 
+7.0.4 (2024-09-06)
+------------------
+* #227 Remove redundant PHP doc to make cs-fixer pass ( @phil-davis )
+* #229 ci: Create dependabot.yml ( @DeepDiver1975 )
+* #231 Add PHP 8.3 to CI ( @phil-davis )
+* #234 use php-cs-fixer 3.51 ( @phil-davis )
+* #235 adjust for php-cs-fixer 3.54.0 ( @phil-davis )
+* #237 stop exporting php-cs-fixer config ( @phil-davis )
+* #247 tool changes - add PHP 8.4 to CI ( @phil-davis )
+
 7.0.3 (2023-08-17)
 ------------------
 * #215 Improve CURLOPT_HTTPHEADER Setting Assignment (@amrita-shrestha)
@@ -16,6 +26,13 @@ ChangeLog
 7.0.0 (2022-09-26)
 ------------------
 * #198 Allow sabre/uri major version 3 ( @phil-davis )
+
+6.0.3 (2024-09-06)
+------------------
+
+* #228 Remove redundant PHP doc to make cs-fixer pass ( @phil-davis )
+* #236 adjust for php-cs-fixer 3.54.0 ( @phil-davis )
+* #249 add PHP 8.3 and 8.4 to CI of 6.0 branch ( @phil-davis )
 
 6.0.2 (2023-08-17)
 ------------------
@@ -34,6 +51,26 @@ ChangeLog
 * #176 Test enhancement (from original PR #98) (@peter279k)
 * #192 Set min PHP to 7.4 and add type declarations (@phil-davis)
 * #194 Adjust type declarations a little bit (@phil-davis)
+
+5.1.12 (2024-08-27)
+------------------
+
+* #243 add cs-fixer v3 (@phil-davis)
+
+5.1.11 (2024-07-26)
+------------------
+
+* #241 PHP 8.4 compliance (@phil-davis)
+
+5.1.10 (2023-08-18)
+------------------
+
+* #225 Enhance tests/bootstrap.php to find autoloader in more environments (@phil-davis)
+
+5.1.9 (2023-08-17)
+------------------
+
+* #223 skip testParseMimeTypeOnInvalidMimeType (@phil-davis)
 
 5.1.8 (2023-08-17)
 ------------------

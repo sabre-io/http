@@ -53,7 +53,7 @@
             "phpstan analyse lib tests"
         ],
         "cs-fixer": [
-            "php-cs-fixer fix"
+            "PHP_CS_FIXER_IGNORE_ENV=true php-cs-fixer fix"
         ],
         "phpunit": [
             "phpunit --configuration tests/phpunit.xml"

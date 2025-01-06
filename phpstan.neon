@@ -1,6 +1,5 @@
 parameters:
   level: 6
-  phpVersion: 70430 # PHP 7.4.30
   ignoreErrors:
   -
     message: "#^Negated boolean expression is always true.$#"
@@ -12,12 +11,8 @@ parameters:
     path: lib/Client.php
   -
     message: "#^Left side of || is always false.$#"
-    count: 6
+    count: 19
     path: lib/Client.php
-  -
-    message: "#^Else branch is unreachable because ternary operator condition is always true.$#"
-    count: 1
-    path: lib/Auth/Digest.php
   -
     message: "#^Strict comparison using !== between '' and non-empty-string will always evaluate to true.$#"
     count: 1

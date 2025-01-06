@@ -166,7 +166,7 @@ class DigestTest extends \PHPUnit\Framework\TestCase
         $test = preg_match('/Digest realm="'.self::REALM.'",qop="'.$qopstr.'",nonce="([0-9a-f]*)",opaque="([0-9a-f]*)"/',
             $this->response->getHeader('WWW-Authenticate'), $matches);
 
-        self::assertTrue(true == $test, 'The WWW-Authenticate response didn\'t match our pattern. We received: '.$this->response->getHeader('WWW-Authenticate'));
+        self::assertTrue(1 === $test, 'The WWW-Authenticate response didn\'t match our pattern. We received: '.$this->response->getHeader('WWW-Authenticate'));
 
         $nonce = $matches[1];
         $opaque = $matches[2];

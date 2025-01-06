@@ -537,7 +537,7 @@ class ClientMock extends Client
         // If nothing modified $response, we're using the default behavior.
         if (is_null($response)) {
             return parent::doRequest($request);
-        } else { /* @phpstan-ignore-line phpstan thinks Else branch is unreachable */
+        } else {
             return $response;
         }
     }
@@ -557,7 +557,7 @@ class ClientMock extends Client
         // If nothing modified $return, we're using the default behavior.
         if (is_null($return)) {
             return parent::curlStuff($curlHandle);
-        } else { /* @phpstan-ignore-line phpstan thinks Else branch is unreachable */
+        } else {
             return $return;
         }
     }
@@ -577,7 +577,7 @@ class ClientMock extends Client
         // If nothing modified $return, we're using the default behavior.
         if (is_null($return)) {
             return parent::curlExec($curlHandle);
-        } else { /* @phpstan-ignore-line phpstan thinks Else branch is unreachable */
+        } else {
             return $return;
         }
     }

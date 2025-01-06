@@ -82,11 +82,8 @@ abstract class Message implements MessageInterface
 
             return ob_get_clean();
         }
-        /**
-         * @var string|int|null $contentLength
-         */
         $contentLength = $this->getHeader('Content-Length');
-        if (null !== $contentLength && (is_int($contentLength) || ctype_digit($contentLength))) {
+        if (null !== $contentLength && ctype_digit($contentLength)) {
             return stream_get_contents($body, (int) $contentLength);
         }
 

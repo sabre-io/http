@@ -31,10 +31,6 @@ parameters:
     count: 1
     path: lib/functions.php
   -
-    message: "#^Offset 'value' on array.* in isset\\(\\) always exists and is not nullable.$#"
-    count: 1
-    path: lib/functions.php
-  -
     message: "#^.* will always evaluate to true\\.$#"
     count: 4
     path: tests/*

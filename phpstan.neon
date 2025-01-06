@@ -15,10 +15,6 @@ parameters:
     count: 6
     path: lib/Client.php
   -
-    message: "#^Else branch is unreachable because ternary operator condition is always true.$#"
-    count: 1
-    path: lib/Auth/Digest.php
-  -
     message: "#^Strict comparison using !== between '' and non-empty-string will always evaluate to true.$#"
     count: 1
     path: lib/Auth/Digest.php

@@ -86,7 +86,7 @@ class Sapi
         $contentLength = $response->getHeader('Content-Length');
         if (null !== $contentLength) {
             $output = fopen('php://output', 'wb');
-            if (is_resource($body) && 'stream' == get_resource_type($body)) {
+            if (is_resource($body) && 'stream' === get_resource_type($body)) {
                 // a workaround to make PHP more possible to use mmap based copy, see https://github.com/sabre-io/http/pull/119
                 $left = (int) $contentLength;
                 // copy with 4MiB chunks

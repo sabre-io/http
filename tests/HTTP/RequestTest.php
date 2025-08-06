@@ -134,4 +134,18 @@ class RequestTest extends \PHPUnit\Framework\TestCase
                   .'foo';
         $this->assertEquals($expected, (string) $request);
     }
+
+    public function testAbsoluteUrlHttp(): void
+    {
+        $request = new Request('GET', 'http://example.com/foo/bar?a=b&c=d');
+        self::assertEquals('http://example.com/foo/bar?a=b&c=d', $request->getAbsoluteUrl());
+    }
+
+    public function testAbsoluteUrlHttpHostPrevalence(): void
+    {
+        $request = new Request('GET', 'http://example.com/foo/bar?a=b&c=d', [
+            'Host' => 'example.org',
+        ]);
+        self::assertEquals('http://example.com/foo/bar?a=b&c=d', $request->getAbsoluteUrl());
+    }
 }

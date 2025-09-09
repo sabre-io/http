@@ -1,5 +1,9 @@
 ChangeLog
 =========
+6.0.4 (2025-09-09)
+------------------
+
+* #260 properly compute absolute URL (@skjnldsv)
 
 6.0.3 (2024-09-06)
 ------------------
@@ -25,6 +29,11 @@ ChangeLog
 * #176 Test enhancement (from original PR #98) (@peter279k)
 * #192 Set min PHP to 7.4 and add type declarations (@phil-davis)
 * #194 Adjust type declarations a little bit (@phil-davis)
+
+5.1.13 (2025-09-09)
+------------------
+
+* #262 properly compute absolute URL (@skjnldsv)
 
 5.1.12 (2024-08-27)
 ------------------

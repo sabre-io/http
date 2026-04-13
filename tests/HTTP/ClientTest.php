@@ -6,6 +6,28 @@ namespace Sabre\HTTP;
 
 class ClientTest extends \PHPUnit\Framework\TestCase
 {
+    /**
+     * Returns the expected curl protocol settings depending on available constants.
+     */
+    private static function protocolSettings(): array
+    {
+        if (defined('CURLOPT_PROTOCOLS_STR')) {
+            return [
+                CURLOPT_PROTOCOLS_STR => 'http,https',
+                CURLOPT_REDIR_PROTOCOLS_STR => 'http,https',
+            ];
+        }
+
+        if (defined('CURLOPT_PROTOCOLS')) {
+            return [
+                CURLOPT_PROTOCOLS => CURLPROTO_HTTP | CURLPROTO_HTTPS,
+                CURLOPT_REDIR_PROTOCOLS => CURLPROTO_HTTP | CURLPROTO_HTTPS,
+            ];
+        }
+
+        return [];
+    }
+
     public function testCreateCurlSettingsArrayGET(): void
     {
         $client = new ClientMock();
@@ -22,7 +44,7 @@ class ClientTest extends \PHPUnit\Framework\TestCase
             CURLOPT_URL => 'http://example.org/',
             CURLOPT_CUSTOMREQUEST => 'GET',
             CURLOPT_USERAGENT => 'sabre-http/'.Version::VERSION.' (http://sabre.io/)',
-        ];
+        ] + self::protocolSettings();
 
         // FIXME: CURLOPT_PROTOCOLS and CURLOPT_REDIR_PROTOCOLS are currently unsupported by HHVM
         // at least if this unit test fails in the future we know it is :)
@@ -54,9 +76,7 @@ class ClientTest extends \PHPUnit\Framework\TestCase
             CURLOPT_URL => 'http://example.org/',
             CURLOPT_CUSTOMREQUEST => 'GET',
             CURLOPT_USERAGENT => 'sabre-http/'.Version::VERSION.' (http://sabre.io/)',
-            CURLOPT_PROTOCOLS => CURLPROTO_HTTP | CURLPROTO_HTTPS,
-            CURLOPT_REDIR_PROTOCOLS => CURLPROTO_HTTP | CURLPROTO_HTTPS,
-        ];
+        ] + self::protocolSettings();
 
         self::assertEquals($settings, $client->createCurlSettingsArray($request));
     }
@@ -74,7 +94,7 @@ class ClientTest extends \PHPUnit\Framework\TestCase
             CURLOPT_HTTPHEADER => ['X-Foo: bar'],
             CURLOPT_URL => 'http://example.org/',
             CURLOPT_USERAGENT => 'sabre-http/'.Version::VERSION.' (http://sabre.io/)',
-        ];
+        ] + self::protocolSettings();
 
         // FIXME: CURLOPT_PROTOCOLS and CURLOPT_REDIR_PROTOCOLS are currently unsupported by HHVM
         // at least if this unit test fails in the future we know it is :)
@@ -107,7 +127,7 @@ class ClientTest extends \PHPUnit\Framework\TestCase
             CURLOPT_NOBODY => false,
             CURLOPT_URL => 'http://example.org/',
             CURLOPT_USERAGENT => 'sabre-http/'.Version::VERSION.' (http://sabre.io/)',
-        ];
+        ] + self::protocolSettings();
 
         // FIXME: CURLOPT_PROTOCOLS and CURLOPT_REDIR_PROTOCOLS are currently unsupported by HHVM
         // at least if this unit test fails in the future we know it is :)
@@ -139,7 +159,7 @@ class ClientTest extends \PHPUnit\Framework\TestCase
             CURLOPT_HTTPHEADER => ['X-Foo: bar'],
             CURLOPT_URL => 'http://example.org/',
             CURLOPT_USERAGENT => 'sabre-http/'.Version::VERSION.' (http://sabre.io/)',
-        ];
+        ] + self::protocolSettings();
 
         // FIXME: CURLOPT_PROTOCOLS and CURLOPT_REDIR_PROTOCOLS are currently unsupported by HHVM
         // at least if this unit test fails in the future we know it is :)
@@ -165,7 +185,7 @@ class ClientTest extends \PHPUnit\Framework\TestCase
             CURLOPT_HTTPHEADER => ['X-Foo: bar'],
             CURLOPT_URL => 'http://example.org/',
             CURLOPT_USERAGENT => 'sabre-http/'.Version::VERSION.' (http://sabre.io/)',
-        ];
+        ] + self::protocolSettings();
 
         // FIXME: CURLOPT_PROTOCOLS and CURLOPT_REDIR_PROTOCOLS are currently unsupported by HHVM
         // at least if this unit test fails in the future we know it is :)

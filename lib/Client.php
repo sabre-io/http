@@ -410,10 +410,15 @@ class Client extends EventEmitter
             $settings[CURLOPT_HTTPHEADER] = $nHeaders;
         }
         $settings[CURLOPT_URL] = $request->getUrl();
-        if (defined('CURLOPT_PROTOCOLS')) {
+        // Prefer string-based protocol constants (PHP 8.3+), fall back to
+        // bitmask constants for older PHP versions.  When PHP eventually
+        // removes the bitmask constants the string variant keeps protocol
+        // restrictions in place.
+        if (defined('CURLOPT_PROTOCOLS_STR') && defined('CURLOPT_REDIR_PROTOCOLS_STR')) {
+            $settings[CURLOPT_PROTOCOLS_STR] = 'http,https';
+            $settings[CURLOPT_REDIR_PROTOCOLS_STR] = 'http,https';
+        } elseif (defined('CURLOPT_PROTOCOLS') && defined('CURLOPT_REDIR_PROTOCOLS')) {
             $settings[CURLOPT_PROTOCOLS] = CURLPROTO_HTTP | CURLPROTO_HTTPS;
-        }
-        if (defined('CURLOPT_REDIR_PROTOCOLS')) {
             $settings[CURLOPT_REDIR_PROTOCOLS] = CURLPROTO_HTTP | CURLPROTO_HTTPS;
         }
 

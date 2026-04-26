@@ -8,17 +8,19 @@ class ClientTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Returns the expected curl protocol settings depending on available constants.
+     *
+     * @return array<int,int|string>
      */
     private static function protocolSettings(): array
     {
-        if (defined('CURLOPT_PROTOCOLS_STR')) {
+        if (defined('CURLOPT_PROTOCOLS_STR') && defined('CURLOPT_REDIR_PROTOCOLS_STR')) {
             return [
                 CURLOPT_PROTOCOLS_STR => 'http,https',
                 CURLOPT_REDIR_PROTOCOLS_STR => 'http,https',
             ];
         }
 
-        if (defined('CURLOPT_PROTOCOLS')) {
+        if (defined('CURLOPT_PROTOCOLS') && defined('CURLOPT_REDIR_PROTOCOLS')) {
             return [
                 CURLOPT_PROTOCOLS => CURLPROTO_HTTP | CURLPROTO_HTTPS,
                 CURLOPT_REDIR_PROTOCOLS => CURLPROTO_HTTP | CURLPROTO_HTTPS,

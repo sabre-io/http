@@ -413,10 +413,10 @@ class Client extends EventEmitter
         // bitmask constants for older PHP versions.  When PHP eventually
         // removes the bitmask constants the string variant keeps protocol
         // restrictions in place.
-        if (defined('CURLOPT_PROTOCOLS_STR')) {
+        if (defined('CURLOPT_PROTOCOLS_STR') && defined('CURLOPT_REDIR_PROTOCOLS_STR')) {
             $settings[CURLOPT_PROTOCOLS_STR] = 'http,https';
             $settings[CURLOPT_REDIR_PROTOCOLS_STR] = 'http,https';
-        } elseif (defined('CURLOPT_PROTOCOLS')) {
+        } elseif (defined('CURLOPT_PROTOCOLS') && defined('CURLOPT_REDIR_PROTOCOLS')) {
             $settings[CURLOPT_PROTOCOLS] = CURLPROTO_HTTP | CURLPROTO_HTTPS;
             $settings[CURLOPT_REDIR_PROTOCOLS] = CURLPROTO_HTTP | CURLPROTO_HTTPS;
         }

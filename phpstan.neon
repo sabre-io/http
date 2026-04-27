@@ -1,18 +1,9 @@
+includes:
+  - phpstan-ignore-by-php-version.neon.php
+
 parameters:
   level: 6
   ignoreErrors:
-  -
-    message: "#^Negated boolean expression is always true.$#"
-    count: 1
-    path: lib/Client.php
-  -
-    message: "#^If condition is always false.$#"
-    count: 3
-    path: lib/Client.php
-  -
-    message: "#^Left side of || is always false.$#"
-    count: 19
-    path: lib/Client.php
   -
     message: "#^Strict comparison using !== between '' and non-empty-string will always evaluate to true.$#"
     count: 1

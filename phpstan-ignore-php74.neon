@@ -1,6 +1,0 @@
-parameters:
-  ignoreErrors:
-  -
-    message: "#^Left side of || is always false.$#"
-    count: 10
-    path: lib/Client.php

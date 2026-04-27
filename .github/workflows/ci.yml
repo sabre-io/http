@@ -12,13 +12,13 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        php-versions: ['8.0', '8.1', '8.2', '8.3','8.4']
+        php-versions: ['8.3','8.4']
         coverage: ['xdebug']
         code-style: ['no']
         code-analysis: ['no']
         rector-check: ['no']
         include:
-          - php-versions: '7.4'
+          - php-versions: '8.2'
             coverage: 'xdebug'
             code-style: 'yes'
             code-analysis: 'yes'
@@ -73,5 +73,5 @@ jobs:
         run: vendor/bin/phpunit --configuration tests/phpunit.xml --coverage-clover clover.xml
 
       - name: Code Coverage
-        uses: codecov/codecov-action@v5
+        uses: codecov/codecov-action@v6
         if: matrix.coverage != 'none'

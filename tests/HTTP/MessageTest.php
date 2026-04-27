@@ -9,7 +9,7 @@ class MessageTest extends \PHPUnit\Framework\TestCase
     public function testConstruct(): void
     {
         $message = new MessageMock();
-        self::assertInstanceOf('Sabre\HTTP\Message', $message);
+        self::assertInstanceOf(Message::class, $message);
     }
 
     public function testStreamBody(): void
@@ -270,7 +270,7 @@ class MessageTest extends \PHPUnit\Framework\TestCase
      */
     private function createCallback($content)
     {
-        return function () use ($content) {
+        return function () use ($content): void {
             echo $content;
         };
     }

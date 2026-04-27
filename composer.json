@@ -18,7 +18,8 @@
         "phpstan/phpstan-phpunit": "^2.0",
         "phpstan/phpstan-strict-rules": "^2.0",
         "phpstan/extension-installer": "^1.4",
-        "phpunit/phpunit" : "^9.6"
+        "phpunit/phpunit" : "^9.6",
+        "rector/rector": "^2.4"
     },
     "suggest" : {
         "ext-curl" : " to make http requests with the Client class"
@@ -54,6 +55,12 @@
         ],
         "cs-fixer": [
             "PHP_CS_FIXER_IGNORE_ENV=true php-cs-fixer fix"
+        ],
+        "rector-check": [
+            "rector process --dry-run"
+        ],
+        "rector-fix": [
+            "rector process"
         ],
         "phpunit": [
             "phpunit --configuration tests/phpunit.xml"

@@ -62,7 +62,7 @@ class AWS extends AbstractAuth
             return false;
         }
 
-        list($this->accessKey, $this->signature) = explode(':', $authHeader[1]);
+        [$this->accessKey, $this->signature] = explode(':', $authHeader[1]);
 
         return true;
     }

@@ -29,7 +29,7 @@ class DigestTest extends \PHPUnit\Framework\TestCase
 
     public function testDigest(): void
     {
-        list($nonce, $opaque) = $this->getServerTokens();
+        [$nonce, $opaque] = $this->getServerTokens();
 
         $username = 'admin';
         $password = '12345';
@@ -58,7 +58,7 @@ class DigestTest extends \PHPUnit\Framework\TestCase
 
     public function testInvalidDigest(): void
     {
-        list($nonce, $opaque) = $this->getServerTokens();
+        [$nonce, $opaque] = $this->getServerTokens();
 
         $username = 'admin';
         $password = 12345;
@@ -94,7 +94,7 @@ class DigestTest extends \PHPUnit\Framework\TestCase
     public function testDigestAuthInt(): void
     {
         $this->auth->setQOP(Digest::QOP_AUTHINT);
-        list($nonce, $opaque) = $this->getServerTokens(Digest::QOP_AUTHINT);
+        [$nonce, $opaque] = $this->getServerTokens(Digest::QOP_AUTHINT);
 
         $username = 'admin';
         $password = 12345;
@@ -122,7 +122,7 @@ class DigestTest extends \PHPUnit\Framework\TestCase
     public function testDigestAuthBoth(): void
     {
         $this->auth->setQOP(Digest::QOP_AUTHINT | Digest::QOP_AUTH);
-        list($nonce, $opaque) = $this->getServerTokens(Digest::QOP_AUTHINT | Digest::QOP_AUTH);
+        [$nonce, $opaque] = $this->getServerTokens(Digest::QOP_AUTHINT | Digest::QOP_AUTH);
 
         $username = 'admin';
         $password = 12345;

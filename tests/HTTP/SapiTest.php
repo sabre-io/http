@@ -286,7 +286,7 @@ class SapiTest extends \PHPUnit\Framework\TestCase
      */
     public function testSendWorksWithCallbackAsBody(): void
     {
-        $response = new Response(200, [], function () {
+        $response = new Response(200, [], function (): void {
             $fd = fopen('php://output', 'r+');
             fwrite($fd, 'foo');
             fclose($fd);

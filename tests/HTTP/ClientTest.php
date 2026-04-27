@@ -192,7 +192,7 @@ class ClientTest extends \PHPUnit\Framework\TestCase
         $client = new ClientMock();
         $request = new Request('GET', 'http://example.org/');
 
-        $client->on('doRequest', function ($request, &$response) {
+        $client->on('doRequest', function ($request, &$response): void {
             $response = new Response(200);
         });
 
@@ -231,7 +231,7 @@ class ClientTest extends \PHPUnit\Framework\TestCase
         $maxPeakMemoryUsageEnvVariable = 'SABRE_HTTP_TEST_GET_LARGE_CONTENT_MAX_PEAK_MEMORY_USAGE';
         $maxPeakMemoryUsage = \getenv($maxPeakMemoryUsageEnvVariable);
         if (false === $maxPeakMemoryUsage) {
-            $maxPeakMemoryUsage = 60 * pow(1024, 2);
+            $maxPeakMemoryUsage = 60 * 1024 ** 2;
         }
 
         $request = new Request('GET', $url);
@@ -259,11 +259,11 @@ class ClientTest extends \PHPUnit\Framework\TestCase
         $client = new Client();
 
         $request = new Request('GET', $url);
-        $client->sendAsync($request, function (ResponseInterface $response) {
+        $client->sendAsync($request, function (ResponseInterface $response): void {
             self::assertEquals("foo\n", $response->getBody());
             self::assertEquals(200, $response->getStatus());
             self::assertEquals(4, $response->getHeader('Content-Length'));
-        }, function ($error) use ($request) {
+        }, function ($error) use ($request): void {
             $url = $request->getUrl();
             self::fail("Failed to GET $url");
         });
@@ -284,22 +284,22 @@ class ClientTest extends \PHPUnit\Framework\TestCase
         $client = new Client();
 
         $request = new Request('GET', $url);
-        $client->sendAsync($request, function (ResponseInterface $response) {
+        $client->sendAsync($request, function (ResponseInterface $response): void {
             self::assertEquals("foo\n", $response->getBody());
             self::assertEquals(200, $response->getStatus());
             self::assertEquals(4, $response->getHeader('Content-Length'));
-        }, function ($error) use ($request) {
+        }, function ($error) use ($request): void {
             $url = $request->getUrl();
             self::fail("Failed to get $url");
         });
 
         $url = $this->getAbsoluteUrl('/bar.php');
         $request = new Request('GET', $url);
-        $client->sendAsync($request, function (ResponseInterface $response) {
+        $client->sendAsync($request, function (ResponseInterface $response): void {
             self::assertEquals("bar\n", $response->getBody());
             self::assertEquals(200, $response->getStatus());
             self::assertEquals('Bar', $response->getHeader('X-Test'));
-        }, function ($error) use ($request) {
+        }, function ($error) use ($request): void {
             $url = $request->getUrl();
             self::fail("Failed to get $url");
         });
@@ -312,11 +312,11 @@ class ClientTest extends \PHPUnit\Framework\TestCase
         $client = new ClientMock();
         $request = new Request('GET', 'http://example.org/');
 
-        $client->on('doRequest', function ($request, &$response) {
+        $client->on('doRequest', function ($request, &$response): void {
             throw new ClientException('aaah', 1);
         });
         $called = false;
-        $client->on('exception', function () use (&$called) {
+        $client->on('exception', function () use (&$called): void {
             $called = true;
         });
 
@@ -333,14 +333,14 @@ class ClientTest extends \PHPUnit\Framework\TestCase
         $client = new ClientMock();
         $request = new Request('GET', 'http://example.org/');
 
-        $client->on('doRequest', function ($request, &$response) {
+        $client->on('doRequest', function ($request, &$response): void {
             $response = new Response(404);
         });
         $called = 0;
-        $client->on('error', function () use (&$called) {
+        $client->on('error', function () use (&$called): void {
             ++$called;
         });
-        $client->on('error:404', function () use (&$called) {
+        $client->on('error:404', function () use (&$called): void {
             ++$called;
         });
 
@@ -354,7 +354,7 @@ class ClientTest extends \PHPUnit\Framework\TestCase
         $request = new Request('GET', 'http://example.org/');
 
         $called = 0;
-        $client->on('doRequest', function ($request, &$response) use (&$called) {
+        $client->on('doRequest', function ($request, &$response) use (&$called): void {
             ++$called;
             if ($called < 3) {
                 $response = new Response(404);
@@ -364,7 +364,7 @@ class ClientTest extends \PHPUnit\Framework\TestCase
         });
 
         $errorCalled = 0;
-        $client->on('error', function ($request, $response, &$retry, $retryCount) use (&$errorCalled) {
+        $client->on('error', function ($request, $response, &$retry, $retryCount) use (&$errorCalled): void {
             ++$errorCalled;
             $retry = true;
         });
@@ -381,7 +381,7 @@ class ClientTest extends \PHPUnit\Framework\TestCase
         $client->setThrowExceptions(true);
         $request = new Request('GET', 'http://example.org/');
 
-        $client->on('doRequest', function ($request, &$response) {
+        $client->on('doRequest', function ($request, &$response): void {
             $response = new Response(404);
         });
 
@@ -390,14 +390,14 @@ class ClientTest extends \PHPUnit\Framework\TestCase
             self::fail('An exception should have been thrown');
         } catch (ClientHttpException $e) {
             self::assertEquals(404, $e->getHttpStatus());
-            self::assertInstanceOf('Sabre\HTTP\Response', $e->getResponse());
+            self::assertInstanceOf(Response::class, $e->getResponse());
         }
     }
 
     public function testParseCurlResult(): void
     {
         $client = new ClientMock();
-        $client->on('curlStuff', function (&$return) {
+        $client->on('curlStuff', function (&$return): void {
             $return = [
                 [
                     'header_size' => 33,
@@ -422,7 +422,7 @@ class ClientTest extends \PHPUnit\Framework\TestCase
     public function testParseCurlResultEmptyBody(): void
     {
         $client = new ClientMock();
-        $client->on('curlStuff', function (&$return) {
+        $client->on('curlStuff', function (&$return): void {
             $return = [
                 [
                     'header_size' => 33,
@@ -447,7 +447,7 @@ class ClientTest extends \PHPUnit\Framework\TestCase
     public function testParseCurlError(): void
     {
         $client = new ClientMock();
-        $client->on('curlStuff', function (&$return) {
+        $client->on('curlStuff', function (&$return): void {
             $return = [
                 [],
                 1,
@@ -468,10 +468,10 @@ class ClientTest extends \PHPUnit\Framework\TestCase
     {
         $client = new ClientMock();
         $request = new Request('GET', 'http://example.org/');
-        $client->on('curlExec', function (&$return) {
+        $client->on('curlExec', function (&$return): void {
             $return = "HTTP/1.1 200 OK\r\nHeader1:Val1\r\n\r\nFoo";
         });
-        $client->on('curlStuff', function (&$return) {
+        $client->on('curlStuff', function (&$return): void {
             $return = [
                 [
                     'header_size' => 33,
@@ -491,10 +491,10 @@ class ClientTest extends \PHPUnit\Framework\TestCase
     {
         $client = new ClientMock();
         $request = new Request('GET', 'http://example.org/');
-        $client->on('curlExec', function (&$return) {
+        $client->on('curlExec', function (&$return): void {
             $return = '';
         });
-        $client->on('curlStuff', function (&$return) {
+        $client->on('curlStuff', function (&$return): void {
             $return = [
                 [],
                 1,

@@ -74,7 +74,7 @@ class Client extends EventEmitter
     {
         // See https://github.com/sabre-io/http/pull/115#discussion_r241292068
         // Preserve compatibility for sub-classes that implement their own method `parseCurlResult`
-        $separatedHeaders = __CLASS__ === get_class($this);
+        $separatedHeaders = self::class === get_class($this);
 
         $this->curlSettings = [
             CURLOPT_RETURNTRANSFER => true,
@@ -217,11 +217,7 @@ class Client extends EventEmitter
             if ($status && CURLMSG_DONE === $status['msg']) {
                 $resourceId = (int) $status['handle'];
 
-                list(
-                    $request,
-                    $successCallback,
-                    $errorCallback,
-                    $retryCount) = $this->curlMultiMap[$resourceId];
+                [$request, $successCallback, $errorCallback, $retryCount] = $this->curlMultiMap[$resourceId];
                 unset($this->curlMultiMap[$resourceId]);
 
                 $curlHandle = $status['handle'];

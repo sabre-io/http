@@ -16,15 +16,18 @@ jobs:
         coverage: ['xdebug']
         code-style: ['no']
         code-analysis: ['no']
+        rector-check: ['no']
         include:
           - php-versions: '7.4'
             coverage: 'xdebug'
             code-style: 'yes'
             code-analysis: 'yes'
+            rector-check: ['no']
           - php-versions: '8.5'
             coverage: 'xdebug'
             code-style: 'no'
             code-analysis: 'yes'
+            rector-check: ['yes']
     steps:
       - name: Checkout
         uses: actions/checkout@v6
@@ -61,6 +64,10 @@ jobs:
 
       - name: Run application server
         run: php -S localhost:8000 -t tests/www 2>/dev/null &
+
+      - name: Code Refactoring (rector)
+        if: matrix.rector-check == 'yes'
+        run: composer rector-check
 
       - name: Test with phpunit
         run: vendor/bin/phpunit --configuration tests/phpunit.xml --coverage-clover clover.xml

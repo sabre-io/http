@@ -173,7 +173,7 @@ class Request extends Message implements RequestInterface
 
         if (0 === strpos($uri, $baseUri)) {
             // We're not interested in the query part (everything after the ?).
-            list($uri) = explode('?', $uri);
+            [$uri] = explode('?', $uri);
 
             return trim(decodePath(substr($uri, strlen($baseUri))), '/');
         }
@@ -260,7 +260,7 @@ class Request extends Message implements RequestInterface
         foreach ($this->getHeaders() as $key => $value) {
             foreach ($value as $v) {
                 if ('Authorization' === $key) {
-                    list($v) = explode(' ', $v, 2);
+                    [$v] = explode(' ', $v, 2);
                     $v .= ' REDACTED';
                 }
                 $out .= $key.': '.$v."\r\n";

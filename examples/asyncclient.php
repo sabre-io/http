@@ -37,7 +37,7 @@ for ($i = 0; $i < 1000; ++$i) {
         $request,
 
         // This is the 'success' callback
-        function ($response) use ($i) {
+        function ($response) use ($i): void {
             echo "$i -> ".$response->getStatus()."\n";
         },
 
@@ -45,7 +45,7 @@ for ($i = 0; $i < 1000; ++$i) {
         // problems (such as not being able to connect to a host, dns errors,
         // etc.) and also cases where a response was returned, but it had a
         // status code of 400 or higher.
-        function ($error) use ($i) {
+        function ($error) use ($i): void {
             if (Client::STATUS_CURLERROR === $error['status']) {
                 // Curl errors
                 echo "$i -> curl error: ".$error['curl_errmsg']."\n";

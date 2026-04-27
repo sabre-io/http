@@ -335,12 +335,12 @@ function parseMimeType(string $str): array
         // Illegal value
         throw new \InvalidArgumentException('Not a valid mime-type: '.$str);
     }
-    list($type, $subType) = $mimeType;
+    [$type, $subType] = $mimeType;
 
     foreach ($parts as $part) {
         $part = trim($part);
         if (strpos($part, '=')) {
-            list($partName, $partValue) =
+            [$partName, $partValue] =
                 explode('=', $part, 2);
         } else {
             $partName = $part;
@@ -374,9 +374,7 @@ function parseMimeType(string $str): array
  */
 function encodePath(string $path): string
 {
-    return preg_replace_callback('/([^A-Za-z0-9_\-\.~\(\)\/:@])/', function ($match) {
-        return '%'.sprintf('%02x', ord($match[0]));
-    }, $path);
+    return preg_replace_callback('/([^A-Za-z0-9_\-\.~\(\)\/:@])/', fn ($match) => '%'.sprintf('%02x', ord($match[0])), $path);
 }
 
 /**
@@ -386,9 +384,7 @@ function encodePath(string $path): string
  */
 function encodePathSegment(string $pathSegment): string
 {
-    return preg_replace_callback('/([^A-Za-z0-9_\-\.~\(\):@])/', function ($match) {
-        return '%'.sprintf('%02x', ord($match[0]));
-    }, $pathSegment);
+    return preg_replace_callback('/([^A-Za-z0-9_\-\.~\(\):@])/', fn ($match) => '%'.sprintf('%02x', ord($match[0])), $pathSegment);
 }
 
 /**

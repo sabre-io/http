@@ -1,6 +1,15 @@
 ChangeLog
 =========
 
+7.0.6 (2026-04-27)
+------------------
+
+* #259 chore (ci): add CI for PHP 8.5 on 6.0 branch ( @phil-davis )
+* #273 test: adjust code style ( @phil-davis )
+* #272 fix(http/client): prefer CURLOPT_PROTOCOLS_STR over deprecated bitmask constants ( @ralflang )
+* #255 chore: update to phpstan major version 2
+* #278 chore: add rector  ( @phil-davis )
+
 7.0.5 (2025-09-09)
 ------------------
 * #257 properly compute absolute URL (@skjnldsv)
@@ -30,6 +39,13 @@ ChangeLog
 7.0.0 (2022-09-26)
 ------------------
 * #198 Allow sabre/uri major version 3 ( @phil-davis )
+
+6.0.5 (2026-04-27)
+------------------
+
+* #267 chore (ci): add CI for PHP 8.5 on 6.0 branch (@phil-davis)
+* #274 test: adjust code style (@phil-davis)
+* #275 fix(http/client): prefer CURLOPT_PROTOCOLS_STR over deprecated bitmask constants (@ralflang)
 
 6.0.4 (2025-09-09)
 ------------------

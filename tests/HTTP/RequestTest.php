@@ -35,7 +35,7 @@ class RequestTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @backupGlobals
+     * @backupGlobals enabled
      */
     public function testCreateFromPHPRequest(): void
     {

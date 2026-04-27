@@ -1,5 +1,12 @@
 ChangeLog
 =========
+6.0.5 (2026-04-27)
+------------------
+
+* #267 chore (ci): add CI for PHP 8.5 on 6.0 branch (@phil-davis)
+* #274 test: adjust code style (@phil-davis)
+* #275 fix(http/client): prefer CURLOPT_PROTOCOLS_STR over deprecated bitmask constants (@ralflang)
+
 6.0.4 (2025-09-09)
 ------------------
 

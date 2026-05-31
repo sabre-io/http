@@ -33,9 +33,8 @@ abstract class AbstractAuth
         /**
          * Response object.
          */
-        protected ResponseInterface $response
-    )
-    {
+        protected ResponseInterface $response,
+    ) {
     }
 
     /**

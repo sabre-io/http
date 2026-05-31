@@ -27,9 +27,8 @@ class ResponseDecorator implements ResponseInterface
          *
          * All method calls will be forwarded here.
          */
-        protected ResponseInterface $inner
-    )
-    {
+        protected ResponseInterface $inner,
+    ) {
     }
 
     /**

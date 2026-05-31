@@ -27,9 +27,8 @@ class RequestDecorator implements RequestInterface
          *
          * All method calls will be forwarded here.
          */
-        protected RequestInterface $inner
-    )
-    {
+        protected RequestInterface $inner,
+    ) {
     }
 
     /**

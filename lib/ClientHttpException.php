@@ -22,7 +22,7 @@ class ClientHttpException extends \Exception implements HttpException
     public function __construct(/**
      * Response object.
      */
-    protected ResponseInterface $response)
+        protected ResponseInterface $response)
     {
         parent::__construct($this->response->getStatusText(), $this->response->getStatus());
     }

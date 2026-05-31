@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace Sabre\HTTP;
 
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Depends;
+
 class SapiTest extends \PHPUnit\Framework\TestCase
 {
     public function testConstructFromServerArray(): void
@@ -144,9 +147,8 @@ class SapiTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @runInSeparateProcess
-     *
-     * @depends testSend
      */
+    #[Depends('testSend')]
     public function testSendLimitedByContentLengthString(): void
     {
         $response = new Response(200);
@@ -180,9 +182,8 @@ class SapiTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @runInSeparateProcess
-     *
-     * @depends testSend
      */
+    #[Depends('testSend')]
     public function testSendLimitedByContentLengthStream(): void
     {
         $response = new Response(200, ['Content-Length' => 19]);
@@ -205,17 +206,15 @@ class SapiTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @runInSeparateProcess
-     *
-     * @depends testSend
-     *
-     * @dataProvider sendContentRangeStreamData
      */
+    #[Depends('testSend')]
+    #[DataProvider('sendContentRangeStreamData')]
     public function testSendContentRangeStream(
         string $ignoreAtStart,
         string $sendText,
         int $multiplier,
         string $ignoreAtEnd,
-        ?int $contentLength): void
+        ?int $contentLength = null): void
     {
         $partial = str_repeat($sendText, $multiplier);
         $ignoreAtStartLength = strlen($ignoreAtStart);
@@ -281,9 +280,8 @@ class SapiTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @runInSeparateProcess
-     *
-     * @depends testSend
      */
+    #[Depends('testSend')]
     public function testSendWorksWithCallbackAsBody(): void
     {
         $response = new Response(200, [], function (): void {

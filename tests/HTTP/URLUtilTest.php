@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Sabre\HTTP;
 
+use PHPUnit\Framework\Attributes\Depends;
+
 class URLUtilTest extends \PHPUnit\Framework\TestCase
 {
     public function testEncodePath(): void
@@ -61,9 +63,7 @@ class URLUtilTest extends \PHPUnit\Framework\TestCase
         self::assertEquals('Hello Test+Test2.txt', $newStr);
     }
 
-    /**
-     * @depends testDecode
-     */
+    #[Depends('testDecode')]
     public function testDecodeUmlaut(): void
     {
         $str = 'Hello%C3%BC.txt';
@@ -71,9 +71,7 @@ class URLUtilTest extends \PHPUnit\Framework\TestCase
         self::assertEquals("Hello\xC3\xBC.txt", $newStr);
     }
 
-    /**
-     * @depends testDecode
-     */
+    #[Depends('testDecode')]
     public function testDecodeSlavicWords(): void
     {
         $words = [
@@ -90,9 +88,7 @@ class URLUtilTest extends \PHPUnit\Framework\TestCase
         }
     }
 
-    /**
-     * @depends testDecodeUmlaut
-     */
+    #[Depends('testDecodeUmlaut')]
     public function testDecodeUmlautLatin1(): void
     {
         $str = 'Hello%FC.txt';
@@ -102,9 +98,8 @@ class URLUtilTest extends \PHPUnit\Framework\TestCase
 
     /**
      * This testcase was sent by a bug reporter.
-     *
-     * @depends testDecode
      */
+    #[Depends('testDecode')]
     public function testDecodeAccentsWindows7(): void
     {
         $str = '/webdav/%C3%A0fo%C3%B3';

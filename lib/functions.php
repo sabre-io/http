@@ -59,13 +59,13 @@ function parseDate(string $dateString)
     }
 
     // append implicit GMT timezone to ANSI C time format
-    if (false === strpos($dateString, ' GMT')) {
+    if (!str_contains($dateString, ' GMT')) {
         $dateString .= ' GMT';
     }
 
     try {
         return new \DateTime($dateString, new \DateTimeZone('UTC'));
-    } catch (\Exception $e) {
+    } catch (\Exception) {
         return false;
     }
 }
@@ -109,7 +109,7 @@ function negotiateContentType(?string $acceptHeaderValue, array $availableOption
     }
 
     $proposals = array_map(
-        'Sabre\HTTP\parseMimeType',
+        \Sabre\HTTP\parseMimeType(...),
         explode(',', $acceptHeaderValue)
     );
 
@@ -117,7 +117,7 @@ function negotiateContentType(?string $acceptHeaderValue, array $availableOption
     $availableOptions = array_values($availableOptions);
 
     $options = array_map(
-        'Sabre\HTTP\parseMimeType',
+        \Sabre\HTTP\parseMimeType(...),
         $availableOptions
     );
 

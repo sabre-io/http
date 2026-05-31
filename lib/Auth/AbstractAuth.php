@@ -19,28 +19,23 @@ use Sabre\HTTP\ResponseInterface;
 abstract class AbstractAuth
 {
     /**
-     * Authentication realm.
-     */
-    protected string $realm;
-
-    /**
-     * Request object.
-     */
-    protected RequestInterface $request;
-
-    /**
-     * Response object.
-     */
-    protected ResponseInterface $response;
-
-    /**
      * Creates the object.
      */
-    public function __construct(string $realm, RequestInterface $request, ResponseInterface $response)
+    public function __construct(
+        /**
+         * Authentication realm.
+         */
+        protected string $realm,
+        /**
+         * Request object.
+         */
+        protected RequestInterface $request,
+        /**
+         * Response object.
+         */
+        protected ResponseInterface $response
+    )
     {
-        $this->realm = $realm;
-        $this->request = $request;
-        $this->response = $response;
     }
 
     /**

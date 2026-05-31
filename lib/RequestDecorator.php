@@ -17,19 +17,19 @@ namespace Sabre\HTTP;
 class RequestDecorator implements RequestInterface
 {
     use MessageDecoratorTrait;
-    /**
-     * The inner request object.
-     *
-     * All method calls will be forwarded here.
-     */
-    protected RequestInterface $inner;
 
     /**
      * Constructor.
      */
-    public function __construct(RequestInterface $inner)
+    public function __construct(
+        /**
+         * The inner request object.
+         *
+         * All method calls will be forwarded here.
+         */
+        protected RequestInterface $inner
+    )
     {
-        $this->inner = $inner;
     }
 
     /**

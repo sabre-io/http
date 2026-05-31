@@ -154,17 +154,14 @@ class DigestTest extends \PHPUnit\Framework\TestCase
     {
         $this->auth->requireLogin();
 
-        switch ($qop) {
-            case Digest::QOP_AUTH: $qopstr = 'auth';
-                break;
-            case Digest::QOP_AUTHINT: $qopstr = 'auth-int';
-                break;
-            default: $qopstr = 'auth,auth-int';
-                break;
-        }
+        $qopstr = match ($qop) {
+            Digest::QOP_AUTH => 'auth',
+            Digest::QOP_AUTHINT => 'auth-int',
+            default => 'auth,auth-int',
+        };
 
         $test = preg_match('/Digest realm="'.self::REALM.'",qop="'.$qopstr.'",nonce="([0-9a-f]*)",opaque="([0-9a-f]*)"/',
-            $this->response->getHeader('WWW-Authenticate'), $matches);
+            (string) $this->response->getHeader('WWW-Authenticate'), $matches);
 
         self::assertTrue(1 === $test, 'The WWW-Authenticate response didn\'t match our pattern. We received: '.$this->response->getHeader('WWW-Authenticate'));
 

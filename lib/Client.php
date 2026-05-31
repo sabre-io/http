@@ -74,7 +74,7 @@ class Client extends EventEmitter
     {
         // See https://github.com/sabre-io/http/pull/115#discussion_r241292068
         // Preserve compatibility for sub-classes that implement their own method `parseCurlResult`
-        $separatedHeaders = self::class === get_class($this);
+        $separatedHeaders = self::class === static::class;
 
         $this->curlSettings = [
             CURLOPT_RETURNTRANSFER => true,
@@ -82,7 +82,7 @@ class Client extends EventEmitter
             CURLOPT_USERAGENT => 'sabre-http/'.Version::VERSION.' (http://sabre.io/)',
         ];
         if ($separatedHeaders) {
-            $this->curlSettings[CURLOPT_HEADERFUNCTION] = [$this, 'receiveCurlHeader'];
+            $this->curlSettings[CURLOPT_HEADERFUNCTION] = $this->receiveCurlHeader(...);
         } else {
             $this->curlSettings[CURLOPT_HEADER] = true;
         }

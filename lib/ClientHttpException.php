@@ -17,17 +17,14 @@ namespace Sabre\HTTP;
 class ClientHttpException extends \Exception implements HttpException
 {
     /**
-     * Response object.
-     */
-    protected ResponseInterface $response;
-
-    /**
      * Constructor.
      */
-    public function __construct(ResponseInterface $response)
+    public function __construct(/**
+     * Response object.
+     */
+    protected ResponseInterface $response)
     {
-        $this->response = $response;
-        parent::__construct($response->getStatusText(), $response->getStatus());
+        parent::__construct($this->response->getStatusText(), $this->response->getStatus());
     }
 
     /**

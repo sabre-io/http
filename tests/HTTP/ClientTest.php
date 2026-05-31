@@ -323,7 +323,7 @@ class ClientTest extends \PHPUnit\Framework\TestCase
         try {
             $client->send($request);
             self::fail('send() should have thrown an exception');
-        } catch (ClientException $e) {
+        } catch (ClientException) {
         }
         self::assertTrue($called);
     }

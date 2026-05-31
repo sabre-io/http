@@ -252,7 +252,7 @@ class SapiTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array<int, array<int, mixed>>
      */
-    public function sendContentRangeStreamData(): array
+    public static function sendContentRangeStreamData(): array
     {
         return [
             ['Ignore this. ', 'Send this.', 10, ' Ignore this at end.'],

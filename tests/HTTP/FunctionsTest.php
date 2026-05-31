@@ -21,7 +21,7 @@ class FunctionsTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array<int, array<int, array<int, string>>>
      */
-    public function getHeaderValuesDataOnValues2(): array
+    public static function getHeaderValuesDataOnValues2(): array
     {
         return [
             [
@@ -54,7 +54,7 @@ class FunctionsTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array<int, mixed>
      */
-    public function getHeaderValuesData(): array
+    public static function getHeaderValuesData(): array
     {
         return [
             [
@@ -97,7 +97,7 @@ class FunctionsTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array<int, mixed>
      */
-    public function preferData(): array
+    public static function preferData(): array
     {
         return [
             [

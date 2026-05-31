@@ -207,7 +207,7 @@ class Sapi
                     break;
 
                 default:
-                    if ('HTTP_' === substr($key, 0, 5)) {
+                    if (str_starts_with($key, 'HTTP_')) {
                         // It's an HTTP header
 
                         // Normalizing it to be prettier

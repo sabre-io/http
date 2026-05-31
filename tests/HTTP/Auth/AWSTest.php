@@ -199,7 +199,7 @@ class AWSTest extends \PHPUnit\Framework\TestCase
     public function test401(): void
     {
         $this->auth->requireLogin();
-        $test = preg_match('/^AWS$/', $this->response->getHeader('WWW-Authenticate'), $matches);
+        $test = preg_match('/^AWS$/', (string) $this->response->getHeader('WWW-Authenticate'), $matches);
         self::assertTrue(1 === $test, 'The WWW-Authenticate response didn\'t match our pattern');
     }
 

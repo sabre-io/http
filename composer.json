@@ -5,7 +5,7 @@
     "homepage" : "https://github.com/fruux/sabre-http",
     "license" : "BSD-3-Clause",
     "require" : {
-        "php"          : "^7.4 || ^8.0",
+        "php"          : "^8.2",
         "ext-mbstring" : "*",
         "ext-ctype"    : "*",
         "ext-curl"     : "*",
@@ -18,7 +18,7 @@
         "phpstan/phpstan-phpunit": "^2.0",
         "phpstan/phpstan-strict-rules": "^2.0",
         "phpstan/extension-installer": "^1.4",
-        "phpunit/phpunit" : "^9.6",
+        "phpunit/phpunit" : "^10.5",
         "rector/rector": "^2.4"
     },
     "suggest" : {
@@ -74,6 +74,9 @@
     "config": {
         "allow-plugins": {
             "phpstan/extension-installer": true
+        },
+        "platform": {
+            "php": "8.2"
         }
     }
 }

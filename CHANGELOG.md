@@ -1,6 +1,12 @@
 ChangeLog
 =========
 
+7.1.0 (2026-05-31)
+------------------
+
+* #280 chore: support PHP 8.2 and up ( @phil-davis )
+* #282 test: migrate to phpunit 11 ( @phil-davis )
+
 7.0.6 (2026-04-27)
 ------------------
 

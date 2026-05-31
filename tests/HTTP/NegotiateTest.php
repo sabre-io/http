@@ -4,13 +4,14 @@ declare(strict_types=1);
 
 namespace Sabre\HTTP;
 
+use PHPUnit\Framework\Attributes\DataProvider;
+
 class NegotiateTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @dataProvider negotiateData
-     *
      * @param array<mixed, mixed> $available
      */
+    #[DataProvider('negotiateData')]
     public function testNegotiate(?string $acceptHeader, array $available, ?string $expected): void
     {
         self::assertEquals(

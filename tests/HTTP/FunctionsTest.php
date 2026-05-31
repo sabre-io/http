@@ -4,15 +4,16 @@ declare(strict_types=1);
 
 namespace Sabre\HTTP;
 
+use PHPUnit\Framework\Attributes\DataProvider;
+
 class FunctionsTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @dataProvider getHeaderValuesDataOnValues2
-     *
      * @param array<int, string> $result
      * @param array<int, string> $values1
      * @param array<int, string> $values2
      */
+    #[DataProvider('getHeaderValuesDataOnValues2')]
     public function testGetHeaderValuesOnValues2(array $result, array $values1, array $values2): void
     {
         self::assertEquals($result, getHeaderValues($values1, $values2));
@@ -38,11 +39,10 @@ class FunctionsTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @dataProvider getHeaderValuesData
-     *
      * @param string            $input
      * @param array<int, mixed> $output
      */
+    #[DataProvider('getHeaderValuesData')]
     public function testGetHeaderValues($input, array $output): void
     {
         self::assertEquals(
@@ -81,11 +81,10 @@ class FunctionsTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @dataProvider preferData
-     *
      * @param string            $input
      * @param array<int, mixed> $output
      */
+    #[DataProvider('preferData')]
     public function testPrefer($input, array $output): void
     {
         self::assertEquals(

@@ -22,7 +22,7 @@ class NegotiateTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array<int, array<int, mixed>>
      */
-    public function negotiateData(): array
+    public static function negotiateData(): array
     {
         return [
             [ // simple

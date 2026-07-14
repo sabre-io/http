@@ -7,7 +7,7 @@ namespace Sabre\HTTP\Auth;
 use Sabre\HTTP\Request;
 use Sabre\HTTP\Response;
 
-class BasicTest extends \PHPUnit\Framework\TestCase
+final class BasicTest extends \PHPUnit\Framework\TestCase
 {
     public function testGetCredentials(): void
     {
@@ -17,7 +17,7 @@ class BasicTest extends \PHPUnit\Framework\TestCase
 
         $basic = new Basic('Dagger', $request, new Response());
 
-        self::assertEquals([
+        $this->assertSame([
             'user',
             'pass:bla',
         ], $basic->getCredentials());
@@ -31,7 +31,7 @@ class BasicTest extends \PHPUnit\Framework\TestCase
 
         $basic = new Basic('Dagger', $request, new Response());
 
-        self::assertNull($basic->getCredentials());
+        $this->assertNull($basic->getCredentials());
     }
 
     public function testGetCredentialsNoHeader(): void
@@ -39,7 +39,7 @@ class BasicTest extends \PHPUnit\Framework\TestCase
         $request = new Request('GET', '/', []);
         $basic = new Basic('Dagger', $request, new Response());
 
-        self::assertNull($basic->getCredentials());
+        $this->assertNull($basic->getCredentials());
     }
 
     public function testGetCredentialsNotBasic(): void
@@ -49,7 +49,7 @@ class BasicTest extends \PHPUnit\Framework\TestCase
         ]);
         $basic = new Basic('Dagger', $request, new Response());
 
-        self::assertNull($basic->getCredentials());
+        $this->assertNull($basic->getCredentials());
     }
 
     public function testRequireLogin(): void
@@ -61,7 +61,7 @@ class BasicTest extends \PHPUnit\Framework\TestCase
 
         $basic->requireLogin();
 
-        self::assertEquals('Basic realm="Dagger", charset="UTF-8"', $response->getHeader('WWW-Authenticate'));
-        self::assertEquals(401, $response->getStatus());
+        $this->assertSame('Basic realm="Dagger", charset="UTF-8"', $response->getHeader('WWW-Authenticate'));
+        $this->assertSame(401, $response->getStatus());
     }
 }

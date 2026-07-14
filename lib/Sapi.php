@@ -104,6 +104,7 @@ class Sapi
                         $left -= stream_copy_to_stream($body, $output, min($delta, $left));
                     }
                 }
+
                 while ($left > 0) {
                     $copied = stream_copy_to_stream($body, $output, min($left, $chunk_size));
                     // stream_copy_to_stream($src, $dest, $maxLength) must return the number of bytes copied or false in case of failure
@@ -113,12 +114,14 @@ class Sapi
                     if ($copied <= 0) {
                         break;
                     }
+
                     // Abort on client disconnect.
                     // With ignore_user_abort(true), the script is not aborted on client disconnect.
                     // To avoid reading the entire stream and dismissing the data afterward, check between the chunks if the client is still there.
                     if (1 === ignore_user_abort() && 1 === connection_aborted()) {
                         break;
                     }
+
                     $left -= $copied;
                 }
             } else {
@@ -160,6 +163,7 @@ class Sapi
                     } elseif ('HTTP/2.0' === $value) {
                         $httpVersion = '2.0';
                     }
+
                     break;
                 case 'REQUEST_METHOD':
                     $method = $value;
@@ -182,6 +186,7 @@ class Sapi
                     if (isset($serverArray['PHP_AUTH_PW'])) {
                         $headers['Authorization'] = 'Basic '.base64_encode($value.':'.$serverArray['PHP_AUTH_PW']);
                     }
+
                     break;
 
                     // Similarly, mod_php may also screw around with digest auth.
@@ -204,6 +209,7 @@ class Sapi
                     if ('' !== $value && 'off' !== $value) {
                         $protocol = 'https';
                     }
+
                     break;
 
                 default:
@@ -221,6 +227,7 @@ class Sapi
                         $header = str_replace(' ', '-', $header);
                         $headers[$header] = $value;
                     }
+
                     break;
             }
         }
@@ -232,6 +239,7 @@ class Sapi
         if (null === $method) {
             throw new \InvalidArgumentException('The _SERVER array must have a REQUEST_METHOD key');
         }
+
         $r = new Request($method, $url, $headers);
         $r->setHttpVersion($httpVersion);
         $r->setRawServerData($serverArray);

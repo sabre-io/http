@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * This example shows how to make an HTTP request with the Request and Response
  * objects.

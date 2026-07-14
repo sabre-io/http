@@ -58,7 +58,7 @@ class Response extends Message implements ResponseInterface
         415 => 'Unsupported Media Type',
         416 => 'Requested Range Not Satisfiable',
         417 => 'Expectation Failed',
-        418 => 'I\'m a teapot', // RFC 2324
+        418 => "I'm a teapot", // RFC 2324
         421 => 'Misdirected Request', // RFC7540 (HTTP/2)
         422 => 'Unprocessable Entity', // RFC 4918
         423 => 'Locked', // RFC 4918
@@ -106,9 +106,11 @@ class Response extends Message implements ResponseInterface
         if (null !== $status) {
             $this->setStatus($status);
         }
+
         if (null !== $headers) {
             $this->setHeaders($headers);
         }
+
         if (null !== $body) {
             $this->setBody($body);
         }
@@ -156,6 +158,7 @@ class Response extends Message implements ResponseInterface
                 $statusText,
             ) = explode(' ', $status, 2);
         }
+
         $statusCode = (int) $statusCode;
         if ($statusCode < 100 || $statusCode > 999) {
             throw new \InvalidArgumentException('The HTTP status code must be exactly 3 digits');
@@ -178,9 +181,9 @@ class Response extends Message implements ResponseInterface
                 $str .= $key.': '.$v."\r\n";
             }
         }
-        $str .= "\r\n";
-        $str .= $this->getBodyAsString();
 
-        return $str;
+        $str .= "\r\n";
+
+        return $str.$this->getBodyAsString();
     }
 }

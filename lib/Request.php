@@ -118,7 +118,7 @@ class Request extends Message implements RequestInterface
                     ?? parse_url($url, PHP_URL_HOST)
                     ?? 'localhost';
                 // Guessing we're a http endpoint.
-                $this->absoluteUrl = "http://$host$url";
+                $this->absoluteUrl = "http://{$host}{$url}";
             }
         }
 
@@ -169,6 +169,7 @@ class Request extends Message implements RequestInterface
         $uri = str_replace('//', '/', $this->getUrl());
 
         $uri = Uri\normalize($uri);
+
         $baseUri = Uri\normalize($this->getBaseUrl());
 
         if (str_starts_with($uri, $baseUri)) {
@@ -181,6 +182,7 @@ class Request extends Message implements RequestInterface
         if ($uri.'/' === $baseUri) {
             return '';
         }
+
         // A special case, if the baseUri was accessed without a trailing
         // slash, we'll accept it as well.
 
@@ -263,12 +265,13 @@ class Request extends Message implements RequestInterface
                     [$v] = explode(' ', (string) $v, 2);
                     $v .= ' REDACTED';
                 }
+
                 $out .= $key.': '.$v."\r\n";
             }
         }
-        $out .= "\r\n";
-        $out .= $this->getBodyAsString();
 
-        return $out;
+        $out .= "\r\n";
+
+        return $out.$this->getBodyAsString();
     }
 }

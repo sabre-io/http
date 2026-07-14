@@ -35,15 +35,20 @@ class Digest extends AbstractAuth
      * These constants are used in setQOP();.
      */
     public const QOP_AUTH = 1;
+
     public const QOP_AUTHINT = 2;
 
     protected string $nonce;
+
     protected string $opaque;
+
     /**
      * @var array<int|string, string>|bool
      */
     protected $digestParts;
+
     protected string $A1;
+
     protected int $qop = self::QOP_AUTH;
 
     /**
@@ -133,6 +138,7 @@ class Digest extends AbstractAuth
             if (0 === ($this->qop & self::QOP_AUTHINT)) {
                 return false;
             }
+
             // We need to add an MD5 of the entire request body to the A2 part of the hash
             $body = $this->request->getBody();
             $this->request->setBody($body);
@@ -191,7 +197,7 @@ class Digest extends AbstractAuth
      *
      * @return false|array<int|string, mixed>
      */
-    protected function parseDigest(string $digest)
+    protected function parseDigest(string $digest): array|false
     {
         // protect against missing data
         $needed_parts = ['nonce' => 1, 'nc' => 1, 'cnonce' => 1, 'qop' => 1, 'username' => 1, 'uri' => 1, 'response' => 1];
@@ -204,6 +210,6 @@ class Digest extends AbstractAuth
             unset($needed_parts[$m[1]]);
         }
 
-        return (count($needed_parts) > 0) ? false : $data;
+        return ([] !== $needed_parts) ? false : $data;
     }
 }

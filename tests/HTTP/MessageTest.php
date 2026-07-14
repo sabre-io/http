@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace Sabre\HTTP;
 
-class MessageTest extends \PHPUnit\Framework\TestCase
+final class MessageTest extends \PHPUnit\Framework\TestCase
 {
     public function testConstruct(): void
     {
         $message = new MessageMock();
-        self::assertInstanceOf(Message::class, $message);
+        $this->assertInstanceOf(Message::class, $message);
     }
 
     public function testStreamBody(): void
@@ -22,11 +22,11 @@ class MessageTest extends \PHPUnit\Framework\TestCase
         $message = new MessageMock();
         $message->setBody($h);
 
-        self::assertEquals($body, $message->getBodyAsString());
+        $this->assertSame($body, $message->getBodyAsString());
         rewind($h);
-        self::assertEquals($body, stream_get_contents($message->getBodyAsStream()));
+        $this->assertEquals($body, stream_get_contents($message->getBodyAsStream()));
         rewind($h);
-        self::assertEquals($body, stream_get_contents($message->getBody()));
+        $this->assertEquals($body, stream_get_contents($message->getBody()));
     }
 
     public function testStringBody(): void
@@ -36,9 +36,9 @@ class MessageTest extends \PHPUnit\Framework\TestCase
         $message = new MessageMock();
         $message->setBody($body);
 
-        self::assertEquals($body, $message->getBodyAsString());
-        self::assertEquals($body, stream_get_contents($message->getBodyAsStream()));
-        self::assertEquals($body, $message->getBody());
+        $this->assertSame($body, $message->getBodyAsString());
+        $this->assertEquals($body, stream_get_contents($message->getBodyAsStream()));
+        $this->assertEquals($body, $message->getBody());
     }
 
     public function testCallbackBodyAsString(): void
@@ -50,7 +50,7 @@ class MessageTest extends \PHPUnit\Framework\TestCase
 
         $string = $message->getBodyAsString();
 
-        self::assertSame('foo', $string);
+        $this->assertSame('foo', $string);
     }
 
     public function testCallbackBodyAsStream(): void
@@ -62,7 +62,7 @@ class MessageTest extends \PHPUnit\Framework\TestCase
 
         $stream = $message->getBodyAsStream();
 
-        self::assertSame('foo', stream_get_contents($stream));
+        $this->assertSame('foo', stream_get_contents($stream));
     }
 
     public function testGetBodyWhenCallback(): void
@@ -72,7 +72,7 @@ class MessageTest extends \PHPUnit\Framework\TestCase
         $message = new MessageMock();
         $message->setBody($callback);
 
-        self::assertSame($callback, $message->getBody());
+        $this->assertSame($callback, $message->getBody());
     }
 
     /**
@@ -96,10 +96,7 @@ class MessageTest extends \PHPUnit\Framework\TestCase
         $message->setBody($body);
         $message->setHeader('Content-Length', '4');
 
-        self::assertEquals(
-            'cdef',
-            $message->getBodyAsString()
-        );
+        $this->assertSame('cdef', $message->getBodyAsString());
     }
 
     /**
@@ -116,10 +113,7 @@ class MessageTest extends \PHPUnit\Framework\TestCase
         $message->setBody($body);
         $message->setHeader('Content-Length', '');
 
-        self::assertEquals(
-            'cdefg',
-            $message->getBodyAsString()
-        );
+        $this->assertSame('cdefg', $message->getBodyAsString());
     }
 
     public function testGetEmptyBodyStream(): void
@@ -127,7 +121,7 @@ class MessageTest extends \PHPUnit\Framework\TestCase
         $message = new MessageMock();
         $body = $message->getBodyAsStream();
 
-        self::assertEquals('', stream_get_contents($body));
+        $this->assertEquals('', stream_get_contents($body));
     }
 
     public function testGetEmptyBodyString(): void
@@ -135,7 +129,7 @@ class MessageTest extends \PHPUnit\Framework\TestCase
         $message = new MessageMock();
         $body = $message->getBodyAsString();
 
-        self::assertEquals('', $body);
+        $this->assertSame('', $body);
     }
 
     public function testHeaders(): void
@@ -144,16 +138,12 @@ class MessageTest extends \PHPUnit\Framework\TestCase
         $message->setHeader('X-Foo', 'bar');
 
         // Testing caselessness
-        self::assertEquals('bar', $message->getHeader('X-Foo'));
-        self::assertEquals('bar', $message->getHeader('x-fOO'));
+        $this->assertSame('bar', $message->getHeader('X-Foo'));
+        $this->assertSame('bar', $message->getHeader('x-fOO'));
 
-        self::assertTrue(
-            $message->removeHeader('X-FOO')
-        );
-        self::assertNull($message->getHeader('X-Foo'));
-        self::assertFalse(
-            $message->removeHeader('X-FOO')
-        );
+        $this->assertTrue($message->removeHeader('X-FOO'));
+        $this->assertNull($message->getHeader('X-Foo'));
+        $this->assertFalse($message->removeHeader('X-FOO'));
     }
 
     public function testSetHeaders(): void
@@ -166,7 +156,7 @@ class MessageTest extends \PHPUnit\Framework\TestCase
         ];
 
         $message->setHeaders($headers);
-        self::assertEquals($headers, $message->getHeaders());
+        $this->assertSame($headers, $message->getHeaders());
 
         $message->setHeaders([
             'X-Foo' => ['3', '4'],
@@ -178,7 +168,7 @@ class MessageTest extends \PHPUnit\Framework\TestCase
             'X-Bar' => ['5'],
         ];
 
-        self::assertEquals($expected, $message->getHeaders());
+        $this->assertSame($expected, $message->getHeaders());
     }
 
     public function testAddHeaders(): void
@@ -191,7 +181,7 @@ class MessageTest extends \PHPUnit\Framework\TestCase
         ];
 
         $message->addHeaders($headers);
-        self::assertEquals($headers, $message->getHeaders());
+        $this->assertSame($headers, $message->getHeaders());
 
         $message->addHeaders([
             'X-Foo' => ['3', '4'],
@@ -203,7 +193,7 @@ class MessageTest extends \PHPUnit\Framework\TestCase
             'X-Bar' => ['2', '5'],
         ];
 
-        self::assertEquals($expected, $message->getHeaders());
+        $this->assertSame($expected, $message->getHeaders());
     }
 
     public function testSendBody(): void
@@ -222,7 +212,7 @@ class MessageTest extends \PHPUnit\Framework\TestCase
         $body = $message->getBody();
         rewind($body);
 
-        self::assertEquals('bar', stream_get_contents($body));
+        $this->assertEquals('bar', stream_get_contents($body));
     }
 
     public function testMultipleHeaders(): void
@@ -231,44 +221,27 @@ class MessageTest extends \PHPUnit\Framework\TestCase
         $message->setHeader('a', '1');
         $message->addHeader('A', '2');
 
-        self::assertEquals(
-            '1,2',
-            $message->getHeader('A')
-        );
-        self::assertEquals(
-            '1,2',
-            $message->getHeader('a')
-        );
+        $this->assertSame('1,2', $message->getHeader('A'));
+        $this->assertSame('1,2', $message->getHeader('a'));
 
-        self::assertEquals(
-            ['1', '2'],
-            $message->getHeaderAsArray('a')
-        );
-        self::assertEquals(
-            ['1', '2'],
-            $message->getHeaderAsArray('A')
-        );
-        self::assertEquals(
-            [],
-            $message->getHeaderAsArray('B')
-        );
+        $this->assertSame(['1', '2'], $message->getHeaderAsArray('a'));
+        $this->assertSame(['1', '2'], $message->getHeaderAsArray('A'));
+        $this->assertSame([], $message->getHeaderAsArray('B'));
     }
 
     public function testHasHeaders(): void
     {
         $message = new MessageMock();
 
-        self::assertFalse($message->hasHeader('X-Foo'));
+        $this->assertFalse($message->hasHeader('X-Foo'));
         $message->setHeader('X-Foo', 'Bar');
-        self::assertTrue($message->hasHeader('X-Foo'));
+        $this->assertTrue($message->hasHeader('X-Foo'));
     }
 
     /**
-     * @param string $content
-     *
      * @return \Closure Returns a callback printing $content to php://output stream
      */
-    private function createCallback($content)
+    private function createCallback(string $content)
     {
         return function () use ($content): void {
             echo $content;

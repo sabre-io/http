@@ -7,7 +7,7 @@ namespace Sabre\HTTP\Auth;
 use Sabre\HTTP\Request;
 use Sabre\HTTP\Response;
 
-class AWSTest extends \PHPUnit\Framework\TestCase
+final class AWSTest extends \PHPUnit\Framework\TestCase
 {
     private Response $response;
 
@@ -17,7 +17,7 @@ class AWSTest extends \PHPUnit\Framework\TestCase
 
     public const REALM = 'SabreDAV unittest';
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->response = new Response();
         $this->request = new Request('GET', '/');
@@ -29,8 +29,8 @@ class AWSTest extends \PHPUnit\Framework\TestCase
         $this->request->setMethod('GET');
         $result = $this->auth->init();
 
-        self::assertFalse($result, 'No AWS Authorization header was supplied, so we should have gotten false');
-        self::assertEquals(AWS::ERR_NOAWSHEADER, $this->auth->errorCode);
+        $this->assertFalse($result, 'No AWS Authorization header was supplied, so we should have gotten false');
+        $this->assertSame(AWS::ERR_NOAWSHEADER, $this->auth->errorCode);
     }
 
     public function testInvalidAuthorizationHeader(): void
@@ -38,7 +38,7 @@ class AWSTest extends \PHPUnit\Framework\TestCase
         $this->request->setMethod('GET');
         $this->request->setHeader('Authorization', 'Invalid Auth Header');
 
-        self::assertFalse($this->auth->init(), 'The Invalid AWS authorization header');
+        $this->assertFalse($this->auth->init(), 'The Invalid AWS authorization header');
     }
 
     public function testIncorrectContentMD5(): void
@@ -48,7 +48,7 @@ class AWSTest extends \PHPUnit\Framework\TestCase
 
         $this->request->setMethod('GET');
         $this->request->setHeaders([
-            'Authorization' => "AWS $accessKey:sig",
+            'Authorization' => "AWS {$accessKey}:sig",
             'Content-MD5' => 'garbage',
         ]);
         $this->request->setUrl('/');
@@ -56,8 +56,8 @@ class AWSTest extends \PHPUnit\Framework\TestCase
         $this->auth->init();
         $result = $this->auth->validate($secretKey);
 
-        self::assertFalse($result);
-        self::assertEquals(AWS::ERR_MD5CHECKSUMWRONG, $this->auth->errorCode);
+        $this->assertFalse($result);
+        $this->assertSame(AWS::ERR_MD5CHECKSUMWRONG, $this->auth->errorCode);
     }
 
     public function testNoDate(): void
@@ -69,7 +69,7 @@ class AWSTest extends \PHPUnit\Framework\TestCase
 
         $this->request->setMethod('POST');
         $this->request->setHeaders([
-            'Authorization' => "AWS $accessKey:sig",
+            'Authorization' => "AWS {$accessKey}:sig",
             'Content-MD5' => $contentMD5,
         ]);
         $this->request->setUrl('/');
@@ -78,8 +78,8 @@ class AWSTest extends \PHPUnit\Framework\TestCase
         $this->auth->init();
         $result = $this->auth->validate($secretKey);
 
-        self::assertFalse($result);
-        self::assertEquals(AWS::ERR_INVALIDDATEFORMAT, $this->auth->errorCode);
+        $this->assertFalse($result);
+        $this->assertSame(AWS::ERR_INVALIDDATEFORMAT, $this->auth->errorCode);
     }
 
     public function testFutureDate(): void
@@ -95,7 +95,7 @@ class AWSTest extends \PHPUnit\Framework\TestCase
 
         $this->request->setMethod('POST');
         $this->request->setHeaders([
-            'Authorization' => "AWS $accessKey:sig",
+            'Authorization' => "AWS {$accessKey}:sig",
             'Content-MD5' => $contentMD5,
             'Date' => $date,
         ]);
@@ -105,8 +105,8 @@ class AWSTest extends \PHPUnit\Framework\TestCase
         $this->auth->init();
         $result = $this->auth->validate($secretKey);
 
-        self::assertFalse($result);
-        self::assertEquals(AWS::ERR_REQUESTTIMESKEWED, $this->auth->errorCode);
+        $this->assertFalse($result);
+        $this->assertSame(AWS::ERR_REQUESTTIMESKEWED, $this->auth->errorCode);
     }
 
     public function testPastDate(): void
@@ -122,7 +122,7 @@ class AWSTest extends \PHPUnit\Framework\TestCase
 
         $this->request->setMethod('POST');
         $this->request->setHeaders([
-            'Authorization' => "AWS $accessKey:sig",
+            'Authorization' => "AWS {$accessKey}:sig",
             'Content-MD5' => $contentMD5,
             'Date' => $date,
         ]);
@@ -132,8 +132,8 @@ class AWSTest extends \PHPUnit\Framework\TestCase
         $this->auth->init();
         $result = $this->auth->validate($secretKey);
 
-        self::assertFalse($result);
-        self::assertEquals(AWS::ERR_REQUESTTIMESKEWED, $this->auth->errorCode);
+        $this->assertFalse($result);
+        $this->assertSame(AWS::ERR_REQUESTTIMESKEWED, $this->auth->errorCode);
     }
 
     public function testIncorrectSignature(): void
@@ -151,7 +151,7 @@ class AWSTest extends \PHPUnit\Framework\TestCase
         $this->request->setUrl('/');
         $this->request->setMethod('POST');
         $this->request->setHeaders([
-            'Authorization' => "AWS $accessKey:sig",
+            'Authorization' => "AWS {$accessKey}:sig",
             'Content-MD5' => $contentMD5,
             'X-amz-date' => $date,
         ]);
@@ -160,8 +160,8 @@ class AWSTest extends \PHPUnit\Framework\TestCase
         $this->auth->init();
         $result = $this->auth->validate($secretKey);
 
-        self::assertFalse($result);
-        self::assertEquals(AWS::ERR_INVALIDSIGNATURE, $this->auth->errorCode);
+        $this->assertFalse($result);
+        $this->assertSame(AWS::ERR_INVALIDSIGNATURE, $this->auth->errorCode);
     }
 
     public function testValidRequest(): void
@@ -176,13 +176,13 @@ class AWSTest extends \PHPUnit\Framework\TestCase
         $date = $date->format('D, d M Y H:i:s \\G\\M\\T');
 
         $sig = base64_encode($this->hmacsha1($secretKey,
-            "POST\n$contentMD5\n\n$date\nx-amz-date:$date\n/evert"
+            "POST\n{$contentMD5}\n\n{$date}\nx-amz-date:{$date}\n/evert"
         ));
 
         $this->request->setUrl('/evert');
         $this->request->setMethod('POST');
         $this->request->setHeaders([
-            'Authorization' => "AWS $accessKey:$sig",
+            'Authorization' => "AWS {$accessKey}:{$sig}",
             'Content-MD5' => $contentMD5,
             'X-amz-date' => $date,
         ]);
@@ -192,15 +192,15 @@ class AWSTest extends \PHPUnit\Framework\TestCase
         $this->auth->init();
         $result = $this->auth->validate($secretKey);
 
-        self::assertTrue($result, 'Signature did not validate, got errorcode '.$this->auth->errorCode);
-        self::assertEquals($accessKey, $this->auth->getAccessKey());
+        $this->assertTrue($result, 'Signature did not validate, got errorcode '.$this->auth->errorCode);
+        $this->assertSame($accessKey, $this->auth->getAccessKey());
     }
 
     public function test401(): void
     {
         $this->auth->requireLogin();
         $test = preg_match('/^AWS$/', (string) $this->response->getHeader('WWW-Authenticate'), $matches);
-        self::assertTrue(1 === $test, 'The WWW-Authenticate response didn\'t match our pattern');
+        $this->assertSame(1, $test, "The WWW-Authenticate response didn't match our pattern");
     }
 
     /**
@@ -212,11 +212,11 @@ class AWSTest extends \PHPUnit\Framework\TestCase
         if (strlen($key) > $blocksize) {
             $key = pack('H*', sha1($key));
         }
+
         $key = str_pad($key, $blocksize, chr(0x00));
         $ipad = str_repeat(chr(0x36), $blocksize);
         $opad = str_repeat(chr(0x5C), $blocksize);
-        $hmac = pack('H*', sha1(($key ^ $opad).pack('H*', sha1(($key ^ $ipad).$message))));
 
-        return $hmac;
+        return pack('H*', sha1(($key ^ $opad).pack('H*', sha1(($key ^ $ipad).$message))));
     }
 }

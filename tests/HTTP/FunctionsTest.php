@@ -6,7 +6,7 @@ namespace Sabre\HTTP;
 
 use PHPUnit\Framework\Attributes\DataProvider;
 
-class FunctionsTest extends \PHPUnit\Framework\TestCase
+final class FunctionsTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @param array<int, string> $result
@@ -16,25 +16,23 @@ class FunctionsTest extends \PHPUnit\Framework\TestCase
     #[DataProvider('getHeaderValuesDataOnValues2')]
     public function testGetHeaderValuesOnValues2(array $result, array $values1, array $values2): void
     {
-        self::assertEquals($result, getHeaderValues($values1, $values2));
+        $this->assertEquals($result, getHeaderValues($values1, $values2));
     }
 
     /**
-     * @return array<int, array<int, array<int, string>>>
+     * @return \Iterator<int, array<int, array<int, string>>>
      */
-    public static function getHeaderValuesDataOnValues2(): array
+    public static function getHeaderValuesDataOnValues2(): \Iterator
     {
-        return [
-            [
-                ['a', 'b'],
-                ['a'],
-                ['b'],
-            ],
-            [
-                ['a', 'b', 'c', 'd', 'e'],
-                ['a', 'b', 'c'],
-                ['d', 'e'],
-            ],
+        yield [
+            ['a', 'b'],
+            ['a'],
+            ['b'],
+        ];
+        yield [
+            ['a', 'b', 'c', 'd', 'e'],
+            ['a', 'b', 'c'],
+            ['d', 'e'],
         ];
     }
 
@@ -43,40 +41,35 @@ class FunctionsTest extends \PHPUnit\Framework\TestCase
      * @param array<int, mixed> $output
      */
     #[DataProvider('getHeaderValuesData')]
-    public function testGetHeaderValues($input, array $output): void
+    public function testGetHeaderValues(string|array $input, array $output): void
     {
-        self::assertEquals(
-            $output,
-            getHeaderValues($input)
-        );
+        $this->assertEquals($output, getHeaderValues($input));
     }
 
     /**
-     * @return array<int, mixed>
+     * @return \Iterator<int, mixed>
      */
-    public static function getHeaderValuesData(): array
+    public static function getHeaderValuesData(): \Iterator
     {
-        return [
-            [
-                'a',
-                ['a'],
-            ],
-            [
-                'a,b',
-                ['a', 'b'],
-            ],
-            [
-                'a, b',
-                ['a', 'b'],
-            ],
-            [
-                ['a, b'],
-                ['a', 'b'],
-            ],
-            [
-                ['a, b', 'c', 'd,e'],
-                ['a', 'b', 'c', 'd', 'e'],
-            ],
+        yield [
+            'a',
+            ['a'],
+        ];
+        yield [
+            'a,b',
+            ['a', 'b'],
+        ];
+        yield [
+            'a, b',
+            ['a', 'b'],
+        ];
+        yield [
+            ['a, b'],
+            ['a', 'b'],
+        ];
+        yield [
+            ['a, b', 'c', 'd,e'],
+            ['a', 'b', 'c', 'd', 'e'],
         ];
     }
 
@@ -85,70 +78,65 @@ class FunctionsTest extends \PHPUnit\Framework\TestCase
      * @param array<int, mixed> $output
      */
     #[DataProvider('preferData')]
-    public function testPrefer($input, array $output): void
+    public function testPrefer(string|array $input, array $output): void
     {
-        self::assertEquals(
-            $output,
-            parsePrefer($input)
-        );
+        $this->assertEquals($output, parsePrefer($input));
     }
 
     /**
-     * @return array<int, mixed>
+     * @return \Iterator<int, mixed>
      */
-    public static function preferData(): array
+    public static function preferData(): \Iterator
     {
-        return [
-            [
-                'foo; bar',
-                ['foo' => true],
-            ],
-            [
-                'foo; bar=""',
-                ['foo' => true],
-            ],
-            [
-                'foo=""; bar',
-                ['foo' => true],
-            ],
-            [
-                'FOO',
-                ['foo' => true],
-            ],
-            [
-                'respond-async',
-                ['respond-async' => true],
-            ],
-            [
-                ['respond-async, wait=100', 'handling=lenient'],
-                ['respond-async' => true, 'wait' => 100, 'handling' => 'lenient'],
-            ],
-            [
-                ['respond-async, wait=100, handling=lenient'],
-                ['respond-async' => true, 'wait' => 100, 'handling' => 'lenient'],
-            ],
-            // Old values
-            [
-                'return-asynch, return-representation',
-                ['respond-async' => true, 'return' => 'representation'],
-            ],
-            [
-                'return-minimal',
-                ['return' => 'minimal'],
-            ],
-            [
-                'strict',
-                ['handling' => 'strict'],
-            ],
-            [
-                'lenient',
-                ['handling' => 'lenient'],
-            ],
-            // Invalid token
-            [
-                ['foo=%bar%'],
-                [],
-            ],
+        yield [
+            'foo; bar',
+            ['foo' => true],
+        ];
+        yield [
+            'foo; bar=""',
+            ['foo' => true],
+        ];
+        yield [
+            'foo=""; bar',
+            ['foo' => true],
+        ];
+        yield [
+            'FOO',
+            ['foo' => true],
+        ];
+        yield [
+            'respond-async',
+            ['respond-async' => true],
+        ];
+        yield [
+            ['respond-async, wait=100', 'handling=lenient'],
+            ['respond-async' => true, 'wait' => 100, 'handling' => 'lenient'],
+        ];
+        yield [
+            ['respond-async, wait=100, handling=lenient'],
+            ['respond-async' => true, 'wait' => 100, 'handling' => 'lenient'],
+        ];
+        // Old values
+        yield [
+            'return-asynch, return-representation',
+            ['respond-async' => true, 'return' => 'representation'],
+        ];
+        yield [
+            'return-minimal',
+            ['return' => 'minimal'],
+        ];
+        yield [
+            'strict',
+            ['handling' => 'strict'],
+        ];
+        yield [
+            'lenient',
+            ['handling' => 'lenient'],
+        ];
+        // Invalid token
+        yield [
+            ['foo=%bar%'],
+            [],
         ];
     }
 
@@ -164,11 +152,11 @@ class FunctionsTest extends \PHPUnit\Framework\TestCase
 
         foreach ($times as $time) {
             $result = parseDate($time);
-            self::assertEquals($expected, $result->format('U'));
+            $this->assertEquals($expected, $result->format('U'));
         }
 
         $result = parseDate('Wed Oct  6 10:26:00 2010');
-        self::assertEquals(1286360760, $result->format('U'));
+        $this->assertEquals(1286360760, $result->format('U'));
     }
 
     public function testParseHTTPDateFail(): void
@@ -193,7 +181,7 @@ class FunctionsTest extends \PHPUnit\Framework\TestCase
         ];
 
         foreach ($times as $time) {
-            self::assertFalse(parseDate($time), 'We used the string: '.$time);
+            $this->assertFalse(parseDate($time), 'We used the string: '.$time);
         }
     }
 
@@ -211,10 +199,7 @@ class FunctionsTest extends \PHPUnit\Framework\TestCase
     {
         $dt = new \DateTime('2011-12-10 12:00:00 +0200');
 
-        self::assertEquals(
-            'Sat, 10 Dec 2011 10:00:00 GMT',
-            toDate($dt)
-        );
+        $this->assertSame('Sat, 10 Dec 2011 10:00:00 GMT', toDate($dt));
     }
 
     public function testParseMimeTypeOnInvalidMimeType(): void

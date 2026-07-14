@@ -508,7 +508,7 @@ class ClientMock extends Client
     /**
      * Making this method public.
      */
-    protected function receiveCurlHeader($curlHandle, string $headerLine): int
+    public function receiveCurlHeader($curlHandle, string $headerLine): int
     {
         return parent::receiveCurlHeader($curlHandle, $headerLine);
     }
@@ -516,7 +516,7 @@ class ClientMock extends Client
     /**
      * Making this method public.
      */
-    protected function createCurlSettingsArray(RequestInterface $request): array
+    public function createCurlSettingsArray(RequestInterface $request): array
     {
         return parent::createCurlSettingsArray($request);
     }
@@ -524,7 +524,7 @@ class ClientMock extends Client
     /**
      * Making this method public.
      */
-    protected function parseCurlResult(string $response, $curlHandle): array
+    public function parseCurlResult(string $response, $curlHandle): array
     {
         return parent::parseCurlResult($response, $curlHandle);
     }
@@ -532,7 +532,7 @@ class ClientMock extends Client
     /**
      * This method is responsible for performing a single request.
      */
-    protected function doRequest(RequestInterface $request): ResponseInterface
+    public function doRequest(RequestInterface $request): ResponseInterface
     {
         $response = null;
         $this->emit('doRequest', [$request, &$response]);
@@ -553,7 +553,7 @@ class ClientMock extends Client
      *
      * @param resource $curlHandle
      */
-    protected function curlStuff($curlHandle): array
+    public function curlStuff($curlHandle): array
     {
         $return = null;
         $this->emit('curlStuff', [&$return]);
@@ -574,7 +574,7 @@ class ClientMock extends Client
      *
      * @param resource $curlHandle
      */
-    protected function curlExec($curlHandle): string
+    public function curlExec($curlHandle): string
     {
         $return = null;
         $this->emit('curlExec', [&$return]);

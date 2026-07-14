@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use Rector\CodingStyle\Rector\ClassMethod\MakeInheritedMethodVisibilitySameAsParentRector;
 use Rector\CodingStyle\Rector\Encapsed\EncapsedStringsToSprintfRector;
 use Rector\Config\RectorConfig;
 use Rector\PHPUnit\AnnotationsToAttributes\Rector\ClassMethod\DataProviderAnnotationToAttributeRector;
@@ -34,4 +35,7 @@ return RectorConfig::configure()
     )->withSkip([
         AddSeeTestAnnotationRector::class,
         EncapsedStringsToSprintfRector::class,
+        MakeInheritedMethodVisibilitySameAsParentRector::class => [
+            'tests/HTTP/ClientTest.php',
+        ],
     ]);

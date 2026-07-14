@@ -6,6 +6,7 @@ $config->getFinder()
     ->in(__DIR__)
     ->append([
         __FILE__,
+        'rector.php',
     ]);
 $config->setRules([
     '@PSR1' => true,

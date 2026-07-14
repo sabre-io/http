@@ -374,7 +374,7 @@ function parseMimeType(string $str): array
  */
 function encodePath(string $path): string
 {
-    return preg_replace_callback('/([^A-Za-z0-9_\-\.~\(\)\/:@])/', fn ($match) => '%'.sprintf('%02x', ord($match[0])), $path);
+    return preg_replace_callback('/([^A-Za-z0-9_\-\.~\(\)\/:@])/', fn ($match): string => '%'.sprintf('%02x', ord($match[0])), $path);
 }
 
 /**
@@ -384,7 +384,7 @@ function encodePath(string $path): string
  */
 function encodePathSegment(string $pathSegment): string
 {
-    return preg_replace_callback('/([^A-Za-z0-9_\-\.~\(\):@])/', fn ($match) => '%'.sprintf('%02x', ord($match[0])), $pathSegment);
+    return preg_replace_callback('/([^A-Za-z0-9_\-\.~\(\):@])/', fn ($match): string => '%'.sprintf('%02x', ord($match[0])), $pathSegment);
 }
 
 /**

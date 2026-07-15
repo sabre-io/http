@@ -20,7 +20,7 @@ final class FunctionsTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return \Iterator<int, array<int, array<int, string>>>
+     * @return \Iterator<int, list<list<string>>>
      */
     public static function getHeaderValuesDataOnValues2(): \Iterator
     {
@@ -37,11 +37,11 @@ final class FunctionsTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @param string            $input
+     * @param list<string>      $input
      * @param array<int, mixed> $output
      */
     #[DataProvider('getHeaderValuesData')]
-    public function testGetHeaderValues(string|array $input, array $output): void
+    public function testGetHeaderValues(array $input, array $output): void
     {
         $this->assertEquals($output, getHeaderValues($input));
     }
@@ -74,8 +74,8 @@ final class FunctionsTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @param string            $input
-     * @param array<int, mixed> $output
+     * @param string|list<string> $input
+     * @param array<int, mixed>   $output
      */
     #[DataProvider('preferData')]
     public function testPrefer(string|array $input, array $output): void

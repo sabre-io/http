@@ -175,9 +175,7 @@ class AWSTest extends \PHPUnit\Framework\TestCase
         $date->setTimezone(new \DateTimeZone('GMT'));
         $date = $date->format('D, d M Y H:i:s \\G\\M\\T');
 
-        $sig = base64_encode($this->hmacsha1($secretKey,
-            "POST\n$contentMD5\n\n$date\nx-amz-date:$date\n/evert"
-        ));
+        $sig = base64_encode(hash_hmac('sha1', "POST\n$contentMD5\n\n$date\nx-amz-date:$date\n/evert", $secretKey, true));
 
         $this->request->setUrl('/evert');
         $this->request->setMethod('POST');

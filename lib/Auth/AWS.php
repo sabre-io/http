@@ -107,16 +107,14 @@ class AWS extends AbstractAuth
 
         $amzHeaders = $this->getAmzHeaders();
 
-        $signature = base64_encode(
-            $this->hmacsha1($secretKey,
-                $this->request->getMethod()."\n".
+        $message = $this->request->getMethod()."\n".
                 $contentMD5."\n".
                 $this->request->getHeader('Content-type')."\n".
                 $requestDate."\n".
                 $amzHeaders.
-                $this->request->getUrl()
-            )
-        );
+                $this->request->getUrl();
+
+        $signature = base64_encode(hash_hmac('sha1', $message, $secretKey, true));
 
         if ($this->signature !== $signature) {
             $this->errorCode = self::ERR_INVALIDSIGNATURE;
@@ -191,26 +189,5 @@ class AWS extends AbstractAuth
         }
 
         return $headerStr;
-    }
-
-    /**
-     * Generates an HMAC-SHA1 signature.
-     */
-    private function hmacsha1(string $key, string $message): string
-    {
-        if (function_exists('hash_hmac')) {
-            return hash_hmac('sha1', $message, $key, true);
-        }
-
-        $blocksize = 64;
-        if (strlen($key) > $blocksize) {
-            $key = pack('H*', sha1($key));
-        }
-        $key = str_pad($key, $blocksize, chr(0x00));
-        $ipad = str_repeat(chr(0x36), $blocksize);
-        $opad = str_repeat(chr(0x5C), $blocksize);
-        $hmac = pack('H*', sha1(($key ^ $opad).pack('H*', sha1(($key ^ $ipad).$message))));
-
-        return $hmac;
     }
 }

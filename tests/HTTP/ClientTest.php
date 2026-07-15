@@ -4,14 +4,14 @@ declare(strict_types=1);
 
 namespace Sabre\HTTP;
 
-class ClientTest extends \PHPUnit\Framework\TestCase
+final class ClientTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Returns the expected curl protocol settings depending on available constants.
      *
      * @return array<int,int|string>
      */
-    private static function protocolSettings(): array
+    private function protocolSettings(): array
     {
         if (defined('CURLOPT_PROTOCOLS_STR') && defined('CURLOPT_REDIR_PROTOCOLS_STR')) {
             return [
@@ -46,9 +46,9 @@ class ClientTest extends \PHPUnit\Framework\TestCase
             CURLOPT_URL => 'http://example.org/',
             CURLOPT_CUSTOMREQUEST => 'GET',
             CURLOPT_USERAGENT => 'sabre-http/'.Version::VERSION.' (http://sabre.io/)',
-        ] + self::protocolSettings();
+        ] + $this->protocolSettings();
 
-        self::assertEquals($settings, $client->createCurlSettingsArray($request));
+        $this->assertEquals($settings, $client->createCurlSettingsArray($request));
     }
 
     public function testCreateCurlSettingsHTTPHeader(): void
@@ -71,9 +71,9 @@ class ClientTest extends \PHPUnit\Framework\TestCase
             CURLOPT_URL => 'http://example.org/',
             CURLOPT_CUSTOMREQUEST => 'GET',
             CURLOPT_USERAGENT => 'sabre-http/'.Version::VERSION.' (http://sabre.io/)',
-        ] + self::protocolSettings();
+        ] + $this->protocolSettings();
 
-        self::assertEquals($settings, $client->createCurlSettingsArray($request));
+        $this->assertEquals($settings, $client->createCurlSettingsArray($request));
     }
 
     public function testCreateCurlSettingsArrayHEAD(): void
@@ -89,9 +89,9 @@ class ClientTest extends \PHPUnit\Framework\TestCase
             CURLOPT_HTTPHEADER => ['X-Foo: bar'],
             CURLOPT_URL => 'http://example.org/',
             CURLOPT_USERAGENT => 'sabre-http/'.Version::VERSION.' (http://sabre.io/)',
-        ] + self::protocolSettings();
+        ] + $this->protocolSettings();
 
-        self::assertEquals($settings, $client->createCurlSettingsArray($request));
+        $this->assertEquals($settings, $client->createCurlSettingsArray($request));
     }
 
     public function testCreateCurlSettingsArrayGETAfterHEAD(): void
@@ -115,9 +115,9 @@ class ClientTest extends \PHPUnit\Framework\TestCase
             CURLOPT_NOBODY => false,
             CURLOPT_URL => 'http://example.org/',
             CURLOPT_USERAGENT => 'sabre-http/'.Version::VERSION.' (http://sabre.io/)',
-        ] + self::protocolSettings();
+        ] + $this->protocolSettings();
 
-        self::assertEquals($settings, $client->createCurlSettingsArray($request));
+        $this->assertEquals($settings, $client->createCurlSettingsArray($request));
     }
 
     public function testCreateCurlSettingsArrayPUTStream(): void
@@ -140,9 +140,9 @@ class ClientTest extends \PHPUnit\Framework\TestCase
             CURLOPT_HTTPHEADER => ['X-Foo: bar'],
             CURLOPT_URL => 'http://example.org/',
             CURLOPT_USERAGENT => 'sabre-http/'.Version::VERSION.' (http://sabre.io/)',
-        ] + self::protocolSettings();
+        ] + $this->protocolSettings();
 
-        self::assertEquals($settings, $client->createCurlSettingsArray($request));
+        $this->assertEquals($settings, $client->createCurlSettingsArray($request));
     }
 
     public function testCreateCurlSettingsArrayPUTString(): void
@@ -159,9 +159,9 @@ class ClientTest extends \PHPUnit\Framework\TestCase
             CURLOPT_HTTPHEADER => ['X-Foo: bar'],
             CURLOPT_URL => 'http://example.org/',
             CURLOPT_USERAGENT => 'sabre-http/'.Version::VERSION.' (http://sabre.io/)',
-        ] + self::protocolSettings();
+        ] + $this->protocolSettings();
 
-        self::assertEquals($settings, $client->createCurlSettingsArray($request));
+        $this->assertEquals($settings, $client->createCurlSettingsArray($request));
     }
 
     public function testIssue89MultiplePutInfileGivesWarning(): void
@@ -171,20 +171,20 @@ class ClientTest extends \PHPUnit\Framework\TestCase
         $request = new Request('POST', 'http://example.org/', ['X-Foo' => 'bar'], 'body');
 
         $settings = $client->createCurlSettingsArray($request);
-        self::assertArrayNotHasKey(CURLOPT_PUT, $settings);
-        self::assertArrayNotHasKey(CURLOPT_INFILE, $settings);
+        $this->assertArrayNotHasKey(CURLOPT_PUT, $settings);
+        $this->assertArrayNotHasKey(CURLOPT_INFILE, $settings);
 
         $request = new Request('POST', 'http://example.org/', ['X-Foo' => 'bar'], $tmpFile);
 
         $settings = $client->createCurlSettingsArray($request);
-        self::assertEquals(true, $settings[CURLOPT_PUT]);
-        self::assertEquals($tmpFile, $settings[CURLOPT_INFILE]);
+        $this->assertEquals(true, $settings[CURLOPT_PUT]);
+        $this->assertEquals($tmpFile, $settings[CURLOPT_INFILE]);
 
         $request = new Request('POST', 'http://example.org/', ['X-Foo' => 'bar'], 'body');
 
         $settings = $client->createCurlSettingsArray($request);
-        self::assertArrayNotHasKey(CURLOPT_PUT, $settings);
-        self::assertArrayNotHasKey(CURLOPT_INFILE, $settings);
+        $this->assertArrayNotHasKey(CURLOPT_PUT, $settings);
+        $this->assertArrayNotHasKey(CURLOPT_INFILE, $settings);
     }
 
     public function testSend(): void
@@ -198,19 +198,16 @@ class ClientTest extends \PHPUnit\Framework\TestCase
 
         $response = $client->send($request);
 
-        self::assertEquals(200, $response->getStatus());
+        $this->assertSame(200, $response->getStatus());
     }
 
-    /**
-     * @return false|string
-     */
-    protected function getAbsoluteUrl(string $path)
+    protected function getAbsoluteUrl(string $path): string|false
     {
         $baseUrl = getenv('BASEURL');
         if ($baseUrl) {
             $path = ltrim($path, '/');
 
-            return "$baseUrl/$path";
+            return "{$baseUrl}/{$path}";
         }
 
         return false;
@@ -238,12 +235,8 @@ class ClientTest extends \PHPUnit\Framework\TestCase
         $client = new Client();
         $response = $client->send($request);
 
-        self::assertEquals(200, $response->getStatus());
-        self::assertLessThan(
-            (int) $maxPeakMemoryUsage,
-            memory_get_peak_usage(),
-            "Hint: you can adjust the max peak memory usage allowed for this test by defining env variable $maxPeakMemoryUsageEnvVariable to be the desired max bytes"
-        );
+        $this->assertSame(200, $response->getStatus());
+        $this->assertLessThan((int) $maxPeakMemoryUsage, memory_get_peak_usage(), "Hint: you can adjust the max peak memory usage allowed for this test by defining env variable {$maxPeakMemoryUsageEnvVariable} to be the desired max bytes");
     }
 
     /**
@@ -260,12 +253,12 @@ class ClientTest extends \PHPUnit\Framework\TestCase
 
         $request = new Request('GET', $url);
         $client->sendAsync($request, function (ResponseInterface $response): void {
-            self::assertEquals("foo\n", $response->getBody());
-            self::assertEquals(200, $response->getStatus());
-            self::assertEquals(4, $response->getHeader('Content-Length'));
-        }, function ($error) use ($request): void {
+            $this->assertEquals("foo\n", $response->getBody());
+            $this->assertSame(200, $response->getStatus());
+            $this->assertEquals(4, $response->getHeader('Content-Length'));
+        }, function ($error) use ($request): never {
             $url = $request->getUrl();
-            self::fail("Failed to GET $url");
+            self::fail("Failed to GET {$url}");
         });
 
         $client->wait();
@@ -285,23 +278,23 @@ class ClientTest extends \PHPUnit\Framework\TestCase
 
         $request = new Request('GET', $url);
         $client->sendAsync($request, function (ResponseInterface $response): void {
-            self::assertEquals("foo\n", $response->getBody());
-            self::assertEquals(200, $response->getStatus());
-            self::assertEquals(4, $response->getHeader('Content-Length'));
-        }, function ($error) use ($request): void {
+            $this->assertEquals("foo\n", $response->getBody());
+            $this->assertSame(200, $response->getStatus());
+            $this->assertEquals(4, $response->getHeader('Content-Length'));
+        }, function ($error) use ($request): never {
             $url = $request->getUrl();
-            self::fail("Failed to get $url");
+            self::fail("Failed to get {$url}");
         });
 
         $url = $this->getAbsoluteUrl('/bar.php');
         $request = new Request('GET', $url);
         $client->sendAsync($request, function (ResponseInterface $response): void {
-            self::assertEquals("bar\n", $response->getBody());
-            self::assertEquals(200, $response->getStatus());
-            self::assertEquals('Bar', $response->getHeader('X-Test'));
-        }, function ($error) use ($request): void {
+            $this->assertEquals("bar\n", $response->getBody());
+            $this->assertSame(200, $response->getStatus());
+            $this->assertSame('Bar', $response->getHeader('X-Test'));
+        }, function ($error) use ($request): never {
             $url = $request->getUrl();
-            self::fail("Failed to get $url");
+            self::fail("Failed to get {$url}");
         });
 
         $client->wait();
@@ -312,7 +305,7 @@ class ClientTest extends \PHPUnit\Framework\TestCase
         $client = new ClientMock();
         $request = new Request('GET', 'http://example.org/');
 
-        $client->on('doRequest', function ($request, &$response): void {
+        $client->on('doRequest', function ($request, &$response): never {
             throw new ClientException('aaah', 1);
         });
         $called = false;
@@ -325,7 +318,8 @@ class ClientTest extends \PHPUnit\Framework\TestCase
             self::fail('send() should have thrown an exception');
         } catch (ClientException) {
         }
-        self::assertTrue($called);
+
+        $this->assertTrue($called);
     }
 
     public function testSendHttpError(): void
@@ -345,7 +339,7 @@ class ClientTest extends \PHPUnit\Framework\TestCase
         });
 
         $client->send($request);
-        self::assertEquals(2, $called);
+        $this->assertSame(2, $called);
     }
 
     public function testSendRetry(): void
@@ -356,11 +350,7 @@ class ClientTest extends \PHPUnit\Framework\TestCase
         $called = 0;
         $client->on('doRequest', function ($request, &$response) use (&$called): void {
             ++$called;
-            if ($called < 3) {
-                $response = new Response(404);
-            } else {
-                $response = new Response(200);
-            }
+            $response = $called < 3 ? new Response(404) : new Response(200);
         });
 
         $errorCalled = 0;
@@ -370,15 +360,16 @@ class ClientTest extends \PHPUnit\Framework\TestCase
         });
 
         $response = $client->send($request);
-        self::assertEquals(3, $called);
-        self::assertEquals(2, $errorCalled);
-        self::assertEquals(200, $response->getStatus());
+        $this->assertSame(3, $called);
+        $this->assertSame(2, $errorCalled);
+        $this->assertSame(200, $response->getStatus());
     }
 
     public function testHttpErrorException(): void
     {
         $client = new ClientMock();
         $client->setThrowExceptions(true);
+
         $request = new Request('GET', 'http://example.org/');
 
         $client->on('doRequest', function ($request, &$response): void {
@@ -388,9 +379,9 @@ class ClientTest extends \PHPUnit\Framework\TestCase
         try {
             $client->send($request);
             self::fail('An exception should have been thrown');
-        } catch (ClientHttpException $e) {
-            self::assertEquals(404, $e->getHttpStatus());
-            self::assertInstanceOf(Response::class, $e->getResponse());
+        } catch (ClientHttpException $clientHttpException) {
+            $this->assertEquals(404, $clientHttpException->getHttpStatus());
+            $this->assertInstanceOf(Response::class, $clientHttpException->getResponse());
         }
     }
 
@@ -412,11 +403,11 @@ class ClientTest extends \PHPUnit\Framework\TestCase
         /** @phpstan-ignore-next-line */
         $result = $client->parseCurlResult($body, 'foobar');
 
-        self::assertEquals(Client::STATUS_SUCCESS, $result['status']);
-        self::assertEquals(200, $result['http_code']);
-        self::assertEquals(200, $result['response']->getStatus());
-        self::assertEquals(['Header1' => ['Val1']], $result['response']->getHeaders());
-        self::assertEquals('Foo', $result['response']->getBodyAsString());
+        $this->assertEquals(Client::STATUS_SUCCESS, $result['status']);
+        $this->assertEquals(200, $result['http_code']);
+        $this->assertEquals(200, $result['response']->getStatus());
+        $this->assertEquals(['Header1' => ['Val1']], $result['response']->getHeaders());
+        $this->assertEquals('Foo', $result['response']->getBodyAsString());
     }
 
     public function testParseCurlResultEmptyBody(): void
@@ -437,11 +428,11 @@ class ClientTest extends \PHPUnit\Framework\TestCase
         /** @phpstan-ignore-next-line */
         $result = $client->parseCurlResult($body, 'foobar');
 
-        self::assertEquals(Client::STATUS_SUCCESS, $result['status']);
-        self::assertEquals(200, $result['http_code']);
-        self::assertEquals(200, $result['response']->getStatus());
-        self::assertEquals(['Header1' => ['Val1']], $result['response']->getHeaders());
-        self::assertEquals('', $result['response']->getBodyAsString());
+        $this->assertEquals(Client::STATUS_SUCCESS, $result['status']);
+        $this->assertEquals(200, $result['http_code']);
+        $this->assertEquals(200, $result['response']->getStatus());
+        $this->assertEquals(['Header1' => ['Val1']], $result['response']->getHeaders());
+        $this->assertEquals('', $result['response']->getBodyAsString());
     }
 
     public function testParseCurlError(): void
@@ -459,9 +450,9 @@ class ClientTest extends \PHPUnit\Framework\TestCase
         /** @phpstan-ignore-next-line */
         $result = $client->parseCurlResult($body, 'foobar');
 
-        self::assertEquals(Client::STATUS_CURLERROR, $result['status']);
-        self::assertEquals(1, $result['curl_errno']);
-        self::assertEquals('Curl error', $result['curl_errmsg']);
+        $this->assertEquals(Client::STATUS_CURLERROR, $result['status']);
+        $this->assertEquals(1, $result['curl_errno']);
+        $this->assertEquals('Curl error', $result['curl_errmsg']);
     }
 
     public function testDoRequest(): void
@@ -482,9 +473,9 @@ class ClientTest extends \PHPUnit\Framework\TestCase
             ];
         });
         $response = $client->doRequest($request);
-        self::assertEquals(200, $response->getStatus());
-        self::assertEquals(['Header1' => ['Val1']], $response->getHeaders());
-        self::assertEquals('Foo', $response->getBodyAsString());
+        $this->assertSame(200, $response->getStatus());
+        $this->assertSame(['Header1' => ['Val1']], $response->getHeaders());
+        $this->assertSame('Foo', $response->getBodyAsString());
     }
 
     public function testDoRequestCurlError(): void
@@ -505,9 +496,9 @@ class ClientTest extends \PHPUnit\Framework\TestCase
         try {
             $response = $client->doRequest($request);
             self::fail('This should have thrown an exception');
-        } catch (ClientException $e) {
-            self::assertEquals(1, $e->getCode());
-            self::assertEquals('Curl error', $e->getMessage());
+        } catch (ClientException $clientException) {
+            $this->assertEquals(1, $clientException->getCode());
+            $this->assertSame('Curl error', $clientException->getMessage());
         }
     }
 }
@@ -562,7 +553,7 @@ class ClientMock extends Client
      *
      * @param resource $curlHandle
      */
-    protected function curlStuff($curlHandle): array
+    public function curlStuff($curlHandle): array
     {
         $return = null;
         $this->emit('curlStuff', [&$return]);
@@ -583,7 +574,7 @@ class ClientMock extends Client
      *
      * @param resource $curlHandle
      */
-    protected function curlExec($curlHandle): string
+    public function curlExec($curlHandle): string
     {
         $return = null;
         $this->emit('curlExec', [&$return]);

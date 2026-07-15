@@ -149,9 +149,7 @@ class Client extends EventEmitter
                 // If retry was still set to false, it means no event handler
                 // dealt with the problem. In this case we just re-throw the
                 // exception.
-                if (!$retry) {
-                    throw $e;
-                }
+                throw $e;
             }
 
             if ($retry) {
@@ -194,7 +192,7 @@ class Client extends EventEmitter
     public function poll(): bool
     {
         // nothing to do?
-        if (0 === count($this->curlMultiMap)) {
+        if ([] === $this->curlMultiMap) {
             return false;
         }
 
@@ -264,7 +262,7 @@ class Client extends EventEmitter
             }
         } while ($messagesInQueue > 0);
 
-        return count($this->curlMultiMap) > 0;
+        return [] !== $this->curlMultiMap;
     }
 
     /**
@@ -335,7 +333,7 @@ class Client extends EventEmitter
      *
      * @var resource|null
      */
-    private $curlHandle;
+    private \CurlHandle|bool|null $curlHandle = null;
 
     /**
      * Handler for curl_multi requests.
@@ -344,7 +342,7 @@ class Client extends EventEmitter
      *
      * @var resource|null
      */
-    private $curlMultiHandle;
+    private ?\CurlMultiHandle $curlMultiHandle = null;
 
     /**
      * Has a list of curl handles, as well as their associated success and
@@ -391,6 +389,7 @@ class Client extends EventEmitter
                     // post local files.
                     $settings[CURLOPT_POSTFIELDS] = (string) $body;
                 }
+
                 $settings[CURLOPT_CUSTOMREQUEST] = $request->getMethod();
                 break;
         }
@@ -405,6 +404,7 @@ class Client extends EventEmitter
         if ([] !== $nHeaders) {
             $settings[CURLOPT_HTTPHEADER] = $nHeaders;
         }
+
         $settings[CURLOPT_URL] = $request->getUrl();
         // Prefer string-based protocol constants (PHP 8.3+), fall back to
         // bitmask constants for older PHP versions.  When PHP eventually
@@ -422,7 +422,9 @@ class Client extends EventEmitter
     }
 
     public const STATUS_SUCCESS = 0;
+
     public const STATUS_CURLERROR = 1;
+
     public const STATUS_HTTPERROR = 2;
 
     /**
@@ -437,17 +439,12 @@ class Client extends EventEmitter
 
         if ($separatedHeaders) {
             $resourceId = (int) $curlHandle;
-            if (isset($this->headerLinesMap[$resourceId])) {
-                $headers = $this->headerLinesMap[$resourceId];
-            } else {
-                $headers = [];
-            }
-            $response = $this->parseCurlResponse($headers, $response, $curlHandle);
-        } else {
-            $response = $this->parseCurlResult($response, $curlHandle);
+            $headers = $this->headerLinesMap[$resourceId] ?? [];
+
+            return $this->parseCurlResponse($headers, $response, $curlHandle);
         }
 
-        return $response;
+        return $this->parseCurlResult($response, $curlHandle);
     }
 
     /**
@@ -576,9 +573,10 @@ class Client extends EventEmitter
      */
     protected function sendAsyncInternal(RequestInterface $request, callable $success, callable $error, int $retryCount = 0): void
     {
-        if (null === $this->curlMultiHandle) {
+        if (!$this->curlMultiHandle instanceof \CurlMultiHandle) {
             $this->curlMultiHandle = curl_multi_init();
         }
+
         $curl = curl_init();
         curl_setopt_array(
             $curl,
@@ -611,7 +609,7 @@ class Client extends EventEmitter
 
         $result = curl_exec($curlHandle);
         if (false === $result) {
-            $result = '';
+            return '';
         }
 
         return $result;

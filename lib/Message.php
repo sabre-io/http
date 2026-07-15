@@ -50,6 +50,7 @@ abstract class Message implements MessageInterface
         if (is_callable($this->body)) {
             $body = $this->getBodyAsString();
         }
+
         if (is_string($body) || null === $body) {
             $stream = fopen('php://temp', 'r+');
             fwrite($stream, (string) $body);
@@ -73,15 +74,18 @@ abstract class Message implements MessageInterface
         if (is_string($body)) {
             return $body;
         }
+
         if (null === $body) {
             return '';
         }
+
         if (is_callable($body)) {
             ob_start();
             $body();
 
             return ob_get_clean();
         }
+
         $contentLength = $this->getHeader('Content-Length');
         if (null !== $contentLength && ctype_digit($contentLength)) {
             return stream_get_contents($body, (int) $contentLength);
@@ -265,6 +269,7 @@ abstract class Message implements MessageInterface
         if (!isset($this->headers[$name])) {
             return false;
         }
+
         unset($this->headers[$name]);
 
         return true;

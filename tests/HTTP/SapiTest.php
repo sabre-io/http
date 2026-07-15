@@ -7,7 +7,7 @@ namespace Sabre\HTTP;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Depends;
 
-class SapiTest extends \PHPUnit\Framework\TestCase
+final class SapiTest extends \PHPUnit\Framework\TestCase
 {
     public function testConstructFromServerArray(): void
     {
@@ -20,18 +20,18 @@ class SapiTest extends \PHPUnit\Framework\TestCase
             'SERVER_PROTOCOL' => 'HTTP/1.0',
         ]);
 
-        self::assertEquals('GET', $request->getMethod());
-        self::assertEquals('/foo', $request->getUrl());
-        self::assertEquals([
+        $this->assertSame('GET', $request->getMethod());
+        $this->assertSame('/foo', $request->getUrl());
+        $this->assertSame([
             'User-Agent' => ['Evert'],
             'Content-Type' => ['text/xml'],
             'Content-Length' => ['400'],
         ], $request->getHeaders());
 
-        self::assertEquals('1.0', $request->getHttpVersion());
+        $this->assertEquals('1.0', $request->getHttpVersion());
 
-        self::assertEquals('400', $request->getRawServerValue('CONTENT_LENGTH'));
-        self::assertNull($request->getRawServerValue('FOO'));
+        $this->assertEquals('400', $request->getRawServerValue('CONTENT_LENGTH'));
+        $this->assertNull($request->getRawServerValue('FOO'));
     }
 
     public function testConstructFromServerArrayOnNullUrl(): void
@@ -39,7 +39,7 @@ class SapiTest extends \PHPUnit\Framework\TestCase
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('The _SERVER array must have a REQUEST_URI key');
 
-        $request = Sapi::createFromServerArray([
+        Sapi::createFromServerArray([
             'REQUEST_METHOD' => 'GET',
             'HTTP_USER_AGENT' => 'Evert',
             'CONTENT_TYPE' => 'text/xml',
@@ -53,7 +53,7 @@ class SapiTest extends \PHPUnit\Framework\TestCase
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('The _SERVER array must have a REQUEST_METHOD key');
 
-        $request = Sapi::createFromServerArray([
+        Sapi::createFromServerArray([
             'REQUEST_URI' => '/foo',
             'HTTP_USER_AGENT' => 'Evert',
             'CONTENT_TYPE' => 'text/xml',
@@ -71,9 +71,9 @@ class SapiTest extends \PHPUnit\Framework\TestCase
             'PHP_AUTH_PW' => 'pass',
         ]);
 
-        self::assertEquals('GET', $request->getMethod());
-        self::assertEquals('/foo', $request->getUrl());
-        self::assertEquals([
+        $this->assertSame('GET', $request->getMethod());
+        $this->assertSame('/foo', $request->getUrl());
+        $this->assertEquals([
             'Authorization' => ['Basic '.base64_encode('user:pass')],
         ], $request->getHeaders());
     }
@@ -86,9 +86,9 @@ class SapiTest extends \PHPUnit\Framework\TestCase
             'PHP_AUTH_DIGEST' => 'blabla',
         ]);
 
-        self::assertEquals('GET', $request->getMethod());
-        self::assertEquals('/foo', $request->getUrl());
-        self::assertEquals([
+        $this->assertSame('GET', $request->getMethod());
+        $this->assertSame('/foo', $request->getUrl());
+        $this->assertSame([
             'Authorization' => ['Digest blabla'],
         ], $request->getHeaders());
     }
@@ -101,9 +101,9 @@ class SapiTest extends \PHPUnit\Framework\TestCase
             'REDIRECT_HTTP_AUTHORIZATION' => 'Basic bla',
         ]);
 
-        self::assertEquals('GET', $request->getMethod());
-        self::assertEquals('/foo', $request->getUrl());
-        self::assertEquals([
+        $this->assertSame('GET', $request->getMethod());
+        $this->assertSame('/foo', $request->getUrl());
+        $this->assertSame([
             'Authorization' => ['Basic bla'],
         ], $request->getHeaders());
     }
@@ -134,15 +134,12 @@ class SapiTest extends \PHPUnit\Framework\TestCase
         $result = ob_get_clean();
         header_remove();
 
-        self::assertEquals(
-            [
-                'Content-Type: text/xml;charset=UTF-8',
-                'Content-Type: application/xml',
-            ],
-            $headers
-        );
+        $this->assertSame([
+            'Content-Type: text/xml;charset=UTF-8',
+            'Content-Type: application/xml',
+        ], $headers);
 
-        self::assertEquals('foo', $result);
+        $this->assertEquals('foo', $result);
     }
 
     /**
@@ -163,7 +160,7 @@ class SapiTest extends \PHPUnit\Framework\TestCase
         $result = ob_get_clean();
         header_remove();
 
-        self::assertEquals('Send this sentence.', $result);
+        $this->assertEquals('Send this sentence.', $result);
     }
 
     /**
@@ -177,7 +174,7 @@ class SapiTest extends \PHPUnit\Framework\TestCase
             'REQUEST_METHOD' => 'GET',
         ]);
 
-        self::assertEquals('2.0', $request->getHttpVersion());
+        $this->assertEquals('2.0', $request->getHttpVersion());
     }
 
     /**
@@ -201,7 +198,7 @@ class SapiTest extends \PHPUnit\Framework\TestCase
         $result = ob_get_clean();
         header_remove();
 
-        self::assertEquals('Send this sentence.', $result);
+        $this->assertEquals('Send this sentence.', $result);
     }
 
     /**
@@ -223,15 +220,18 @@ class SapiTest extends \PHPUnit\Framework\TestCase
         if (null === $contentLength) {
             $contentLength = strlen($partial);
         }
+
         fwrite($body, $ignoreAtStart);
         fwrite($body, $partial);
         if ($ignoreAtEndLength > 0) {
             fwrite($body, $ignoreAtEnd);
         }
+
         rewind($body);
         if ($ignoreAtStartLength > 0) {
             fread($body, $ignoreAtStartLength);
         }
+
         $response = new Response(200, [
             'Content-Length' => $contentLength,
             'Content-Range' => sprintf('bytes %d-%d/%d', $ignoreAtStartLength, $ignoreAtStartLength + strlen($partial) - 1, $ignoreAtStartLength + strlen($partial) + $ignoreAtEndLength),
@@ -245,37 +245,34 @@ class SapiTest extends \PHPUnit\Framework\TestCase
         $result = ob_get_clean();
         header_remove();
 
-        self::assertEquals($partial, $result);
+        $this->assertEquals($partial, $result);
     }
 
     /**
-     * @return array<int, array<int, mixed>>
+     * @return \Iterator<int, array<int, mixed>>
      */
-    public static function sendContentRangeStreamData(): array
+    public static function sendContentRangeStreamData(): \Iterator
     {
-        return [
-            ['Ignore this. ', 'Send this.', 10, ' Ignore this at end.'],
-            ['Ignore this. ', 'Send this.', 1000, ' Ignore this at end.'],
-            ['Ignore this. ', 'S', 4096, ' Ignore this at end.'],
-            ['I', 'S', 4094, 'E'],
-            ['', 'Send this.', 10, ' Ignore this at end.'],
-            ['', 'Send this.', 1000, ' Ignore this at end.'],
-            ['', 'S', 4096, ' Ignore this at end.'],
-            ['', 'S', 4094, 'En'],
-            ['Ignore this. ', 'Send this.', 10, ''],
-            ['Ignore this. ', 'Send this.', 1000, ''],
-            ['Ignore this. ', 'S', 4096, ''],
-            ['Ig', 'S', 4094, ''],
-
-            // Provide contentLength greater than the bytes remaining in the stream.
-            ['Ignore this. ', 'Send this.', 10, '', 101],
-            ['Ignore this. ', 'Send this.', 1000, '', 10001],
-            ['Ignore this. ', 'S', 4096, '', 5000000],
-            ['I', 'S', 4094, '', 8095],
-            // Provide contentLength equal to the bytes remaining in the stream.
-            ['', 'Send this.', 10, '', 100],
-            ['Ignore this. ', 'Send this.', 1000, '', 10000],
-        ];
+        yield ['Ignore this. ', 'Send this.', 10, ' Ignore this at end.'];
+        yield ['Ignore this. ', 'Send this.', 1000, ' Ignore this at end.'];
+        yield ['Ignore this. ', 'S', 4096, ' Ignore this at end.'];
+        yield ['I', 'S', 4094, 'E'];
+        yield ['', 'Send this.', 10, ' Ignore this at end.'];
+        yield ['', 'Send this.', 1000, ' Ignore this at end.'];
+        yield ['', 'S', 4096, ' Ignore this at end.'];
+        yield ['', 'S', 4094, 'En'];
+        yield ['Ignore this. ', 'Send this.', 10, ''];
+        yield ['Ignore this. ', 'Send this.', 1000, ''];
+        yield ['Ignore this. ', 'S', 4096, ''];
+        yield ['Ig', 'S', 4094, ''];
+        // Provide contentLength greater than the bytes remaining in the stream.
+        yield ['Ignore this. ', 'Send this.', 10, '', 101];
+        yield ['Ignore this. ', 'Send this.', 1000, '', 10001];
+        yield ['Ignore this. ', 'S', 4096, '', 5000000];
+        yield ['I', 'S', 4094, '', 8095];
+        // Provide contentLength equal to the bytes remaining in the stream.
+        yield ['', 'Send this.', 10, '', 100];
+        yield ['Ignore this. ', 'Send this.', 1000, '', 10000];
     }
 
     /**
@@ -296,7 +293,7 @@ class SapiTest extends \PHPUnit\Framework\TestCase
 
         $result = ob_get_clean();
 
-        self::assertEquals('foo', $result);
+        $this->assertEquals('foo', $result);
     }
 
     public function testSendConnectionAborted(): void
@@ -318,6 +315,7 @@ class SapiTest extends \PHPUnit\Framework\TestCase
             if (false === $temp) {
                 break;
             }
+
             $size += strlen($temp);
         }
 
@@ -326,7 +324,7 @@ class SapiTest extends \PHPUnit\Framework\TestCase
         sleep(5);
 
         $bytes_read = file_get_contents(sys_get_temp_dir().'/dummy_stream_read_counter');
-        self::assertEquals($chunk_size * 2, $bytes_read);
-        self::assertGreaterThanOrEqual($fetch_size, $bytes_read);
+        $this->assertEquals($chunk_size * 2, $bytes_read);
+        $this->assertGreaterThanOrEqual($fetch_size, $bytes_read);
     }
 }

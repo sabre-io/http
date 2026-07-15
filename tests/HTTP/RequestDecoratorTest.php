@@ -4,12 +4,13 @@ declare(strict_types=1);
 
 namespace Sabre\HTTP;
 
-class RequestDecoratorTest extends \PHPUnit\Framework\TestCase
+final class RequestDecoratorTest extends \PHPUnit\Framework\TestCase
 {
-    protected Request $inner;
-    protected RequestDecorator $outer;
+    private Request $inner;
 
-    public function setUp(): void
+    private RequestDecorator $outer;
+
+    protected function setUp(): void
     {
         $this->inner = new Request('GET', '/');
         $this->outer = new RequestDecorator($this->inner);
@@ -18,37 +19,37 @@ class RequestDecoratorTest extends \PHPUnit\Framework\TestCase
     public function testMethod(): void
     {
         $this->outer->setMethod('FOO');
-        self::assertEquals('FOO', $this->inner->getMethod());
-        self::assertEquals('FOO', $this->outer->getMethod());
+        $this->assertSame('FOO', $this->inner->getMethod());
+        $this->assertSame('FOO', $this->outer->getMethod());
     }
 
     public function testUrl(): void
     {
         $this->outer->setUrl('/foo');
-        self::assertEquals('/foo', $this->inner->getUrl());
-        self::assertEquals('/foo', $this->outer->getUrl());
+        $this->assertSame('/foo', $this->inner->getUrl());
+        $this->assertSame('/foo', $this->outer->getUrl());
     }
 
     public function testAbsoluteUrl(): void
     {
         $this->outer->setAbsoluteUrl('http://example.org/foo');
-        self::assertEquals('http://example.org/foo', $this->inner->getAbsoluteUrl());
-        self::assertEquals('http://example.org/foo', $this->outer->getAbsoluteUrl());
+        $this->assertSame('http://example.org/foo', $this->inner->getAbsoluteUrl());
+        $this->assertSame('http://example.org/foo', $this->outer->getAbsoluteUrl());
     }
 
     public function testBaseUrl(): void
     {
         $this->outer->setBaseUrl('/foo');
-        self::assertEquals('/foo', $this->inner->getBaseUrl());
-        self::assertEquals('/foo', $this->outer->getBaseUrl());
+        $this->assertSame('/foo', $this->inner->getBaseUrl());
+        $this->assertSame('/foo', $this->outer->getBaseUrl());
     }
 
     public function testPath(): void
     {
         $this->outer->setBaseUrl('/foo');
         $this->outer->setUrl('/foo/bar');
-        self::assertEquals('bar', $this->inner->getPath());
-        self::assertEquals('bar', $this->outer->getPath());
+        $this->assertSame('bar', $this->inner->getPath());
+        $this->assertSame('bar', $this->outer->getPath());
     }
 
     public function testQueryParams(): void
@@ -60,8 +61,8 @@ class RequestDecoratorTest extends \PHPUnit\Framework\TestCase
             'e' => null,
         ];
 
-        self::assertEquals($expected, $this->inner->getQueryParameters());
-        self::assertEquals($expected, $this->outer->getQueryParameters());
+        $this->assertEquals($expected, $this->inner->getQueryParameters());
+        $this->assertEquals($expected, $this->outer->getQueryParameters());
     }
 
     public function testPostData(): void
@@ -73,8 +74,8 @@ class RequestDecoratorTest extends \PHPUnit\Framework\TestCase
         ];
 
         $this->outer->setPostData($postData);
-        self::assertEquals($postData, $this->inner->getPostData());
-        self::assertEquals($postData, $this->outer->getPostData());
+        $this->assertEquals($postData, $this->inner->getPostData());
+        $this->assertEquals($postData, $this->outer->getPostData());
     }
 
     public function testServerData(): void
@@ -84,11 +85,11 @@ class RequestDecoratorTest extends \PHPUnit\Framework\TestCase
         ];
 
         $this->outer->setRawServerData($serverData);
-        self::assertEquals('On', $this->inner->getRawServerValue('HTTPS'));
-        self::assertEquals('On', $this->outer->getRawServerValue('HTTPS'));
+        $this->assertSame('On', $this->inner->getRawServerValue('HTTPS'));
+        $this->assertSame('On', $this->outer->getRawServerValue('HTTPS'));
 
-        self::assertNull($this->inner->getRawServerValue('FOO'));
-        self::assertNull($this->outer->getRawServerValue('FOO'));
+        $this->assertNull($this->inner->getRawServerValue('FOO'));
+        $this->assertNull($this->outer->getRawServerValue('FOO'));
     }
 
     public function testToString(): void
@@ -98,6 +99,6 @@ class RequestDecoratorTest extends \PHPUnit\Framework\TestCase
         $this->inner->setBody('foo');
         $this->inner->setHeader('foo', 'bar');
 
-        self::assertEquals((string) $this->inner, (string) $this->outer);
+        $this->assertSame((string) $this->inner, (string) $this->outer);
     }
 }

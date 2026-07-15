@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 use Sabre\HTTP;
 
-include '../bootstrap.php';
+include __DIR__.'/../bootstrap.php';
 
 class DummyStream
 {

@@ -4,16 +4,16 @@ declare(strict_types=1);
 
 namespace Sabre\HTTP;
 
-class RequestTest extends \PHPUnit\Framework\TestCase
+final class RequestTest extends \PHPUnit\Framework\TestCase
 {
     public function testConstruct(): void
     {
         $request = new Request('GET', '/foo', [
             'User-Agent' => 'Evert',
         ]);
-        self::assertEquals('GET', $request->getMethod());
-        self::assertEquals('/foo', $request->getUrl());
-        self::assertEquals([
+        $this->assertSame('GET', $request->getMethod());
+        $this->assertSame('/foo', $request->getUrl());
+        $this->assertSame([
             'User-Agent' => ['Evert'],
         ], $request->getHeaders());
     }
@@ -21,7 +21,7 @@ class RequestTest extends \PHPUnit\Framework\TestCase
     public function testGetQueryParameters(): void
     {
         $request = new Request('GET', '/foo?a=b&c&d=e');
-        self::assertEquals([
+        $this->assertEquals([
             'a' => 'b',
             'c' => null,
             'd' => 'e',
@@ -31,7 +31,7 @@ class RequestTest extends \PHPUnit\Framework\TestCase
     public function testGetQueryParametersNoData(): void
     {
         $request = new Request('GET', '/foo');
-        self::assertEquals([], $request->getQueryParameters());
+        $this->assertSame([], $request->getQueryParameters());
     }
 
     /**
@@ -43,7 +43,7 @@ class RequestTest extends \PHPUnit\Framework\TestCase
         $_SERVER['REQUEST_METHOD'] = 'PUT';
 
         $request = Sapi::getRequest();
-        self::assertEquals('PUT', $request->getMethod());
+        $this->assertSame('PUT', $request->getMethod());
     }
 
     public function testGetAbsoluteUrl(): void
@@ -52,7 +52,7 @@ class RequestTest extends \PHPUnit\Framework\TestCase
             'Host' => 'sabredav.org',
         ]);
 
-        self::assertEquals('http://sabredav.org/foo', $r->getAbsoluteUrl());
+        $this->assertSame('http://sabredav.org/foo', $r->getAbsoluteUrl());
 
         $s = [
             'HTTP_HOST' => 'sabredav.org',
@@ -63,7 +63,7 @@ class RequestTest extends \PHPUnit\Framework\TestCase
 
         $r = Sapi::createFromServerArray($s);
 
-        self::assertEquals('https://sabredav.org/foo', $r->getAbsoluteUrl());
+        $this->assertSame('https://sabredav.org/foo', $r->getAbsoluteUrl());
     }
 
     public function testGetPostData(): void
@@ -73,7 +73,7 @@ class RequestTest extends \PHPUnit\Framework\TestCase
         ];
         $r = new Request('POST', '/');
         $r->setPostData($post);
-        self::assertEquals($post, $r->getPostData());
+        $this->assertSame($post, $r->getPostData());
     }
 
     public function testGetPath(): void
@@ -82,7 +82,7 @@ class RequestTest extends \PHPUnit\Framework\TestCase
         $request->setBaseUrl('/foo');
         $request->setUrl('/foo/bar/');
 
-        self::assertEquals('bar', $request->getPath());
+        $this->assertSame('bar', $request->getPath());
     }
 
     public function testGetPathStrippedQuery(): void
@@ -90,7 +90,7 @@ class RequestTest extends \PHPUnit\Framework\TestCase
         $request = new Request('GET', '/foo/bar?a=B');
         $request->setBaseUrl('/foo');
 
-        self::assertEquals('bar', $request->getPath());
+        $this->assertSame('bar', $request->getPath());
     }
 
     public function testGetPathMissingSlash(): void
@@ -98,7 +98,7 @@ class RequestTest extends \PHPUnit\Framework\TestCase
         $request = new Request('GET', '/foo');
         $request->setBaseUrl('/foo/');
 
-        self::assertEquals('', $request->getPath());
+        $this->assertSame('', $request->getPath());
     }
 
     public function testGetPathOutsideBaseUrl(): void
@@ -119,7 +119,7 @@ class RequestTest extends \PHPUnit\Framework\TestCase
                   ."Content-Type: text/xml\r\n"
                   ."\r\n"
                   .'foo';
-        self::assertEquals($expected, (string) $request);
+        $this->assertSame($expected, (string) $request);
     }
 
     public function testToStringAuthorization(): void
@@ -132,13 +132,13 @@ class RequestTest extends \PHPUnit\Framework\TestCase
                   ."Authorization: Basic REDACTED\r\n"
                   ."\r\n"
                   .'foo';
-        self::assertEquals($expected, (string) $request);
+        $this->assertSame($expected, (string) $request);
     }
 
     public function testAbsoluteUrlHttp(): void
     {
         $request = new Request('GET', 'http://example.com/foo/bar?a=b&c=d');
-        self::assertEquals('http://example.com/foo/bar?a=b&c=d', $request->getAbsoluteUrl());
+        $this->assertSame('http://example.com/foo/bar?a=b&c=d', $request->getAbsoluteUrl());
     }
 
     public function testAbsoluteUrlHttpHostPrevalence(): void
@@ -146,6 +146,6 @@ class RequestTest extends \PHPUnit\Framework\TestCase
         $request = new Request('GET', 'http://example.com/foo/bar?a=b&c=d', [
             'Host' => 'example.org',
         ]);
-        self::assertEquals('http://example.com/foo/bar?a=b&c=d', $request->getAbsoluteUrl());
+        $this->assertSame('http://example.com/foo/bar?a=b&c=d', $request->getAbsoluteUrl());
     }
 }

@@ -32,26 +32,26 @@ $request = new Request('GET', 'http://localhost/');
 $client = new Client();
 
 for ($i = 0; $i < 1000; ++$i) {
-    echo "$i sending\n";
+    echo "{$i} sending\n";
     $client->sendAsync(
         $request,
 
         // This is the 'success' callback
         function ($response) use ($i): void {
-            echo "$i -> ".$response->getStatus()."\n";
+            echo "{$i} -> ".$response->getStatus()."\n";
         },
 
         // This is the 'error' callback. It is called for general connection
         // problems (such as not being able to connect to a host, dns errors,
         // etc.) and also cases where a response was returned, but it had a
         // status code of 400 or higher.
-        function ($error) use ($i): void {
+        function (array $error) use ($i): void {
             if (Client::STATUS_CURLERROR === $error['status']) {
                 // Curl errors
-                echo "$i -> curl error: ".$error['curl_errmsg']."\n";
+                echo "{$i} -> curl error: ".$error['curl_errmsg']."\n";
             } else {
                 // HTTP errors
-                echo "$i -> ".$error['response']->getStatus()."\n";
+                echo "{$i} -> ".$error['response']->getStatus()."\n";
             }
         }
     );

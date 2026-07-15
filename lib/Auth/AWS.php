@@ -35,9 +35,13 @@ class AWS extends AbstractAuth
     public int $errorCode = 0;
 
     public const ERR_NOAWSHEADER = 1;
+
     public const ERR_MD5CHECKSUMWRONG = 2;
+
     public const ERR_INVALIDDATEFORMAT = 3;
+
     public const ERR_REQUESTTIMESKEWED = 4;
+
     public const ERR_INVALIDSIGNATURE = 5;
 
     /**
@@ -54,6 +58,7 @@ class AWS extends AbstractAuth
 
             return false;
         }
+
         $authHeader = explode(' ', $authHeader);
 
         if ('AWS' !== $authHeader[0] || !isset($authHeader[1])) {
@@ -183,6 +188,7 @@ class AWS extends AbstractAuth
                 $amzHeaders[strtolower($headerName)] = str_replace(["\r\n"], [' '], $headerValue[0])."\n";
             }
         }
+
         ksort($amzHeaders);
 
         $headerStr = '';
@@ -206,11 +212,11 @@ class AWS extends AbstractAuth
         if (strlen($key) > $blocksize) {
             $key = pack('H*', sha1($key));
         }
+
         $key = str_pad($key, $blocksize, chr(0x00));
         $ipad = str_repeat(chr(0x36), $blocksize);
         $opad = str_repeat(chr(0x5C), $blocksize);
-        $hmac = pack('H*', sha1(($key ^ $opad).pack('H*', sha1(($key ^ $ipad).$message))));
 
-        return $hmac;
+        return pack('H*', sha1(($key ^ $opad).pack('H*', sha1(($key ^ $ipad).$message))));
     }
 }

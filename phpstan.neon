@@ -19,5 +19,7 @@ parameters:
     path: tests/*
   -
     message: "#^Left side of || is always false.$#"
-    count: 23
+    count: 18
     path: lib/Client.php
+
+  - '#Dynamic call to static method PHPUnit\\Framework\\.*#'

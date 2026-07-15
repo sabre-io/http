@@ -14,7 +14,6 @@ use DateTime;
  * @author Evert Pot (http://evertpot.com/)
  * @license http://sabre.io/license/ Modified BSD License
  */
-
 /**
  * Parses an HTTP date-string.
  *
@@ -27,10 +26,8 @@ use DateTime;
  *
  * See:
  *   http://tools.ietf.org/html/rfc7231#section-7.1.1.1
- *
- * @return bool|\DateTime
  */
-function parseDate(string $dateString)
+function parseDate(string $dateString): false|\DateTime
 {
     // Only the format is checked, valid ranges are checked by strtotime below
     $month = '(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)';
@@ -50,7 +47,7 @@ function parseDate(string $dateString)
     // RFC 822, updated by RFC 1123
     $rfc1123_date = $wkday.', '.$date1.' '.$time.' GMT';
     // allowed date formats by RFC 2616
-    $HTTP_date = "($rfc1123_date|$rfc850_date|$asctime_date)";
+    $HTTP_date = "({$rfc1123_date}|{$rfc850_date}|{$asctime_date})";
 
     // allow for space around the string and strip it
     $dateString = trim($dateString, ' ');
@@ -142,6 +139,7 @@ function negotiateContentType(?string $acceptHeaderValue, array $availableOption
                 // no match on type.
                 continue;
             }
+
             if ('*' !== $proposal['subType'] && $proposal['subType'] !== $option['subType']) {
                 // no match on subtype.
                 continue;
@@ -153,6 +151,7 @@ function negotiateContentType(?string $acceptHeaderValue, array $availableOption
                 if (!array_key_exists($paramName, $proposal['parameters'])) {
                     continue 2;
                 }
+
                 if ($paramValue !== $proposal['parameters'][$paramName]) {
                     continue 2;
                 }
@@ -221,10 +220,10 @@ function parsePrefer($input): array
     $regex = <<<REGEX
 /
 ^
-(?<name> $token)      # Prefer property name
+(?<name> {$token})      # Prefer property name
 \s*                   # Optional space
 (?: = \s*             # Prefer property value
-   (?<value> $word)
+   (?<value> {$word})
 )?
 (?: \s* ; (?: .*))?   # Prefer parameters (ignored)
 $
@@ -256,11 +255,8 @@ REGEX;
                 $output['handling'] = 'lenient';
                 break;
             default:
-                if (isset($matches['value'])) {
-                    $value = trim($matches['value'], '"');
-                } else {
-                    $value = true;
-                }
+                $value = isset($matches['value']) ? trim($matches['value'], '"') : true;
+
                 $output[strtolower($matches['name'])] = ('' === $value) ? true : $value;
                 break;
         }
@@ -335,6 +331,7 @@ function parseMimeType(string $str): array
         // Illegal value
         throw new \InvalidArgumentException('Not a valid mime-type: '.$str);
     }
+
     [$type, $subType] = $mimeType;
 
     foreach ($parts as $part) {
@@ -374,7 +371,7 @@ function parseMimeType(string $str): array
  */
 function encodePath(string $path): string
 {
-    return preg_replace_callback('/([^A-Za-z0-9_\-\.~\(\)\/:@])/', fn ($match) => '%'.sprintf('%02x', ord($match[0])), $path);
+    return preg_replace_callback('/([^A-Za-z0-9_\-\.~\(\)\/:@])/', fn ($match): string => '%'.sprintf('%02x', ord($match[0])), $path);
 }
 
 /**
@@ -384,7 +381,7 @@ function encodePath(string $path): string
  */
 function encodePathSegment(string $pathSegment): string
 {
-    return preg_replace_callback('/([^A-Za-z0-9_\-\.~\(\):@])/', fn ($match) => '%'.sprintf('%02x', ord($match[0])), $pathSegment);
+    return preg_replace_callback('/([^A-Za-z0-9_\-\.~\(\):@])/', fn ($match): string => '%'.sprintf('%02x', ord($match[0])), $pathSegment);
 }
 
 /**
@@ -403,7 +400,7 @@ function decodePathSegment(string $path): string
     $path = rawurldecode($path);
 
     if (!mb_check_encoding($path, 'UTF-8') && mb_check_encoding($path, 'ISO-8859-1')) {
-        $path = mb_convert_encoding($path, 'UTF-8', 'ISO-8859-1');
+        return mb_convert_encoding($path, 'UTF-8', 'ISO-8859-1');
     }
 
     return $path;

@@ -200,21 +200,4 @@ class AWSTest extends \PHPUnit\Framework\TestCase
         $test = preg_match('/^AWS$/', (string) $this->response->getHeader('WWW-Authenticate'), $matches);
         self::assertTrue(1 === $test, 'The WWW-Authenticate response didn\'t match our pattern');
     }
-
-    /**
-     * Generates an HMAC-SHA1 signature.
-     */
-    private function hmacsha1(string $key, string $message): string
-    {
-        $blocksize = 64;
-        if (strlen($key) > $blocksize) {
-            $key = pack('H*', sha1($key));
-        }
-        $key = str_pad($key, $blocksize, chr(0x00));
-        $ipad = str_repeat(chr(0x36), $blocksize);
-        $opad = str_repeat(chr(0x5C), $blocksize);
-        $hmac = pack('H*', sha1(($key ^ $opad).pack('H*', sha1(($key ^ $ipad).$message))));
-
-        return $hmac;
-    }
 }

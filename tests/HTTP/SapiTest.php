@@ -220,9 +220,7 @@ class SapiTest extends \PHPUnit\Framework\TestCase
         $ignoreAtStartLength = strlen($ignoreAtStart);
         $ignoreAtEndLength = strlen($ignoreAtEnd);
         $body = fopen('php://memory', 'w');
-        if (null === $contentLength) {
-            $contentLength = strlen($partial);
-        }
+        $contentLength ??= strlen($partial);
         fwrite($body, $ignoreAtStart);
         fwrite($body, $partial);
         if ($ignoreAtEndLength > 0) {

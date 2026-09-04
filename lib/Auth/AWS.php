@@ -97,9 +97,7 @@ class AWS extends AbstractAuth
 
         $requestDate = $this->request->getHeader('x-amz-date');
 
-        if (null === $requestDate) {
-            $requestDate = $this->request->getHeader('Date');
-        }
+        $requestDate ??= $this->request->getHeader('Date');
 
         if (!$this->validateRFC2616Date((string) $requestDate)) {
             return false;

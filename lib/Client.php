@@ -584,9 +584,7 @@ class Client extends EventEmitter
      */
     protected function sendAsyncInternal(RequestInterface $request, callable $success, callable $error, int $retryCount = 0): void
     {
-        if (null === $this->curlMultiHandle) {
-            $this->curlMultiHandle = curl_multi_init();
-        }
+        $this->curlMultiHandle ??= curl_multi_init();
         $curl = curl_init();
         curl_setopt_array(
             $curl,

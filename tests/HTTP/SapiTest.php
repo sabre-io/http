@@ -309,6 +309,7 @@ class SapiTest extends \PHPUnit\Framework\TestCase
         $fetch_size = 6 * 1024 * 1024;
 
         $stream = fopen($url, 'r');
+        self::assertIsResource($stream, "could not open $url - is the test server running?");
         $size = 0;
 
         while ($size <= $fetch_size) {

@@ -2,10 +2,6 @@ parameters:
   level: 6
   ignoreErrors:
   -
-    rawMessage: "Strict comparison using !== between '' and non-empty-string will always evaluate to true."
-    count: 1
-    path: lib/Auth/Digest.php
-  -
     rawMessage: "Casting to string something that's already string."
     count: 1
     path: lib/Sapi.php
